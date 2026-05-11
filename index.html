@@ -10,7 +10,7 @@
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Saira:wght@500;600;700&display=swap" rel="stylesheet" />
 
   <!-- Stylesheets -->
   <link rel="stylesheet" href="assets/css/reset.css" />
@@ -21,14 +21,16 @@
 </head>
 
 <body>
-  <a href="#main" class="skip-link">Skip to content</a>
-
+  <div class="scroll-progress" aria-hidden="true"><div class="scroll-progress-fill"></div></div>
   <!-- ========== HEADER ========== -->
   <header class="site-header" data-transparent="true" data-state="transparent">
     <div class="container site-header-inner">
       <a href="index.html" class="brand" aria-label="Globalex Trading DMCC home">
-        <span class="brand-mark">Globalex<span class="accent">.</span></span>
-        <span class="brand-tagline">Trading DMCC</span>
+        <img src="assets/logo.webp" alt="" class="brand-logo" width="64" height="64" />
+        <span class="brand-text">
+          <span class="brand-main">GLOBALEX</span>
+          <span class="brand-sub">TRADING DMCC</span>
+        </span>
       </a>
 
       <nav class="nav-primary" aria-label="Primary">
@@ -83,26 +85,54 @@
     <!-- ========== HERO ========== -->
     <section class="hero">
       <div class="hero-media">
-        <img
-          src="https://images.unsplash.com/photo-1494412651409-8963ce7935a7?auto=format&fit=crop&w=2400&q=80"
-          alt="Aerial view of an international shipping port"
-          loading="eager"
-        />
+        <video
+          class="hero-video"
+          autoplay muted loop playsinline preload="metadata"
+          poster="assets/hero-poster.jpg"
+          aria-hidden="true">
+          <source src="assets/hero-1080.mp4" type="video/mp4" />
+          <img src="assets/hero-poster.jpg" alt="" />
+        </video>
       </div>
       <div class="container">
-        <div class="hero-content reveal">
-          <span class="eyebrow on-dark">Globalex Trading DMCC · Dubai, UAE</span>
-          <h1 class="display">Established in 2019 based on honesty, integrity, trust and a vision to succeed.</h1>
-          <p class="lead">Specialized in Urea, Sulphur, Fertilizers, as well as Polymers — sourced mostly from the Caspian Region and Central Asian markets including Turkmenistan, Uzbekistan, Kazakhstan, and Azerbaijan.</p>
-          <div class="btn-group">
+        <div class="hero-content">
+          <span class="eyebrow on-dark reveal">Globalex Trading DMCC · Dubai, UAE</span>
+          <h1 class="display reveal-words" data-words>Established in 2019 based on <em>honesty, integrity, trust</em> and a vision to succeed.</h1>
+          <p class="lead reveal" style="--reveal-delay: 240ms;">Specialized in Urea, Sulphur, Fertilizers, as well as Polymers — sourced mostly from the Caspian Region and Central Asian markets including Turkmenistan, Uzbekistan, Kazakhstan, and Azerbaijan.</p>
+          <div class="btn-group reveal" style="--reveal-delay: 360ms;">
             <a href="#offer" class="btn btn-accent">Explore products <span class="arrow">→</span></a>
             <a href="contact.html" class="btn btn-outline-light">Contact us</a>
           </div>
-          <div class="hero-meta">
+          <div class="hero-meta reveal" style="--reveal-delay: 480ms;">
             <span><strong>2019</strong> · Founded</span>
             <span><strong>DMCC</strong> · Freezone licensed</span>
             <span><strong>20+</strong> · Product lines</span>
             <span><strong>Caspian</strong> · Core sourcing</span>
+          </div>
+        </div>
+      </div>
+      <span class="hero-scroll-cue" aria-hidden="true">Scroll to explore</span>
+    </section>
+
+    <!-- ========== STATS STRIP — animated counters ========== -->
+    <section class="stats-strip">
+      <div class="container">
+        <div class="stats-strip-grid reveal-stagger">
+          <div class="stat">
+            <div class="stat-num"><span class="counter" data-target="20" data-duration="1400">0</span><span class="suffix">+</span></div>
+            <div class="stat-label">Commodities traded</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num"><span class="counter" data-target="7" data-duration="1200">0</span></div>
+            <div class="stat-label">Origin markets</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num"><span class="counter" data-target="10" data-duration="1200">0</span></div>
+            <div class="stat-label">Trade-procedure steps</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num"><span class="counter" data-target="2019" data-duration="1800">0</span></div>
+            <div class="stat-label">Established in Dubai</div>
           </div>
         </div>
       </div>
@@ -244,18 +274,24 @@
           <span class="eyebrow">They Trust Us</span>
         </div>
       </div>
-      <div class="marquee" aria-label="Partners">
+      <div class="marquee" aria-label="Partners — top row">
         <div class="marquee-track">
           <span class="marquee-item">SOCAR</span>
           <span class="marquee-item">World Economic Forum</span>
-          <span class="marquee-item">Integral Petroleum</span>
-          <span class="marquee-item">PTC Commodities</span>
           <span class="marquee-item">DP World</span>
           <span class="marquee-item">AIFC</span>
+          <span class="marquee-item">Horasis</span>
+          <span class="marquee-item">Integral Petroleum</span>
+        </div>
+      </div>
+      <div class="marquee" aria-label="Partners — bottom row">
+        <div class="marquee-track reverse">
+          <span class="marquee-item">PTC Commodities</span>
           <span class="marquee-item">Esalco Logistics</span>
           <span class="marquee-item">Great Caspian Association</span>
-          <span class="marquee-item">Horasis</span>
           <span class="marquee-item">Ady Containers</span>
+          <span class="marquee-item">SOCAR</span>
+          <span class="marquee-item">DP World</span>
         </div>
       </div>
     </section>
@@ -284,7 +320,13 @@
     <div class="container">
       <div class="footer-grid">
         <div>
-          <p class="footer-brand-mark">Globalex<span class="accent">.</span></p>
+          <div class="footer-brand-lockup">
+            <img src="assets/logo.webp" alt="" />
+            <span class="brand-text">
+              <span class="brand-main">GLOBALEX</span>
+              <span class="brand-sub">TRADING DMCC</span>
+            </span>
+          </div>
           <p class="footer-blurb">The company is registered &amp; licensed as a freezone company under the rules &amp; regulations of DMCC in the United Arab Emirates (UAE).</p>
         </div>
 

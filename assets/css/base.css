@@ -7,26 +7,29 @@ body {
   color: var(--text);
   font-family: var(--font-body);
   font-size: var(--fs-body);
-  font-feature-settings: "ss01", "cv11";
   line-height: 1.65;
+  font-feature-settings: "ss01", "cv11";
 }
 
-/* --- Headings --- */
+/* --- Headings — Manrope, generous tracking & line-height --- */
 h1, h2, h3, h4 {
   font-family: var(--font-display);
   color: var(--ink);
-  font-weight: 400;
-  line-height: 1.05;
-  letter-spacing: -0.02em;
-  font-variation-settings: "opsz" 96, "SOFT" 50;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.018em;
 }
+
+h1, .display { line-height: 1.04; letter-spacing: -0.025em; font-weight: 700; }
+h2 { line-height: 1.08; letter-spacing: -0.02em; }
+h3 { letter-spacing: -0.015em; }
 
 h5, h6 {
   font-family: var(--font-body);
   color: var(--ink);
   font-weight: 600;
-  line-height: 1.3;
-  letter-spacing: -0.01em;
+  line-height: 1.35;
+  letter-spacing: -0.005em;
 }
 
 h1 { font-size: var(--fs-h1); }
@@ -39,10 +42,15 @@ h6 { font-size: var(--fs-h6); }
 .display {
   font-family: var(--font-display);
   font-size: var(--fs-display);
-  font-weight: 400;
-  line-height: 0.98;
-  letter-spacing: -0.035em;
-  font-variation-settings: "opsz" 144, "SOFT" 30;
+  font-weight: 700;
+  line-height: 1.04;
+  letter-spacing: -0.028em;
+}
+
+.display em, h1 em, h2 em, h3 em {
+  font-style: normal;
+  color: var(--accent-cyan);
+  font-weight: 700;
 }
 
 /* --- Eyebrow / Kicker --- */
@@ -66,7 +74,8 @@ h6 { font-size: var(--fs-h6); }
   display: inline-block;
 }
 
-.eyebrow.on-dark { color: var(--accent-sand); }
+.eyebrow.on-dark { color: var(--accent-cyan); }
+.eyebrow.on-cyan { color: var(--accent-cyan); }
 
 /* --- Lead / Intro paragraph --- */
 .lead {
@@ -196,18 +205,58 @@ a:hover { color: var(--brand-mid); }
   border-radius: 2px;
 }
 
-/* --- Skip link --- */
-.skip-link {
+/* --- Section index (e.g. "01 — Offer") shown in the corner of sections --- */
+.section-index {
   position: absolute;
-  left: -9999px;
-  top: 0;
-  z-index: var(--z-modal);
-  padding: var(--s-3) var(--s-5);
-  background: var(--ink);
-  color: var(--on-dark);
+  top: var(--s-7);
+  right: var(--container-pad);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-3);
+  pointer-events: none;
 }
 
-.skip-link:focus {
-  left: var(--s-4);
-  top: var(--s-4);
+.section-index .num {
+  color: var(--accent-cyan);
+}
+
+.section-index::before {
+  content: "";
+  width: 36px;
+  height: 1px;
+  background: var(--accent-cyan);
+}
+
+.section-dark .section-index { color: var(--on-dark-muted); }
+
+@media (max-width: 720px) {
+  .section-index { display: none; }
+}
+
+/* --- Section that hosts an index needs relative positioning --- */
+.section { position: relative; }
+.section-tight { position: relative; }
+
+/* --- Decorative angular divider used to break up dark sections --- */
+.divider-angular {
+  position: relative;
+  height: 1px;
+  background: var(--line);
+  overflow: visible;
+}
+
+.divider-angular::before {
+  content: "";
+  position: absolute;
+  top: -3px;
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+  width: 8px;
+  height: 8px;
+  background: var(--accent-cyan);
 }

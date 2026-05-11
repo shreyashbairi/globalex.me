@@ -54,10 +54,11 @@
 }
 
 .origin-list .dot {
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
-  background: var(--accent-sand);
+  background: var(--accent-cyan);
+  box-shadow: 0 0 0 4px rgba(43, 197, 232, 0.18);
 }
 
 .sustain-split {
@@ -117,13 +118,13 @@
 }
 
 .value-card:hover .value-num,
-.value-card:hover h4 { color: var(--accent-sand); }
+.value-card:hover h4 { color: var(--accent-cyan); }
 
 .value-num {
   font-family: var(--font-mono);
   font-size: 0.7rem;
   letter-spacing: 0.18em;
-  color: var(--accent-sand);
+  color: var(--accent-cyan);
 }
 
 .value-card h4 {
@@ -151,7 +152,7 @@
   font-family: var(--font-mono);
   font-size: 0.78rem;
   letter-spacing: 0.18em;
-  color: var(--accent-sand);
+  color: var(--accent-cyan);
   min-width: 2.5rem;
 }
 
@@ -215,6 +216,82 @@
    PROCEDURES — Timeline
    ============================================ */
 
+/* Pinned indicator beside the timeline */
+.timeline-layout {
+  display: grid;
+  gap: var(--s-7);
+  grid-template-columns: 1fr;
+  position: relative;
+}
+
+@media (min-width: 980px) {
+  .timeline-layout { grid-template-columns: 280px 1fr; }
+}
+
+.timeline-pinned {
+  position: relative;
+}
+
+@media (min-width: 980px) {
+  .timeline-pinned {
+    position: sticky;
+    top: 120px;
+    align-self: start;
+    height: max-content;
+  }
+}
+
+.timeline-pinned .step-counter {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(3rem, 6vw, 5rem);
+  line-height: 1;
+  color: var(--ink);
+  letter-spacing: -0.03em;
+  display: flex;
+  align-items: baseline;
+  gap: 0.1em;
+}
+
+.timeline-pinned .step-counter .of {
+  font-size: 0.4em;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.timeline-pinned .step-counter .current {
+  color: var(--accent-cyan);
+  font-variant-numeric: tabular-nums;
+  min-width: 1.6em;
+  display: inline-block;
+}
+
+.timeline-pinned .step-name {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--brand-mid);
+  margin-top: var(--s-4);
+  min-height: 2em;
+  transition: color var(--dur-base);
+}
+
+.timeline-pinned .step-progress {
+  margin-top: var(--s-5);
+  height: 2px;
+  background: var(--line);
+  border-radius: var(--r-pill);
+  overflow: hidden;
+}
+
+.timeline-pinned .step-progress-fill {
+  height: 100%;
+  width: 10%;
+  background: var(--accent-cyan);
+  transition: width var(--dur-slow) var(--ease-out);
+}
+
 .timeline {
   position: relative;
   display: grid;
@@ -230,11 +307,7 @@
   bottom: var(--s-5);
   left: 32px;
   width: 1px;
-  background: linear-gradient(180deg, var(--accent-sand), var(--line));
-}
-
-@media (min-width: 800px) {
-  .timeline::before { left: 50%; transform: translateX(-0.5px); }
+  background: linear-gradient(180deg, var(--accent-cyan), var(--line));
 }
 
 .timeline-step {
@@ -246,18 +319,21 @@
 
 @media (min-width: 800px) {
   .timeline-step {
-    width: 50%;
-    padding-left: var(--s-7);
-    padding-right: 0;
+    width: 100%;
+    padding-left: calc(64px + var(--s-6));
   }
-  .timeline-step:nth-child(even) {
-    margin-left: 50%;
-  }
-  .timeline-step:nth-child(odd) {
-    text-align: right;
-    padding-left: 0;
-    padding-right: var(--s-7);
-  }
+}
+
+/* Active step styling for the pinned-layout timeline */
+.timeline-step.is-active .num {
+  background: var(--ink);
+  color: var(--accent-cyan);
+  border-color: var(--ink);
+  box-shadow: 0 0 0 6px rgba(43, 197, 232, 0.18);
+}
+
+.timeline-step.is-active h4 {
+  color: var(--ink);
 }
 
 .timeline-step .num {
@@ -283,18 +359,8 @@
 
 .timeline-step:hover .num {
   background: var(--ink);
-  color: var(--accent-sand);
+  color: var(--accent-cyan);
   border-color: var(--ink);
-}
-
-@media (min-width: 800px) {
-  .timeline-step:nth-child(odd) .num {
-    left: auto;
-    right: -32px;
-  }
-  .timeline-step:nth-child(even) .num {
-    left: -32px;
-  }
 }
 
 .timeline-step h4 {
@@ -314,7 +380,7 @@
   font-size: 0.7rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--accent-sand);
+  color: var(--accent-cyan);
 }
 
 /* ============================================
@@ -346,7 +412,7 @@
   left: 0;
   right: 0;
   height: 3px;
-  background: var(--accent-sand);
+  background: var(--accent-cyan);
   transform: scaleX(0);
   transform-origin: left;
   transition: transform var(--dur-slow) var(--ease-out);
@@ -363,7 +429,7 @@
   font-family: var(--font-mono);
   font-size: 0.72rem;
   letter-spacing: 0.2em;
-  color: var(--accent-sand);
+  color: var(--accent-cyan);
 }
 
 .commit-card h3 {
@@ -381,7 +447,7 @@
   max-width: 28ch;
   position: relative;
   padding-left: var(--s-5);
-  border-left: 2px solid var(--accent-sand);
+  border-left: 2px solid var(--accent-cyan);
 }
 
 /* ============================================
@@ -461,7 +527,7 @@
   font-size: 0.72rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--accent-sand);
+  color: var(--accent-cyan);
 }
 
 .contact-card .value {

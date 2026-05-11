@@ -9,7 +9,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Saira:wght@500;600;700&display=swap" rel="stylesheet" />
 
   <link rel="stylesheet" href="assets/css/reset.css" />
   <link rel="stylesheet" href="assets/css/tokens.css" />
@@ -19,13 +19,15 @@
 </head>
 
 <body>
-  <a href="#main" class="skip-link">Skip to content</a>
-
+  <div class="scroll-progress" aria-hidden="true"><div class="scroll-progress-fill"></div></div>
   <header class="site-header" data-state="solid">
     <div class="container site-header-inner">
       <a href="index.html" class="brand" aria-label="Globalex Trading DMCC home">
-        <span class="brand-mark">Globalex<span class="accent">.</span></span>
-        <span class="brand-tagline">Trading DMCC</span>
+        <img src="assets/logo.webp" alt="" class="brand-logo" width="64" height="64" />
+        <span class="brand-text">
+          <span class="brand-main">GLOBALEX</span>
+          <span class="brand-sub">TRADING DMCC</span>
+        </span>
       </a>
       <nav class="nav-primary" aria-label="Primary">
         <ul class="nav-links">
@@ -72,6 +74,9 @@
 
     <!-- ========== PAGE HERO ========== -->
     <section class="page-hero">
+      <div class="page-hero-media">
+        <img src="https://images.unsplash.com/photo-1518684079-3c830dcef090?auto=format&fit=crop&w=2400&q=80" alt="Dubai skyline at dusk, the trading hub of the UAE" loading="eager" />
+      </div>
       <div class="container">
         <div class="page-hero-content reveal">
           <nav class="breadcrumbs" aria-label="Breadcrumb">
@@ -80,7 +85,7 @@
             <span class="current">About</span>
           </nav>
           <span class="eyebrow on-dark">About Us</span>
-          <h1>An international trading house built in Dubai. Sourcing from the Caspian, delivering worldwide.</h1>
+          <h1 class="reveal-words" data-words>An international trading house built in Dubai. Sourcing from the Caspian, delivering worldwide.</h1>
           <p class="lead">Established in 2019 based on honesty, integrity, trust and a vision to succeed. We specialize in Urea, Sulphur, Fertilizers, as well as Polymers — registered as a freezone company under DMCC.</p>
         </div>
       </div>
@@ -94,6 +99,27 @@
           <h2>A trading partner committed to quality, transparency and the long game.</h2>
           <p class="lead">Globalex Trading DMCC operates from Dubai's Jumeirah Lakes Towers as a freezone licensed company. Since 2019, we've built our practice on three principles: source from origins we trust, deliver with the rigor our clients expect, and never compromise on the quality of what we move.</p>
           <p class="lead">Our products originate mostly from the Caspian Region and Central Asian markets — Turkmenistan, Uzbekistan, Kazakhstan, and Azerbaijan — with additional sourcing partnerships in the UAE, Saudi Arabia and China.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== IMAGE FEATURE — Dubai office story ========== -->
+    <section class="section">
+      <div class="container">
+        <div class="image-split-feature reveal">
+          <div class="image-split-media">
+            <span class="badge">Headquarters</span>
+            <img src="https://images.unsplash.com/photo-1546412414-e1885259563a?auto=format&fit=crop&w=1400&q=80" alt="Dubai Marina at twilight with illuminated skyscrapers" loading="lazy" />
+          </div>
+          <div class="image-split-content">
+            <span class="eyebrow">Jumeirah Lakes Towers · Dubai</span>
+            <h2>Operating from Dubai's premier freezone — the bridge between East and West.</h2>
+            <p class="lead">Our office at 2605 X3 Tower sits inside Cluster X of Jumeirah Lakes Towers, one of the world's most active commercial freezones. The location is deliberate: Dubai gives us the regulatory clarity of DMCC, the logistics depth of Jebel Ali and DP World, and the geographic position to broker between Caspian producers and global buyers.</p>
+            <p>This is where shipments are negotiated, contracts are signed, and the relationships that anchor 20+ trade lanes are nurtured.</p>
+            <div class="btn-group">
+              <a href="contact.html" class="btn btn-ghost btn-sm">Visit us <span class="arrow">→</span></a>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -113,6 +139,12 @@
         </div>
       </div>
     </section>
+
+    <!-- ========== IMAGE STRIP — global trade ========== -->
+    <div class="image-strip reveal">
+      <img src="https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&w=2400&q=80" alt="Container ship navigating open ocean at dawn" loading="lazy" />
+      <span class="image-strip-caption">Caspian to Gulf · Gulf to the World</span>
+    </div>
 
     <!-- ========== WHY YOU SHOULD CHOOSE US ========== -->
     <section class="section">
@@ -258,7 +290,13 @@
     <div class="container">
       <div class="footer-grid">
         <div>
-          <p class="footer-brand-mark">Globalex<span class="accent">.</span></p>
+          <div class="footer-brand-lockup">
+            <img src="assets/logo.webp" alt="" />
+            <span class="brand-text">
+              <span class="brand-main">GLOBALEX</span>
+              <span class="brand-sub">TRADING DMCC</span>
+            </span>
+          </div>
           <p class="footer-blurb">The company is registered &amp; licensed as a freezone company under the rules &amp; regulations of DMCC in the United Arab Emirates (UAE).</p>
         </div>
         <div class="footer-col">

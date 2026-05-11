@@ -9,7 +9,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Saira:wght@500;600;700&display=swap" rel="stylesheet" />
 
   <link rel="stylesheet" href="assets/css/reset.css" />
   <link rel="stylesheet" href="assets/css/tokens.css" />
@@ -19,13 +19,15 @@
 </head>
 
 <body>
-  <a href="#main" class="skip-link">Skip to content</a>
-
+  <div class="scroll-progress" aria-hidden="true"><div class="scroll-progress-fill"></div></div>
   <header class="site-header" data-state="solid">
     <div class="container site-header-inner">
       <a href="index.html" class="brand" aria-label="Globalex Trading DMCC home">
-        <span class="brand-mark">Globalex<span class="accent">.</span></span>
-        <span class="brand-tagline">Trading DMCC</span>
+        <img src="assets/logo.webp" alt="" class="brand-logo" width="64" height="64" />
+        <span class="brand-text">
+          <span class="brand-main">GLOBALEX</span>
+          <span class="brand-sub">TRADING DMCC</span>
+        </span>
       </a>
       <nav class="nav-primary" aria-label="Primary">
         <ul class="nav-links">
@@ -71,6 +73,9 @@
   <main id="main">
 
     <section class="page-hero">
+      <div class="page-hero-media">
+        <img src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?auto=format&fit=crop&w=2400&q=80" alt="Industrial polymer manufacturing facility" loading="eager" />
+      </div>
       <div class="container">
         <div class="page-hero-content reveal">
           <nav class="breadcrumbs" aria-label="Breadcrumb">
@@ -81,7 +86,7 @@
             <span class="current">Polymers</span>
           </nav>
           <span class="eyebrow on-dark">3 categories · Gulf, Caspian & East Asia origin</span>
-          <h1>Polymers</h1>
+          <h1 class="reveal-words" data-words>Polymers</h1>
           <p class="lead">Trade across the polymer spectrum — polyethylene (LDPE, HDPE, LLDPE, UHMWPE), polypropylene homopolymer and copolymer, and the chemical additives that tune performance to your application.</p>
         </div>
       </div>
@@ -141,7 +146,49 @@
       </div>
     </section>
 
-    <section class="section-tight section-cream">
+    <!-- ========== IMAGE FEATURE — applications across industries ========== -->
+    <section class="section">
+      <div class="container">
+        <div class="image-split-feature reveal">
+          <div class="image-split-media">
+            <span class="badge">Applications</span>
+            <img src="https://images.unsplash.com/photo-1611273426858-450d8e3c9fce?auto=format&fit=crop&w=1400&q=80" alt="Colorful plastic polymer pellets" loading="lazy" />
+          </div>
+          <div class="image-split-content">
+            <span class="eyebrow">From Resin To Product</span>
+            <h2>One material category, every modern industry.</h2>
+            <p class="lead">Polymers underpin packaging that protects food, pipes that deliver water, components that move automobiles, and films that keep medical supplies sterile. We supply the resin grades and additive specs that match the application — not just the category.</p>
+            <p>Our buyers include converters across the Middle East, North Africa and South Asia. We work to grade, packaging spec and delivery window — and we hold inventory positions in Dubai for short lead-time orders.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== IMAGE GALLERY — industries we serve ========== -->
+    <section class="section section-cream">
+      <div class="container">
+        <div class="section-header reveal">
+          <span class="eyebrow">Industries we serve</span>
+          <h2>Where our polymers end up.</h2>
+        </div>
+        <div class="image-gallery reveal-stagger">
+          <div>
+            <span class="label">Packaging</span>
+            <img src="https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?auto=format&fit=crop&w=900&q=80" alt="Food packaging film roll" loading="lazy" />
+          </div>
+          <div>
+            <span class="label">Construction &amp; Pipes</span>
+            <img src="https://images.unsplash.com/photo-1581094271901-8022df4466f9?auto=format&fit=crop&w=900&q=80" alt="HDPE pipes stacked at a construction site" loading="lazy" />
+          </div>
+          <div>
+            <span class="label">Automotive &amp; Goods</span>
+            <img src="https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?auto=format&fit=crop&w=900&q=80" alt="Automotive manufacturing line" loading="lazy" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-tight">
       <div class="container">
         <div class="split">
           <div class="reveal">
@@ -177,7 +224,13 @@
     <div class="container">
       <div class="footer-grid">
         <div>
-          <p class="footer-brand-mark">Globalex<span class="accent">.</span></p>
+          <div class="footer-brand-lockup">
+            <img src="assets/logo.webp" alt="" />
+            <span class="brand-text">
+              <span class="brand-main">GLOBALEX</span>
+              <span class="brand-sub">TRADING DMCC</span>
+            </span>
+          </div>
           <p class="footer-blurb">The company is registered &amp; licensed as a freezone company under the rules &amp; regulations of DMCC in the United Arab Emirates (UAE).</p>
         </div>
         <div class="footer-col">

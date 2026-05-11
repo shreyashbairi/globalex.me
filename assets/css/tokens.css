@@ -13,6 +13,10 @@
   --accent-sand:   #C7A56B;
   --accent-sand-2: #B89254;
 
+  /* --- Color: Brand cyan (from the wordmark) --- */
+  --accent-cyan:   #2BC5E8;
+  --accent-cyan-2: #1AA8C9;
+
   /* --- Color: Surfaces --- */
   --canvas:        #FAFAF7;   /* page background — warm off-white */
   --surface:       #FFFFFF;
@@ -29,9 +33,10 @@
   --line-dark:     rgba(244, 242, 236, 0.14);
 
   /* --- Typography --- */
-  --font-display:  'Fraunces', 'Georgia', serif;
-  --font-body:     'Inter Tight', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-display:  'Manrope', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body:     'Inter', -apple-system, BlinkMacSystemFont, 'Manrope', sans-serif;
   --font-mono:     'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+  --font-brand:    'Saira', 'Manrope', sans-serif;
 
   /* Fluid type scale */
   --fs-eyebrow:    clamp(0.72rem, 0.7rem + 0.1vw, 0.8rem);
@@ -42,8 +47,8 @@
   --fs-h4:         clamp(1.35rem, 1.2rem + 0.6vw, 1.7rem);
   --fs-h3:         clamp(1.7rem, 1.4rem + 1vw, 2.25rem);
   --fs-h2:         clamp(2.2rem, 1.8rem + 1.6vw, 3.25rem);
-  --fs-h1:         clamp(2.6rem, 2rem + 3vw, 4.75rem);
-  --fs-display:    clamp(3rem, 2.2rem + 4vw, 6.25rem);
+  --fs-h1:         clamp(2.4rem, 1.7rem + 2.6vw, 4.1rem);
+  --fs-display:    clamp(2.6rem, 1.8rem + 3.4vw, 5.25rem);
 
   /* --- Spacing scale (4-base) --- */
   --s-1: 0.25rem;
@@ -61,8 +66,8 @@
   --section-y: clamp(5rem, 12vh, 10rem);
 
   /* --- Layout --- */
-  --container-max: 1280px;
-  --container-pad: clamp(1.25rem, 5vw, 5rem);
+  --container-max: 1480px;
+  --container-pad: clamp(1.25rem, 4vw, 4rem);
 
   /* --- Radii --- */
   --r-1: 4px;

@@ -9,7 +9,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Saira:wght@500;600;700&display=swap" rel="stylesheet" />
 
   <link rel="stylesheet" href="assets/css/reset.css" />
   <link rel="stylesheet" href="assets/css/tokens.css" />
@@ -19,13 +19,15 @@
 </head>
 
 <body>
-  <a href="#main" class="skip-link">Skip to content</a>
-
+  <div class="scroll-progress" aria-hidden="true"><div class="scroll-progress-fill"></div></div>
   <header class="site-header" data-state="solid">
     <div class="container site-header-inner">
       <a href="index.html" class="brand" aria-label="Globalex Trading DMCC home">
-        <span class="brand-mark">Globalex<span class="accent">.</span></span>
-        <span class="brand-tagline">Trading DMCC</span>
+        <img src="assets/logo.webp" alt="" class="brand-logo" width="64" height="64" />
+        <span class="brand-text">
+          <span class="brand-main">GLOBALEX</span>
+          <span class="brand-sub">TRADING DMCC</span>
+        </span>
       </a>
       <nav class="nav-primary" aria-label="Primary">
         <ul class="nav-links">
@@ -71,6 +73,9 @@
   <main id="main">
 
     <section class="page-hero">
+      <div class="page-hero-media">
+        <img src="https://images.unsplash.com/photo-1494412651409-8963ce7935a7?auto=format&fit=crop&w=2400&q=80" alt="Aerial view of cargo containers at port" loading="eager" />
+      </div>
       <div class="container">
         <div class="page-hero-content reveal">
           <nav class="breadcrumbs" aria-label="Breadcrumb">
@@ -79,87 +84,108 @@
             <span class="current">Procedures</span>
           </nav>
           <span class="eyebrow on-dark">Trade Workflow · 10 Steps</span>
-          <h1>Procedures</h1>
+          <h1 class="reveal-words" data-words>Procedures</h1>
           <p class="lead">While we have standardized procedures in place, our goal is to collaborate with our clients to achieve mutual agreement. We highly value your business and encourage you to reach out if you have any inquiries regarding the outlined procedure.</p>
         </div>
       </div>
     </section>
 
-    <!-- ========== TIMELINE ========== -->
+    <!-- ========== IMAGE STRIP — port of Dubai ========== -->
+    <div class="image-strip reveal">
+      <img src="https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&w=2400&q=80" alt="Container ship at sea carrying cargo internationally" loading="lazy" />
+      <span class="image-strip-caption">Every shipment runs through ten contractual checkpoints</span>
+    </div>
+
+    <!-- ========== TIMELINE — pinned step indicator + steps ========== -->
     <section class="section">
       <div class="container">
-        <div class="timeline reveal-stagger">
+        <div class="timeline-layout">
 
-          <article class="timeline-step">
-            <div class="num">01</div>
-            <span class="tag">NCND</span>
-            <h4>Non-Circumvention and Non-Disclosure Agreement</h4>
-            <p>NCND agreement is signed between all parties involved.</p>
-          </article>
+          <aside class="timeline-pinned" aria-hidden="true">
+            <div class="eyebrow" style="margin-bottom: var(--s-4);">Trade workflow</div>
+            <div class="step-counter">
+              <span class="current">01</span>
+              <span class="of">/ 10</span>
+            </div>
+            <div class="step-name">Non-Circumvention &amp; Non-Disclosure</div>
+            <div class="step-progress" role="progressbar" aria-label="Step progress">
+              <div class="step-progress-fill"></div>
+            </div>
+          </aside>
 
-          <article class="timeline-step">
-            <div class="num">02</div>
-            <span class="tag">IMFPA</span>
-            <h4>Master Fee Protection Agreement</h4>
-            <p>Irrevocable Master Fee Protection Agreement (IMFPA) is signed between all parties involved.</p>
-          </article>
+          <div class="timeline reveal-stagger">
 
-          <article class="timeline-step">
-            <div class="num">03</div>
-            <span class="tag">LOI · BCL · ICPO</span>
-            <h4>Buyer issues Letter of Intent</h4>
-            <p>Buyer submits a valid Letter of Intent (LOI) with complete banking coordinates and authorization of soft probe and Bank Comfort/Clearance Letter (BCL) or Irrevocable Corporate Purchase Order (ICPO).</p>
-          </article>
+            <article class="timeline-step is-active" data-step="1" data-label="Non-Circumvention &amp; Non-Disclosure">
+              <div class="num">01</div>
+              <span class="tag">NCND</span>
+              <h4>Non-Circumvention and Non-Disclosure Agreement</h4>
+              <p>NCND agreement is signed between all parties involved.</p>
+            </article>
 
-          <article class="timeline-step">
-            <div class="num">04</div>
-            <span class="tag">DC · FCO</span>
-            <h4>Seller issues draft contract</h4>
-            <p>Seller issues the draft contract (DC) and Full Corporate Offer (FCO).</p>
-          </article>
+            <article class="timeline-step" data-step="2" data-label="Master Fee Protection Agreement">
+              <div class="num">02</div>
+              <span class="tag">IMFPA</span>
+              <h4>Master Fee Protection Agreement</h4>
+              <p>Irrevocable Master Fee Protection Agreement (IMFPA) is signed between all parties involved.</p>
+            </article>
 
-          <article class="timeline-step">
-            <div class="num">05</div>
-            <span class="tag">Counter-signature</span>
-            <h4>Buyer counter-signs with fresh BCL</h4>
-            <p>Buyer sends signed and stamped DC, FCO with a fresh BCL confirming that the buyer has the capability to open a Letter of Credit (LC).</p>
-          </article>
+            <article class="timeline-step" data-step="3" data-label="Buyer issues Letter of Intent">
+              <div class="num">03</div>
+              <span class="tag">LOI · BCL · ICPO</span>
+              <h4>Buyer issues Letter of Intent</h4>
+              <p>Buyer submits a valid Letter of Intent (LOI) with complete banking coordinates and authorization of soft probe and Bank Comfort/Clearance Letter (BCL) or Irrevocable Corporate Purchase Order (ICPO).</p>
+            </article>
 
-          <article class="timeline-step">
-            <div class="num">06</div>
-            <span class="tag">Final Contract</span>
-            <h4>Seller delivers final contract</h4>
-            <p>Seller sends soft and hard copies of the final contract to be signed and stamped by the buyer.</p>
-          </article>
+            <article class="timeline-step" data-step="4" data-label="Seller issues draft contract">
+              <div class="num">04</div>
+              <span class="tag">DC · FCO</span>
+              <h4>Seller issues draft contract</h4>
+              <p>Seller issues the draft contract (DC) and Full Corporate Offer (FCO).</p>
+            </article>
 
-          <article class="timeline-step">
-            <div class="num">07</div>
-            <span class="tag">Non-operative LC + POF</span>
-            <h4>Buyer issues non-operative LC</h4>
-            <p>Buyer issues a non-operative LC and provides Proof of Funds (POF) to the seller's bank.</p>
-          </article>
+            <article class="timeline-step" data-step="5" data-label="Buyer counter-signs with fresh BCL">
+              <div class="num">05</div>
+              <span class="tag">Counter-signature</span>
+              <h4>Buyer counter-signs with fresh BCL</h4>
+              <p>Buyer sends signed and stamped DC, FCO with a fresh BCL confirming that the buyer has the capability to open a Letter of Credit (LC).</p>
+            </article>
 
-          <article class="timeline-step">
-            <div class="num">08</div>
-            <span class="tag">POP</span>
-            <h4>Seller provides Proof of Product</h4>
-            <p>Seller will provide Proof of Product (POP) to the buyer's bank.</p>
-          </article>
+            <article class="timeline-step" data-step="6" data-label="Seller delivers final contract">
+              <div class="num">06</div>
+              <span class="tag">Final Contract</span>
+              <h4>Seller delivers final contract</h4>
+              <p>Seller sends soft and hard copies of the final contract to be signed and stamped by the buyer.</p>
+            </article>
 
-          <article class="timeline-step">
-            <div class="num">09</div>
-            <span class="tag">2% PBG</span>
-            <h4>Seller issues Performance Bond Guarantee</h4>
-            <p>Seller will issue 2% Performance Bond Guarantee (PBG) to activate the LC.</p>
-          </article>
+            <article class="timeline-step" data-step="7" data-label="Buyer issues non-operative LC">
+              <div class="num">07</div>
+              <span class="tag">Non-operative LC + POF</span>
+              <h4>Buyer issues non-operative LC</h4>
+              <p>Buyer issues a non-operative LC and provides Proof of Funds (POF) to the seller's bank.</p>
+            </article>
 
-          <article class="timeline-step">
-            <div class="num">10</div>
-            <span class="tag">Delivery</span>
-            <h4>Shipment begins</h4>
-            <p>Shipment begins as per mutually agreed schedule in the contract.</p>
-          </article>
+            <article class="timeline-step" data-step="8" data-label="Seller provides Proof of Product">
+              <div class="num">08</div>
+              <span class="tag">POP</span>
+              <h4>Seller provides Proof of Product</h4>
+              <p>Seller will provide Proof of Product (POP) to the buyer's bank.</p>
+            </article>
 
+            <article class="timeline-step" data-step="9" data-label="Seller issues Performance Bond Guarantee">
+              <div class="num">09</div>
+              <span class="tag">2% PBG</span>
+              <h4>Seller issues Performance Bond Guarantee</h4>
+              <p>Seller will issue 2% Performance Bond Guarantee (PBG) to activate the LC.</p>
+            </article>
+
+            <article class="timeline-step" data-step="10" data-label="Shipment begins">
+              <div class="num">10</div>
+              <span class="tag">Delivery</span>
+              <h4>Shipment begins</h4>
+              <p>Shipment begins as per mutually agreed schedule in the contract.</p>
+            </article>
+
+          </div>
         </div>
       </div>
     </section>
@@ -187,7 +213,13 @@
     <div class="container">
       <div class="footer-grid">
         <div>
-          <p class="footer-brand-mark">Globalex<span class="accent">.</span></p>
+          <div class="footer-brand-lockup">
+            <img src="assets/logo.webp" alt="" />
+            <span class="brand-text">
+              <span class="brand-main">GLOBALEX</span>
+              <span class="brand-sub">TRADING DMCC</span>
+            </span>
+          </div>
           <p class="footer-blurb">The company is registered &amp; licensed as a freezone company under the rules &amp; regulations of DMCC in the United Arab Emirates (UAE).</p>
         </div>
         <div class="footer-col">

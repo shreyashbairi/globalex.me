@@ -9,7 +9,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Saira:wght@500;600;700&display=swap" rel="stylesheet" />
 
   <link rel="stylesheet" href="assets/css/reset.css" />
   <link rel="stylesheet" href="assets/css/tokens.css" />
@@ -19,13 +19,15 @@
 </head>
 
 <body>
-  <a href="#main" class="skip-link">Skip to content</a>
-
+  <div class="scroll-progress" aria-hidden="true"><div class="scroll-progress-fill"></div></div>
   <header class="site-header" data-state="solid">
     <div class="container site-header-inner">
       <a href="index.html" class="brand" aria-label="Globalex Trading DMCC home">
-        <span class="brand-mark">Globalex<span class="accent">.</span></span>
-        <span class="brand-tagline">Trading DMCC</span>
+        <img src="assets/logo.webp" alt="" class="brand-logo" width="64" height="64" />
+        <span class="brand-text">
+          <span class="brand-main">GLOBALEX</span>
+          <span class="brand-sub">TRADING DMCC</span>
+        </span>
       </a>
       <nav class="nav-primary" aria-label="Primary">
         <ul class="nav-links">
@@ -72,6 +74,9 @@
 
     <!-- ========== PAGE HERO ========== -->
     <section class="page-hero">
+      <div class="page-hero-media">
+        <img src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=2400&q=80" alt="Golden wheat field at sunset" loading="eager" />
+      </div>
       <div class="container">
         <div class="page-hero-content reveal">
           <nav class="breadcrumbs" aria-label="Breadcrumb">
@@ -82,7 +87,7 @@
             <span class="current">Fertilizers</span>
           </nav>
           <span class="eyebrow on-dark">5 Products · Caspian & Central Asian origin</span>
-          <h1>Fertilizers</h1>
+          <h1 class="reveal-words" data-words>Fertilizers</h1>
           <p class="lead">Top-quality fertilizers — Urea-B (N46), Potash, Ammonia, Ammonium Nitrate and NPK — designed for optimal crop growth, reliably sourced from Turkmenistan, Uzbekistan, Kazakhstan and Azerbaijan.</p>
         </div>
       </div>
@@ -186,6 +191,36 @@
       </div>
     </section>
 
+    <!-- ========== IMAGE FEATURE — Caspian agriculture ========== -->
+    <section class="section">
+      <div class="container">
+        <div class="image-split-feature reverse reveal">
+          <div class="image-split-content">
+            <span class="eyebrow">Origin Story</span>
+            <h2>The Caspian basin: one of the world's most fertile nitrogen corridors.</h2>
+            <p class="lead">Turkmenistan, Uzbekistan, Kazakhstan and Azerbaijan together produce some of the world's most cost-efficient urea and ammonium nitrate, anchored by abundant natural gas feedstock and decades of state-backed production capacity.</p>
+            <p>We move that production to global agriculture markets — from European Union arable farms to South Asian smallholder programs — under contracts structured for transparency, on shipments timed for the planting window.</p>
+            <div class="chip-row" style="margin-top: var(--s-3);">
+              <span class="chip chip-accent">N46 grade</span>
+              <span class="chip chip-origin">Turkmenistan</span>
+              <span class="chip chip-origin">Uzbekistan</span>
+              <span class="chip chip-origin">Kazakhstan</span>
+            </div>
+          </div>
+          <div class="image-split-media">
+            <span class="badge">Agriculture</span>
+            <img src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1400&q=80" alt="Golden wheat field at sunset" loading="lazy" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== IMAGE STRIP ========== -->
+    <div class="image-strip reveal">
+      <img src="https://images.unsplash.com/photo-1574943320219-553eb213f72d?auto=format&fit=crop&w=2400&q=80" alt="Aerial view of agricultural fields in geometric patterns" loading="lazy" />
+      <span class="image-strip-caption">Yield begins with quality input</span>
+    </div>
+
     <!-- ========== SOURCING NOTE ========== -->
     <section class="section-tight section-cream">
       <div class="container">
@@ -224,7 +259,13 @@
     <div class="container">
       <div class="footer-grid">
         <div>
-          <p class="footer-brand-mark">Globalex<span class="accent">.</span></p>
+          <div class="footer-brand-lockup">
+            <img src="assets/logo.webp" alt="" />
+            <span class="brand-text">
+              <span class="brand-main">GLOBALEX</span>
+              <span class="brand-sub">TRADING DMCC</span>
+            </span>
+          </div>
           <p class="footer-blurb">The company is registered &amp; licensed as a freezone company under the rules &amp; regulations of DMCC in the United Arab Emirates (UAE).</p>
         </div>
         <div class="footer-col">

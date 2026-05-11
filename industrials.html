@@ -9,7 +9,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Saira:wght@500;600;700&display=swap" rel="stylesheet" />
 
   <link rel="stylesheet" href="assets/css/reset.css" />
   <link rel="stylesheet" href="assets/css/tokens.css" />
@@ -19,13 +19,15 @@
 </head>
 
 <body>
-  <a href="#main" class="skip-link">Skip to content</a>
-
+  <div class="scroll-progress" aria-hidden="true"><div class="scroll-progress-fill"></div></div>
   <header class="site-header" data-state="solid">
     <div class="container site-header-inner">
       <a href="index.html" class="brand" aria-label="Globalex Trading DMCC home">
-        <span class="brand-mark">Globalex<span class="accent">.</span></span>
-        <span class="brand-tagline">Trading DMCC</span>
+        <img src="assets/logo.webp" alt="" class="brand-logo" width="64" height="64" />
+        <span class="brand-text">
+          <span class="brand-main">GLOBALEX</span>
+          <span class="brand-sub">TRADING DMCC</span>
+        </span>
       </a>
       <nav class="nav-primary" aria-label="Primary">
         <ul class="nav-links">
@@ -71,6 +73,9 @@
   <main id="main">
 
     <section class="page-hero">
+      <div class="page-hero-media">
+        <img src="https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=2400&q=80" alt="Industrial chemical plant lit at night" loading="eager" />
+      </div>
       <div class="container">
         <div class="page-hero-content reveal">
           <nav class="breadcrumbs" aria-label="Breadcrumb">
@@ -81,7 +86,7 @@
             <span class="current">Industrial Chemicals</span>
           </nav>
           <span class="eyebrow on-dark">16 Specialty Chemicals · Multi-origin sourcing</span>
-          <h1>Industrial Chemicals</h1>
+          <h1 class="reveal-words" data-words>Industrial Chemicals</h1>
           <p class="lead">From sulphur and caustic soda to LABSA, SLES, sulphuric acid, carbon black and iodine — sixteen specialty chemicals across water treatment, manufacturing, personal care, agriculture and energy.</p>
         </div>
       </div>
@@ -320,6 +325,30 @@
       </div>
     </section>
 
+    <!-- ========== IMAGE FEATURE — industrial scale ========== -->
+    <section class="section">
+      <div class="container">
+        <div class="image-split-feature reverse reveal">
+          <div class="image-split-content">
+            <span class="eyebrow">Heavy Industry</span>
+            <h2>From water treatment to refineries — chemistry at industrial scale.</h2>
+            <p class="lead">Our industrial chemicals reach manufacturers across the GCC, South Asia and East Africa. Buyers include refiners using sulphuric acid in pretreatment, municipal authorities running chlorine-based potable water plants, detergent formulators using LABSA and SLES, and tire makers consuming carbon black at tonne scale.</p>
+            <p>For every product we trade, we hold to a single principle: specification matters. Grades are verified, packaging is matched to the use case, and documentation is complete before a single drum or container leaves origin.</p>
+          </div>
+          <div class="image-split-media">
+            <span class="badge">Manufacturing</span>
+            <img src="https://images.unsplash.com/photo-1565793298595-6a879b1d9492?auto=format&fit=crop&w=1400&q=80" alt="Industrial pipework and refinery infrastructure" loading="lazy" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== IMAGE STRIP ========== -->
+    <div class="image-strip reveal">
+      <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=2400&q=80" alt="Industrial facility at twilight with illuminated stacks" loading="lazy" />
+      <span class="image-strip-caption">Specification first. Always.</span>
+    </div>
+
     <section class="section">
       <div class="container">
         <div class="cta-banner reveal">
@@ -342,7 +371,13 @@
     <div class="container">
       <div class="footer-grid">
         <div>
-          <p class="footer-brand-mark">Globalex<span class="accent">.</span></p>
+          <div class="footer-brand-lockup">
+            <img src="assets/logo.webp" alt="" />
+            <span class="brand-text">
+              <span class="brand-main">GLOBALEX</span>
+              <span class="brand-sub">TRADING DMCC</span>
+            </span>
+          </div>
           <p class="footer-blurb">The company is registered &amp; licensed as a freezone company under the rules &amp; regulations of DMCC in the United Arab Emirates (UAE).</p>
         </div>
         <div class="footer-col">

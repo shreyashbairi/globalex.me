@@ -17,8 +17,7 @@
       header.dataset.state = 'solid';
       return;
     }
-    const threshold = window.innerHeight * 0.6;
-    header.dataset.state = window.scrollY > threshold ? 'solid' : 'transparent';
+    header.dataset.state = window.scrollY > 24 ? 'solid' : 'transparent';
   }
 
   updateHeaderState();
