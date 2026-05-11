@@ -1,0 +1,91 @@
+/* ============================================
+   Design Tokens — single source of truth
+   ============================================ */
+
+:root {
+  /* --- Color: Anchor / Brand --- */
+  --ink:           #0B1F2A;   /* darkest — headings, footer */
+  --brand-deep:    #13414F;   /* primary buttons, dark sections */
+  --brand-mid:     #2A6F7F;   /* hover, accents */
+  --brand-soft:    #E8EFF1;   /* tinted backgrounds */
+
+  /* --- Color: Warm Accent (use sparingly) --- */
+  --accent-sand:   #C7A56B;
+  --accent-sand-2: #B89254;
+
+  /* --- Color: Surfaces --- */
+  --canvas:        #FAFAF7;   /* page background — warm off-white */
+  --surface:       #FFFFFF;
+  --surface-2:     #F4F2EC;
+
+  /* --- Color: Text --- */
+  --text:          #1F2A30;
+  --muted:         #5A6B72;
+  --on-dark:       #F4F2EC;
+  --on-dark-muted: #94A8B0;
+
+  /* --- Color: Hairlines --- */
+  --line:          #E4E2DA;
+  --line-dark:     rgba(244, 242, 236, 0.14);
+
+  /* --- Typography --- */
+  --font-display:  'Fraunces', 'Georgia', serif;
+  --font-body:     'Inter Tight', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono:     'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  /* Fluid type scale */
+  --fs-eyebrow:    clamp(0.72rem, 0.7rem + 0.1vw, 0.8rem);
+  --fs-body:       clamp(0.98rem, 0.96rem + 0.1vw, 1.05rem);
+  --fs-lead:       clamp(1.1rem, 1rem + 0.4vw, 1.25rem);
+  --fs-h6:         clamp(0.95rem, 0.9rem + 0.2vw, 1.05rem);
+  --fs-h5:         clamp(1.1rem, 1rem + 0.4vw, 1.35rem);
+  --fs-h4:         clamp(1.35rem, 1.2rem + 0.6vw, 1.7rem);
+  --fs-h3:         clamp(1.7rem, 1.4rem + 1vw, 2.25rem);
+  --fs-h2:         clamp(2.2rem, 1.8rem + 1.6vw, 3.25rem);
+  --fs-h1:         clamp(2.6rem, 2rem + 3vw, 4.75rem);
+  --fs-display:    clamp(3rem, 2.2rem + 4vw, 6.25rem);
+
+  /* --- Spacing scale (4-base) --- */
+  --s-1: 0.25rem;
+  --s-2: 0.5rem;
+  --s-3: 0.75rem;
+  --s-4: 1rem;
+  --s-5: 1.5rem;
+  --s-6: 2rem;
+  --s-7: 3rem;
+  --s-8: 4rem;
+  --s-9: 6rem;
+  --s-10: 8rem;
+
+  /* Section vertical rhythm */
+  --section-y: clamp(5rem, 12vh, 10rem);
+
+  /* --- Layout --- */
+  --container-max: 1280px;
+  --container-pad: clamp(1.25rem, 5vw, 5rem);
+
+  /* --- Radii --- */
+  --r-1: 4px;
+  --r-2: 8px;
+  --r-3: 16px;
+  --r-4: 24px;
+  --r-pill: 999px;
+
+  /* --- Shadow --- */
+  --shadow-sm: 0 1px 2px rgba(11, 31, 42, 0.04), 0 1px 3px rgba(11, 31, 42, 0.06);
+  --shadow-md: 0 8px 24px -8px rgba(11, 31, 42, 0.12), 0 2px 6px rgba(11, 31, 42, 0.04);
+  --shadow-lg: 0 20px 60px -20px rgba(11, 31, 42, 0.18), 0 4px 12px rgba(11, 31, 42, 0.05);
+  --shadow-xl: 0 40px 100px -30px rgba(11, 31, 42, 0.28);
+
+  /* --- Motion --- */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-fast: 180ms;
+  --dur-base: 320ms;
+  --dur-slow: 800ms;
+
+  /* --- Z-index --- */
+  --z-nav: 50;
+  --z-overlay: 80;
+  --z-modal: 100;
+}
