@@ -19,7 +19,14 @@
       "Bash(curl -s -o /dev/null -w \"reveal.js: HTTP %{http_code}\\\\n\" http://localhost:8765/assets/js/reveal.js)",
       "Bash(ffprobe -v error -select_streams v:0 -show_entries stream=width,height,codec_name,duration,bit_rate -of default=noprint_wrappers=1 heronew.mp4)",
       "Bash(curl -s -o /dev/null -w \"hero-1080.mp4: HTTP %{http_code} · %{size_download} bytes\\\\n\" --range 0-99 http://localhost:8765/assets/hero-1080.mp4)",
-      "Bash(curl -sI http://localhost:8765/assets/hero-1080.mp4)"
+      "Bash(curl -sI http://localhost:8765/assets/hero-1080.mp4)",
+      "Bash(curl -s -o /dev/null -w \"Homepage: HTTP %{http_code}\\\\n\" http://localhost:8765/)",
+      "Bash(curl -s -o /dev/null -w \"Contact: HTTP %{http_code}\\\\n\" http://localhost:8765/contact.html)",
+      "Bash(python3 -m http.server 8765 > /tmp/globalex-server.log 2>&1 & *)",
+      "Bash(curl -s -o /dev/null -w \"Server alive: HTTP %{http_code}\\\\n\" http://localhost:8765/)"
+    ],
+    "additionalDirectories": [
+      "/tmp"
     ]
   }
 }

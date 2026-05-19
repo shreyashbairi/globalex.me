@@ -339,20 +339,34 @@
   color: var(--on-dark);
 }
 
-.btn-primary:hover {
+.btn-primary::before {
+  content: "";
+  position: absolute;
+  inset: 0;
   background: var(--brand-deep);
-  color: var(--on-dark);
+  transform: translateX(-101%);
+  transition: transform 420ms var(--ease-out);
+  z-index: -1;
 }
+
+.btn-primary:hover::before { transform: translateX(0); }
 
 .btn-accent {
   background: var(--accent-sand);
   color: var(--ink);
 }
 
-.btn-accent:hover {
+.btn-accent::before {
+  content: "";
+  position: absolute;
+  inset: 0;
   background: var(--accent-sand-2);
-  color: var(--ink);
+  transform: translateX(-101%);
+  transition: transform 420ms var(--ease-out);
+  z-index: -1;
 }
+
+.btn-accent:hover::before { transform: translateX(0); }
 
 .btn-ghost {
   background: transparent;
@@ -438,7 +452,31 @@
   border-radius: var(--r-3);
   height: 100%;
   position: relative;
+  isolation: isolate;
+  transition: border-color var(--dur-base), transform var(--dur-base), box-shadow var(--dur-base);
+  overflow: hidden;
 }
+
+.card-pillar::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--accent-cyan);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 600ms var(--ease-out);
+}
+
+.card-pillar:hover {
+  transform: translateY(-3px);
+  border-color: var(--brand-mid);
+  box-shadow: var(--shadow-md);
+}
+
+.card-pillar:hover::before { transform: scaleX(1); }
 
 .card-pillar .num {
   font-family: var(--font-mono);
@@ -937,9 +975,10 @@
   display: inline-flex;
   align-items: center;
   gap: var(--s-3);
-  color: var(--on-dark-muted);
+  color: var(--on-dark);
   font-family: var(--font-mono);
-  font-size: 0.7rem;
+  font-size: 0.72rem;
+  font-weight: 500;
   letter-spacing: 0.22em;
   text-transform: uppercase;
   writing-mode: vertical-rl;
@@ -977,18 +1016,19 @@
   display: flex;
   flex-wrap: wrap;
   gap: var(--s-6);
-  color: var(--on-dark-muted);
+  color: var(--on-dark);
   font-family: var(--font-mono);
-  font-size: 0.72rem;
+  font-size: 0.74rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   padding-top: var(--s-5);
-  border-top: 1px solid var(--line-dark);
+  border-top: 1px solid rgba(244, 242, 236, 0.25);
+  font-weight: 500;
 }
 
 .hero-meta strong {
-  color: var(--on-dark);
-  font-weight: 500;
+  color: var(--accent-cyan);
+  font-weight: 700;
 }
 
 /* Compact hero used on non-home pages — now supports a background image */
@@ -1403,6 +1443,55 @@
 .counter {
   font-variant-numeric: tabular-nums;
 }
+
+/* ============================================
+   SOCIAL FOLLOW BLOCK
+   ============================================ */
+
+.social-follow {
+  display: grid;
+  gap: var(--s-3);
+}
+
+.social-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-3);
+}
+
+.social-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-3);
+  padding: 0.65rem 1.1rem 0.65rem 0.85rem;
+  border: 1px solid var(--line);
+  border-radius: var(--r-pill);
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 0.92rem;
+  font-weight: 500;
+  transition: border-color var(--dur-fast),
+              color var(--dur-fast),
+              background var(--dur-fast),
+              transform var(--dur-base) var(--ease-out);
+}
+
+.social-link:hover {
+  border-color: var(--ink);
+  background: var(--ink);
+  color: var(--accent-cyan);
+  transform: translateY(-2px);
+}
+
+.social-link svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  fill: currentColor;
+}
+
+.social-link .arrow { transition: transform var(--dur-base) var(--ease-out); }
+.social-link:hover .arrow { transform: translateX(3px); }
 
 /* ============================================
    8. STAT / METRIC BLOCK

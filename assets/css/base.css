@@ -99,14 +99,38 @@ a:hover { color: var(--brand-mid); }
   gap: var(--s-2);
   font-weight: 500;
   color: var(--ink);
-  border-bottom: 1px solid var(--ink);
-  padding-bottom: 2px;
+  position: relative;
+  padding-bottom: 4px;
   transition: gap var(--dur-base) var(--ease-out), color var(--dur-fast);
+}
+
+.link-arrow::before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--ink);
+  transform-origin: right;
+  transition: transform 480ms var(--ease-out);
 }
 
 .link-arrow:hover {
   gap: var(--s-3);
   color: var(--brand-deep);
+}
+
+.link-arrow:hover::before {
+  background: var(--accent-cyan);
+  animation: link-underline-redraw 720ms var(--ease-out);
+}
+
+@keyframes link-underline-redraw {
+  0%   { transform: scaleX(1); transform-origin: right; }
+  49%  { transform: scaleX(0); transform-origin: right; }
+  51%  { transform: scaleX(0); transform-origin: left; }
+  100% { transform: scaleX(1); transform-origin: left; }
 }
 
 .link-arrow::after {
@@ -115,7 +139,7 @@ a:hover { color: var(--brand-mid); }
   transition: transform var(--dur-base) var(--ease-out);
 }
 
-.link-arrow:hover::after { transform: translateX(2px); }
+.link-arrow:hover::after { transform: translateX(3px); }
 
 /* --- Utility: container --- */
 .container {
@@ -198,9 +222,9 @@ a:hover { color: var(--brand-mid); }
   color: var(--on-dark);
 }
 
-/* --- Focus rings (a11y) --- */
+/* --- Focus rings (a11y) — cyan, brand-consistent --- */
 :focus-visible {
-  outline: 2px solid var(--brand-mid);
+  outline: 2px solid var(--accent-cyan);
   outline-offset: 3px;
   border-radius: 2px;
 }
