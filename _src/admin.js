@@ -1,0 +1,553 @@
+/* ============================================================
+   ADMIN DASHBOARD — /admin.html
+
+   Not a marketing page, so it skips the site chrome: no preloader, no
+   globe, no custom cursor. Same palette and type stack, but tuned for
+   density — this is a tool someone opens every morning.
+   ============================================================ */
+
+const FONTS =
+  'https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Instrument+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap';
+
+const css = `
+*,*::before,*::after{box-sizing:border-box}*{margin:0;padding:0}
+:root{
+  --void:#04121A;--deep:#071C27;--panel:#0A2632;--steel:#10394A;
+  --line:rgba(146,190,204,.16);--line-2:rgba(146,190,204,.32);
+  --cyan:#35D6F5;--cyan-d:#0FA8C9;--sand:#D9B778;--rose:#F5748A;
+  --frost:#E9F3F6;--haze:#B4C9D2;--haze-d:#8FAAB6;
+  --f-disp:'Archivo',system-ui,sans-serif;--f-body:'Instrument Sans',system-ui,sans-serif;
+  --f-mono:'IBM Plex Mono',ui-monospace,Menlo,monospace;
+  --ease:cubic-bezier(.16,1,.3,1);
+}
+body{font-family:var(--f-body);background:var(--void);color:var(--frost);font-size:.95rem;
+  -webkit-font-smoothing:antialiased;min-height:100svh}
+a{color:inherit;text-decoration:none}
+button,input,select{font:inherit;color:inherit;background:none;border:none}
+button{cursor:pointer}
+::selection{background:var(--cyan);color:var(--void)}
+.mono{font-family:var(--f-mono)}
+[hidden]{display:none !important}
+
+/* ---------- sign in ---------- */
+.gatepage{min-height:100svh;display:grid;place-items:center;padding:1.5rem;
+  background:radial-gradient(110% 70% at 50% 0,rgba(53,214,245,.07),transparent 62%)}
+.gatebox{width:min(100%,392px);border:1px solid var(--line-2);background:var(--deep);
+  padding:2.1rem 1.9rem;
+  clip-path:polygon(0 0,calc(100% - 17px) 0,100% 17px,100% 100%,17px 100%,0 calc(100% - 17px))}
+.gatebox img{margin:0 auto 1.4rem}
+.gatebox h1{font-family:var(--f-disp);font-variation-settings:'wdth' 114;font-weight:700;
+  font-size:1.28rem;text-align:center}
+.gatebox p{color:var(--haze-d);font-size:.86rem;text-align:center;margin-top:.5rem}
+.gatebox form{display:grid;gap:.9rem;margin-top:1.6rem}
+label{font-family:var(--f-mono);font-size:.715rem;letter-spacing:.17em;text-transform:uppercase;
+  color:var(--haze-d);display:block;margin-bottom:.4rem}
+input,select{width:100%;padding:.75rem .9rem;background:rgba(4,18,26,.6);
+  border:1px solid var(--line);color:var(--frost);transition:border-color .3s}
+input:focus,select:focus{outline:none;border-color:var(--cyan)}
+select option{background:var(--deep)}
+.btn{padding:.78em 1.4em;background:var(--cyan);color:var(--void);font-weight:600;font-size:.88rem;
+  text-align:center;transition:background .3s;
+  clip-path:polygon(0 0,calc(100% - 9px) 0,100% 9px,100% 100%,9px 100%,0 calc(100% - 9px))}
+.btn:hover{background:var(--frost)}
+.btn-o{background:none;border:1px solid var(--line-2);color:var(--haze);clip-path:none;
+  padding:.5em 1em;font-size:.79rem}
+.btn-o:hover{border-color:var(--cyan);color:var(--cyan);background:rgba(53,214,245,.07)}
+.err{color:var(--rose);font-size:.86rem;text-align:center;min-height:1.2em}
+
+/* ---------- shell ---------- */
+.top{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:1rem;flex-wrap:wrap;
+  padding:.85rem clamp(.9rem,2.4vw,1.7rem);background:rgba(4,18,26,.95);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.top .mark{display:flex;align-items:center;gap:.6rem}
+.top .mark b{font-family:var(--f-disp);font-variation-settings:'wdth' 112;font-weight:700;
+  font-size:.86rem;letter-spacing:.13em}
+.top .tag{font-family:var(--f-mono);font-size:.645rem;letter-spacing:.2em;color:var(--cyan);
+  border:1px solid rgba(53,214,245,.3);padding:.25em .55em}
+.top .sp{flex:1}
+.top select{width:auto;padding:.42rem .7rem;font-size:.79rem}
+main{padding:clamp(1.1rem,2.6vw,1.9rem);max-width:1560px;margin:0 auto}
+
+h2{font-family:var(--f-disp);font-variation-settings:'wdth' 110;font-weight:700;font-size:1.05rem;
+  letter-spacing:.01em;display:flex;align-items:center;gap:.6rem}
+h2::before{content:'';width:6px;height:6px;background:var(--cyan);flex:none;
+  clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%)}
+section{margin-bottom:clamp(1.7rem,3.4vw,2.6rem)}
+.shead{display:flex;align-items:center;gap:1rem;flex-wrap:wrap;margin-bottom:1rem}
+.shead .sp{flex:1}
+
+/* ---------- KPI ---------- */
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1px;
+  background:var(--line);border:1px solid var(--line)}
+.kpi{background:var(--deep);padding:1.15rem 1.25rem}
+.kpi span{font-family:var(--f-mono);font-size:.69rem;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--haze-d)}
+.kpi b{display:block;font-family:var(--f-disp);font-variation-settings:'wdth' 118;font-weight:700;
+  font-size:clamp(1.6rem,3.4vw,2.15rem);line-height:1.1;margin-top:.5rem;
+  font-variant-numeric:tabular-nums}
+.kpi.hi b{color:var(--cyan)}
+.kpi.mat b{color:var(--sand)}
+
+/* ---------- chart ---------- */
+.chart{border:1px solid var(--line);background:var(--deep);padding:1rem;height:250px;position:relative}
+.chart canvas{width:100%;height:100%}
+.legend{position:absolute;top:1rem;right:1.1rem;display:flex;gap:1rem;
+  font-family:var(--f-mono);font-size:.69rem;color:var(--haze-d)}
+.legend i{display:inline-block;width:9px;height:9px;margin-right:.4em;vertical-align:middle}
+
+/* ---------- tables ---------- */
+.tw{border:1px solid var(--line);background:var(--deep);overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:.88rem;min-width:640px}
+th{font-family:var(--f-mono);font-size:.67rem;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--haze-d);text-align:left;font-weight:400;padding:.75rem .85rem;
+  border-bottom:1px solid var(--line);white-space:nowrap;position:sticky;top:0;background:var(--panel)}
+td{padding:.7rem .85rem;border-bottom:1px solid rgba(146,190,204,.09);vertical-align:top}
+tbody tr:hover{background:rgba(53,214,245,.045)}
+tbody tr:last-child td{border-bottom:0}
+td.num,th.num{text-align:right;font-family:var(--f-mono);font-variant-numeric:tabular-nums;
+  white-space:nowrap}
+td.when{font-family:var(--f-mono);font-size:.79rem;color:var(--haze);white-space:nowrap}
+td.em{font-weight:600}
+td.em small{display:block;font-weight:400;color:var(--haze-d);font-size:.76rem;margin-top:.15rem}
+.k{font-family:var(--f-mono);font-size:.645rem;letter-spacing:.14em;padding:.24em .5em;
+  border:1px solid rgba(53,214,245,.3);color:var(--cyan);background:rgba(53,214,245,.07);
+  white-space:nowrap}
+.k[data-kind=TDS],.k[data-kind=SPEC]{color:var(--sand);border-color:rgba(217,183,120,.34);
+  background:rgba(217,183,120,.1)}
+.pill{font-family:var(--f-mono);font-size:.645rem;letter-spacing:.1em;padding:.2em .5em;
+  border:1px solid var(--line-2);color:var(--haze-d)}
+.pill.on{color:var(--cyan);border-color:rgba(53,214,245,.4)}
+.pill.off{color:var(--rose);border-color:rgba(245,116,138,.4)}
+.zero{color:var(--haze-d)}
+.empty{padding:2.6rem 1rem;text-align:center;color:var(--haze-d);font-size:.9rem}
+
+/* proportion bars in the country / page lists */
+.bars{display:grid;gap:.1rem}
+.bar{display:grid;grid-template-columns:1fr auto;align-items:center;gap:.8rem;
+  padding:.5rem .85rem;position:relative;font-size:.88rem}
+.bar::before{content:'';position:absolute;left:0;top:0;bottom:0;width:var(--w,0%);
+  background:rgba(53,214,245,.1);transition:width .6s var(--ease)}
+.bar span,.bar b{position:relative}
+.bar b{font-family:var(--f-mono);font-size:.79rem;color:var(--haze);font-variant-numeric:tabular-nums}
+
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(1rem,2vw,1.5rem)}
+@media (max-width:900px){.g2{grid-template-columns:1fr}}
+
+/* ---------- drill-down ---------- */
+.dd{position:fixed;inset:0;z-index:40;display:grid;justify-items:end;
+  opacity:0;visibility:hidden;transition:opacity .35s var(--ease),visibility .35s}
+.dd[data-open]{opacity:1;visibility:visible}
+.dd-bd{position:absolute;inset:0;background:rgba(2,9,13,.72);backdrop-filter:blur(5px)}
+.dd-p{position:relative;width:min(100%,560px);height:100%;overflow-y:auto;background:var(--deep);
+  border-left:1px solid var(--line-2);padding:1.5rem;transform:translateX(28px);
+  transition:transform .45s var(--ease)}
+.dd[data-open] .dd-p{transform:none}
+.dd-x{position:absolute;top:1.1rem;right:1.2rem;width:28px;height:28px;color:var(--haze);
+  font-size:1.1rem;line-height:1}
+.dd-x:hover{color:var(--cyan)}
+.dd h3{font-family:var(--f-disp);font-variation-settings:'wdth' 112;font-weight:700;font-size:1.15rem;
+  padding-right:2rem}
+.dd .sub{font-family:var(--f-mono);font-size:.72rem;letter-spacing:.14em;color:var(--haze-d);
+  margin-top:.4rem;text-transform:uppercase}
+.ev{display:grid;gap:.1rem;margin-top:1.2rem}
+.ev-r{display:grid;grid-template-columns:auto 1fr auto;gap:.8rem;align-items:baseline;
+  padding:.6rem .1rem;border-bottom:1px solid rgba(146,190,204,.1)}
+.ev-r i{width:7px;height:7px;background:var(--cyan);flex:none;
+  clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%);transform:translateY(-1px)}
+.ev-r[data-k=download] i{background:var(--sand)}
+.ev-r b{font-weight:500;font-size:.88rem}
+.ev-r b small{display:block;color:var(--haze-d);font-weight:400;font-size:.76rem;margin-top:.15rem}
+.ev-r span{font-family:var(--f-mono);font-size:.72rem;color:var(--haze-d);white-space:nowrap}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms !important;
+  transition-duration:.01ms !important}}
+`;
+
+const body = `
+<div class="gatepage" id="signin">
+  <div class="gatebox">
+    <img src="assets/logo.webp" alt="" width="58" height="50" />
+    <h1>Globalex control</h1>
+    <p>Leads, traffic and document activity.</p>
+    <form id="signin-form">
+      <div>
+        <label for="pw">Password</label>
+        <input id="pw" type="password" autocomplete="current-password" required />
+      </div>
+      <button class="btn" type="submit">Sign in</button>
+      <p class="err" id="signin-err" role="alert"></p>
+    </form>
+  </div>
+</div>
+
+<div id="app" hidden>
+  <header class="top">
+    <a class="mark" href="index.html">
+      <img src="assets/logo.webp" alt="" width="34" height="29" />
+      <b>GLOBALEX</b>
+    </a>
+    <span class="tag">CONTROL</span>
+    <span class="sp"></span>
+    <select id="range" aria-label="Date range">
+      <option value="7">Last 7 days</option>
+      <option value="30" selected>Last 30 days</option>
+      <option value="90">Last 90 days</option>
+      <option value="365">Last 12 months</option>
+    </select>
+    <button class="btn-o" id="signout" type="button">Sign out</button>
+  </header>
+
+  <main>
+    <section>
+      <div class="kpis" id="kpis"></div>
+    </section>
+
+    <section>
+      <div class="shead"><h2>Traffic</h2><span class="sp"></span></div>
+      <div class="chart">
+        <canvas id="chart"></canvas>
+        <div class="legend">
+          <span><i style="background:var(--cyan)"></i>Visitors</span>
+          <span><i style="background:rgba(146,190,204,.4)"></i>Views</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="g2">
+      <div>
+        <div class="shead"><h2>Where from</h2></div>
+        <div class="tw"><div class="bars" id="countries"></div></div>
+      </div>
+      <div>
+        <div class="shead"><h2>Most read pages</h2></div>
+        <div class="tw"><div class="bars" id="paths"></div></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="shead">
+        <h2>Document engagement</h2><span class="sp"></span>
+        <a class="btn-o" href="/api/admin/export?what=events">Export activity CSV</a>
+      </div>
+      <div class="tw">
+        <table>
+          <thead><tr>
+            <th>Document</th><th class="num">Requested</th><th class="num">Links opened</th>
+            <th class="num">Total opens</th><th class="num">Downloads</th><th class="num">Read time</th>
+          </tr></thead>
+          <tbody id="docs"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section>
+      <div class="shead">
+        <h2>Leads</h2><span class="sp"></span>
+        <input id="search" type="search" placeholder="Search email or company" style="width:auto;min-width:220px" />
+        <a class="btn-o" href="/api/admin/export?what=leads">Export leads CSV</a>
+        <a class="btn-o" href="/api/admin/export?what=messages">Export messages CSV</a>
+      </div>
+      <div class="tw">
+        <table>
+          <thead><tr>
+            <th>Email</th><th>Document</th><th>Requested</th><th>Location</th>
+            <th class="num">Opens</th><th class="num">Downloads</th><th>Last opened</th><th></th>
+          </tr></thead>
+          <tbody id="leads"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div class="dd" id="dd" role="dialog" aria-modal="true" aria-label="Document activity">
+  <div class="dd-bd" data-dd-close></div>
+  <div class="dd-p">
+    <button class="dd-x" type="button" data-dd-close aria-label="Close">&times;</button>
+    <h3 id="dd-title">—</h3>
+    <div class="sub" id="dd-sub">—</div>
+    <div id="dd-pages"></div>
+    <div class="ev" id="dd-events"></div>
+  </div>
+</div>
+`;
+
+const js = `
+(function(){
+  var signin = document.getElementById('signin');
+  var app = document.getElementById('app');
+  var rangeSel = document.getElementById('range');
+  var searchBox = document.getElementById('search');
+
+  function api(path, opts){
+    return fetch(path, Object.assign({credentials:'same-origin'}, opts||{})).then(function(r){
+      if (r.status === 401){ show(false); throw new Error('Signed out'); }
+      return r.json().then(function(j){
+        if (!r.ok || j.ok === false) throw new Error(j.error || ('HTTP ' + r.status));
+        return j;
+      });
+    });
+  }
+  function show(in_){
+    signin.hidden = in_; app.hidden = !in_;
+    if (in_) load();
+  }
+  var fmt = function(n){ return String(n == null ? 0 : n).replace(/\\B(?=(\\d{3})+(?!\\d))/g, ','); };
+  function esc(s){ return String(s == null ? '' : s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+  function when(ms){
+    if (!ms) return '—';
+    var d = new Date(ms), t = Date.now() - ms;
+    if (t < 6e4) return 'just now';
+    if (t < 36e5) return Math.round(t/6e4) + 'm ago';
+    if (t < 864e5) return Math.round(t/36e5) + 'h ago';
+    if (t < 6048e5) return Math.round(t/864e5) + 'd ago';
+    return d.toISOString().slice(0,10);
+  }
+  function dur(s){
+    if (!s) return '—';
+    if (s < 60) return s + 's';
+    if (s < 3600) return Math.floor(s/60) + 'm ' + (s%60) + 's';
+    return Math.floor(s/3600) + 'h ' + Math.round((s%3600)/60) + 'm';
+  }
+
+  /* ---------- sign in ---------- */
+  document.getElementById('signin-form').addEventListener('submit', function(e){
+    e.preventDefault();
+    var err = document.getElementById('signin-err');
+    err.textContent = '';
+    fetch('/api/admin/login', {
+      method:'POST', credentials:'same-origin',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({password: document.getElementById('pw').value})
+    }).then(function(r){ return r.json().then(function(j){ if(!r.ok) throw new Error(j.error||'Failed'); return j; }); })
+      .then(function(){ document.getElementById('pw').value = ''; show(true); })
+      .catch(function(e2){ err.textContent = e2.message; });
+  });
+  document.getElementById('signout').addEventListener('click', function(){
+    fetch('/api/admin/login', {method:'DELETE', credentials:'same-origin'})
+      .then(function(){ show(false); });
+  });
+
+  /* ---------- load ---------- */
+  var days = 30;
+  rangeSel.addEventListener('change', function(){ days = +rangeSel.value; load(); });
+
+  function load(){
+    api('/api/admin/summary?days=' + days).then(render).catch(function(){});
+    loadLeads();
+  }
+
+  function render(d){
+    document.getElementById('kpis').innerHTML = [
+      ['Unique visitors', fmt(d.totals.visitors), 'hi'],
+      ['Page views', fmt(d.totals.views), ''],
+      ['Document requests', fmt(d.totals.leads), 'mat'],
+      ['Document opens', fmt(d.totals.opens), ''],
+    ].map(function(k){
+      return '<div class="kpi ' + k[2] + '"><span>' + k[0] + '</span><b>' + k[1] + '</b></div>';
+    }).join('');
+
+    chart(d.series || []);
+    bars('countries', (d.countries||[]).map(function(c){
+      return [countryName(c.country), c.visitors];
+    }));
+    bars('paths', (d.paths||[]).map(function(p){ return [p.path, p.views]; }));
+
+    var tb = document.getElementById('docs');
+    tb.innerHTML = (d.documents||[]).map(function(x){
+      return '<tr><td class="em"><span class="k" data-kind="'+esc(x.kind)+'">'+esc(x.kind)+'</span> '
+        + esc(x.title) + '</td>'
+        + n(x.requests) + n(x.openedLinks) + n(x.opens) + n(x.downloads)
+        + '<td class="num">' + (x.readSeconds ? dur(x.readSeconds) : '<span class="zero">—</span>') + '</td></tr>';
+    }).join('') || '<tr><td colspan="6"><div class="empty">No document requests in this period.</div></td></tr>';
+  }
+  function n(v){ return '<td class="num">' + (v ? fmt(v) : '<span class="zero">0</span>') + '</td>'; }
+
+  function bars(id, rows){
+    var el = document.getElementById(id);
+    var max = rows.reduce(function(m,r){ return Math.max(m, r[1]); }, 0) || 1;
+    el.innerHTML = rows.map(function(r){
+      return '<div class="bar" style="--w:' + Math.round(r[1]/max*100) + '%">'
+        + '<span>' + esc(r[0]) + '</span><b>' + fmt(r[1]) + '</b></div>';
+    }).join('') || '<div class="empty">Nothing yet.</div>';
+  }
+
+  /* ---------- traffic chart ----------
+     Plain canvas rather than a charting library: two series, one axis, and
+     no dependency to keep current. */
+  function chart(series){
+    var cv = document.getElementById('chart');
+    var ctx = cv.getContext('2d');
+    var r = cv.getBoundingClientRect();
+    var dpr = Math.min(window.devicePixelRatio||1, 2);
+    cv.width = Math.round(r.width*dpr); cv.height = Math.round(r.height*dpr);
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    var w = r.width, h = r.height;
+    ctx.clearRect(0,0,w,h);
+
+    if (!series.length){
+      ctx.font = '400 13px Instrument Sans, sans-serif';
+      ctx.fillStyle = 'rgba(143,170,182,.8)'; ctx.textAlign = 'center';
+      ctx.fillText('No traffic recorded yet.', w/2, h/2);
+      return;
+    }
+
+    var padL = 44, padR = 14, padT = 28, padB = 26;
+    var iw = w-padL-padR, ih = h-padT-padB;
+    var max = series.reduce(function(m,s){ return Math.max(m, s.views, s.visitors); }, 0) || 1;
+    // round the ceiling up so the gridlines land on readable numbers
+    var mag = Math.pow(10, Math.floor(Math.log10(max)));
+    max = Math.ceil(max/mag)*mag;
+    var X = function(i){ return padL + (series.length<2 ? iw/2 : i/(series.length-1)*iw); };
+    var Y = function(v){ return padT + ih - (v/max)*ih; };
+
+    ctx.font = '400 10px IBM Plex Mono, monospace';
+    ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
+    for (var g=0; g<=4; g++){
+      var v = max*g/4, y = Y(v);
+      ctx.strokeStyle = 'rgba(146,190,204,.1)'; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(padL, y); ctx.lineTo(w-padR, y); ctx.stroke();
+      ctx.fillStyle = 'rgba(143,170,182,.8)';
+      ctx.fillText(String(Math.round(v)), padL-9, y);
+    }
+
+    function line(key, stroke, fill){
+      ctx.beginPath();
+      series.forEach(function(s,i){ i ? ctx.lineTo(X(i), Y(s[key])) : ctx.moveTo(X(i), Y(s[key])); });
+      if (fill){
+        ctx.save();
+        ctx.lineTo(X(series.length-1), padT+ih); ctx.lineTo(X(0), padT+ih); ctx.closePath();
+        var grd = ctx.createLinearGradient(0,padT,0,padT+ih);
+        grd.addColorStop(0, fill); grd.addColorStop(1, 'rgba(53,214,245,0)');
+        ctx.fillStyle = grd; ctx.fill(); ctx.restore();
+        ctx.beginPath();
+        series.forEach(function(s,i){ i ? ctx.lineTo(X(i), Y(s[key])) : ctx.moveTo(X(i), Y(s[key])); });
+      }
+      ctx.strokeStyle = stroke; ctx.lineWidth = 2; ctx.lineJoin = 'round'; ctx.stroke();
+    }
+    line('views', 'rgba(146,190,204,.45)', null);
+    line('visitors', '#35D6F5', 'rgba(53,214,245,.2)');
+
+    ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+    ctx.fillStyle = 'rgba(143,170,182,.8)';
+    var step = Math.max(1, Math.ceil(series.length/7));
+    series.forEach(function(s,i){
+      if (i % step && i !== series.length-1) return;
+      ctx.fillText(s.d.slice(5), X(i), padT+ih+8);
+    });
+  }
+  var rt; addEventListener('resize', function(){
+    clearTimeout(rt); rt = setTimeout(function(){ if(!app.hidden) load(); }, 300);
+  }, {passive:true});
+
+  /* ---------- leads ---------- */
+  var searchT;
+  searchBox.addEventListener('input', function(){
+    clearTimeout(searchT); searchT = setTimeout(loadLeads, 280);
+  });
+
+  function loadLeads(){
+    var q = encodeURIComponent(searchBox.value.trim());
+    api('/api/admin/leads?limit=200&q=' + q).then(function(d){
+      var tb = document.getElementById('leads');
+      if (!d.leads.length){
+        tb.innerHTML = '<tr><td colspan="8"><div class="empty">'
+          + (searchBox.value ? 'Nothing matches that search.' : 'No document requests yet.')
+          + '</div></td></tr>';
+        return;
+      }
+      tb.innerHTML = d.leads.map(function(l){
+        var who = esc(l.email) + (l.company || l.name
+          ? '<small>' + esc([l.name, l.company].filter(Boolean).join(' · ')) + '</small>' : '');
+        return '<tr>'
+          + '<td class="em">' + who + '</td>'
+          + '<td><span class="k" data-kind="'+esc(l.docKind)+'">'+esc(l.docKind)+'</span> ' + esc(l.docTitle) + '</td>'
+          + '<td class="when">' + when(l.created_at) + '</td>'
+          + '<td>' + (esc(l.place) || '<span class="zero">—</span>') + '</td>'
+          + n(l.opens) + n(l.downloads)
+          + '<td class="when">' + when(l.last_open) + '</td>'
+          + '<td class="num">'
+            + (l.token ? '<button class="btn-o" data-open-ev="'+esc(l.token)+'" data-t="'+esc(l.docTitle)+'" data-e="'+esc(l.email)+'">Activity</button> '
+              + '<button class="btn-o" data-revoke="'+esc(l.token)+'" data-on="'+(l.revoked?0:1)+'">'
+              + (l.revoked ? 'Restore' : 'Revoke') + '</button>' : '')
+          + '</td></tr>';
+      }).join('');
+    }).catch(function(){});
+  }
+
+  document.getElementById('leads').addEventListener('click', function(e){
+    var ev = e.target.closest('[data-open-ev]');
+    if (ev) return openDrill(ev.getAttribute('data-open-ev'), ev.getAttribute('data-t'), ev.getAttribute('data-e'));
+    var rv = e.target.closest('[data-revoke]');
+    if (!rv) return;
+    var on = rv.getAttribute('data-on') === '1';
+    if (on && !confirm('Revoke this link? The recipient will no longer be able to open the document.')) return;
+    api('/api/admin/leads', {method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({token: rv.getAttribute('data-revoke'), revoke: on})})
+      .then(loadLeads).catch(function(){});
+  });
+
+  /* ---------- drill-down ---------- */
+  var dd = document.getElementById('dd');
+  [].forEach.call(dd.querySelectorAll('[data-dd-close]'), function(b){
+    b.addEventListener('click', function(){ dd.removeAttribute('data-open'); });
+  });
+  addEventListener('keydown', function(e){ if (e.key === 'Escape') dd.removeAttribute('data-open'); });
+
+  function openDrill(token, title, email){
+    document.getElementById('dd-title').textContent = title;
+    document.getElementById('dd-sub').textContent = email;
+    document.getElementById('dd-events').innerHTML = '<div class="empty">Loading…</div>';
+    document.getElementById('dd-pages').innerHTML = '';
+    dd.setAttribute('data-open','');
+    api('/api/admin/events?token=' + encodeURIComponent(token)).then(function(d){
+      var pg = d.pages || [];
+      document.getElementById('dd-pages').innerHTML = pg.length
+        ? '<div class="shead" style="margin-top:1.6rem"><h2>Time per page</h2></div>'
+          + '<div class="bars">' + (function(){
+              var max = pg.reduce(function(m,p){ return Math.max(m, p.secs||0); }, 0) || 1;
+              return pg.map(function(p){
+                return '<div class="bar" style="--w:' + Math.round((p.secs||0)/max*100) + '%">'
+                  + '<span>Page ' + p.page + '</span><b>' + dur(p.secs) + '</b></div>';
+              }).join('');
+            })() + '</div>'
+        : '';
+
+      var evs = (d.events || []).filter(function(x){ return x.kind === 'open' || x.kind === 'download'; });
+      document.getElementById('dd-events').innerHTML =
+        '<div class="shead" style="margin-top:1.6rem"><h2>Opens</h2></div>'
+        + (evs.length ? evs.map(function(x){
+            return '<div class="ev-r" data-k="' + esc(x.kind) + '"><i></i>'
+              + '<b>' + (x.kind === 'download' ? 'Downloaded' : 'Opened')
+              + '<small>' + (esc(x.place) || 'Location unknown')
+              + (x.ip ? ' · ' + esc(x.ip) : '') + '</small></b>'
+              + '<span>' + when(x.ts) + '</span></div>';
+          }).join('')
+        : '<div class="empty">The link has not been opened yet.</div>');
+    }).catch(function(){
+      document.getElementById('dd-events').innerHTML = '<div class="empty">Could not load activity.</div>';
+    });
+  }
+
+  /* ISO country codes are what Cloudflare gives us; show the name where we
+     know it and fall back to the code rather than guessing. */
+  var CC = {AE:'United Arab Emirates',IN:'India',CN:'China',TR:'Turkey',RU:'Russia',
+    TM:'Turkmenistan',UZ:'Uzbekistan',KZ:'Kazakhstan',AZ:'Azerbaijan',US:'United States',
+    GB:'United Kingdom',DE:'Germany',NL:'Netherlands',SG:'Singapore',SA:'Saudi Arabia',
+    EG:'Egypt',PK:'Pakistan',BD:'Bangladesh',VN:'Vietnam',BR:'Brazil',KE:'Kenya',
+    ZA:'South Africa',FR:'France',IT:'Italy',ES:'Spain',CH:'Switzerland',JP:'Japan',
+    KR:'South Korea',ID:'Indonesia',TH:'Thailand',MY:'Malaysia',IR:'Iran',IQ:'Iraq',
+    QA:'Qatar',KW:'Kuwait',OM:'Oman',BH:'Bahrain',JO:'Jordan',LB:'Lebanon',UA:'Ukraine',
+    PL:'Poland',RO:'Romania',GE:'Georgia',AM:'Armenia',BE:'Belgium',CA:'Canada',AU:'Australia'};
+  function countryName(c){ return CC[c] || c || 'Unknown'; }
+
+  /* Resume an existing session rather than asking for the password again
+     on every reload. */
+  fetch('/api/admin/login', {credentials:'same-origin'})
+    .then(function(r){ return r.json(); })
+    .then(function(j){ show(!!j.signedIn); })
+    .catch(function(){ show(false); });
+})();
+`;
+
+module.exports = { css, body, js, FONTS };

@@ -1,0 +1,14 @@
+_src
+_docs
+functions
+node_modules
+.wrangler
+.dev.vars
+.dev.vars.example
+.gitignore
+.claude
+DEPLOY.md
+schema.sql
+wrangler.toml
+package.json
+package-lock.json

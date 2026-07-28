@@ -1,0 +1,8 @@
+node_modules/
+.wrangler/
+.dev.vars
+.DS_Store
+
+# Source PDFs live in R2, not in the repo. They are staged here for upload
+# and must never be part of a deploy — see DEPLOY.md.
+_docs/

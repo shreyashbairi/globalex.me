@@ -1,0 +1,29 @@
+name = "globalex-me"
+compatibility_date = "2026-07-01"
+pages_build_output_dir = "."
+
+# ---------------------------------------------------------------------
+# Bindings. Create the resources first (see DEPLOY.md), then paste the
+# database_id below. Secrets are NOT set here — they go in the Pages
+# dashboard or `wrangler pages secret put`, so they stay out of git.
+# ---------------------------------------------------------------------
+
+[[d1_databases]]
+binding = "DB"
+database_name = "globalex"
+database_id = "b1e21976-9a54-4e77-b983-9f51fb83fdfe"
+
+[[r2_buckets]]
+binding = "DOCS"
+bucket_name = "globalex-docs"
+
+[vars]
+# Non-secret configuration. Override per-environment in the dashboard.
+DESK_EMAIL = "info@globalex.me"
+MAIL_FROM = "Globalex Documents <documents@globalex.me>"
+
+# Secrets to set with `npx wrangler pages secret put <NAME>`:
+#   RESEND_API_KEY   mail provider token
+#   ADMIN_PASSWORD   password for /admin
+#   ADMIN_SECRET     random 32+ chars, signs the admin session cookie
+#   ANALYTICS_SALT   random 32+ chars, salts the daily visitor hash

@@ -1,0 +1,17 @@
+{
+  "name": "globalex-me",
+  "private": true,
+  "version": "1.0.0",
+  "description": "globalex.me — static site, Cloudflare Pages Functions backend",
+  "scripts": {
+    "build": "node _src/build.js",
+    "dev": "wrangler pages dev . --port 8788",
+    "db:local": "wrangler d1 execute globalex --local --file=./schema.sql",
+    "db:remote": "wrangler d1 execute globalex --remote --file=./schema.sql",
+    "docs:upload": "node _src/upload-docs.js",
+    "seed:demo": "node _src/seed-demo.js"
+  },
+  "devDependencies": {
+    "wrangler": "^4.0.0"
+  }
+}
