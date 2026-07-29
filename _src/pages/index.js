@@ -12,7 +12,7 @@ module.exports = {
   padding-top:clamp(6rem,12vh,8rem);padding-bottom:clamp(4rem,8vh,6rem)}
 /* scrim keeps the header legible where the globe rides beneath it */
 .hero::before{content:'';position:absolute;inset:0 0 auto;height:210px;z-index:1;pointer-events:none;
-  background:linear-gradient(180deg,rgba(4,18,26,.9),rgba(4,18,26,0))}
+  background:linear-gradient(180deg,rgba(15,42,56,.9),rgba(15,42,56,0))}
 .hero-stage{position:absolute;top:50%;right:calc(var(--pad-x) * .1);
   width:min(86vh,46vw,880px);aspect-ratio:1;transform:translateY(-50%);z-index:0;
   transition:opacity .3s linear}
@@ -46,7 +46,7 @@ module.exports = {
 
 /* hero telemetry readout */
 .hud{position:relative;z-index:3;margin-top:.4rem;padding:1.05rem 1.25rem;max-width:44ch;
-  background:rgba(4,18,26,.62);backdrop-filter:blur(9px);border:1px solid var(--line);
+  background:rgba(15,42,56,.62);backdrop-filter:blur(9px);border:1px solid var(--line);
   clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px))}
 .hud-r{display:grid;grid-template-columns:6.6rem 1fr;gap:.35rem .9rem;font-family:var(--f-mono);
   font-size:.725rem;letter-spacing:.13em;text-transform:uppercase}
@@ -380,7 +380,7 @@ function visCrystal(cv){
   glxStage(cv, function(x,w,h,t){
     x.clearRect(0,0,w,h);
     var g = x.createLinearGradient(0,0,0,h);
-    g.addColorStop(0,'rgba(217,183,120,.07)'); g.addColorStop(1,'rgba(4,18,26,0)');
+    g.addColorStop(0,'rgba(217,183,120,.07)'); g.addColorStop(1,'rgba(15,42,56,0)');
     x.fillStyle=g; x.fillRect(0,0,w,h);
     seeds.forEach(function(s,si){
       var cx = s.x*w, cy = s.y*h;

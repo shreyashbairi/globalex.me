@@ -34,7 +34,7 @@ export const onRequestGet = requireAdmin(async ({ request, env }) => {
 
   const rows = await db
     .prepare(
-      `SELECT l.id, l.email, l.name, l.company, l.doc_id, l.created_at,
+      `SELECT l.id, l.email, l.name, l.company, l.doc_id, l.created_at, l.page,
               l.country, l.city, l.region, l.ip,
               g.token, g.opens, g.downloads, g.last_open, g.revoked, g.expires_at
        FROM leads l
@@ -61,6 +61,9 @@ export const onRequestGet = requireAdmin(async ({ request, env }) => {
       docTitle: DOC_BY_ID[r.doc_id]?.title || r.doc_id,
       docKind: DOC_BY_ID[r.doc_id]?.kind || '',
       place: [r.city, r.region, r.country].filter(Boolean).join(', '),
+      // Created by the desk from the dashboard rather than by a visitor
+      // filling in the form. Same row shape, different provenance.
+      shared: r.page === 'admin-share',
     })),
   });
 });

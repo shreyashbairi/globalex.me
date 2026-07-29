@@ -16,7 +16,7 @@ const THREE_CDN = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.mi
 const LOGO_B64 = fs.readFileSync(path.join(OUT, 'assets/logo.webp')).toString('base64');
 const faviconPlate = 'data:image/svg+xml,' + encodeURIComponent(
   `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 70 70">`
-  + `<rect width="70" height="70" fill="#04121A"/>`
+  + `<rect width="70" height="70" fill="#0F2A38"/>`
   + `<image xlink:href="data:image/webp;base64,${LOGO_B64}" x="2" y="7" width="66" height="56"/>`
   + `</svg>`
 );
@@ -28,7 +28,7 @@ function render(p) {
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<meta name="theme-color" content="#04121A" />
+<meta name="theme-color" content="#0F2A38" />
 <meta name="color-scheme" content="dark" />
 <title>${p.title}</title>
 <meta name="description" content="${p.desc}" />
@@ -96,7 +96,7 @@ function emitAdmin() {
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="robots" content="noindex, nofollow" />
-<meta name="theme-color" content="#04121A" />
+<meta name="theme-color" content="#0F2A38" />
 <meta name="color-scheme" content="dark" />
 <title>Control — Globalex Trading DMCC</title>
 <link rel="icon" type="image/svg+xml" href="${faviconPlate}" />

@@ -7,7 +7,7 @@ module.exports = {
 
   css: `
 .role{position:relative;padding:clamp(1.7rem,3vw,2.5rem);border:1px solid var(--line);
-  background:linear-gradient(160deg,rgba(16,57,74,.34),rgba(7,28,39,.68));display:grid;gap:1.15rem;
+  background:linear-gradient(160deg,rgba(35,89,107,.34),rgba(20,53,68,.68));display:grid;gap:1.15rem;
   clip-path:polygon(0 0,calc(100% - 20px) 0,100% 20px,100% 100%,20px 100%,0 calc(100% - 20px));
   transition:border-color .45s var(--ease)}
 .role:hover{border-color:rgba(53,214,245,.4)}

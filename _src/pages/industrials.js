@@ -1,55 +1,16 @@
 const { hero, cta } = require('../parts');
+// Grades live in the catalogue so this page, products.html and site search
+// cannot drift apart.
+const { CHEMICALS: CHEMS, SECTORS } = require('../catalogue');
 
-const SECTORS = [
-  ['all', 'All grades'],
-  ['water', 'Water treatment'],
-  ['mfg', 'Manufacturing'],
-  ['care', 'Detergents &amp; care'],
-  ['agri', 'Agriculture &amp; energy'],
-];
 
-const CHEMS = [
-  { n: 'Sulphur', f: 'S', s: ['Granular', 'Lump'], t: ['mfg', 'agri'], o: ['Turkmenistan', 'Uzbekistan', 'Kazakhstan'],
-    d: 'High-quality granular and lump sulphur &mdash; the upstream input for sulphuric acid, and from there for phosphate fertilizer and a long list of industrial processes.' },
-  { n: 'Urea-A (technical)', f: 'CH&#8324;N&#8322;O', s: ['Technical Grade A'], t: ['mfg'], o: ['Uzbekistan'],
-    d: 'High-purity urea for industrial rather than agricultural use: resin and adhesive production, and as the reducing agent in selective catalytic reduction (SCR) systems on diesel exhaust.' },
-  { n: 'Caustic Soda', f: 'NaOH', s: ['Solid', 'Liquid'], t: ['mfg', 'water'], o: [],
-    d: 'Sodium hydroxide, the most broadly used industrial alkali &mdash; pulp and paper, textiles, alumina, soap, and pH correction in water treatment. Supplied solid and liquid.' },
-  { n: 'Sodium Hypochlorite', f: 'NaOCl', s: ['Disinfectant grade'], t: ['water'], o: [],
-    d: 'The workhorse disinfectant and bleaching agent for municipal water purification and cleaning product manufacture.' },
-  { n: 'Hydrochloric Acid', f: 'HCl', s: ['Industrial grade'], t: ['mfg', 'water'], o: [],
-    d: 'Steel pickling, chemical synthesis and pH control. Supplied at industrial concentration with the handling documentation the grade requires.' },
-  { n: 'Liquid Chlorine', f: 'Cl&#8322;', s: ['Bulk supply'], t: ['water'], o: [],
-    d: 'Bulk chlorine for water treatment, disinfection and chemical manufacture, shipped under pressure to specification.' },
-  { n: 'Calcium Chloride', f: 'CaCl&#8322;', s: ['Solid', 'Liquid'], t: ['mfg'], o: [],
-    d: 'De-icing, dust suppression on unsealed roads, concrete acceleration and industrial drying. Hygroscopic enough to pull moisture out of almost anything.' },
-  { n: 'Sodium Sulphate', f: 'Na&#8322;SO&#8324;', s: ['Detergent grade'], t: ['care', 'mfg'], o: [],
-    d: 'The bulk filler and processing aid in powder detergents, and a flux in glass manufacture and pulping.' },
-  { n: 'LABSA', f: 'C&#8321;&#8328;H&#8330;&#8320;O&#8323;S', s: ['96% purity'], t: ['care'], o: [],
-    d: 'Linear alkyl benzene sulphonic acid at 96% &mdash; the primary anionic surfactant behind most detergent and cleaning formulations sold in the region.' },
-  { n: 'SLES', f: 'C&#8321;&#8322;H&#8322;&#8325;NaO&#8324;S', s: ['70% concentration'], t: ['care'], o: [],
-    d: 'Sodium lauryl ether sulphate at 70% &mdash; the foaming surfactant in shampoo, body wash and liquid detergent.' },
-  { n: 'Sulphuric Acid', f: 'H&#8322;SO&#8324;', s: ['Industrial'], t: ['mfg', 'agri'], o: [],
-    d: 'The single most produced industrial chemical on earth. Phosphate fertilizer production, oil refining, metal processing and wastewater neutralisation.' },
-  { n: 'Formic Acid', f: 'CH&#8322;O&#8322;', s: ['Preservative grade'], t: ['agri', 'mfg'], o: [],
-    d: 'Silage preservation in agriculture, plus leather tanning and textile dyeing where a strong, volatile acid is needed that leaves no residue.' },
-  { n: 'Acetex Plus', f: '&mdash;', s: ['Multi-purpose'], t: ['mfg'], o: [],
-    d: 'A versatile process chemical for coatings, adhesives and general chemical manufacture.' },
-  { n: 'Aluminium Sulphate', f: 'Al&#8322;(SO&#8324;)&#8323;', s: ['Water treatment'], t: ['water', 'mfg'], o: [],
-    d: 'The standard coagulant in drinking water and effluent treatment &mdash; it pulls suspended solids together so they settle. Also used in paper sizing and dyeing.' },
-  { n: 'Iodine', f: 'I&#8322;', s: ['Pharma grade'], t: ['mfg'], o: ['Turkmenistan'],
-    d: 'Pharmaceutical synthesis, X-ray contrast media, disinfectants and LCD polarising film. A genuinely scarce element, and one of the few we source single-origin.' },
-  { n: 'Carbon Black', f: 'C', s: ['Rubber grade'], t: ['mfg'], o: ['Turkmenistan'],
-    d: 'The reinforcing filler that makes a tyre last. Also pigment and UV protection in plastics, coatings and inks.' },
-];
-
-const chem = (c, i) => `<article class="row chem" data-tags="${c.t.join(' ')}">
+const chem = (c, i) => `<article class="row chem" id="${c.id}" data-tags="${c.t.join(' ')}">
 <span class="row-ix">${String(i + 1).padStart(2, '0')}</span>
 <div class="row-b">
-  <div class="chem-h"><h3>${c.n}</h3><span class="formula">${c.f}</span></div>
-  <div class="chips">${c.s.map((s) => `<span class="chip spec">${s}</span>`).join('')}</div>
-  <p>${c.d}</p>
-  ${c.o.length ? `<div class="chips">${c.o.map((o) => `<span class="chip org">${o}</span>`).join('')}</div>` : ''}
+  <div class="chem-h"><h3>${c.name}</h3><span class="formula">${c.f}</span></div>
+  <div class="chips">${c.specs.map((s) => `<span class="chip spec">${s}</span>`).join('')}</div>
+  <p>${c.body}</p>
+  ${c.origins.length ? `<div class="chips">${c.origins.map((o) => `<span class="chip org">${o}</span>`).join('')}</div>` : ''}
 </div>
 <div class="row-side">
   ${c.t.map((t) => `<span>${SECTORS.find((s) => s[0] === t)[1]}</span>`).join('')}
@@ -71,7 +32,7 @@ module.exports = {
 .filt{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;margin-bottom:.5rem}
 .filt button{position:relative;padding:.6em 1.05em;font-family:var(--f-mono);font-size:.725rem;
   font-weight:500;letter-spacing:.15em;text-transform:uppercase;color:var(--haze);
-  border:1px solid var(--line);background:rgba(4,18,26,.4);cursor:pointer;
+  border:1px solid var(--line);background:rgba(15,42,56,.4);cursor:pointer;
   transition:color .3s var(--ease),border-color .3s var(--ease),background .3s var(--ease)}
 .filt button:hover{color:var(--frost);border-color:var(--line-2)}
 .filt button[aria-pressed=true]{color:var(--void);background:var(--cyan);border-color:var(--cyan);
@@ -97,7 +58,7 @@ module.exports = {
 
   body: `
 ${hero({
-    crumb: [['Products', 'fertilizers.html'], 'Industrial Chemicals'],
+    crumb: [['Products', 'products.html'], 'Industrial Chemicals'],
     eyebrow: 'Class 03 &middot; 16 grades &middot; Multi-origin',
     h1: 'Industrial chemicals',
     lead: 'Sulphur and caustic soda through LABSA, SLES, sulphuric acid, carbon black and iodine &mdash; sixteen specialty grades across water treatment, manufacturing, personal care, agriculture and energy.',

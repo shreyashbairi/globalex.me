@@ -203,6 +203,14 @@ npx wrangler d1 execute globalex --local \
 
 Never run the seeder against `--remote`.
 
+> **Keep `--local` on the clear command too.** Run that `DELETE` against
+> `--remote` and it does not just empty the dashboard: every live document
+> link dies with it, because the token in someone's inbox is only valid while
+> its `grants` row exists. Recipients then see *"This link is not valid"* —
+> which is the missing-row message, not the expiry one, and is the way to tell
+> the two apart. There is no undo; the only fix is to issue fresh links from
+> **Share a document** in the dashboard.
+
 ---
 
 ## How the document gate works
@@ -239,6 +247,25 @@ Downloading the original is still allowed — the viewer is a measurement
 surface, not a lock. Once someone downloads it, that copy is untracked, and
 the dashboard says so by counting downloads separately from opens.
 
+**Links the desk creates.** `POST /api/admin/share` (behind the admin session)
+mints the same pair of rows without a visitor filling in the form, so a
+document can be handed to a contact directly:
+
+```
+Share a document ──► POST /api/admin/share {doc, email?, label?, days, send?}
+        │                    │
+        │                    └─► leads row (page = "admin-share") + grants row
+        ├─► the URL, returned to the dashboard to copy
+        └─► optionally, the same email the visitor flow sends
+```
+
+A recipient address is optional — leave it blank for a link to paste into a
+chat, and the viewer says "controlled link" instead of naming anyone. The
+lifetime is chosen per link (7 / 30 / 90 / 365 days) and the email quotes
+whichever was picked. Because the rows are ordinary leads and grants, shared
+links appear in the Leads table tagged **Shared**, drill down to the same
+activity view, export to the same CSV, and revoke with the same button.
+
 ---
 
 ## The dashboard
@@ -250,9 +277,12 @@ the dashboard says so by counting downloads separately from opens.
 - **Where from** and **most read pages**
 - **Document engagement** — requested, links opened, total opens, downloads,
   total read time per document
+- **Share a document** — pick a document, set a lifetime, optionally name a
+  recipient, and get a tracked link to copy (or have it emailed for you)
 - **Leads** — email, document, timestamp, location, opens, downloads, last
   opened, with **Activity** (every open with city and IP, plus per-page dwell)
-  and **Revoke** (kills the link, keeps the history)
+  and **Revoke** (kills the link, keeps the history). Links the desk created
+  are tagged **Shared**
 - **CSV export** for leads, messages and raw activity
 
 Sessions last 12 hours. Everything under `/admin`, `/d/` and `/f/` is

@@ -33,7 +33,9 @@ export async function onRequestGet(ctx) {
     return page(gone('This link has been withdrawn.', 'Contact info@globalex.me if you still need the document.'), 410);
   }
   if (grant.expires_at < Date.now()) {
-    return page(gone('This link has expired.', 'Links stay live for 30 days. Request the document again at globalex.me for a new one.'), 410);
+    /* No fixed lifetime quoted here any more: a desk-shared link can carry
+       any term, so naming "30 days" would contradict what its own email said. */
+    return page(gone('This link has expired.', 'Request the document again at globalex.me and a fresh link will arrive, or write to info@globalex.me.'), 410);
   }
 
   const doc = DOC_BY_ID[grant.doc_id];
@@ -79,7 +81,7 @@ const SHELL = (title, body, head = '') => `<!DOCTYPE html>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <meta name="robots" content="noindex, nofollow" />
-<meta name="theme-color" content="#04121A" />
+<meta name="theme-color" content="#0F2A38" />
 <title>${esc(title)} — Globalex</title>
 <link rel="icon" type="image/webp" href="/assets/logo.webp" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -88,8 +90,8 @@ const SHELL = (title, body, head = '') => `<!DOCTYPE html>
 <style>
 *,*::before,*::after{box-sizing:border-box}*{margin:0;padding:0}
 :root{
-  --void:#04121A;--deep:#071C27;--panel:#0A2632;--line:rgba(146,190,204,.16);
-  --line-2:rgba(146,190,204,.32);--cyan:#35D6F5;--cyan-d:#0FA8C9;--sand:#D9B778;
+  --void:#0F2A38;--deep:#143544;--panel:#173B4A;--line:rgba(146,190,204,.2);
+  --line-2:rgba(146,190,204,.36);--cyan:#35D6F5;--cyan-d:#0FA8C9;--sand:#D9B778;
   --frost:#E9F3F6;--haze:#B4C9D2;--haze-d:#8FAAB6;
   --f-disp:'Archivo',system-ui,sans-serif;--f-body:'Instrument Sans',system-ui,sans-serif;
   --f-mono:'IBM Plex Mono',ui-monospace,Menlo,monospace;
@@ -150,7 +152,11 @@ function viewer(doc, token, grant) {
 </header>
 
 <div class="strip">
-  <span>Issued to <b>${esc(grant.email)}</b></span>
+  <span>${grant.email
+    ? `Issued to <b>${esc(grant.email)}</b>`
+    : /* Desk-shared links need not name a recipient, and "Issued to" with
+         nothing after it reads like a bug. */
+      'Issued as a <b>controlled link</b>'}</span>
   <span class="sep"></span>
   <span>Controlled document &middot; ${esc(doc.sub)} &middot; ${esc(doc.origin)}</span>
 </div>
@@ -315,7 +321,7 @@ function viewer(doc, token, grant) {
 
   const style = `
 .bar{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:1.2rem;
-  padding:.8rem clamp(.9rem,2.6vw,1.6rem);background:rgba(4,18,26,.94);
+  padding:.8rem clamp(.9rem,2.6vw,1.6rem);background:rgba(15,42,56,.94);
   backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
   border-bottom:1px solid var(--line);flex-wrap:wrap}
 .mark{display:flex;align-items:center;gap:.6rem;flex:none}
@@ -344,7 +350,7 @@ function viewer(doc, token, grant) {
 @media (max-width:720px){.doc{order:3;width:100%;flex:none}.tools{margin-left:auto}}
 
 .strip{display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;
-  padding:.55rem clamp(.9rem,2.6vw,1.6rem);background:rgba(10,38,50,.6);
+  padding:.55rem clamp(.9rem,2.6vw,1.6rem);background:rgba(23,59,74,.6);
   border-bottom:1px solid var(--line);font-family:var(--f-mono);font-size:.69rem;
   letter-spacing:.1em;color:var(--haze-d);text-transform:uppercase}
 .strip b{color:var(--haze);font-weight:500}

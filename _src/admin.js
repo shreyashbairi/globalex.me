@@ -6,14 +6,16 @@
    density — this is a tool someone opens every morning.
    ============================================================ */
 
+const { DOCS } = require('./docs');
+
 const FONTS =
   'https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Instrument+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap';
 
 const css = `
 *,*::before,*::after{box-sizing:border-box}*{margin:0;padding:0}
 :root{
-  --void:#04121A;--deep:#071C27;--panel:#0A2632;--steel:#10394A;
-  --line:rgba(146,190,204,.16);--line-2:rgba(146,190,204,.32);
+  --void:#0F2A38;--deep:#143544;--panel:#173B4A;--steel:#23596B;
+  --line:rgba(146,190,204,.2);--line-2:rgba(146,190,204,.36);
   --cyan:#35D6F5;--cyan-d:#0FA8C9;--sand:#D9B778;--rose:#F5748A;
   --frost:#E9F3F6;--haze:#B4C9D2;--haze-d:#8FAAB6;
   --f-disp:'Archivo',system-ui,sans-serif;--f-body:'Instrument Sans',system-ui,sans-serif;
@@ -42,7 +44,7 @@ button{cursor:pointer}
 .gatebox form{display:grid;gap:.9rem;margin-top:1.6rem}
 label{font-family:var(--f-mono);font-size:.715rem;letter-spacing:.17em;text-transform:uppercase;
   color:var(--haze-d);display:block;margin-bottom:.4rem}
-input,select{width:100%;padding:.75rem .9rem;background:rgba(4,18,26,.6);
+input,select{width:100%;padding:.75rem .9rem;background:rgba(15,42,56,.6);
   border:1px solid var(--line);color:var(--frost);transition:border-color .3s}
 input:focus,select:focus{outline:none;border-color:var(--cyan)}
 select option{background:var(--deep)}
@@ -57,7 +59,7 @@ select option{background:var(--deep)}
 
 /* ---------- shell ---------- */
 .top{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:1rem;flex-wrap:wrap;
-  padding:.85rem clamp(.9rem,2.4vw,1.7rem);background:rgba(4,18,26,.95);
+  padding:.85rem clamp(.9rem,2.4vw,1.7rem);background:rgba(15,42,56,.95);
   backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
 .top .mark{display:flex;align-items:center;gap:.6rem}
 .top .mark b{font-family:var(--f-disp);font-variation-settings:'wdth' 112;font-weight:700;
@@ -101,7 +103,7 @@ table{width:100%;border-collapse:collapse;font-size:.88rem;min-width:640px}
 th{font-family:var(--f-mono);font-size:.67rem;letter-spacing:.16em;text-transform:uppercase;
   color:var(--haze-d);text-align:left;font-weight:400;padding:.75rem .85rem;
   border-bottom:1px solid var(--line);white-space:nowrap;position:sticky;top:0;background:var(--panel)}
-td{padding:.7rem .85rem;border-bottom:1px solid rgba(146,190,204,.09);vertical-align:top}
+td{padding:.7rem .85rem;border-bottom:1px solid rgba(146,190,204,.13);vertical-align:top}
 tbody tr:hover{background:rgba(53,214,245,.045)}
 tbody tr:last-child td{border-bottom:0}
 td.num,th.num{text-align:right;font-family:var(--f-mono);font-variant-numeric:tabular-nums;
@@ -133,11 +135,35 @@ td.em small{display:block;font-weight:400;color:var(--haze-d);font-size:.76rem;m
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(1rem,2vw,1.5rem)}
 @media (max-width:900px){.g2{grid-template-columns:1fr}}
 
+/* ---------- share a document ---------- */
+.share{border:1px solid var(--line);background:var(--deep);padding:clamp(1.1rem,2.2vw,1.5rem)}
+.share-f{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;align-items:end}
+.share-f .wide{grid-column:1/-1}
+.share-opt{display:flex;align-items:center;gap:.55rem;font-size:.86rem;color:var(--haze);
+  cursor:pointer;padding-bottom:.15rem}
+.share-opt input{width:16px;height:16px;flex:none;accent-color:var(--cyan);padding:0;cursor:pointer}
+.share-hint{font-size:.8rem;color:var(--haze-d);margin-top:.9rem;line-height:1.55}
+.share-go{display:flex;align-items:center;gap:.9rem;flex-wrap:wrap}
+.share-go .btn{flex:none}
+
+.share-out{margin-top:1.2rem;border:1px solid rgba(53,214,245,.34);background:rgba(53,214,245,.06);
+  padding:1rem 1.15rem}
+.share-out.bad{border-color:rgba(245,116,138,.4);background:rgba(245,116,138,.07)}
+.share-out h3{font-family:var(--f-disp);font-variation-settings:'wdth' 112;font-weight:700;
+  font-size:1rem;margin-bottom:.75rem}
+.share-link{display:flex;align-items:stretch;gap:.5rem;flex-wrap:wrap}
+.share-link input{flex:1;min-width:220px;font-family:var(--f-mono);font-size:.82rem;
+  background:rgba(15,42,56,.7)}
+.share-meta{font-family:var(--f-mono);font-size:.72rem;letter-spacing:.1em;color:var(--haze-d);
+  margin-top:.75rem;display:flex;gap:1.1rem;flex-wrap:wrap}
+.share-meta b{color:var(--haze);font-weight:500}
+.share-warn{color:var(--sand);font-size:.84rem;margin-top:.7rem;line-height:1.5}
+
 /* ---------- drill-down ---------- */
 .dd{position:fixed;inset:0;z-index:40;display:grid;justify-items:end;
   opacity:0;visibility:hidden;transition:opacity .35s var(--ease),visibility .35s}
 .dd[data-open]{opacity:1;visibility:visible}
-.dd-bd{position:absolute;inset:0;background:rgba(2,9,13,.72);backdrop-filter:blur(5px)}
+.dd-bd{position:absolute;inset:0;background:rgba(6,20,27,.72);backdrop-filter:blur(5px)}
 .dd-p{position:relative;width:min(100%,560px);height:100%;overflow-y:auto;background:var(--deep);
   border-left:1px solid var(--line-2);padding:1.5rem;transform:translateX(28px);
   transition:transform .45s var(--ease)}
@@ -151,7 +177,7 @@ td.em small{display:block;font-weight:400;color:var(--haze-d);font-size:.76rem;m
   margin-top:.4rem;text-transform:uppercase}
 .ev{display:grid;gap:.1rem;margin-top:1.2rem}
 .ev-r{display:grid;grid-template-columns:auto 1fr auto;gap:.8rem;align-items:baseline;
-  padding:.6rem .1rem;border-bottom:1px solid rgba(146,190,204,.1)}
+  padding:.6rem .1rem;border-bottom:1px solid rgba(146,190,204,.14)}
 .ev-r i{width:7px;height:7px;background:var(--cyan);flex:none;
   clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%);transform:translateY(-1px)}
 .ev-r[data-k=download] i{background:var(--sand)}
@@ -236,6 +262,46 @@ const body = `
           </tr></thead>
           <tbody id="docs"></tbody>
         </table>
+      </div>
+    </section>
+
+    <section>
+      <div class="shead"><h2>Share a document</h2><span class="sp"></span></div>
+      <div class="share">
+        <form class="share-f" id="share-form">
+          <div class="wide">
+            <label for="sh-doc">Document</label>
+            <select id="sh-doc" required>
+${DOCS.map((d) => `              <option value="${d.id}">${d.kind} — ${d.title}</option>`).join('\n')}
+            </select>
+          </div>
+          <div>
+            <label for="sh-email">Recipient email <span style="text-transform:none;letter-spacing:0">(optional)</span></label>
+            <input id="sh-email" type="email" autocomplete="off" placeholder="buyer@company.com" />
+          </div>
+          <div>
+            <label for="sh-label">Company or note <span style="text-transform:none;letter-spacing:0">(optional)</span></label>
+            <input id="sh-label" type="text" autocomplete="off" placeholder="Anadolu Kimya — Istanbul" />
+          </div>
+          <div>
+            <label for="sh-days">Valid for</label>
+            <select id="sh-days">
+              <option value="7">7 days</option>
+              <option value="30" selected>30 days</option>
+              <option value="90">90 days</option>
+              <option value="365">12 months</option>
+            </select>
+          </div>
+          <div class="share-go">
+            <label class="share-opt" for="sh-send">
+              <input id="sh-send" type="checkbox" /> Email it to them
+            </label>
+            <button class="btn" type="submit" id="sh-btn">Generate link</button>
+          </div>
+        </form>
+        <p class="share-hint">Every link is tracked exactly like one a visitor requests &mdash; opens, downloads,
+          location and read time all appear in the table below, and it can be revoked from there at any time.</p>
+        <div class="share-out" id="share-out" hidden></div>
       </div>
     </section>
 
@@ -405,7 +471,7 @@ const js = `
     ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
     for (var g=0; g<=4; g++){
       var v = max*g/4, y = Y(v);
-      ctx.strokeStyle = 'rgba(146,190,204,.1)'; ctx.lineWidth = 1;
+      ctx.strokeStyle = 'rgba(146,190,204,.14)'; ctx.lineWidth = 1;
       ctx.beginPath(); ctx.moveTo(padL, y); ctx.lineTo(w-padR, y); ctx.stroke();
       ctx.fillStyle = 'rgba(143,170,182,.8)';
       ctx.fillText(String(Math.round(v)), padL-9, y);
@@ -440,6 +506,91 @@ const js = `
     clearTimeout(rt); rt = setTimeout(function(){ if(!app.hidden) load(); }, 300);
   }, {passive:true});
 
+  /* ---------- share a document ----------
+     The link comes back from the server rather than being assembled here:
+     the token is minted server-side and never leaves the response, so there
+     is nothing for this code to get wrong about it. */
+  var shareForm = document.getElementById('share-form');
+  var shareOut = document.getElementById('share-out');
+  var shareBtn = document.getElementById('sh-btn');
+
+  shareForm.addEventListener('submit', function(e){
+    e.preventDefault();
+    var email = document.getElementById('sh-email').value.trim();
+    var send = document.getElementById('sh-send').checked;
+    if (send && !email){
+      showShare(null, 'Add a recipient address, or untick "Email it to them".');
+      return;
+    }
+    shareBtn.disabled = true;
+    shareBtn.textContent = 'Generating…';
+
+    api('/api/admin/share', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        doc:   document.getElementById('sh-doc').value,
+        email: email,
+        label: document.getElementById('sh-label').value.trim(),
+        days:  +document.getElementById('sh-days').value,
+        send:  send
+      })
+    }).then(function(d){
+      showShare(d, null);
+      // The new grant is a lead like any other, so the table below is stale.
+      loadLeads();
+      load();
+    }).catch(function(err){
+      showShare(null, err.message);
+    }).then(function(){
+      shareBtn.disabled = false;
+      shareBtn.textContent = 'Generate link';
+    });
+  });
+
+  function showShare(d, error){
+    shareOut.hidden = false;
+    shareOut.classList.toggle('bad', !!error);
+    if (error){
+      shareOut.innerHTML = '<h3>Could not create the link</h3>'
+        + '<p style="color:var(--haze);font-size:.88rem">' + esc(error) + '</p>';
+      return;
+    }
+    var until = new Date(d.expiresAt).toISOString().slice(0,10);
+    shareOut.innerHTML = '<h3>Link ready — ' + esc(d.doc.title) + '</h3>'
+      + '<div class="share-link">'
+      +   '<input type="text" readonly value="' + esc(d.link) + '" id="sh-url" />'
+      +   '<button class="btn" type="button" id="sh-copy">Copy</button>'
+      +   '<a class="btn-o" href="' + esc(d.link) + '" target="_blank" rel="noopener" '
+      +      'style="display:grid;place-items:center">Open</a>'
+      + '</div>'
+      + '<div class="share-meta">'
+      +   '<span>Valid <b>' + d.days + ' days</b></span>'
+      +   '<span>Expires <b>' + until + '</b></span>'
+      +   '<span>Email <b>' + (d.mailed ? 'sent' : 'not sent') + '</b></span>'
+      + '</div>'
+      // A failed send must never look like a success: the link is live either
+      // way, and the operator needs to know they have to deliver it by hand.
+      + (d.mailError
+          ? '<p class="share-warn">The link works, but the email did not go out: '
+            + esc(d.mailError) + ' — copy the link and send it yourself.</p>'
+          : '');
+
+    var url = document.getElementById('sh-url');
+    document.getElementById('sh-copy').addEventListener('click', function(){
+      var btn = this;
+      function done(){ btn.textContent = 'Copied'; setTimeout(function(){ btn.textContent = 'Copy'; }, 1600); }
+      // Clipboard API needs a secure context; select-and-copy is the fallback
+      // that still works when the dashboard is opened over plain http locally.
+      if (navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(url.value).then(done, function(){ url.select(); });
+      } else {
+        url.select();
+        try { document.execCommand('copy'); done(); } catch (e2){}
+      }
+    });
+    url.addEventListener('focus', function(){ url.select(); });
+  }
+
   /* ---------- leads ---------- */
   var searchT;
   searchBox.addEventListener('input', function(){
@@ -457,8 +608,12 @@ const js = `
         return;
       }
       tb.innerHTML = d.leads.map(function(l){
-        var who = esc(l.email) + (l.company || l.name
-          ? '<small>' + esc([l.name, l.company].filter(Boolean).join(' · ')) + '</small>' : '');
+        // A desk-shared link may carry no address at all, so say what it is
+        // rather than rendering an empty cell.
+        var who = (l.email ? esc(l.email) : '<span class="zero">No recipient</span>')
+          + (l.shared ? ' <span class="pill on">Shared</span>' : '')
+          + (l.company || l.name
+            ? '<small>' + esc([l.name, l.company].filter(Boolean).join(' · ')) + '</small>' : '');
         return '<tr>'
           + '<td class="em">' + who + '</td>'
           + '<td><span class="k" data-kind="'+esc(l.docKind)+'">'+esc(l.docKind)+'</span> ' + esc(l.docTitle) + '</td>'

@@ -1,7 +1,13 @@
 // Shared runtime — inlined into every page.
+const { searchIndex } = require('./catalogue');
+
 module.exports = `
 (function(){
 'use strict';
+/* The whole site index, ~9 KB, inlined rather than fetched: search has to
+   answer on the first keystroke, and a request per page load to serve 50
+   rows would cost more than shipping them. */
+var GLXSEARCH = ${JSON.stringify(searchIndex())};
 var RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
 var TOUCH = matchMedia('(hover: none)').matches || innerWidth < 901;
 var PAL = {cyan:'53,214,245', sand:'217,183,120'};
@@ -148,6 +154,189 @@ var PAL = {cyan:'53,214,245', sand:'217,183,120'};
   tog.addEventListener('click', function(){ set(tog.getAttribute('aria-expanded') !== 'true'); });
   nav.addEventListener('click', function(e){ if (e.target.closest('a')) set(false); });
   addEventListener('keydown', function(e){ if (e.key === 'Escape') set(false); });
+})();
+
+/* ---------- site search ----------
+   Every product, document and page is in GLXSEARCH with a pre-lowercased
+   haystack, so a query is a scan of ~50 short strings — fast enough to run
+   on every keystroke without debouncing, and it works offline. */
+(function(){
+  var panel = document.getElementById('srch');
+  if (!panel) return;
+  var box  = document.getElementById('srch-q');
+  var out  = document.getElementById('srch-r');
+  var hits = [], sel = -1, lastFocus = null;
+
+  function esc(s){
+    return String(s == null ? '' : s)
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+  /* Highlight by index, not by regex — a query like "Al2(SO4)3" is a perfectly
+     reasonable thing to type and a perfectly broken regex. */
+  function hl(text, terms){
+    var low = text.toLowerCase(), marks = [];
+    terms.forEach(function(q){
+      var i = low.indexOf(q);
+      while (i > -1){ marks.push([i, i + q.length]); i = low.indexOf(q, i + q.length); }
+    });
+    if (!marks.length) return esc(text);
+    marks.sort(function(a,b){ return a[0]-b[0]; });
+    var merged = [marks[0]];
+    marks.slice(1).forEach(function(m){
+      var last = merged[merged.length-1];
+      if (m[0] <= last[1]) last[1] = Math.max(last[1], m[1]); else merged.push(m);
+    });
+    var html = '', at = 0;
+    merged.forEach(function(m){
+      html += esc(text.slice(at, m[0])) + '<mark>' + esc(text.slice(m[0], m[1])) + '</mark>';
+      at = m[1];
+    });
+    return html + esc(text.slice(at));
+  }
+
+  /* Every term must land somewhere, so extra words narrow the result set.
+     A title hit outranks a body hit, and a title that starts with the term
+     outranks one that merely contains it. */
+  function score(it, terms){
+    var t = it.t.toLowerCase(), s = 0, titled = false;
+    for (var i = 0; i < terms.length; i++){
+      var q = terms[i], at = t.indexOf(q);
+      if (at === 0){ s += 70; titled = true; }
+      else if (at > 0){ s += 42; titled = true; }
+      else if (it.h.indexOf(q) > -1) s += 14;
+      else return -1;
+    }
+    if (t === terms.join(' ')) s += 80;
+    if (titled && it.k === 'Commodity class') s += 8;
+    /* Matched only in the body? Then the specific grade is the better answer
+       than the class that contains it — "HDPE" should land on Polyethylene,
+       not on Polymers. */
+    else if (!titled && it.k !== 'Commodity class') s += 2;
+    return s;
+  }
+
+  var GROUP = {documents:'Documents', company:'Pages'};
+  function groupOf(it){ return GROUP[it.c] || 'Products'; }
+
+  function suggestions(){
+    return GLXSEARCH.filter(function(it){
+      return it.k === 'Commodity class' || it.t === 'Specifications & MSDS' || it.t === 'Products';
+    }).slice(0, 5);
+  }
+
+  function render(q){
+    var terms = q ? q.toLowerCase().split(/\\s+/).filter(Boolean) : [];
+    var head = '';
+
+    if (!terms.length){
+      hits = suggestions();
+      head = 'Jump to';
+    } else {
+      hits = GLXSEARCH
+        .map(function(it){ return {it: it, s: score(it, terms)}; })
+        .filter(function(r){ return r.s >= 0; })
+        .sort(function(a, b){ return b.s - a.s; })
+        .slice(0, 12)
+        .map(function(r){ return r.it; });
+    }
+
+    box.setAttribute('aria-expanded', hits.length ? 'true' : 'false');
+
+    if (!hits.length){
+      out.innerHTML = '<div class="srch-none"><b>Nothing matches &ldquo;' + esc(q) + '&rdquo;</b>'
+        + 'We trade well beyond what is listed here &mdash; '
+        + '<a href="contact.html">ask the desk</a> what you need.</div>';
+      sel = -1;
+      return;
+    }
+
+    var html = '', group = null;
+    hits.forEach(function(it, i){
+      var g = head || groupOf(it);
+      if (g !== group){ html += '<div class="srch-g">' + esc(g) + '</div>'; group = g; }
+      html += '<a class="srch-o" role="option" aria-selected="false" href="' + esc(it.u) + '" data-i="' + i + '">'
+        + '<b>' + hl(it.t, terms) + '</b>'
+        + '<i>' + esc(it.k) + '</i>'
+        + '<small>' + esc(it.d) + '</small></a>';
+    });
+    out.innerHTML = html;
+    mark(0);
+  }
+
+  function mark(i){
+    var opts = out.querySelectorAll('.srch-o');
+    if (!opts.length){ sel = -1; return; }
+    sel = (i + opts.length) % opts.length;
+    [].forEach.call(opts, function(o, k){
+      o.toggleAttribute('data-on', k === sel);
+      o.setAttribute('aria-selected', k === sel ? 'true' : 'false');
+    });
+    var on = opts[sel];
+    if (on.scrollIntoView) on.scrollIntoView({block:'nearest'});
+  }
+
+  function open(){
+    lastFocus = document.activeElement;
+    panel.hidden = false;
+    render('');
+    requestAnimationFrame(function(){
+      panel.setAttribute('data-open','');
+      document.body.setAttribute('data-lock','');
+      box.focus(); box.select();
+    });
+  }
+  function close(){
+    panel.removeAttribute('data-open');
+    document.body.removeAttribute('data-lock');
+    setTimeout(function(){ panel.hidden = true; }, 340);
+    if (lastFocus && lastFocus.focus) lastFocus.focus();
+  }
+
+  [].forEach.call(document.querySelectorAll('[data-srch-open]'), function(b){
+    b.addEventListener('click', open);
+  });
+  [].forEach.call(panel.querySelectorAll('[data-srch-close]'), function(b){
+    b.addEventListener('click', close);
+  });
+
+  box.addEventListener('input', function(){ render(box.value.trim()); });
+
+  box.addEventListener('keydown', function(e){
+    if (e.key === 'ArrowDown'){ e.preventDefault(); mark(sel + 1); }
+    else if (e.key === 'ArrowUp'){ e.preventDefault(); mark(sel - 1); }
+    else if (e.key === 'Enter'){
+      e.preventDefault();
+      var on = out.querySelector('.srch-o[data-on]');
+      // No match to pick? Hand the query to the products page rather than
+      // dead-ending on an empty panel.
+      if (on) location.href = on.getAttribute('href');
+      else if (box.value.trim()) location.href = 'products.html?q=' + encodeURIComponent(box.value.trim());
+    }
+  });
+
+  // Pointer selection has to agree with the keyboard cursor, or Enter opens
+  // something other than the row under the mouse.
+  out.addEventListener('mousemove', function(e){
+    var o = e.target.closest('.srch-o');
+    if (o) mark(+o.getAttribute('data-i'));
+  });
+
+  addEventListener('keydown', function(e){
+    var open_ = panel.hasAttribute('data-open');
+    if (open_ && e.key === 'Escape'){ e.preventDefault(); close(); return; }
+    if ((e.metaKey || e.ctrlKey) && (e.key === 'k' || e.key === 'K')){
+      e.preventDefault();
+      open_ ? close() : open();
+      return;
+    }
+    // "/" is the web's other search shortcut, but only when the visitor is
+    // not already typing into something.
+    if (!open_ && e.key === '/' && !e.metaKey && !e.ctrlKey && !e.altKey){
+      var a = document.activeElement, tag = a ? a.tagName : '';
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || (a && a.isContentEditable)) return;
+      e.preventDefault(); open();
+    }
+  });
 })();
 
 /* ---------- reveal ---------- */
@@ -357,9 +546,9 @@ function ornamentField(cv, opt){
 
     // radial vignette mask keeps the pattern a whisper at the edges
     var g = x.createRadialGradient(w*0.5+px*.4, h*0.42+py*.4, 0, w*0.5, h*0.5, R*0.52);
-    g.addColorStop(0,'rgba(4,18,26,0)');
-    g.addColorStop(.55,'rgba(4,18,26,.5)');
-    g.addColorStop(1,'rgba(4,18,26,.97)');
+    g.addColorStop(0,'rgba(15,42,56,0)');
+    g.addColorStop(.55,'rgba(15,42,56,.5)');
+    g.addColorStop(1,'rgba(15,42,56,.97)');
     x.fillStyle = g; x.fillRect(0,0,w,h);
 
     // live nodes — diamond markers with breathing halo

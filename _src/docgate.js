@@ -65,12 +65,12 @@ const css = `
 
 /* ---------- specimen panel ---------- */
 .dv-sp{position:sticky;top:calc(var(--frame) + 92px);border:1px solid var(--line-2);
-  background:linear-gradient(165deg,rgba(10,38,50,.85),rgba(7,28,39,.7));
+  background:linear-gradient(165deg,rgba(23,59,74,.85),rgba(20,53,68,.7));
   clip-path:polygon(0 0,calc(100% - 17px) 0,100% 17px,100% 100%,17px 100%,0 calc(100% - 17px))}
 @media (max-width:1000px){.dv-sp{position:static}}
 
 .dv-plate{position:relative;aspect-ratio:16/10;border-bottom:1px solid var(--line);
-  background:rgba(4,18,26,.55);overflow:hidden}
+  background:rgba(15,42,56,.55);overflow:hidden}
 .dv-plate canvas{width:100%;height:100%}
 /* Controlled-document seal. Centred on the corner diagonal at 45deg with the
    band wider than the corner, so overflow:hidden trims both ends flush
@@ -79,7 +79,7 @@ const css = `
   padding:.36rem 0;text-align:center;font-family:var(--f-mono);font-size:.67rem;
   letter-spacing:.24em;color:var(--void);font-weight:600;pointer-events:none;
   background:repeating-linear-gradient(135deg,var(--cyan) 0 7px,var(--cyan-d) 7px 14px);
-  box-shadow:0 3px 14px rgba(4,18,26,.55)}
+  box-shadow:0 3px 14px rgba(15,42,56,.55)}
 
 .dv-body{padding:clamp(1.2rem,2.6vw,1.85rem)}
 .dv-code{display:flex;align-items:center;gap:.7rem;flex-wrap:wrap}
@@ -106,10 +106,10 @@ const css = `
 .gate{position:fixed;inset:0;z-index:9600;display:grid;place-items:center;padding:1.2rem;
   opacity:0;visibility:hidden;transition:opacity .42s var(--ease),visibility .42s}
 .gate[data-open]{opacity:1;visibility:visible}
-.gate-bd{position:absolute;inset:0;background:rgba(2,9,13,.84);backdrop-filter:blur(8px);
+.gate-bd{position:absolute;inset:0;background:rgba(6,20,27,.84);backdrop-filter:blur(8px);
   -webkit-backdrop-filter:blur(8px)}
 .gate-p{position:relative;width:min(100%,540px);max-height:calc(100vh - 2.4rem);overflow-y:auto;
-  background:linear-gradient(168deg,#0B2B39,#071C27);border:1px solid var(--line-2);
+  background:linear-gradient(168deg,#1B4356,#143544);border:1px solid var(--line-2);
   padding:clamp(1.5rem,3.4vw,2.3rem);transform:translateY(20px) scale(.985);
   transition:transform .5s var(--ease);
   clip-path:polygon(0 0,calc(100% - 19px) 0,100% 19px,100% 100%,19px 100%,0 calc(100% - 19px))}
@@ -121,7 +121,7 @@ const css = `
 .gate-x::before{transform:rotate(45deg)}.gate-x::after{transform:rotate(-45deg)}
 
 .gate-doc{display:flex;align-items:center;gap:.75rem;padding:.8rem .9rem;margin:1.1rem 0 1.4rem;
-  border:1px solid var(--line);background:rgba(4,18,26,.5)}
+  border:1px solid var(--line);background:rgba(15,42,56,.5)}
 .gate-doc .dr-k{flex:none}
 .gate-doc span{min-width:0;font-size:.95rem;font-weight:600;
   overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -341,7 +341,7 @@ var GLXFAM = {
       c.textAlign = 'center';
       for (var v = 0; v <= set.max; v += step){
         var x = X(v);
-        c.strokeStyle = 'rgba(146,190,204,.13)';
+        c.strokeStyle = 'rgba(146,190,204,.17)';
         c.lineWidth = 1;
         c.beginPath(); c.moveTo(x, padT - 6); c.lineTo(x, h - padB + 4); c.stroke();
         c.fillStyle = 'rgba(143,170,182,.8)';
@@ -362,7 +362,7 @@ var GLXFAM = {
         c.fillText(r.g, padL - 12, cy);
 
         // full-width track, so the unlit grades still read as a family
-        c.strokeStyle = 'rgba(146,190,204,.1)';
+        c.strokeStyle = 'rgba(146,190,204,.14)';
         c.beginPath(); c.moveTo(padL, cy); c.lineTo(w - padR, cy); c.stroke();
 
         var x0 = X(r.lo), x1 = X(r.hi), bw = Math.max(3, x1 - x0);

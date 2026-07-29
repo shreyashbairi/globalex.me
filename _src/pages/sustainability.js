@@ -23,7 +23,7 @@ module.exports = {
   css: `
 .cmt{display:grid;grid-template-columns:repeat(2,1fr);gap:var(--gut)}
 .cmt-c{position:relative;padding:clamp(1.6rem,2.8vw,2.3rem);border:1px solid var(--line);
-  background:linear-gradient(160deg,rgba(16,57,74,.32),rgba(7,28,39,.66));
+  background:linear-gradient(160deg,rgba(35,89,107,.32),rgba(20,53,68,.66));
   display:grid;gap:.9rem;align-content:start;overflow:hidden;
   clip-path:polygon(0 0,calc(100% - 18px) 0,100% 18px,100% 100%,18px 100%,0 calc(100% - 18px));
   transition:border-color .45s var(--ease),transform .55s var(--ease)}

@@ -1,4 +1,4 @@
-// Shared chrome: mark, header, mobile nav, footer, frame, loader.
+// Shared chrome: mark, header, search, mobile nav, footer, frame, loader.
 const NAV = [
   ['index.html','Home'],
   ['about.html','About'],
@@ -8,7 +8,10 @@ const NAV = [
   ['careers.html','Careers'],
 ];
 
+/* The dropdown leads with the index page rather than jumping straight into
+   Fertilizers — the header used to imply fertilizer was the whole book. */
 const PRODUCTS = [
+  ['products.html','All products','Search 24 grades'],
   ['fertilizers.html','Fertilizers','5 grades · Caspian origin'],
   ['polymers.html','Polymers','PE · PP · Additives'],
   ['industrials.html','Industrial Chemicals','16 specialty grades'],
@@ -18,12 +21,14 @@ const PRODUCTS = [
    Native raster is 70x60, so every placement is a whole-ratio scale of that. */
 const gul = () => `<img class="mark-logo" src="assets/logo.webp" alt="" width="47" height="40" />`;
 
+const magnifier = `<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="10.5" cy="10.5" r="6.75"/><path d="M15.4 15.4 21 21"/></svg>`;
+
 function header(page) {
   const links = NAV.map(([href, label]) => {
     if (href === '__products__') {
-      const cur = ['fertilizers', 'polymers', 'industrials'].includes(page);
+      const cur = ['products', 'fertilizers', 'polymers', 'industrials'].includes(page);
       return `<li class="has-menu">
-<a class="nl"${cur ? ' data-cur' : ''} href="fertilizers.html" aria-haspopup="true">Products</a>
+<a class="nl"${cur ? ' data-cur' : ''} href="products.html" aria-haspopup="true">Products</a>
 <div class="menu" role="menu">
 ${PRODUCTS.map(([h, t, s]) => `<a role="menuitem" href="${h}"><b>${t}</b><small>${s}</small></a>`).join('\n')}
 </div></li>`;
@@ -38,31 +43,69 @@ ${PRODUCTS.map(([h, t, s]) => `<a role="menuitem" href="${h}"><b>${t}</b><small>
 ${gul()}
 <span class="mark-txt"><b>GLOBALEX</b><span>TRADING DMCC</span></span>
 </a>
+<div class="hdr-r">
+<button class="srch-t" type="button" data-srch-open aria-label="Search the site" aria-haspopup="dialog">
+${magnifier}
+<span>Search</span>
+<kbd>&#8984;K</kbd>
+</button>
 <nav class="nav" aria-label="Primary">
 <ul class="nav-l">${links}</ul>
 <a href="contact.html" class="btn btn-p btn-sm" data-mag="5">Get in touch <span class="ar">&rarr;</span></a>
 </nav>
 <button class="tog" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mnav"><i></i><i></i></button>
 </div>
+</div>
 </header>
 
 <nav id="mnav" class="mnav" aria-label="Mobile">
 <a href="index.html"><i>01</i>Home</a>
 <a href="about.html"><i>02</i>About</a>
-<a href="fertilizers.html"><i>03</i>Fertilizers</a>
-<a href="polymers.html"><i>04</i>Polymers</a>
-<a href="industrials.html"><i>05</i>Industrials</a>
-<a href="procedures.html"><i>06</i>Procedures</a>
-<a href="sustainability.html"><i>07</i>Sustainability</a>
-<a href="careers.html"><i>08</i>Careers</a>
-<a href="contact.html"><i>09</i>Contact</a>
+<a href="products.html"><i>03</i>Products</a>
+<a href="fertilizers.html"><i>04</i>Fertilizers</a>
+<a href="polymers.html"><i>05</i>Polymers</a>
+<a href="industrials.html"><i>06</i>Industrials</a>
+<a href="procedures.html"><i>07</i>Procedures</a>
+<a href="sustainability.html"><i>08</i>Sustainability</a>
+<a href="careers.html"><i>09</i>Careers</a>
+<a href="contact.html"><i>10</i>Contact</a>
 <div class="mnav-f">
 <span>info@globalex.me</span>
 <span>+971 4 566 7713</span>
 <span>Cluster X, JLT — Dubai, UAE</span>
 </div>
-</nav>`;
+</nav>
+
+${search}`;
 }
+
+/* ---------------------------------------------------------------
+   Site search overlay.
+
+   Every page carries the same index and the same panel, so search is
+   one keystroke from anywhere and never costs a round trip. Results
+   are built by kernel-js from the catalogue; this is only the shell.
+   --------------------------------------------------------------- */
+const search = `<div class="srch" id="srch" hidden>
+<div class="srch-bd" data-srch-close></div>
+<div class="srch-p" role="dialog" aria-modal="true" aria-label="Search Globalex">
+<form class="srch-f" role="search" onsubmit="return false">
+${magnifier}
+<label class="vh" for="srch-q">Search products, documents and pages</label>
+<input id="srch-q" type="search" autocomplete="off" spellcheck="false" role="combobox"
+ aria-expanded="false" aria-controls="srch-r" aria-autocomplete="list"
+ placeholder="Search products, documents, pages&hellip;" />
+<button class="srch-esc" type="button" data-srch-close aria-label="Close search">ESC</button>
+</form>
+<div class="srch-r" id="srch-r" role="listbox" aria-label="Search results"></div>
+<div class="srch-ft">
+<span><kbd>&uarr;</kbd><kbd>&darr;</kbd> Navigate</span>
+<span><kbd>&crarr;</kbd> Open</span>
+<span><kbd>esc</kbd> Close</span>
+<a href="products.html">Browse all products &rarr;</a>
+</div>
+</div>
+</div>`;
 
 function footer() {
   return `<footer class="ftr">
@@ -83,6 +126,7 @@ ${gul()}
 <div class="ftr-col">
 <h6>Commodities</h6>
 <ul>
+<li><a href="products.html">All products</a></li>
 <li><a href="fertilizers.html">Fertilizers</a></li>
 <li><a href="polymers.html">Polymers</a></li>
 <li><a href="industrials.html">Industrial Chemicals</a></li>

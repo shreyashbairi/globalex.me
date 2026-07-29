@@ -67,7 +67,7 @@ module.exports = {
   padding-left:var(--head,22%);will-change:transform}
 
 .step{position:relative;width:min(74vw,392px);flex:none;padding:clamp(1.5rem,2.6vw,2.1rem);
-  border:1px solid var(--line);background:linear-gradient(160deg,rgba(16,57,74,.34),rgba(7,28,39,.7));
+  border:1px solid var(--line);background:linear-gradient(160deg,rgba(35,89,107,.34),rgba(20,53,68,.7));
   display:grid;gap:.85rem;align-content:start;min-height:clamp(300px,46vh,392px);
   clip-path:polygon(0 0,calc(100% - 18px) 0,100% 18px,100% 100%,18px 100%,0 calc(100% - 18px));
   opacity:.34;transition:opacity .5s var(--ease),border-color .5s var(--ease),transform .5s var(--ease)}

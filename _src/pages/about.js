@@ -12,7 +12,7 @@ module.exports = {
   clip-path:polygon(0 0,calc(100% - 24px) 0,100% 24px,100% 100%,24px 100%,0 calc(100% - 24px))}
 .hq-vis canvas{position:absolute;inset:0;width:100%;height:100%}
 .hq-tag{position:absolute;left:0;right:0;bottom:0;z-index:2;padding:1.15rem 1.35rem;
-  background:linear-gradient(0deg,rgba(4,18,26,.94),transparent);
+  background:linear-gradient(0deg,rgba(15,42,56,.94),transparent);
   font-family:var(--f-mono);font-size:.725rem;letter-spacing:.16em;text-transform:uppercase;
   color:var(--haze);display:grid;gap:.3rem}
 .hq-tag b{color:var(--cyan);font-weight:500}
@@ -23,8 +23,8 @@ module.exports = {
 .mv-c{position:relative;padding:clamp(1.9rem,3.6vw,3rem);border:1px solid var(--line);
   display:grid;gap:1.4rem;align-content:start;
   clip-path:polygon(0 0,calc(100% - 20px) 0,100% 20px,100% 100%,20px 100%,0 calc(100% - 20px))}
-.mv-c.a{background:linear-gradient(155deg,rgba(53,214,245,.09),rgba(7,28,39,.6))}
-.mv-c.b{background:linear-gradient(155deg,rgba(217,183,120,.08),rgba(7,28,39,.6))}
+.mv-c.a{background:linear-gradient(155deg,rgba(53,214,245,.09),rgba(20,53,68,.6))}
+.mv-c.b{background:linear-gradient(155deg,rgba(217,183,120,.08),rgba(20,53,68,.6))}
 .mv-c q{quotes:none;font-family:var(--f-disp);font-weight:700;
   font-size:clamp(1.15rem,2.3vw,1.62rem);line-height:1.28;letter-spacing:-.018em;
   font-variation-settings:'wdth' 108;color:var(--frost);text-wrap:pretty}

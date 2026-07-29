@@ -44,10 +44,10 @@ export async function send(env, { to, subject, html, text, replyTo }) {
    ------------------------------------------------------------------ */
 
 const SHELL = (inner) => `<!DOCTYPE html>
-<html><body style="margin:0;padding:0;background:#04121A;">
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#04121A;padding:32px 12px;">
+<html><body style="margin:0;padding:0;background:#0F2A38;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#0F2A38;padding:32px 12px;">
 <tr><td align="center">
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;background:#071C27;border:1px solid rgba(146,190,204,.22);">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;background:#143544;border:1px solid rgba(146,190,204,.22);">
 ${inner}
 </table>
 <p style="max-width:560px;margin:18px auto 0;font:12px -apple-system,Segoe UI,sans-serif;color:#5F7D89;text-align:center;">
@@ -62,15 +62,24 @@ const HEAD = `<tr><td style="padding:26px 30px 0;">
 <span style="font:400 11px -apple-system,Segoe UI,sans-serif;letter-spacing:.2em;color:#5F7D89;display:block;margin-top:3px;">TRADING DMCC</span>
 </td></tr>`;
 
-export function documentEmail({ doc, link, name }) {
+/* `days` must match the grant that was actually minted. The copy used to say
+   "30 days" unconditionally, which would be a lie the moment the desk shares
+   a link on any other term. `shared` swaps the opening line for links the
+   desk sends unprompted — the recipient never filled in a form. */
+export function documentEmail({ doc, link, name, days = 30, shared = false }) {
   const hi = name ? `Hello ${esc(name)},` : 'Hello,';
+  const life = days === 1 ? '24 hours' : `${days} days`;
+  const intro = shared
+    ? 'The Globalex desk has shared a controlled document with you.'
+    : 'Here is the document you asked for on globalex.me.';
+
   const html = SHELL(`${HEAD}
 <tr><td style="padding:22px 30px 6px;">
   <p style="font:400 15px/1.6 -apple-system,Segoe UI,sans-serif;color:#B4C9D2;margin:0 0 18px;">${hi}</p>
   <p style="font:400 15px/1.6 -apple-system,Segoe UI,sans-serif;color:#B4C9D2;margin:0 0 22px;">
-    Here is the document you asked for on globalex.me.
+    ${intro}
   </p>
-  <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border:1px solid rgba(146,190,204,.22);background:#04121A;margin-bottom:24px;">
+  <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border:1px solid rgba(146,190,204,.22);background:#0F2A38;margin-bottom:24px;">
     <tr><td style="padding:16px 18px;">
       <span style="font:600 10px -apple-system,Segoe UI,sans-serif;letter-spacing:.18em;color:#35D6F5;">${esc(doc.kind)}</span>
       <div style="font:600 17px -apple-system,Segoe UI,sans-serif;color:#E9F3F6;margin-top:6px;">${esc(doc.title)}</div>
@@ -79,23 +88,23 @@ export function documentEmail({ doc, link, name }) {
   </table>
   <table role="presentation" cellpadding="0" cellspacing="0"><tr>
     <td style="background:#35D6F5;">
-      <a href="${link}" style="display:inline-block;padding:13px 26px;font:600 14px -apple-system,Segoe UI,sans-serif;color:#04121A;text-decoration:none;">Open the document &rarr;</a>
+      <a href="${link}" style="display:inline-block;padding:13px 26px;font:600 14px -apple-system,Segoe UI,sans-serif;color:#0F2A38;text-decoration:none;">Open the document &rarr;</a>
     </td>
   </tr></table>
   <p style="font:400 13px/1.6 -apple-system,Segoe UI,sans-serif;color:#5F7D89;margin:22px 0 0;">
-    The link is yours and stays live for 30 days. If the button does not work, paste this into your browser:<br />
+    The link is yours and stays live for ${life}. If the button does not work, paste this into your browser:<br />
     <a href="${link}" style="color:#8FAAB6;word-break:break-all;">${link}</a>
   </p>
 </td></tr>
 <tr><td style="padding:22px 30px 28px;">
-  <p style="font:400 13px/1.6 -apple-system,Segoe UI,sans-serif;color:#B4C9D2;margin:0;border-top:1px solid rgba(146,190,204,.16);padding-top:18px;">
+  <p style="font:400 13px/1.6 -apple-system,Segoe UI,sans-serif;color:#B4C9D2;margin:0;border-top:1px solid rgba(146,190,204,.2);padding-top:18px;">
     Need pricing, a different grade, or the full range? Reply to this email &mdash; it reaches the Dubai desk.
   </p>
 </td></tr>`);
 
   const text = `${name ? `Hello ${name},` : 'Hello,'}
 
-Here is the document you asked for on globalex.me.
+${intro}
 
 ${doc.kind} — ${doc.title}
 ${doc.sub} · ${doc.origin} · ${doc.pages} pp
@@ -103,7 +112,7 @@ ${doc.sub} · ${doc.origin} · ${doc.pages} pp
 Open it here:
 ${link}
 
-The link is yours and stays live for 30 days.
+The link is yours and stays live for ${life}.
 
 Need pricing, a different grade, or the full range? Reply to this email — it reaches the Dubai desk.
 
@@ -176,7 +185,7 @@ export function formReceipt({ kind }) {
   const html = SHELL(`${HEAD}
 <tr><td style="padding:22px 30px 28px;">
   <p style="font:400 15px/1.65 -apple-system,Segoe UI,sans-serif;color:#B4C9D2;margin:0 0 16px;">${line}</p>
-  <p style="font:400 13px/1.6 -apple-system,Segoe UI,sans-serif;color:#5F7D89;margin:0;border-top:1px solid rgba(146,190,204,.16);padding-top:18px;">
+  <p style="font:400 13px/1.6 -apple-system,Segoe UI,sans-serif;color:#5F7D89;margin:0;border-top:1px solid rgba(146,190,204,.2);padding-top:18px;">
     This is an automatic acknowledgement &mdash; you can reply to it and a person will read it.
   </p>
 </td></tr>`);

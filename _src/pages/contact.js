@@ -29,7 +29,7 @@ module.exports = {
 .map iframe{position:absolute;inset:0;width:100%;height:100%;border:0;
   filter:grayscale(1) invert(.92) hue-rotate(165deg) saturate(1.5) brightness(.86) contrast(1.05)}
 .map-tag{position:absolute;top:12px;left:12px;z-index:2;padding:.4em .75em;font-family:var(--f-mono);
-  font-size:.67rem;letter-spacing:.17em;text-transform:uppercase;background:rgba(4,18,26,.86);
+  font-size:.67rem;letter-spacing:.17em;text-transform:uppercase;background:rgba(15,42,56,.86);
   border:1px solid var(--line-2);color:var(--cyan);pointer-events:none}
 
 /* the one owned photograph on the site, treated to sit in the palette */
@@ -37,10 +37,10 @@ module.exports = {
   clip-path:polygon(0 0,calc(100% - 20px) 0,100% 20px,100% 100%,20px 100%,0 calc(100% - 20px))}
 .plate img{width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.12) brightness(.72)}
 .plate::after{content:'';position:absolute;inset:0;
-  background:linear-gradient(155deg,rgba(53,214,245,.34),rgba(4,18,26,.5) 55%,rgba(217,183,120,.2));
+  background:linear-gradient(155deg,rgba(53,214,245,.34),rgba(15,42,56,.5) 55%,rgba(217,183,120,.2));
   mix-blend-mode:color}
 .plate figcaption{position:absolute;left:0;right:0;bottom:0;z-index:2;padding:1.1rem 1.3rem;
-  background:linear-gradient(0deg,rgba(4,18,26,.92),transparent);font-family:var(--f-mono);
+  background:linear-gradient(0deg,rgba(15,42,56,.92),transparent);font-family:var(--f-mono);
   font-size:.69rem;letter-spacing:.17em;text-transform:uppercase;color:var(--haze)}
 
 .hrs{display:grid;gap:.55rem;margin-top:1.6rem;padding-top:1.4rem;border-top:1px solid var(--line)}

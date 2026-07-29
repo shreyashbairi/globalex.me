@@ -1,4 +1,16 @@
 const { hero, cta } = require('../parts');
+// Families live in the catalogue so this page, products.html and site search
+// cannot drift apart.
+const { POLYMERS } = require('../catalogue');
+
+const family = (p) => `<article class="fam-c" id="${p.id}">
+  <div class="fam-vis"><span class="ix">${p.ix}</span><canvas data-poly="${p.vis}"></canvas></div>
+  <div class="fam-b">
+    <h3>${p.name}</h3>
+    <div class="chips">${p.specs.map((s) => `<span class="chip spec">${s}</span>`).join('')}</div>
+    <p>${p.body}</p>
+  </div>
+</article>`;
 
 module.exports = {
   page: 'polymers',
@@ -39,7 +51,7 @@ module.exports = {
 
   body: `
 ${hero({
-    crumb: [['Products', 'fertilizers.html'], 'Polymers'],
+    crumb: [['Products', 'products.html'], 'Polymers'],
     eyebrow: 'Class 02 &middot; 3 families &middot; Gulf, Caspian &amp; East Asia',
     h1: 'Polymers',
     lead: 'Polyethylene across LDPE, HDPE, LLDPE and UHMWPE; polypropylene homopolymer and copolymer; and the additives that tune a resin to its application.',
@@ -51,41 +63,7 @@ ${hero({
   <div class="wrap">
     <div class="fam rvs">
 
-      <article class="fam-c">
-        <div class="fam-vis"><span class="ix">01 &mdash; Polyethylene</span><canvas data-poly="pe"></canvas></div>
-        <div class="fam-b">
-          <h3>Polyethylene</h3>
-          <div class="chips">
-            <span class="chip spec">LDPE</span><span class="chip spec">HDPE</span>
-            <span class="chip spec">LLDPE</span><span class="chip spec">UHMWPE</span>
-          </div>
-          <p>One monomer, four very different materials &mdash; the difference is how tightly the chains pack. Low-density (LDPE) stays branched and flexible, which is why it becomes film and bags. High-density (HDPE) packs straight and stiff, so it becomes pipe, containers and automotive parts. Linear low-density (LLDPE) trades stiffness for puncture resistance in stretch film, and ultra-high molecular weight (UHMWPE) runs chains so long the material outwears steel in abrasion service.</p>
-        </div>
-      </article>
-
-      <article class="fam-c">
-        <div class="fam-vis"><span class="ix">02 &mdash; Polypropylene</span><canvas data-poly="pp"></canvas></div>
-        <div class="fam-b">
-          <h3>Polypropylene</h3>
-          <div class="chips">
-            <span class="chip spec">Homopolymer</span><span class="chip spec">Copolymer</span>
-            <span class="chip spec">PPR</span><span class="chip spec">PPC</span>
-          </div>
-          <p>Lighter than polyethylene and considerably stiffer, with a higher melting point &mdash; which is what makes it the default for packaging that gets hot-filled, automotive interiors, textiles and rigid consumer goods. Homopolymer for stiffness and clarity; copolymer where impact strength at low temperature matters more.</p>
-        </div>
-      </article>
-
-      <article class="fam-c">
-        <div class="fam-vis"><span class="ix">03 &mdash; Additives</span><canvas data-poly="add"></canvas></div>
-        <div class="fam-b">
-          <h3>Performance additives</h3>
-          <div class="chips">
-            <span class="chip spec">Plasticizers</span><span class="chip spec">UV stabilizers</span>
-            <span class="chip spec">Flame retardants</span><span class="chip spec">Antimicrobials</span>
-          </div>
-          <p>A resin only becomes a product once it is tuned. Plasticizers for flexibility, UV stabilizers so outdoor parts do not chalk and crack, flame retardants for building and electrical compliance, antimicrobials for medical and food contact. Specified by application, supplied to grade.</p>
-        </div>
-      </article>
+${POLYMERS.map(family).join('\n')}
 
     </div>
   </div>

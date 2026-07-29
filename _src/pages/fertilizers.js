@@ -1,40 +1,10 @@
 const { hero, cta } = require('../parts');
+// Nutrient split is what actually distinguishes these grades, so it becomes
+// the visual. The grades themselves live in the catalogue, which the products
+// page and site search read from the same object.
+const { FERTILIZERS: PRODUCTS } = require('../catalogue');
 
-// Nutrient split is what actually distinguishes these grades, so it becomes the visual.
-const PRODUCTS = [
-  {
-    name: 'Urea B (N46)', kind: 'Nitrogen fertilizer', npk: [46, 0, 0],
-    specs: ['N46 &middot; 46% nitrogen', 'Prilled', 'Granular', 'Bulk', 'Liquid'],
-    origins: ['Turkmenistan', 'Uzbekistan', 'Azerbaijan'],
-    body: 'The most widely used nitrogen fertilizer, and the backbone of our fertilizer book. A white crystalline solid, highly soluble, releasing nitrogen slowly and steadily &mdash; which lifts yield while reducing runoff. Supplied bulk, prilled, granular and liquid.',
-  },
-  {
-    name: 'Potash', kind: 'Crop resilience', npk: [0, 0, 60],
-    specs: ['Potassium-rich', 'MOP grade'],
-    origins: ['Turkmenistan', 'Uzbekistan'],
-    body: 'Potash governs how well a crop handles stress &mdash; drought, disease, temperature swing. It is the input that protects the yield the nitrogen created, and it holds quality through storage and transport.',
-  },
-  {
-    name: 'Ammonia', kind: 'Upstream nitrogen', npk: [82, 0, 0],
-    specs: ['Anhydrous', 'Aqueous'],
-    origins: ['Kazakhstan', 'Uzbekistan'],
-    body: 'The upstream input from which most nitrogen fertilizers are made, and a direct-application fertilizer in its own right. Handled to specification, with the shipping and storage discipline anhydrous ammonia demands.',
-  },
-  {
-    name: 'Ammonium Nitrate', kind: 'Quick-release nitrogen', npk: [34, 0, 0],
-    specs: ['34-0-0', 'High-yield'],
-    origins: ['Kazakhstan', 'Uzbekistan'],
-    body: 'Where urea releases slowly, ammonium nitrate is immediately available &mdash; the grade to reach for when the growing window is short or a crop needs correcting mid-season.',
-  },
-  {
-    name: 'NPK Compound', kind: 'Balanced blend', npk: [15, 15, 15],
-    specs: ['N &middot; P &middot; K blend', 'Compound granular'],
-    origins: ['Turkmenistan', 'Kazakhstan', 'Uzbekistan', 'Azerbaijan'],
-    body: 'Nitrogen, phosphorus and potassium in one granule, so every application delivers a balanced ration. The general-purpose workhorse across soil types and cropping systems.',
-  },
-];
-
-const row = (p, i) => `<article class="row prod">
+const row = (p, i) => `<article class="row prod" id="${p.id}">
 <span class="row-ix">${String(i + 1).padStart(2, '0')}</span>
 <div class="row-b">
   <h3>${p.name}</h3>
@@ -59,7 +29,7 @@ module.exports = {
 .prod .row-side{min-width:170px}
 .npk{display:flex;gap:.85rem;align-items:flex-end;margin-top:.3rem}
 .npk-b{display:grid;justify-items:center;gap:.35rem;width:34px}
-.npk-b i{display:block;width:8px;height:62px;background:rgba(146,190,204,.12);position:relative;
+.npk-b i{display:block;width:8px;height:62px;background:rgba(146,190,204,.16);position:relative;
   border:1px solid var(--line)}
 .npk-b i::after{content:'';position:absolute;left:-1px;right:-1px;bottom:-1px;height:var(--v);
   min-height:2px;background:var(--sand);box-shadow:0 0 8px rgba(217,183,120,.5)}
@@ -77,7 +47,7 @@ module.exports = {
 
   body: `
 ${hero({
-    crumb: [['Products', 'fertilizers.html'], 'Fertilizers'],
+    crumb: [['Products', 'products.html'], 'Fertilizers'],
     eyebrow: 'Class 01 &middot; 5 grades &middot; Caspian origin',
     h1: 'Fertilizers',
     lead: 'Urea B (N46), potash, ammonia, ammonium nitrate and NPK &mdash; the nitrogen and compound grades that set yield, sourced from Turkmenistan, Uzbekistan, Kazakhstan and Azerbaijan.',
