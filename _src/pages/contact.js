@@ -1,9 +1,9 @@
-const { hero } = require('../parts');
+const { hero } = require("../parts");
 
 module.exports = {
-  page: 'contact',
-  title: 'Contact — Globalex Trading DMCC, Dubai',
-  desc: 'Contact the Globalex Trading DMCC desk in Jumeirah Lakes Towers, Dubai. Quote requests, trade procedures and partnership enquiries answered within two business days.',
+  page: "contact",
+  title: "Contact — Globalex Trading FZCO, Dubai",
+  desc: "Contact the Globalex Trading FZCO desk in Jumeirah Lakes Towers, Dubai. Quote requests, trade procedures and partnership enquiries answered within two business days.",
 
   css: `
 .cc{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--line)}
@@ -59,13 +59,17 @@ module.exports = {
 
   body: `
 ${hero({
-    crumb: ['Contact'],
-    eyebrow: 'Dubai desk &middot; 25.0693&deg;N / 55.1413&deg;E',
-    h1: 'Tell us the tonnage, the port and the window.',
-    lead: 'Quote requests, trade procedures, partnership conversations. The Dubai desk responds within two business days &mdash; email is fastest, and for time-sensitive deals, call.',
-    meta: [['48h', 'Typical response'], ['GST', 'Mon&ndash;Fri 09:00&ndash;18:00'], ['Cluster X', 'JLT, Dubai']],
-    sec: 'Contact',
-  })}
+  crumb: ["Contact"],
+  eyebrow: "Dubai desk &middot; 25.0693&deg;N / 55.1413&deg;E",
+  h1: "Tell us the tonnage, the port and the window.",
+  lead: "Quote requests, trade procedures, partnership conversations. The Dubai desk responds within two business days &mdash; email is fastest, and for time-sensitive deals, call.",
+  meta: [
+    ["48h", "Typical response"],
+    ["GST", "Mon&ndash;Fri 09:00&ndash;18:00"],
+    ["Cluster X", "JLT, Dubai"],
+  ],
+  sec: "Contact",
+})}
 
 <section class="sec is-tight" data-sec="Reach us">
   <div class="wrap">
@@ -97,7 +101,7 @@ ${hero({
         <h2 style="margin-top:.9rem">Tell us about your enquiry.</h2>
         <p class="lead" style="margin-top:1.3rem">Share what you are looking for &mdash; grade, origin, volume, destination port and delivery window &mdash; and the desk comes back with pricing and procedure.</p>
 
-        <form class="form" style="margin-top:2.2rem" data-form="contact" data-mailto="info@globalex.me" data-subject="Website enquiry — Globalex Trading DMCC">
+        <form class="form" style="margin-top:2.2rem" data-form="contact" data-mailto="info@globalex.me" data-subject="Website enquiry — Globalex Trading FZCO">
           <div class="hp" aria-hidden="true"><label for="cw">Website</label><input id="cw" name="website" type="text" tabindex="-1" autocomplete="off" /></div>
           <div class="f-row">
             <div class="fld"><label for="cn">Your name</label><input id="cn" name="cn" type="text" autocomplete="name" required /></div>
@@ -136,7 +140,7 @@ ${hero({
 
         <div class="map" style="margin-top:1.9rem">
           <span class="map-tag">JLT Cluster X &middot; 25.0693&deg;N 55.1413&deg;E</span>
-          <iframe title="Globalex Trading DMCC office location, Jumeirah Lakes Towers, Dubai"
+          <iframe title="Globalex Trading FZCO office location, Jumeirah Lakes Towers, Dubai"
             src="https://maps.google.com/maps?q=Jumeirah%20Lakes%20Towers%20Cluster%20X%20Dubai&t=&z=14&ie=UTF8&iwloc=&output=embed"
             loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
         </div>
@@ -152,7 +156,7 @@ ${hero({
           <div><span>Response target</span><b>Two business days</b></div>
         </div>
 
-        <a class="soc" href="https://www.linkedin.com/company/globalex-trading-dmcc-uae/" target="_blank" rel="noopener noreferrer">
+        <a class="soc" href="https://www.linkedin.com/company/globalex-trading-FZCO-uae/" target="_blank" rel="noopener noreferrer">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg>
           Follow on LinkedIn <span class="ar">&nearr;</span>
         </a>

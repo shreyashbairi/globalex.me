@@ -10,52 +10,92 @@
    bytes from R2 and is itself gated on the same grant. The original file is
    never at a guessable public URL. */
 
-import { DOC_BY_ID } from '../_lib/docs.js';
-import { geo, esc, now } from '../_lib/util.js';
+import { DOC_BY_ID } from "../_lib/docs.js";
+import { geo, esc, now } from "../_lib/util.js";
 
-const PDFJS = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174';
+const PDFJS = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174";
 
 export async function onRequestGet(ctx) {
   const { params, env, request } = ctx;
-  const token = String(params.token || '');
+  const token = String(params.token || "");
 
-  if (!env.DB) return page(gone('This link cannot be checked right now.', 'Storage is offline. Try again shortly, or write to info@globalex.me.'), 503);
+  if (!env.DB)
+    return page(
+      gone(
+        "This link cannot be checked right now.",
+        "Storage is offline. Try again shortly, or write to info@globalex.me.",
+      ),
+      503,
+    );
 
-  const grant = await env.DB
-    .prepare('SELECT * FROM grants WHERE token = ?1')
+  const grant = await env.DB.prepare("SELECT * FROM grants WHERE token = ?1")
     .bind(token)
     .first();
 
   if (!grant) {
-    return page(gone('This link is not valid.', 'It may have been mistyped. Request the document again at globalex.me and a fresh link will arrive.'), 404);
+    return page(
+      gone(
+        "This link is not valid.",
+        "It may have been mistyped. Request the document again at globalex.me and a fresh link will arrive.",
+      ),
+      404,
+    );
   }
   if (grant.revoked) {
-    return page(gone('This link has been withdrawn.', 'Contact info@globalex.me if you still need the document.'), 410);
+    return page(
+      gone(
+        "This link has been withdrawn.",
+        "Contact info@globalex.me if you still need the document.",
+      ),
+      410,
+    );
   }
   if (grant.expires_at < Date.now()) {
     /* No fixed lifetime quoted here any more: a desk-shared link can carry
        any term, so naming "30 days" would contradict what its own email said. */
-    return page(gone('This link has expired.', 'Request the document again at globalex.me and a fresh link will arrive, or write to info@globalex.me.'), 410);
+    return page(
+      gone(
+        "This link has expired.",
+        "Request the document again at globalex.me and a fresh link will arrive, or write to info@globalex.me.",
+      ),
+      410,
+    );
   }
 
   const doc = DOC_BY_ID[grant.doc_id];
-  if (!doc) return page(gone('That document is no longer published.', 'Write to info@globalex.me and we will send the current revision.'), 404);
+  if (!doc)
+    return page(
+      gone(
+        "That document is no longer published.",
+        "Write to info@globalex.me and we will send the current revision.",
+      ),
+      404,
+    );
 
   /* Log the open before returning the page, but off the critical path so
      the reader is never waiting on a write. */
   const g = geo(request);
   ctx.waitUntil(
     env.DB.batch([
-      env.DB
-        .prepare(
-          `INSERT INTO doc_events (token,doc_id,email,kind,ts,ip,country,city,region,tz,ua)
-           VALUES (?1,?2,?3,'open',?4,?5,?6,?7,?8,?9,?10)`
-        )
-        .bind(token, doc.id, grant.email, now(), g.ip, g.country, g.city, g.region, g.tz, g.ua),
-      env.DB
-        .prepare('UPDATE grants SET opens = opens + 1, last_open = ?2 WHERE token = ?1')
-        .bind(token, now()),
-    ])
+      env.DB.prepare(
+        `INSERT INTO doc_events (token,doc_id,email,kind,ts,ip,country,city,region,tz,ua)
+           VALUES (?1,?2,?3,'open',?4,?5,?6,?7,?8,?9,?10)`,
+      ).bind(
+        token,
+        doc.id,
+        grant.email,
+        now(),
+        g.ip,
+        g.country,
+        g.city,
+        g.region,
+        g.tz,
+        g.ua,
+      ),
+      env.DB.prepare(
+        "UPDATE grants SET opens = opens + 1, last_open = ?2 WHERE token = ?1",
+      ).bind(token, now()),
+    ]),
   );
 
   return page(viewer(doc, token, grant), 200);
@@ -65,18 +105,18 @@ const page = (html, status) =>
   new Response(html, {
     status,
     headers: {
-      'Content-Type': 'text/html; charset=utf-8',
+      "Content-Type": "text/html; charset=utf-8",
       /* Never cache a gated page — the next viewer of this URL must go
          through the grant check again. */
-      'Cache-Control': 'no-store, no-cache, must-revalidate',
-      'Referrer-Policy': 'no-referrer',
-      'X-Robots-Tag': 'noindex, nofollow, noarchive',
+      "Cache-Control": "no-store, no-cache, must-revalidate",
+      "Referrer-Policy": "no-referrer",
+      "X-Robots-Tag": "noindex, nofollow, noarchive",
     },
   });
 
 /* ------------------------------------------------------------------ */
 
-const SHELL = (title, body, head = '') => `<!DOCTYPE html>
+const SHELL = (title, body, head = "") => `<!DOCTYPE html>
 <html lang="en"><head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
@@ -109,7 +149,7 @@ ${head}
 
 function gone(headline, note) {
   return SHELL(
-    'Link unavailable',
+    "Link unavailable",
     `<main class="empty">
       <img src="/assets/logo.webp" alt="" width="70" height="60" />
       <h1>${esc(headline)}</h1>
@@ -124,7 +164,7 @@ function gone(headline, note) {
      .empty p{color:var(--haze);line-height:1.65}
      .btn{margin-top:1rem;padding:.85em 1.6em;background:var(--cyan);color:var(--void);
        font-weight:600;font-size:.92rem;
-       clip-path:polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,10px 100%,0 calc(100% - 10px))}`
+       clip-path:polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,10px 100%,0 calc(100% - 10px))}`,
   );
 }
 
@@ -133,7 +173,7 @@ function viewer(doc, token, grant) {
 <header class="bar">
   <a class="mark" href="https://globalex.me">
     <img src="/assets/logo.webp" alt="Globalex" width="40" height="34" />
-    <span><b>GLOBALEX</b><i>TRADING DMCC</i></span>
+    <span><b>GLOBALEX</b><i>TRADING FZCO</i></span>
   </a>
   <div class="doc">
     <span class="kind" data-kind="${esc(doc.kind)}">${esc(doc.kind)}</span>
@@ -152,11 +192,13 @@ function viewer(doc, token, grant) {
 </header>
 
 <div class="strip">
-  <span>${grant.email
-    ? `Issued to <b>${esc(grant.email)}</b>`
-    : /* Desk-shared links need not name a recipient, and "Issued to" with
+  <span>${
+    grant.email
+      ? `Issued to <b>${esc(grant.email)}</b>`
+      : /* Desk-shared links need not name a recipient, and "Issued to" with
          nothing after it reads like a bug. */
-      'Issued as a <b>controlled link</b>'}</span>
+        "Issued as a <b>controlled link</b>"
+  }</span>
   <span class="sep"></span>
   <span>Controlled document &middot; ${esc(doc.sub)} &middot; ${esc(doc.origin)}</span>
 </div>
@@ -167,7 +209,7 @@ function viewer(doc, token, grant) {
 </main>
 
 <footer class="foot">
-  <span>&copy; <span data-yr>2026</span> Globalex Trading DMCC</span>
+  <span>&copy; <span data-yr>2026</span> Globalex Trading FZCO</span>
   <span>Questions? <a href="mailto:info@globalex.me">info@globalex.me</a></span>
 </footer>
 

@@ -1,29 +1,29 @@
-const { hero, cta } = require('../parts');
+const { hero, cta } = require("../parts");
 // Nutrient split is what actually distinguishes these grades, so it becomes
 // the visual. The grades themselves live in the catalogue, which the products
 // page and site search read from the same object.
-const { FERTILIZERS: PRODUCTS } = require('../catalogue');
+const { FERTILIZERS: PRODUCTS } = require("../catalogue");
 
 const row = (p, i) => `<article class="row prod" id="${p.id}">
-<span class="row-ix">${String(i + 1).padStart(2, '0')}</span>
+<span class="row-ix">${String(i + 1).padStart(2, "0")}</span>
 <div class="row-b">
   <h3>${p.name}</h3>
-  <div class="chips">${p.specs.map((s) => `<span class="chip spec">${s}</span>`).join('')}</div>
+  <div class="chips">${p.specs.map((s) => `<span class="chip spec">${s}</span>`).join("")}</div>
   <p>${p.body}</p>
-  <div class="chips">${p.origins.map((o) => `<span class="chip org">${o}</span>`).join('')}</div>
+  <div class="chips">${p.origins.map((o) => `<span class="chip org">${o}</span>`).join("")}</div>
 </div>
 <div class="row-side">
   <span>${p.kind}</span>
   <div class="npk" role="img" aria-label="Nutrient split: ${p.npk[0]} nitrogen, ${p.npk[1]} phosphorus, ${p.npk[2]} potassium">
-    ${['N', 'P', 'K'].map((L, k) => `<span class="npk-b"><i style="--v:${p.npk[k]}%"></i><b>${L}</b><em>${p.npk[k]}</em></span>`).join('')}
+    ${["N", "P", "K"].map((L, k) => `<span class="npk-b"><i style="--v:${p.npk[k]}%"></i><b>${L}</b><em>${p.npk[k]}</em></span>`).join("")}
   </div>
 </div>
 </article>`;
 
 module.exports = {
-  page: 'fertilizers',
-  title: 'Fertilizers — Globalex Trading DMCC',
-  desc: 'Urea B (N46), Potash, Ammonia, Ammonium Nitrate and NPK compound fertilizers sourced from Turkmenistan, Uzbekistan, Kazakhstan and Azerbaijan.',
+  page: "fertilizers",
+  title: "Fertilizers — Globalex Trading FZCO",
+  desc: "Urea B (N46), Potash, Ammonia, Ammonium Nitrate and NPK compound fertilizers sourced from Turkmenistan, Uzbekistan, Kazakhstan and Azerbaijan.",
 
   css: `
 .prod .row-side{min-width:170px}
@@ -47,19 +47,24 @@ module.exports = {
 
   body: `
 ${hero({
-    crumb: [['Products', 'products.html'], 'Fertilizers'],
-    eyebrow: 'Class 01 &middot; 5 grades &middot; Caspian origin',
-    h1: 'Fertilizers',
-    lead: 'Urea B (N46), potash, ammonia, ammonium nitrate and NPK &mdash; the nitrogen and compound grades that set yield, sourced from Turkmenistan, Uzbekistan, Kazakhstan and Azerbaijan.',
-    tone: 'sand',
-    meta: [['5', 'Grades'], ['N46', 'Flagship spec'], ['4', 'Origin markets'], ['Bulk', 'Vessel &amp; bagged']],
-    sec: 'Fertilizers',
-  })}
+  crumb: [["Products", "products.html"], "Fertilizers"],
+  eyebrow: "Class 01 &middot; 5 grades &middot; Caspian origin",
+  h1: "Fertilizers",
+  lead: "Urea B (N46), potash, ammonia, ammonium nitrate and NPK &mdash; the nitrogen and compound grades that set yield, sourced from Turkmenistan, Uzbekistan, Kazakhstan and Azerbaijan.",
+  tone: "sand",
+  meta: [
+    ["5", "Grades"],
+    ["N46", "Flagship spec"],
+    ["4", "Origin markets"],
+    ["Bulk", "Vessel &amp; bagged"],
+  ],
+  sec: "Fertilizers",
+})}
 
 <section class="sec is-tight" data-sec="Grades">
   <div class="wrap">
     <div class="rows rvs">
-${PRODUCTS.map(row).join('\n')}
+${PRODUCTS.map(row).join("\n")}
     </div>
   </div>
 </section>
@@ -103,11 +108,11 @@ ${PRODUCTS.map(row).join('\n')}
 </section>
 
 ${cta({
-    eyebrow: 'Request a quote',
-    h2: 'Need fertilizer supply at scale?',
-    lead: 'Share volume, destination port and target delivery window &mdash; we return pricing and procedure within two business days.',
-    primary: ['Request a quote', 'contact.html'],
-    tone: 'sand',
-  })}
+  eyebrow: "Request a quote",
+  h2: "Need fertilizer supply at scale?",
+  lead: "Share volume, destination port and target delivery window &mdash; we return pricing and procedure within two business days.",
+  primary: ["Request a quote", "contact.html"],
+  tone: "sand",
+})}
 `,
 };

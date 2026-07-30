@@ -51,7 +51,14 @@
       "Bash(grep -o '\"message\":\"[^\"]\\\\{0,200\\\\}\"' /private/tmp/claude-501/-Users-Shreyash-Desktop-Globalex-globalex-me/f2d7d69b-65f8-452c-be53-f7a3601697db/scratchpad/tail2.log)",
       "Bash(curl -s https://globalex.me/.dev.vars)",
       "Bash(curl -s -o /dev/null -w \"bytes=%{size_download} type=%{content_type}\\\\n\" https://globalex.me/.dev.vars)",
-      "Bash(git check-ignore *)"
+      "Bash(git check-ignore *)",
+      "WebFetch(domain:nitrongroup.com)",
+      "WebFetch(domain:www.trammo.com)",
+      "WebFetch(domain:www.eurochemgroup.com)",
+      "Bash(sort -k1 -n -r)",
+      "WebFetch(domain:hexagon-group.com)",
+      "Bash(git add *)",
+      "Bash(git commit *)"
     ],
     "additionalDirectories": [
       "/tmp"

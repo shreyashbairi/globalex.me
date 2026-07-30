@@ -12,40 +12,52 @@
    with JavaScript off — the box only ever narrows what is on screen.
    ============================================================ */
 
-const { hero, cta } = require('../parts');
-const { CLASSES, plain } = require('../catalogue');
-const { DOCS } = require('../docs');
+const { hero, cta } = require("../parts");
+const { CLASSES, plain } = require("../catalogue");
+const { DOCS } = require("../docs");
 
 const TOTAL = CLASSES.reduce((n, c) => n + c.items.length, 0);
 
 /* Everything the matcher scans, baked into the element. One attribute read
    beats rebuilding a string per keystroke per card. */
 const haystack = (p, cls) =>
-  plain([
-    p.name, p.kind, p.body, p.alias || '', p.f || '',
-    (p.specs || []).join(' '), (p.origins || []).join(' '), cls.title,
-  ].join(' ')).toLowerCase();
+  plain(
+    [
+      p.name,
+      p.kind,
+      p.body,
+      p.alias || "",
+      p.f || "",
+      (p.specs || []).join(" "),
+      (p.origins || []).join(" "),
+      cls.title,
+    ].join(" "),
+  ).toLowerCase();
 
 const card = (p, cls, i) => `<a class="pc" href="${cls.href}#${p.id}"
  data-cat="${cls.key}" data-h="${haystack(p, cls)}" data-cur="Open grade">
 <span class="pc-top">
-  <span class="pc-ix">${String(i + 1).padStart(2, '0')}</span>
-  <span class="pc-cls${cls.tone === 'sand' ? ' mat' : ''}">${cls.title}</span>
+  <span class="pc-ix">${String(i + 1).padStart(2, "0")}</span>
+  <span class="pc-cls${cls.tone === "sand" ? " mat" : ""}">${cls.title}</span>
 </span>
 <span class="pc-h">
   <b>${p.name}</b>
-  ${p.f ? `<i class="formula">${p.f}</i>` : ''}
+  ${p.f ? `<i class="formula">${p.f}</i>` : ""}
 </span>
 <span class="pc-kind">${p.kind}</span>
 <span class="pc-p">${p.body}</span>
-<span class="chips">${(p.specs || []).map((s) => `<span class="chip spec">${s}</span>`).join('')}</span>
-${(p.origins || []).length
-    ? `<span class="chips">${p.origins.map((o) => `<span class="chip org">${o}</span>`).join('')}</span>`
-    : ''}
+<span class="chips">${(p.specs || []).map((s) => `<span class="chip spec">${s}</span>`).join("")}</span>
+${
+  (p.origins || []).length
+    ? `<span class="chips">${p.origins.map((o) => `<span class="chip org">${o}</span>`).join("")}</span>`
+    : ""
+}
 <span class="pc-go">Open grade <em>&rarr;</em></span>
 </a>`;
 
-const classSection = (cls) => `<section class="sec is-tight pcls" data-cat="${cls.key}" id="${cls.key}" data-sec="${cls.title}">
+const classSection = (
+  cls,
+) => `<section class="sec is-tight pcls" data-cat="${cls.key}" id="${cls.key}" data-sec="${cls.title}">
 <div class="wrap">
   <div class="pcls-h rv">
     <span class="pcls-no">${cls.no}</span>
@@ -53,10 +65,10 @@ const classSection = (cls) => `<section class="sec is-tight pcls" data-cat="${cl
       <h2>${cls.title}</h2>
       <p class="lead">${cls.blurb}</p>
     </div>
-    <a class="lk${cls.tone === 'sand' ? ' mat' : ''}" href="${cls.href}">Full class page</a>
+    <a class="lk${cls.tone === "sand" ? " mat" : ""}" href="${cls.href}">Full class page</a>
   </div>
   <div class="pgrid rvs">
-${cls.items.map((p, i) => card(p, cls, i)).join('\n')}
+${cls.items.map((p, i) => card(p, cls, i)).join("\n")}
   </div>
 </div>
 </section>`;
@@ -72,9 +84,9 @@ const docRow = (d) => `<a class="drow" href="index.html#specifications"
 </a>`;
 
 module.exports = {
-  page: 'products',
-  title: 'Products — Globalex Trading DMCC',
-  desc: `Search all ${TOTAL} grades Globalex Trading DMCC supplies across fertilizers, polymers and industrial chemicals — by name, formula, application or origin.`,
+  page: "products",
+  title: "Products — Globalex Trading FZCO",
+  desc: `Search all ${TOTAL} grades Globalex Trading FZCO supplies across fertilizers, polymers and industrial chemicals — by name, formula, application or origin.`,
 
   css: `
 /* ---------- search console ---------- */
@@ -193,12 +205,12 @@ module.exports = {
 
   body: `
 ${hero({
-    crumb: ['Products'],
-    eyebrow: `Three classes &middot; ${TOTAL} grades &middot; Caspian, Gulf &amp; East Asia`,
-    h1: 'Products',
-    lead: 'Fertilizers, polymers and industrial chemicals &mdash; the whole book in one place. Search by grade name, chemical formula, application or origin, or browse the classes below.',
-    sec: 'Products',
-  })}
+  crumb: ["Products"],
+  eyebrow: `Three classes &middot; ${TOTAL} grades &middot; Caspian, Gulf &amp; East Asia`,
+  h1: "Products",
+  lead: "Fertilizers, polymers and industrial chemicals &mdash; the whole book in one place. Search by grade name, chemical formula, application or origin, or browse the classes below.",
+  sec: "Products",
+})}
 
 <section class="sec psec" data-sec="Search">
   <div class="wrap">
@@ -214,7 +226,7 @@ ${hero({
 
       <div class="pfilters">
         <button class="pf" type="button" data-filter="all" data-on>All<b>${TOTAL + DOCS.length}</b></button>
-${CLASSES.map((c) => `        <button class="pf" type="button" data-filter="${c.key}">${c.title}<b>${c.items.length}</b></button>`).join('\n')}
+${CLASSES.map((c) => `        <button class="pf" type="button" data-filter="${c.key}">${c.title}<b>${c.items.length}</b></button>`).join("\n")}
         <button class="pf" type="button" data-filter="documents">Documents<b>${DOCS.length}</b></button>
         <span class="pcount" data-count aria-live="polite"></span>
       </div>
@@ -222,7 +234,7 @@ ${CLASSES.map((c) => `        <button class="pf" type="button" data-filter="${c.
   </div>
 </section>
 
-${CLASSES.map(classSection).join('\n')}
+${CLASSES.map(classSection).join("\n")}
 
 <section class="sec sec-panel pcls" data-cat="documents" id="documents" data-sec="Documents">
   <div class="wrap">
@@ -235,7 +247,7 @@ ${CLASSES.map(classSection).join('\n')}
       <a class="lk" href="index.html#specifications">Open the register</a>
     </div>
     <div class="dreg rvs">
-${DOCS.map(docRow).join('\n')}
+${DOCS.map(docRow).join("\n")}
     </div>
   </div>
 </section>
@@ -251,11 +263,11 @@ ${DOCS.map(docRow).join('\n')}
 </div>
 
 ${cta({
-    eyebrow: 'Request a quote',
-    h2: 'Found the grade? Tell us the tonnage.',
-    lead: 'Share volume, destination port and target delivery window &mdash; we return pricing and procedure within two business days.',
-    primary: ['Request a quote', 'contact.html'],
-  })}
+  eyebrow: "Request a quote",
+  h2: "Found the grade? Tell us the tonnage.",
+  lead: "Share volume, destination port and target delivery window &mdash; we return pricing and procedure within two business days.",
+  primary: ["Request a quote", "contact.html"],
+})}
 `,
 
   js: `

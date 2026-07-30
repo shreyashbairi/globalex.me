@@ -4,21 +4,21 @@
    bearer token over plain fetch — no SDK, no SMTP, nothing that needs a
    Node runtime. Swapping provider means rewriting only `send` below. */
 
-import { esc } from './util.js';
+import { esc } from "./util.js";
 
-const ENDPOINT = 'https://api.resend.com/emails';
+const ENDPOINT = "https://api.resend.com/emails";
 
 export async function send(env, { to, subject, html, text, replyTo }) {
-  if (!env.RESEND_API_KEY) throw new Error('RESEND_API_KEY is not configured');
+  if (!env.RESEND_API_KEY) throw new Error("RESEND_API_KEY is not configured");
 
   const res = await fetch(ENDPOINT, {
-    method: 'POST',
+    method: "POST",
     headers: {
       Authorization: `Bearer ${env.RESEND_API_KEY}`,
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      from: env.MAIL_FROM || 'Globalex Documents <documents@globalex.me>',
+      from: env.MAIL_FROM || "Globalex Documents <documents@globalex.me>",
       to: Array.isArray(to) ? to : [to],
       subject,
       html,
@@ -29,7 +29,9 @@ export async function send(env, { to, subject, html, text, replyTo }) {
 
   if (!res.ok) {
     const body = await res.text();
-    throw new Error(`Mail provider rejected the send (${res.status}): ${body.slice(0, 300)}`);
+    throw new Error(
+      `Mail provider rejected the send (${res.status}): ${body.slice(0, 300)}`,
+    );
   }
   return res.json();
 }
@@ -51,7 +53,7 @@ const SHELL = (inner) => `<!DOCTYPE html>
 ${inner}
 </table>
 <p style="max-width:560px;margin:18px auto 0;font:12px -apple-system,Segoe UI,sans-serif;color:#5F7D89;text-align:center;">
-Globalex Trading DMCC &middot; 2605 X3 Tower, Cluster X, JLT, Dubai, UAE<br />
+Globalex Trading FZCO &middot; 2605 X3 Tower, Cluster X, JLT, Dubai, UAE<br />
 <a href="https://globalex.me" style="color:#8FAAB6;">globalex.me</a>
 </p>
 </td></tr></table>
@@ -59,7 +61,7 @@ Globalex Trading DMCC &middot; 2605 X3 Tower, Cluster X, JLT, Dubai, UAE<br />
 
 const HEAD = `<tr><td style="padding:26px 30px 0;">
 <span style="font:700 15px -apple-system,Segoe UI,sans-serif;letter-spacing:.16em;color:#E9F3F6;">GLOBALEX</span>
-<span style="font:400 11px -apple-system,Segoe UI,sans-serif;letter-spacing:.2em;color:#5F7D89;display:block;margin-top:3px;">TRADING DMCC</span>
+<span style="font:400 11px -apple-system,Segoe UI,sans-serif;letter-spacing:.2em;color:#5F7D89;display:block;margin-top:3px;">TRADING FZCO</span>
 </td></tr>`;
 
 /* `days` must match the grant that was actually minted. The copy used to say
@@ -67,11 +69,11 @@ const HEAD = `<tr><td style="padding:26px 30px 0;">
    a link on any other term. `shared` swaps the opening line for links the
    desk sends unprompted — the recipient never filled in a form. */
 export function documentEmail({ doc, link, name, days = 30, shared = false }) {
-  const hi = name ? `Hello ${esc(name)},` : 'Hello,';
-  const life = days === 1 ? '24 hours' : `${days} days`;
+  const hi = name ? `Hello ${esc(name)},` : "Hello,";
+  const life = days === 1 ? "24 hours" : `${days} days`;
   const intro = shared
-    ? 'The Globalex desk has shared a controlled document with you.'
-    : 'Here is the document you asked for on globalex.me.';
+    ? "The Globalex desk has shared a controlled document with you."
+    : "Here is the document you asked for on globalex.me.";
 
   const html = SHELL(`${HEAD}
 <tr><td style="padding:22px 30px 6px;">
@@ -102,7 +104,7 @@ export function documentEmail({ doc, link, name, days = 30, shared = false }) {
   </p>
 </td></tr>`);
 
-  const text = `${name ? `Hello ${name},` : 'Hello,'}
+  const text = `${name ? `Hello ${name},` : "Hello,"}
 
 ${intro}
 
@@ -116,7 +118,7 @@ The link is yours and stays live for ${life}.
 
 Need pricing, a different grade, or the full range? Reply to this email — it reaches the Dubai desk.
 
-Globalex Trading DMCC · 2605 X3 Tower, Cluster X, JLT, Dubai, UAE
+Globalex Trading FZCO · 2605 X3 Tower, Cluster X, JLT, Dubai, UAE
 globalex.me`;
 
   return { subject: `${doc.title} — ${doc.kind} from Globalex`, html, text };
@@ -127,17 +129,17 @@ globalex.me`;
 export function leadAlert({ doc, email, name, company, place }) {
   const row = (k, v) =>
     `<tr><td style="padding:7px 0;font:400 12px -apple-system,Segoe UI,sans-serif;color:#5F7D89;width:120px;">${k}</td>
-     <td style="padding:7px 0;font:500 14px -apple-system,Segoe UI,sans-serif;color:#E9F3F6;">${esc(v || '—')}</td></tr>`;
+     <td style="padding:7px 0;font:500 14px -apple-system,Segoe UI,sans-serif;color:#E9F3F6;">${esc(v || "—")}</td></tr>`;
 
   const html = SHELL(`${HEAD}
 <tr><td style="padding:22px 30px 28px;">
   <p style="font:600 16px -apple-system,Segoe UI,sans-serif;color:#35D6F5;margin:0 0 16px;">New document request</p>
   <table role="presentation" cellpadding="0" cellspacing="0" width="100%">
-    ${row('Document', `${doc.kind} — ${doc.title}`)}
-    ${row('Email', email)}
-    ${row('Name', name)}
-    ${row('Company', company)}
-    ${row('Location', place)}
+    ${row("Document", `${doc.kind} — ${doc.title}`)}
+    ${row("Email", email)}
+    ${row("Name", name)}
+    ${row("Company", company)}
+    ${row("Location", place)}
   </table>
   <p style="font:400 13px/1.6 -apple-system,Segoe UI,sans-serif;color:#5F7D89;margin:20px 0 0;">
     The link has been sent. Opens and downloads appear in the admin dashboard.
@@ -147,7 +149,7 @@ export function leadAlert({ doc, email, name, company, place }) {
   return {
     subject: `Document request — ${doc.title} — ${email}`,
     html,
-    text: `New document request\n\nDocument: ${doc.kind} — ${doc.title}\nEmail: ${email}\nName: ${name || '—'}\nCompany: ${company || '—'}\nLocation: ${place || '—'}\n`,
+    text: `New document request\n\nDocument: ${doc.kind} — ${doc.title}\nEmail: ${email}\nName: ${name || "—"}\nCompany: ${company || "—"}\nLocation: ${place || "—"}\n`,
   };
 }
 
@@ -157,30 +159,34 @@ export function formAlert({ kind, fields, place }) {
     .map(
       ([k, v]) =>
         `<tr><td style="padding:7px 0;font:400 12px -apple-system,Segoe UI,sans-serif;color:#5F7D89;width:130px;vertical-align:top;">${esc(k)}</td>
-         <td style="padding:7px 0;font:500 14px/1.55 -apple-system,Segoe UI,sans-serif;color:#E9F3F6;white-space:pre-wrap;">${esc(v || '—')}</td></tr>`
+         <td style="padding:7px 0;font:500 14px/1.55 -apple-system,Segoe UI,sans-serif;color:#E9F3F6;white-space:pre-wrap;">${esc(v || "—")}</td></tr>`,
     )
-    .join('');
+    .join("");
 
-  const title = kind === 'careers' ? 'Career application' : 'Website enquiry';
+  const title = kind === "careers" ? "Career application" : "Website enquiry";
   const html = SHELL(`${HEAD}
 <tr><td style="padding:22px 30px 28px;">
   <p style="font:600 16px -apple-system,Segoe UI,sans-serif;color:#35D6F5;margin:0 0 16px;">${title}</p>
   <table role="presentation" cellpadding="0" cellspacing="0" width="100%">${rows}
     <tr><td style="padding:7px 0;font:400 12px -apple-system,Segoe UI,sans-serif;color:#5F7D89;">Location</td>
-        <td style="padding:7px 0;font:500 14px -apple-system,Segoe UI,sans-serif;color:#E9F3F6;">${esc(place || '—')}</td></tr>
+        <td style="padding:7px 0;font:500 14px -apple-system,Segoe UI,sans-serif;color:#E9F3F6;">${esc(place || "—")}</td></tr>
   </table>
 </td></tr>`);
 
-  const text = `${title}\n\n${fields.map(([k, v]) => `${k}: ${v || '—'}`).join('\n')}\nLocation: ${place || '—'}\n`;
-  return { subject: `${title} — ${fields[0]?.[1] || 'globalex.me'}`, html, text };
+  const text = `${title}\n\n${fields.map(([k, v]) => `${k}: ${v || "—"}`).join("\n")}\nLocation: ${place || "—"}\n`;
+  return {
+    subject: `${title} — ${fields[0]?.[1] || "globalex.me"}`,
+    html,
+    text,
+  };
 }
 
 /* Sent to the visitor so a submitted form does not feel like a void. */
 export function formReceipt({ kind }) {
   const line =
-    kind === 'careers'
-      ? 'Thank you for applying to Globalex. Your application is with our team and we will come back to you if there is a fit.'
-      : 'Thank you for contacting Globalex. Your message is with the Dubai desk and we typically reply within two business days.';
+    kind === "careers"
+      ? "Thank you for applying to Globalex. Your application is with our team and we will come back to you if there is a fit."
+      : "Thank you for contacting Globalex. Your message is with the Dubai desk and we typically reply within two business days.";
 
   const html = SHELL(`${HEAD}
 <tr><td style="padding:22px 30px 28px;">
@@ -190,5 +196,9 @@ export function formReceipt({ kind }) {
   </p>
 </td></tr>`);
 
-  return { subject: 'We received your message — Globalex Trading DMCC', html, text: line };
+  return {
+    subject: "We received your message — Globalex Trading FZCO",
+    html,
+    text: line,
+  };
 }

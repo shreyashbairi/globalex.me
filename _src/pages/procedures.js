@@ -1,40 +1,80 @@
-const { hero, cta } = require('../parts');
+const { hero, cta } = require("../parts");
 
 const STEPS = [
-  { tag: 'NCND', party: 'All parties', h: 'Non-circumvention and non-disclosure',
-    d: 'An NCND agreement is signed between all parties involved. Nobody goes around anybody, and nothing discussed leaves the table.' },
-  { tag: 'IMFPA', party: 'All parties', h: 'Master fee protection',
-    d: 'An Irrevocable Master Fee Protection Agreement is signed between all parties, fixing intermediary compensation before commercial terms are discussed.' },
-  { tag: 'LOI &middot; BCL &middot; ICPO', party: 'Buyer', h: 'Letter of intent issued',
-    d: 'The buyer submits a valid LOI with complete banking coordinates, authorisation of soft probe, and either a Bank Comfort Letter or an Irrevocable Corporate Purchase Order.' },
-  { tag: 'DC &middot; FCO', party: 'Seller', h: 'Draft contract and full corporate offer',
-    d: 'The seller issues the draft contract and the Full Corporate Offer &mdash; product, grade, quantity, price basis, delivery terms, all in writing.' },
-  { tag: 'Counter-signature', party: 'Buyer', h: 'Buyer counter-signs with a fresh BCL',
-    d: 'The buyer returns the signed and stamped DC and FCO with a fresh Bank Comfort Letter confirming capability to open a Letter of Credit.' },
-  { tag: 'Final contract', party: 'Seller', h: 'Final contract delivered',
-    d: 'The seller sends soft and hard copies of the final contract to be signed and stamped by the buyer. This is the document the shipment runs on.' },
-  { tag: 'Non-operative LC &middot; POF', party: 'Buyer', h: 'Non-operative letter of credit',
-    d: 'The buyer issues a non-operative LC and provides Proof of Funds to the seller’s bank. Money is committed but not yet released.' },
-  { tag: 'POP', party: 'Seller', h: 'Proof of product',
-    d: 'The seller provides Proof of Product to the buyer’s bank &mdash; evidence the cargo exists, at the grade and quantity contracted.' },
-  { tag: '2% PBG', party: 'Seller', h: 'Performance bond activates the LC',
-    d: 'The seller issues a 2% Performance Bond Guarantee, which activates the Letter of Credit. Both sides now carry exposure.' },
-  { tag: 'Delivery', party: 'All parties', h: 'Shipment begins',
-    d: 'Shipment begins on the schedule agreed in the contract. Documentation follows the cargo; the desk tracks it to discharge.' },
+  {
+    tag: "NCND",
+    party: "All parties",
+    h: "Non-circumvention and non-disclosure",
+    d: "An NCND agreement is signed between all parties involved. Nobody goes around anybody, and nothing discussed leaves the table.",
+  },
+  {
+    tag: "IMFPA",
+    party: "All parties",
+    h: "Master fee protection",
+    d: "An Irrevocable Master Fee Protection Agreement is signed between all parties, fixing intermediary compensation before commercial terms are discussed.",
+  },
+  {
+    tag: "LOI &middot; BCL &middot; ICPO",
+    party: "Buyer",
+    h: "Letter of intent issued",
+    d: "The buyer submits a valid LOI with complete banking coordinates, authorisation of soft probe, and either a Bank Comfort Letter or an Irrevocable Corporate Purchase Order.",
+  },
+  {
+    tag: "DC &middot; FCO",
+    party: "Seller",
+    h: "Draft contract and full corporate offer",
+    d: "The seller issues the draft contract and the Full Corporate Offer &mdash; product, grade, quantity, price basis, delivery terms, all in writing.",
+  },
+  {
+    tag: "Counter-signature",
+    party: "Buyer",
+    h: "Buyer counter-signs with a fresh BCL",
+    d: "The buyer returns the signed and stamped DC and FCO with a fresh Bank Comfort Letter confirming capability to open a Letter of Credit.",
+  },
+  {
+    tag: "Final contract",
+    party: "Seller",
+    h: "Final contract delivered",
+    d: "The seller sends soft and hard copies of the final contract to be signed and stamped by the buyer. This is the document the shipment runs on.",
+  },
+  {
+    tag: "Non-operative LC &middot; POF",
+    party: "Buyer",
+    h: "Non-operative letter of credit",
+    d: "The buyer issues a non-operative LC and provides Proof of Funds to the seller’s bank. Money is committed but not yet released.",
+  },
+  {
+    tag: "POP",
+    party: "Seller",
+    h: "Proof of product",
+    d: "The seller provides Proof of Product to the buyer’s bank &mdash; evidence the cargo exists, at the grade and quantity contracted.",
+  },
+  {
+    tag: "2% PBG",
+    party: "Seller",
+    h: "Performance bond activates the LC",
+    d: "The seller issues a 2% Performance Bond Guarantee, which activates the Letter of Credit. Both sides now carry exposure.",
+  },
+  {
+    tag: "Delivery",
+    party: "All parties",
+    h: "Shipment begins",
+    d: "Shipment begins on the schedule agreed in the contract. Documentation follows the cargo; the desk tracks it to discharge.",
+  },
 ];
 
 const panel = (s, i) => `<article class="step" data-i="${i}">
-<div class="step-n"><span>${String(i + 1).padStart(2, '0')}</span><i>/ 10</i></div>
+<div class="step-n"><span>${String(i + 1).padStart(2, "0")}</span><i>/ 10</i></div>
 <span class="step-tag">${s.tag}</span>
 <h3>${s.h}</h3>
 <p>${s.d}</p>
-<span class="step-party" data-p="${s.party === 'Buyer' ? 'b' : s.party === 'Seller' ? 's' : 'a'}">${s.party}</span>
+<span class="step-party" data-p="${s.party === "Buyer" ? "b" : s.party === "Seller" ? "s" : "a"}">${s.party}</span>
 </article>`;
 
 module.exports = {
-  page: 'procedures',
-  title: 'Trade Procedures — Globalex Trading DMCC',
-  desc: 'The ten contractual checkpoints between handshake and hull: NCND, IMFPA, LOI, FCO, letter of credit, proof of product, performance bond and shipment.',
+  page: "procedures",
+  title: "Trade Procedures — Globalex Trading FZCO",
+  desc: "The ten contractual checkpoints between handshake and hull: NCND, IMFPA, LOI, FCO, letter of credit, proof of product, performance bond and shipment.",
 
   css: `
 /* ---------- scroll-driven corridor ---------- */
@@ -139,13 +179,18 @@ module.exports = {
 
   body: `
 ${hero({
-    crumb: ['Procedures'],
-    eyebrow: 'Trade workflow &middot; 10 checkpoints',
-    h1: 'Ten checkpoints between handshake and hull.',
-    lead: 'We keep standardised procedures, but the goal is mutual agreement. If any step does not fit the shape of your transaction, tell us &mdash; most of it is negotiable, and the parts that are not exist to protect you.',
-    meta: [['10', 'Checkpoints'], ['2%', 'Performance bond'], ['LC', 'Payment instrument'], ['48h', 'Typical response']],
-    sec: 'Procedure',
-  })}
+  crumb: ["Procedures"],
+  eyebrow: "Trade workflow &middot; 10 checkpoints",
+  h1: "Ten checkpoints between handshake and hull.",
+  lead: "We keep standardised procedures, but the goal is mutual agreement. If any step does not fit the shape of your transaction, tell us &mdash; most of it is negotiable, and the parts that are not exist to protect you.",
+  meta: [
+    ["10", "Checkpoints"],
+    ["2%", "Performance bond"],
+    ["LC", "Payment instrument"],
+    ["48h", "Typical response"],
+  ],
+  sec: "Procedure",
+})}
 
 <section class="corr" id="corr" data-sec="Checkpoints">
   <div class="corr-pin">
@@ -163,7 +208,7 @@ ${hero({
 
     <div class="corr-vp">
       <div class="corr-track" data-track>
-${STEPS.map(panel).join('\n')}
+${STEPS.map(panel).join("\n")}
       </div>
     </div>
 
@@ -206,11 +251,11 @@ ${STEPS.map(panel).join('\n')}
 </section>
 
 ${cta({
-    eyebrow: 'Questions',
-    h2: 'Every deal is shaped differently.',
-    lead: 'Tell us your transaction structure and the desk will walk through how each checkpoint maps to your scenario &mdash; including which ones can move.',
-    primary: ['Contact the desk', 'contact.html'],
-  })}
+  eyebrow: "Questions",
+  h2: "Every deal is shaped differently.",
+  lead: "Tell us your transaction structure and the desk will walk through how each checkpoint maps to your scenario &mdash; including which ones can move.",
+  primary: ["Contact the desk", "contact.html"],
+})}
 `,
 
   js: `

@@ -1,12 +1,13 @@
-const docgate = require('../docgate');
+const docgate = require("../docgate");
 
 module.exports = {
-  page: 'index',
-  title: 'Globalex Trading DMCC — The Caspian corridor, operated from Dubai',
-  desc: 'Dubai DMCC freezone commodity trading house. Urea, sulphur, fertilizers, polymers and 16 industrial chemicals sourced across Turkmenistan, Uzbekistan, Kazakhstan and Azerbaijan, delivered worldwide.',
+  page: "index",
+  title: "Globalex Trading FZCO — The Caspian corridor, operated from Dubai",
+  desc: "Dubai FZCO freezone commodity trading house. Urea, sulphur, fertilizers, polymers and 16 industrial chemicals sourced across Turkmenistan, Uzbekistan, Kazakhstan and Azerbaijan, delivered worldwide.",
   three: true,
 
-  css: `
+  css:
+    `
 /* ---------- hero ---------- */
 .hero{position:relative;min-height:100svh;display:flex;align-items:center;overflow:hidden;
   padding-top:clamp(6rem,12vh,8rem);padding-bottom:clamp(4rem,8vh,6rem)}
@@ -124,7 +125,8 @@ module.exports = {
 @media (max-width:940px){.sus{grid-template-columns:1fr}.sus-vis{order:-1;aspect-ratio:16/11}}
 ` + docgate.css,
 
-  body: `
+  body:
+    `
 <section class="hero" data-sec="Corridor">
   <div class="hero-stage" id="stage">
     <canvas id="globe"></canvas>
@@ -133,9 +135,9 @@ module.exports = {
 
   <div class="wrap">
     <div class="hero-in">
-      <span class="eb rv">Globalex Trading DMCC &middot; Dubai, UAE</span>
+      <span class="eb rv">Globalex Trading FZCO &middot; Dubai, UAE</span>
       <h1 class="disp kin">The Caspian corridor, operated from <em>Dubai</em>.</h1>
-      <p class="lead rv" style="--d:180ms">Urea, sulphur, fertilizers, polymers and specialty chemicals &mdash; sourced across Turkmenistan, Uzbekistan, Kazakhstan and Azerbaijan, cleared through DMCC, delivered worldwide.</p>
+      <p class="lead rv" style="--d:180ms">Urea, sulphur, fertilizers, polymers and specialty chemicals &mdash; sourced across Turkmenistan, Uzbekistan, Kazakhstan and Azerbaijan, cleared through FZCO, delivered worldwide.</p>
 
       <div class="hud rv" style="--d:300ms" id="hud">
         <dl class="hud-r">
@@ -255,7 +257,9 @@ module.exports = {
 </section>
 
 <!-- ============ specifications & resources ============ -->
-` + docgate.section('sec') + `
+` +
+    docgate.section("sec") +
+    `
 
 <!-- ============ procedure strip ============ -->
 <section class="sec sec-panel" data-sec="Procedure">
@@ -369,9 +373,11 @@ module.exports = {
     </div>
   </div>
 </section>
-` + docgate.modal,
+` +
+    docgate.modal,
 
-  js: `
+  js:
+    `
 /* ================= commodity class visuals ================= */
 function visCrystal(cv){
   // urea: a white crystalline solid — grow a dendritic lattice
@@ -477,7 +483,7 @@ var NODES = [
   {n:'Baku',         c:'AZ', lat:40.41, lon:49.87, k:'in',  g:'Ammonium nitrate', ly:17},
   {n:'Dammam',       c:'SA', lat:26.43, lon:50.10, k:'in',  g:'HDPE / film grade', ly:-14},
   {n:'Shanghai',     c:'CN', lat:31.23, lon:121.47,k:'in',  g:'PP copolymer / additives', ly:0},
-  {n:'Jebel Ali',    c:'AE', lat:25.07, lon:55.14, k:'hub', g:'Consolidation / DMCC clearing', ly:14},
+  {n:'Jebel Ali',    c:'AE', lat:25.07, lon:55.14, k:'hub', g:'Consolidation / FZCO clearing', ly:14},
   {n:'Rotterdam',   c:'NL', lat:51.92, lon:4.48,  k:'out', g:'NPK / granular', ly:0},
   {n:'Mundra',      c:'IN', lat:22.84, lon:69.72, k:'out', g:'Urea B N46 / bulk', ly:12},
   {n:'Mombasa',     c:'KE', lat:-4.04, lon:39.66, k:'out', g:'NPK / bagged', ly:0},

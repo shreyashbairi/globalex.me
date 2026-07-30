@@ -1,9 +1,9 @@
-const { hero, cta } = require('../parts');
+const { hero, cta } = require("../parts");
 
 module.exports = {
-  page: 'about',
-  title: 'About — Globalex Trading DMCC',
-  desc: 'Established in 2019 on honesty, integrity and trust. A DMCC freezone trading house in Jumeirah Lakes Towers, Dubai, sourcing across the Caspian and Central Asia.',
+  page: "about",
+  title: "About — Globalex Trading FZCO",
+  desc: "Established in 2019 on honesty, integrity and trust. A FZCO freezone trading house in Jumeirah Lakes Towers, Dubai, sourcing across the Caspian and Central Asia.",
 
   css: `
 /* HQ plate */
@@ -63,13 +63,18 @@ module.exports = {
 
   body: `
 ${hero({
-    crumb: ['About'],
-    eyebrow: 'Established 2019 &middot; DMCC Freezone',
-    h1: 'An international trading house built in Dubai, sourced from the Caspian.',
-    lead: 'Globalex Trading DMCC specialises in urea, sulphur, fertilizers and polymers &mdash; registered and licensed as a freezone company under DMCC in the United Arab Emirates.',
-    meta: [['2019', 'Founded'], ['DMCC', 'Freezone licence'], ['24+', 'Grades traded'], ['7', 'Origin markets']],
-    sec: 'About',
-  })}
+  crumb: ["About"],
+  eyebrow: "Established 2019 &middot; FZCO Freezone",
+  h1: "An international trading house built in Dubai, sourced from the Caspian.",
+  lead: "Globalex Trading FZCO specialises in urea, sulphur, fertilizers and polymers &mdash; registered and licensed as a freezone company under FZCO in the United Arab Emirates.",
+  meta: [
+    ["2019", "Founded"],
+    ["FZCO", "Freezone licence"],
+    ["24+", "Grades traded"],
+    ["7", "Origin markets"],
+  ],
+  sec: "About",
+})}
 
 <section class="sec">
   <div class="wrap">
@@ -79,7 +84,7 @@ ${hero({
         <h2 style="margin-top:.9rem">A trading partner built for the long game.</h2>
       </div>
       <div class="rv" style="--d:120ms">
-        <p class="lead">Globalex operates from Jumeirah Lakes Towers as a DMCC freezone licensed company. Since 2019 we have built our practice on three principles: source from origins we trust, deliver with the rigour our clients expect, and never compromise on the quality of what we move.</p>
+        <p class="lead">Globalex operates from Jumeirah Lakes Towers as a FZCO freezone licensed company. Since 2019 we have built our practice on three principles: source from origins we trust, deliver with the rigour our clients expect, and never compromise on the quality of what we move.</p>
         <p class="lead" style="margin-top:1.2rem">Our products originate mostly in the Caspian region and Central Asia &mdash; Turkmenistan, Uzbekistan, Kazakhstan and Azerbaijan &mdash; with additional sourcing partnerships in the UAE, Saudi Arabia and China.</p>
       </div>
     </div>
@@ -92,7 +97,7 @@ ${hero({
       <div>
         <span class="eb rv">Jumeirah Lakes Towers &middot; Dubai</span>
         <h2 class="rv" style="--d:80ms;margin-top:.9rem">Positioned deliberately between producer and buyer.</h2>
-        <p class="lead rv" style="--d:150ms;margin-top:1.35rem">Suite 2605, X3 Tower, sits inside Cluster X of Jumeirah Lakes Towers &mdash; one of the world's most active commercial freezones. The location does three jobs: DMCC gives us regulatory clarity, Jebel Ali and DP World give us logistics depth, and the time zone puts us within a working day of both Caspian producers and global buyers.</p>
+        <p class="lead rv" style="--d:150ms;margin-top:1.35rem">Suite 2605, X3 Tower, sits inside Cluster X of Jumeirah Lakes Towers &mdash; one of the world's most active commercial freezones. The location does three jobs: FZCO gives us regulatory clarity, Jebel Ali and DP World give us logistics depth, and the time zone puts us within a working day of both Caspian producers and global buyers.</p>
         <p class="rv" style="--d:210ms;margin-top:1.1rem;color:var(--haze)">This is where shipments are negotiated, contracts are signed, and the relationships behind two dozen trade lanes are kept warm.</p>
         <div class="btns rv" style="--d:270ms;margin-top:1.9rem">
           <a href="contact.html" class="lk">Visit the Dubai desk</a>
@@ -211,11 +216,11 @@ ${hero({
 </section>
 
 ${cta({
-    eyebrow: 'Work with us',
-    h2: 'Tell us about your sourcing needs.',
-    lead: 'Caspian-origin fertilizer supply, polymer pricing, or a specialty industrial chemical &mdash; start a conversation with the Dubai team.',
-    primary: ['Contact us', 'contact.html'],
-    secondary: ['Careers at Globalex', 'careers.html'],
-  })}
+  eyebrow: "Work with us",
+  h2: "Tell us about your sourcing needs.",
+  lead: "Caspian-origin fertilizer supply, polymer pricing, or a specialty industrial chemical &mdash; start a conversation with the Dubai team.",
+  primary: ["Contact us", "contact.html"],
+  secondary: ["Careers at Globalex", "careers.html"],
+})}
 `,
 };

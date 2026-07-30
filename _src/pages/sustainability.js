@@ -1,24 +1,42 @@
-const { hero, cta } = require('../parts');
+const { hero, cta } = require("../parts");
 
 const COMMITS = [
-  ['Environmental stewardship', 'Environment',
-    'Minimising ecological impact through renewable energy adoption, efficiency improvements and greenhouse gas reduction &mdash; alongside resource conservation, waste minimisation and recycling across operations.'],
-  ['Ethical sourcing and fair trade', 'Sourcing',
-    'Partnering with suppliers who share our position on labour practices and human rights, and supporting the sustainable development of the local economies we operate within.'],
-  ['Product quality and durability', 'Quality',
-    'Focusing on high-quality, long-lasting products that reduce the need for frequent replacement &mdash; the cheapest waste to eliminate is the waste never created.'],
-  ['Collaboration and transparency', 'Transparency',
-    'Engaging stakeholders through open dialogue and transparent reporting, so accountability is demonstrable rather than asserted.'],
-  ['Social impact', 'Community',
-    'Supporting initiatives in education, health and social well-being, alongside philanthropic work in the regions where we operate.'],
-  ['Continuous improvement', 'Innovation',
-    'Investing in research and development to explore new technologies while monitoring sustainability trends &mdash; doing better tomorrow than today is the standard, not the ambition.'],
+  [
+    "Environmental stewardship",
+    "Environment",
+    "Minimising ecological impact through renewable energy adoption, efficiency improvements and greenhouse gas reduction &mdash; alongside resource conservation, waste minimisation and recycling across operations.",
+  ],
+  [
+    "Ethical sourcing and fair trade",
+    "Sourcing",
+    "Partnering with suppliers who share our position on labour practices and human rights, and supporting the sustainable development of the local economies we operate within.",
+  ],
+  [
+    "Product quality and durability",
+    "Quality",
+    "Focusing on high-quality, long-lasting products that reduce the need for frequent replacement &mdash; the cheapest waste to eliminate is the waste never created.",
+  ],
+  [
+    "Collaboration and transparency",
+    "Transparency",
+    "Engaging stakeholders through open dialogue and transparent reporting, so accountability is demonstrable rather than asserted.",
+  ],
+  [
+    "Social impact",
+    "Community",
+    "Supporting initiatives in education, health and social well-being, alongside philanthropic work in the regions where we operate.",
+  ],
+  [
+    "Continuous improvement",
+    "Innovation",
+    "Investing in research and development to explore new technologies while monitoring sustainability trends &mdash; doing better tomorrow than today is the standard, not the ambition.",
+  ],
 ];
 
 module.exports = {
-  page: 'sustainability',
-  title: 'Sustainability — Globalex Trading DMCC',
-  desc: 'Six commitments — environmental stewardship, ethical sourcing, product quality, transparency, social impact and continuous improvement — applied to product, partner and process decisions.',
+  page: "sustainability",
+  title: "Sustainability — Globalex Trading FZCO",
+  desc: "Six commitments — environmental stewardship, ethical sourcing, product quality, transparency, social impact and continuous improvement — applied to product, partner and process decisions.",
 
   css: `
 .cmt{display:grid;grid-template-columns:repeat(2,1fr);gap:var(--gut)}
@@ -58,13 +76,13 @@ module.exports = {
 
   body: `
 ${hero({
-    crumb: ['Sustainability'],
-    eyebrow: 'Six commitments &middot; One standard',
-    h1: 'Sustainable practice is not an option. It is a responsibility we owe the planet and the generations after us.',
-    lead: '',
-    tone: 'sand',
-    sec: 'Sustainability',
-  })}
+  crumb: ["Sustainability"],
+  eyebrow: "Six commitments &middot; One standard",
+  h1: "Sustainable practice is not an option. It is a responsibility we owe the planet and the generations after us.",
+  lead: "",
+  tone: "sand",
+  sec: "Sustainability",
+})}
 
 <section class="sec is-tight" data-sec="Why">
   <div class="wrap">
@@ -100,12 +118,14 @@ ${hero({
     </div>
 
     <div class="cmt rvs">
-${COMMITS.map(([h, tag, d]) => `      <article class="cmt-c">
+${COMMITS.map(
+  ([h, tag, d]) => `      <article class="cmt-c">
         <svg viewBox="0 0 100 100" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2.5"><path d="M50 4 96 50 50 96 4 50Z"/><path d="M50 22 78 50 50 78 22 50Z"/><path d="M50 38 62 50 50 62 38 50Z" fill="currentColor"/></g></svg>
         <span class="eb mat">${tag}</span>
         <h3>${h}</h3>
         <p>${d}</p>
-      </article>`).join('\n')}
+      </article>`,
+).join("\n")}
     </div>
   </div>
 </section>
@@ -120,12 +140,12 @@ ${COMMITS.map(([h, tag, d]) => `      <article class="cmt-c">
 </section>
 
 ${cta({
-    eyebrow: 'Partner with us',
-    h2: 'Build with a partner who shares your standards.',
-    lead: 'If sustainability commitments factor into your sourcing decisions, let us show you how these six pillars translate into shipment-level practice.',
-    primary: ['Get in touch', 'contact.html'],
-    secondary: ['About Globalex', 'about.html'],
-    tone: 'sand',
-  })}
+  eyebrow: "Partner with us",
+  h2: "Build with a partner who shares your standards.",
+  lead: "If sustainability commitments factor into your sourcing decisions, let us show you how these six pillars translate into shipment-level practice.",
+  primary: ["Get in touch", "contact.html"],
+  secondary: ["About Globalex", "about.html"],
+  tone: "sand",
+})}
 `,
 };

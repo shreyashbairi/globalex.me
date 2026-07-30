@@ -1,47 +1,53 @@
 // Shared chrome: mark, header, search, mobile nav, footer, frame, loader.
 const NAV = [
-  ['index.html','Home'],
-  ['about.html','About'],
-  ['__products__','Products'],
-  ['procedures.html','Procedures'],
-  ['sustainability.html','Sustainability'],
-  ['careers.html','Careers'],
+  ["index.html", "Home"],
+  ["about.html", "About"],
+  ["__products__", "Products"],
+  ["procedures.html", "Procedures"],
+  ["sustainability.html", "Sustainability"],
+  ["careers.html", "Careers"],
 ];
 
 /* The dropdown leads with the index page rather than jumping straight into
    Fertilizers — the header used to imply fertilizer was the whole book. */
 const PRODUCTS = [
-  ['products.html','All products','Search 24 grades'],
-  ['fertilizers.html','Fertilizers','5 grades · Caspian origin'],
-  ['polymers.html','Polymers','PE · PP · Additives'],
-  ['industrials.html','Industrial Chemicals','16 specialty grades'],
+  ["products.html", "All products", "Search 24 grades"],
+  ["fertilizers.html", "Fertilizers", "5 grades · Caspian origin"],
+  ["polymers.html", "Polymers", "PE · PP · Additives"],
+  ["industrials.html", "Industrial Chemicals", "16 specialty grades"],
 ];
 
 /* The company mark — the supplied logo file, used as-is.
    Native raster is 70x60, so every placement is a whole-ratio scale of that. */
-const gul = () => `<img class="mark-logo" src="assets/logo.webp" alt="" width="47" height="40" />`;
+const gul = () =>
+  `<img class="mark-logo" src="assets/logo.webp" alt="" width="47" height="40" />`;
 
 const magnifier = `<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="10.5" cy="10.5" r="6.75"/><path d="M15.4 15.4 21 21"/></svg>`;
 
 function header(page) {
   const links = NAV.map(([href, label]) => {
-    if (href === '__products__') {
-      const cur = ['products', 'fertilizers', 'polymers', 'industrials'].includes(page);
+    if (href === "__products__") {
+      const cur = [
+        "products",
+        "fertilizers",
+        "polymers",
+        "industrials",
+      ].includes(page);
       return `<li class="has-menu">
-<a class="nl"${cur ? ' data-cur' : ''} href="products.html" aria-haspopup="true">Products</a>
+<a class="nl"${cur ? " data-cur" : ""} href="products.html" aria-haspopup="true">Products</a>
 <div class="menu" role="menu">
-${PRODUCTS.map(([h, t, s]) => `<a role="menuitem" href="${h}"><b>${t}</b><small>${s}</small></a>`).join('\n')}
+${PRODUCTS.map(([h, t, s]) => `<a role="menuitem" href="${h}"><b>${t}</b><small>${s}</small></a>`).join("\n")}
 </div></li>`;
     }
     const cur = href === `${page}.html`;
-    return `<li><a class="nl"${cur ? ' data-cur aria-current="page"' : ''} href="${href}">${label}</a></li>`;
-  }).join('\n');
+    return `<li><a class="nl"${cur ? ' data-cur aria-current="page"' : ""} href="${href}">${label}</a></li>`;
+  }).join("\n");
 
   return `<header class="hdr">
 <div class="hdr-in">
-<a href="index.html" class="mark" aria-label="Globalex Trading DMCC — home">
+<a href="index.html" class="mark" aria-label="Globalex Trading FZCO — home">
 ${gul()}
-<span class="mark-txt"><b>GLOBALEX</b><span>TRADING DMCC</span></span>
+<span class="mark-txt"><b>GLOBALEX</b><span>TRADING FZCO</span></span>
 </a>
 <div class="hdr-r">
 <button class="srch-t" type="button" data-srch-open aria-label="Search the site" aria-haspopup="dialog">
@@ -114,11 +120,11 @@ function footer() {
 <div>
 <div class="mark" style="pointer-events:none">
 ${gul()}
-<span class="mark-txt"><b>GLOBALEX</b><span>TRADING DMCC</span></span>
+<span class="mark-txt"><b>GLOBALEX</b><span>TRADING FZCO</span></span>
 </div>
-<p class="ftr-blurb">Registered and licensed as a freezone company under the rules and regulations of DMCC, United Arab Emirates.</p>
+<p class="ftr-blurb">Registered and licensed as a freezone company under the rules and regulations of FZCO, United Arab Emirates.</p>
 <div class="chips" style="margin-top:1.3rem">
-<span class="chip org">DMCC Freezone</span>
+<span class="chip org">FZCO Freezone</span>
 <span class="chip org">Dubai Customs</span>
 <span class="chip org">Dubai Chambers</span>
 </div>
@@ -159,11 +165,11 @@ ${gul()}
 </div>
 
 <div class="ftr-b">
-<span><span data-year>2026</span> &copy; Globalex Trading DMCC. All rights reserved.</span>
+<span><span data-year>2026</span> &copy; Globalex Trading FZCO. All rights reserved.</span>
 <div>
 <a href="terms-conditions.html">Terms &amp; Conditions</a>
 <a href="privacy-policy.html">Privacy Policy</a>
-<a href="https://www.linkedin.com/company/globalex-trading-dmcc-uae/" target="_blank" rel="noopener noreferrer">LinkedIn &nearr;</a>
+<a href="https://www.linkedin.com/company/globalex-trading-FZCO-uae/" target="_blank" rel="noopener noreferrer">LinkedIn &nearr;</a>
 </div>
 </div>
 </div>

@@ -9,7 +9,7 @@ data, R2 stores the PDFs. One deploy, one domain, no servers to patch.
 ## Why this stack
 
 **Cloudflare Pages + Functions.** The site was already static, and it stays
-static. Functions add an API on the *same origin*, so there is no CORS, no
+static. Functions add an API on the _same origin_, so there is no CORS, no
 second service to deploy, and no separate domain to secure. The alternative —
 a Node server on a VPS — would mean patching an OS forever to run about 600
 lines of request handling.
@@ -100,7 +100,7 @@ npm run build          # regenerate the HTML from _src/
 npx wrangler pages deploy .
 ```
 
-Deploying comes *before* the secrets, because the first deploy is what
+Deploying comes _before_ the secrets, because the first deploy is what
 creates the Pages project. Run `wrangler pages secret put` any earlier and it
 fails with `Project "globalex-me" does not exist`. Accept the project name
 `globalex-me` when prompted — it has to match `name` in `wrangler.toml`.
@@ -130,7 +130,7 @@ Then deploy a second time:
 npx wrangler pages deploy .
 ```
 
-Secrets apply to *new* deployments, not to the one already running. Skip this
+Secrets apply to _new_ deployments, not to the one already running. Skip this
 and the site is live with no mail and no way into the dashboard.
 
 ### 7. Point the domain at Pages
@@ -206,7 +206,7 @@ Never run the seeder against `--remote`.
 > **Keep `--local` on the clear command too.** Run that `DELETE` against
 > `--remote` and it does not just empty the dashboard: every live document
 > link dies with it, because the token in someone's inbox is only valid while
-> its `grants` row exists. Recipients then see *"This link is not valid"* —
+> its `grants` row exists. Recipients then see _"This link is not valid"_ —
 > which is the missing-row message, not the expiry one, and is the way to tell
 > the two apart. There is no undo; the only fix is to issue fresh links from
 > **Share a document** in the dashboard.
@@ -324,15 +324,15 @@ Do not hand-edit the root `.html` files; they are generated.
 node _src/build.js
 ```
 
-| Path | What it is |
-|---|---|
-| `_src/pages/*.js` | one module per page |
-| `_src/kernel-css.js` | the design system |
-| `_src/kernel-js.js` | shared runtime |
-| `_src/docs.js` | the document catalogue — **the single source of truth** |
-| `_src/docgate.js` | the specifications section and the request modal |
-| `_src/admin.js` | the dashboard |
-| `functions/` | the backend |
+| Path                 | What it is                                              |
+| -------------------- | ------------------------------------------------------- |
+| `_src/pages/*.js`    | one module per page                                     |
+| `_src/kernel-css.js` | the design system                                       |
+| `_src/kernel-js.js`  | shared runtime                                          |
+| `_src/docs.js`       | the document catalogue — **the single source of truth** |
+| `_src/docgate.js`    | the specifications section and the request modal        |
+| `_src/admin.js`      | the dashboard                                           |
+| `functions/`         | the backend                                             |
 
 Adding a document means adding an entry to `_src/docs.js`, dropping the PDF in
 `_docs/` under the same `key`, then `node _src/build.js && node
@@ -352,7 +352,7 @@ site and the backend cannot disagree about what exists.
   Two things stop it: `.assetsignore` keeps the files out of the deploy, and
   `isPrivate()` in the middleware 404s them anyway. Adding a config file,
   a `.md`, or anything under `_src/` needs no further thought, but adding a
-  new *kind* of private file means checking it against that function.
+  new _kind_ of private file means checking it against that function.
 - **Mail failures answer 424, not 502.** Cloudflare replaces the body of any
   5xx a Pages Function returns with its own error page, so the honest "we
   saved your request but could not send the email" JSON never reached the
@@ -367,4 +367,4 @@ site and the backend cannot disagree about what exists.
 - **Link lifetime.** 30 days, then the link 410s. Change `GRANT_TTL` in
   `functions/api/request.js`.
 - **Your PDFs say "GLOBALEX TRADING FZCO"** while the site says "Globalex
-  Trading DMCC". Worth reconciling before these go out to counterparties.
+  Trading FZCO". Worth reconciling before these go out to counterparties.

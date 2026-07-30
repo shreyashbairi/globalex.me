@@ -1,9 +1,9 @@
-const { hero } = require('../parts');
+const { hero } = require("../parts");
 
 module.exports = {
-  page: 'careers',
-  title: 'Careers — Globalex Trading DMCC',
-  desc: 'Open roles at Globalex Trading DMCC in Dubai: Digital Marketing Manager (Shopify and D2C growth) and Chemical Engineer. Apply with your CV.',
+  page: "careers",
+  title: "Careers — Globalex Trading FZCO",
+  desc: "Open roles at Globalex Trading FZCO in Dubai: Digital Marketing Manager (Shopify and D2C growth) and Chemical Engineer. Apply with your CV.",
 
   css: `
 .role{position:relative;padding:clamp(1.7rem,3vw,2.5rem);border:1px solid var(--line);
@@ -39,13 +39,17 @@ module.exports = {
 
   body: `
 ${hero({
-    crumb: ['Careers'],
-    eyebrow: 'Open roles &middot; Dubai, UAE',
-    h1: 'Global trade. Real ownership. Full exposure.',
-    lead: 'Two roles open in Dubai, and a standing interest in professionals who share our standards. We are a trading house where every person touches deals, owns relationships and sees the whole picture &mdash; from sourcing decision to bill of lading.',
-    meta: [['2', 'Open roles'], ['Dubai', 'On-site / hybrid'], ['Weekly', 'Application review']],
-    sec: 'Careers',
-  })}
+  crumb: ["Careers"],
+  eyebrow: "Open roles &middot; Dubai, UAE",
+  h1: "Global trade. Real ownership. Full exposure.",
+  lead: "Two roles open in Dubai, and a standing interest in professionals who share our standards. We are a trading house where every person touches deals, owns relationships and sees the whole picture &mdash; from sourcing decision to bill of lading.",
+  meta: [
+    ["2", "Open roles"],
+    ["Dubai", "On-site / hybrid"],
+    ["Weekly", "Application review"],
+  ],
+  sec: "Careers",
+})}
 
 <section class="sec is-tight" data-sec="Culture">
   <div class="wrap">
@@ -133,7 +137,7 @@ ${hero({
         </div>
       </div>
 
-      <form class="form rv" style="--d:120ms" data-form="careers" data-mailto="info@globalex.me" data-subject="Career application — Globalex Trading DMCC">
+      <form class="form rv" style="--d:120ms" data-form="careers" data-mailto="info@globalex.me" data-subject="Career application — Globalex Trading FZCO">
         <div class="hp" aria-hidden="true"><label for="cw">Website</label><input id="cw" name="website" type="text" tabindex="-1" autocomplete="off" /></div>
         <div class="f-row">
           <div class="fld"><label for="fn">Name</label><input id="fn" name="fn" type="text" autocomplete="given-name" required /></div>

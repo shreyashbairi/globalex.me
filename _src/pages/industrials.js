@@ -1,26 +1,28 @@
-const { hero, cta } = require('../parts');
+const { hero, cta } = require("../parts");
 // Grades live in the catalogue so this page, products.html and site search
 // cannot drift apart.
-const { CHEMICALS: CHEMS, SECTORS } = require('../catalogue');
+const { CHEMICALS: CHEMS, SECTORS } = require("../catalogue");
 
-
-const chem = (c, i) => `<article class="row chem" id="${c.id}" data-tags="${c.t.join(' ')}">
-<span class="row-ix">${String(i + 1).padStart(2, '0')}</span>
+const chem = (
+  c,
+  i,
+) => `<article class="row chem" id="${c.id}" data-tags="${c.t.join(" ")}">
+<span class="row-ix">${String(i + 1).padStart(2, "0")}</span>
 <div class="row-b">
   <div class="chem-h"><h3>${c.name}</h3><span class="formula">${c.f}</span></div>
-  <div class="chips">${c.specs.map((s) => `<span class="chip spec">${s}</span>`).join('')}</div>
+  <div class="chips">${c.specs.map((s) => `<span class="chip spec">${s}</span>`).join("")}</div>
   <p>${c.body}</p>
-  ${c.origins.length ? `<div class="chips">${c.origins.map((o) => `<span class="chip org">${o}</span>`).join('')}</div>` : ''}
+  ${c.origins.length ? `<div class="chips">${c.origins.map((o) => `<span class="chip org">${o}</span>`).join("")}</div>` : ""}
 </div>
 <div class="row-side">
-  ${c.t.map((t) => `<span>${SECTORS.find((s) => s[0] === t)[1]}</span>`).join('')}
+  ${c.t.map((t) => `<span>${SECTORS.find((s) => s[0] === t)[1]}</span>`).join("")}
 </div>
 </article>`;
 
 module.exports = {
-  page: 'industrials',
-  title: 'Industrial Chemicals — Globalex Trading DMCC',
-  desc: 'Sixteen specialty chemicals — sulphur, caustic soda, sulphuric and hydrochloric acid, LABSA 96%, SLES 70%, carbon black, iodine and more — for water treatment, manufacturing, personal care, agriculture and energy.',
+  page: "industrials",
+  title: "Industrial Chemicals — Globalex Trading FZCO",
+  desc: "Sixteen specialty chemicals — sulphur, caustic soda, sulphuric and hydrochloric acid, LABSA 96%, SLES 70%, carbon black, iodine and more — for water treatment, manufacturing, personal care, agriculture and energy.",
 
   css: `
 .chem-h{display:flex;align-items:baseline;gap:.9rem;flex-wrap:wrap}
@@ -58,13 +60,18 @@ module.exports = {
 
   body: `
 ${hero({
-    crumb: [['Products', 'products.html'], 'Industrial Chemicals'],
-    eyebrow: 'Class 03 &middot; 16 grades &middot; Multi-origin',
-    h1: 'Industrial chemicals',
-    lead: 'Sulphur and caustic soda through LABSA, SLES, sulphuric acid, carbon black and iodine &mdash; sixteen specialty grades across water treatment, manufacturing, personal care, agriculture and energy.',
-    meta: [['16', 'Grades'], ['4', 'End sectors'], ['Spec', 'Verified at origin'], ['MSDS', 'Supplied with every lot']],
-    sec: 'Industrials',
-  })}
+  crumb: [["Products", "products.html"], "Industrial Chemicals"],
+  eyebrow: "Class 03 &middot; 16 grades &middot; Multi-origin",
+  h1: "Industrial chemicals",
+  lead: "Sulphur and caustic soda through LABSA, SLES, sulphuric acid, carbon black and iodine &mdash; sixteen specialty grades across water treatment, manufacturing, personal care, agriculture and energy.",
+  meta: [
+    ["16", "Grades"],
+    ["4", "End sectors"],
+    ["Spec", "Verified at origin"],
+    ["MSDS", "Supplied with every lot"],
+  ],
+  sec: "Industrials",
+})}
 
 <section class="sec is-tight" data-sec="Sectors">
   <div class="wrap">
@@ -85,12 +92,12 @@ ${hero({
     </div>
 
     <div class="filt rv" role="group" aria-label="Filter grades by sector">
-${SECTORS.map(([k, l], i) => `      <button type="button" data-filt="${k}" aria-pressed="${i === 0}">${l}</button>`).join('\n')}
+${SECTORS.map(([k, l], i) => `      <button type="button" data-filt="${k}" aria-pressed="${i === 0}">${l}</button>`).join("\n")}
       <span class="filt-n"><b data-count>16</b> of 16 shown</span>
     </div>
 
     <div class="rows rvs" id="chems">
-${CHEMS.map(chem).join('\n')}
+${CHEMS.map(chem).join("\n")}
     </div>
   </div>
 </section>
@@ -112,11 +119,11 @@ ${CHEMS.map(chem).join('\n')}
 </section>
 
 ${cta({
-    eyebrow: 'Request a quote',
-    h2: 'Need a specialty chemical at scale?',
-    lead: 'Industrial chemicals need precise spec, packaging and documentation. Send your requirements and we will match origin to specification.',
-    primary: ['Request a quote', 'contact.html'],
-  })}
+  eyebrow: "Request a quote",
+  h2: "Need a specialty chemical at scale?",
+  lead: "Industrial chemicals need precise spec, packaging and documentation. Send your requirements and we will match origin to specification.",
+  primary: ["Request a quote", "contact.html"],
+})}
 `,
 
   js: `

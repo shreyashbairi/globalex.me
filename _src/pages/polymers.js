@@ -1,21 +1,21 @@
-const { hero, cta } = require('../parts');
+const { hero, cta } = require("../parts");
 // Families live in the catalogue so this page, products.html and site search
 // cannot drift apart.
-const { POLYMERS } = require('../catalogue');
+const { POLYMERS } = require("../catalogue");
 
 const family = (p) => `<article class="fam-c" id="${p.id}">
   <div class="fam-vis"><span class="ix">${p.ix}</span><canvas data-poly="${p.vis}"></canvas></div>
   <div class="fam-b">
     <h3>${p.name}</h3>
-    <div class="chips">${p.specs.map((s) => `<span class="chip spec">${s}</span>`).join('')}</div>
+    <div class="chips">${p.specs.map((s) => `<span class="chip spec">${s}</span>`).join("")}</div>
     <p>${p.body}</p>
   </div>
 </article>`;
 
 module.exports = {
-  page: 'polymers',
-  title: 'Polymers — Globalex Trading DMCC',
-  desc: 'Polyethylene (LDPE, HDPE, LLDPE, UHMWPE), polypropylene homopolymer and copolymer, and performance additives — sourced from Turkmenistan, Uzbekistan, UAE, Saudi Arabia and China.',
+  page: "polymers",
+  title: "Polymers — Globalex Trading FZCO",
+  desc: "Polyethylene (LDPE, HDPE, LLDPE, UHMWPE), polypropylene homopolymer and copolymer, and performance additives — sourced from Turkmenistan, Uzbekistan, UAE, Saudi Arabia and China.",
 
   css: `
 /* resin family cards, each with its own chain visual */
@@ -51,19 +51,25 @@ module.exports = {
 
   body: `
 ${hero({
-    crumb: [['Products', 'products.html'], 'Polymers'],
-    eyebrow: 'Class 02 &middot; 3 families &middot; Gulf, Caspian &amp; East Asia',
-    h1: 'Polymers',
-    lead: 'Polyethylene across LDPE, HDPE, LLDPE and UHMWPE; polypropylene homopolymer and copolymer; and the additives that tune a resin to its application.',
-    meta: [['3', 'Families'], ['5', 'Origin markets'], ['Dubai', 'Held inventory'], ['MFI', 'Spec matched']],
-    sec: 'Polymers',
-  })}
+  crumb: [["Products", "products.html"], "Polymers"],
+  eyebrow:
+    "Class 02 &middot; 3 families &middot; Gulf, Caspian &amp; East Asia",
+  h1: "Polymers",
+  lead: "Polyethylene across LDPE, HDPE, LLDPE and UHMWPE; polypropylene homopolymer and copolymer; and the additives that tune a resin to its application.",
+  meta: [
+    ["3", "Families"],
+    ["5", "Origin markets"],
+    ["Dubai", "Held inventory"],
+    ["MFI", "Spec matched"],
+  ],
+  sec: "Polymers",
+})}
 
 <section class="sec is-tight" data-sec="Families">
   <div class="wrap">
     <div class="fam rvs">
 
-${POLYMERS.map(family).join('\n')}
+${POLYMERS.map(family).join("\n")}
 
     </div>
   </div>
@@ -113,11 +119,11 @@ ${POLYMERS.map(family).join('\n')}
 </section>
 
 ${cta({
-    eyebrow: 'Request a quote',
-    h2: 'Need polymer supply at scale?',
-    lead: 'Share grade, melt-flow index target, volume and destination &mdash; we match origin to spec and come back with pricing.',
-    primary: ['Request a quote', 'contact.html'],
-  })}
+  eyebrow: "Request a quote",
+  h2: "Need polymer supply at scale?",
+  lead: "Share grade, melt-flow index target, volume and destination &mdash; we match origin to spec and come back with pricing.",
+  primary: ["Request a quote", "contact.html"],
+})}
 `,
 
   js: `
