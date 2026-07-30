@@ -318,6 +318,29 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
 .nl:hover::after,.nl[data-on]::after{transform:scaleX(1)}
 .nl[data-on]{color:var(--cyan)}
 
+/* ---------- hero background footage ----------
+   Treated to the palette with the same recipe as .plate on the contact page,
+   so the footage reads as part of the site rather than as stock dropped in.
+   The poster carries the frame until the video can fade over it. */
+.ph.has-vid{padding-top:clamp(9.5rem,19vh,13.5rem)}
+.ph-vid{position:absolute;inset:0;overflow:hidden}
+.ph-vid::after{content:'';position:absolute;inset:0;z-index:2;
+  background:linear-gradient(155deg,rgba(53,214,245,.28),rgba(15,42,56,.62));
+  mix-blend-mode:color}
+.ph-vid-p,.ph-vid-v{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  filter:grayscale(1) contrast(1.1) brightness(.55)}
+.ph-vid-v{opacity:0;transition:opacity .6s var(--ease)}
+.ph-vid-v[data-ready]{opacity:1}
+/* scrim, so the fixed header stays legible over moving footage — the same
+   pattern the homepage hero uses over the globe */
+.ph.has-vid::before{content:'';position:absolute;inset:0 0 auto;height:230px;z-index:3;
+  pointer-events:none;background:linear-gradient(180deg,rgba(var(--void-rgb),.92),rgba(var(--void-rgb),0))}
+.ph.has-vid .wrap{position:relative;z-index:4}
+/* and a floor, so the lead copy does not sit on a bright frame */
+.ph.has-vid .ph-vid::before{content:'';position:absolute;inset:auto 0 0;height:55%;z-index:2;
+  background:linear-gradient(0deg,rgba(var(--void-rgb),.86),rgba(var(--void-rgb),0))}
+@media (prefers-reduced-motion:reduce){.ph-vid-v{display:none}}
+
 /* ---------- dropdowns and mega-menus ----------
    The panel is hidden with the hidden attribute and transitioned with
    data-open, the same two-state pattern the search overlay uses. The old
@@ -1075,6 +1098,7 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
 <div class="menu" id="mm-trade" role="menu"
  aria-label="Trade" hidden><div class="menu-l">
 <a role="menuitem" tabindex="-1" href="procedures.html"><b>Trade Procedures</b><small>How an enquiry becomes a shipment</small></a>
+<a role="menuitem" tabindex="-1" href="logistics.html"><b>Logistics &amp; Shipping</b><small>Incoterms, load ports and packing</small></a>
 </div></div>
 </li>
 <li><a class="nl" href="sustainability.html">Sustainability</a></li></ul>
@@ -1107,6 +1131,7 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
 <summary><i>03</i>Trade<span class="ac-i" aria-hidden="true"></span></summary>
 <div class="mnav-s">
 <a href="procedures.html">Trade Procedures</a>
+<a href="logistics.html">Logistics &amp; Shipping</a>
 </div>
 </details>
 <a class="mnav-lk" href="sustainability.html"><i>04</i>Sustainability</a>
@@ -1210,6 +1235,7 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
 <h6>Trade</h6>
 <ul>
 <li><a href="procedures.html">Trade Procedures</a></li>
+<li><a href="logistics.html">Logistics &amp; Shipping</a></li>
 </ul>
 </div>
 <div class="ftr-col">
@@ -1391,6 +1417,57 @@ var PAL = {cyan:'53,214,245', sand:'217,183,120'};
   tog.addEventListener('click', function(){ set(tog.getAttribute('aria-expanded') !== 'true'); });
   nav.addEventListener('click', function(e){ if (e.target.closest('a')) set(false); });
   addEventListener('keydown', function(e){ if (e.key === 'Escape') set(false); });
+})();
+
+/* ---------- hero background footage ----------
+   The 1080p file is 8.5 MB, so nothing is attached until the hero is actually
+   on screen: the markup ships with no src at all and the poster stands in.
+
+   Skipped entirely under prefers-reduced-motion and under Save-Data, in which
+   case the poster is simply the background and no bytes are spent. Paused when
+   the hero scrolls away and when the tab is hidden.
+
+   There is no mute control on purpose — both files were encoded without an
+   audio track, so a mute button would toggle silence. */
+(function(){
+  var host = document.querySelector('[data-hero-vid]');
+  if (!host) return;
+  var vid = host.querySelector('video');
+  if (!vid) return;
+
+  var saveData = navigator.connection && navigator.connection.saveData;
+  if (RM || saveData) return;
+
+  var attached = false;
+  function attach(){
+    if (attached) return;
+    attached = true;
+    var small = matchMedia('(max-width:900px)').matches;
+    vid.src = vid.getAttribute(small ? 'data-src-sm' : 'data-src-lg');
+    vid.addEventListener('canplay', function(){ vid.setAttribute('data-ready',''); });
+    var p = vid.play();
+    if (p && p.catch) p.catch(function(){ /* autoplay refused; poster stands */ });
+  }
+
+  if (!('IntersectionObserver' in window)){ attach(); return; }
+
+  var io = new IntersectionObserver(function(rows){
+    rows.forEach(function(r){
+      if (r.isIntersecting){
+        attach();
+        if (attached && vid.paused && !document.hidden) vid.play().catch(function(){});
+      } else if (attached && !vid.paused){
+        vid.pause();
+      }
+    });
+  }, {threshold:.01});
+  io.observe(host);
+
+  document.addEventListener('visibilitychange', function(){
+    if (!attached) return;
+    if (document.hidden) vid.pause();
+    else if (io && host.getBoundingClientRect().bottom > 0) vid.play().catch(function(){});
+  });
 })();
 
 /* ---------- header mega-menus ----------

@@ -18,7 +18,7 @@
    ============================================================ */
 
 const { CLASSES } = require("./catalogue");
-const { pageLive } = require("./flags");
+const { pageLive, on } = require("./flags");
 
 /* A row carrying `gate` is only rendered when its switch in _src/flags.js is
    on. That keeps the intended IA visible here in full while the rendered menu
@@ -41,7 +41,8 @@ const NAV = [
         desc: "Who we are, and how the desk operates",
       },
       {
-        href: "leadership.html",
+        /* a section of the About page rather than a page of its own */
+        href: "about.html#leadership",
         label: "Leadership",
         desc: "The people behind the trades",
         gate: "leadership",
@@ -116,7 +117,9 @@ const NAV = [
    this drops LABSA, SLES and Sulphuric Acid from the menu. */
 const MENU_GRADE_CAP = 8;
 
-const live = (n) => !n.gate || pageLive(n.gate);
+/* A row's gate may name either a page or a section — leadership is a section
+   of about.html, everything else is its own page. */
+const live = (n) => !n.gate || pageLive(n.gate) || on(n.gate);
 
 /* The tree as rendered: held rows removed, and a top-level item with a menu
    that has lost every row degrades to a plain link rather than presenting an

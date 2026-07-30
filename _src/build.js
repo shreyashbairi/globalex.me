@@ -273,6 +273,38 @@ function checkOgPlate() {
    exist would put a dead link in the header, the mobile nav, the footer and
    the sitemap on every page of the site. Fail the build instead: flipping the
    switch too early should be a local error, not a live 404. */
+/* Switching a page off stops it being written — but a file written by an
+   earlier build is still sitting in the repo root, and Pages deploys whatever
+   is there. So the off state has to actively remove it, or "hidden" only means
+   "hidden until someone looks at the last deploy". */
+function pruneHeld() {
+  const { NEWS, url } = (() => {
+    try {
+      const n = require("./news");
+      return { NEWS: n.NEWS, url: n.url };
+    } catch {
+      return { NEWS: [], url: () => "" };
+    }
+  })();
+  const { pageLive } = require("./flags");
+
+  const stale = HELD.map((p) => `${p}.html`);
+  /* News post pages are generated, so their names are not in HELD — derive
+     them from the data whenever the newsroom is off. */
+  if (!pageLive("news")) for (const post of NEWS) stale.push(url(post));
+
+  let removed = 0;
+  for (const f of stale) {
+    const abs = path.join(OUT, f);
+    if (fs.existsSync(abs)) {
+      fs.unlinkSync(abs);
+      console.log(`  removed ${f} (switched off in flags.js)`);
+      removed++;
+    }
+  }
+  return removed;
+}
+
 function checkFlags() {
   const { PAGES, SECTIONS } = require("./flags");
   const missing = Object.keys(PAGES).filter(
@@ -388,6 +420,7 @@ function main() {
   }
 
   emitAdmin();
+  pruneHeld();
   checkFlags();
   emitSitemap();
   emitRobots();

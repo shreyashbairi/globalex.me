@@ -156,6 +156,57 @@ var PAL = {cyan:'53,214,245', sand:'217,183,120'};
   addEventListener('keydown', function(e){ if (e.key === 'Escape') set(false); });
 })();
 
+/* ---------- hero background footage ----------
+   The 1080p file is 8.5 MB, so nothing is attached until the hero is actually
+   on screen: the markup ships with no src at all and the poster stands in.
+
+   Skipped entirely under prefers-reduced-motion and under Save-Data, in which
+   case the poster is simply the background and no bytes are spent. Paused when
+   the hero scrolls away and when the tab is hidden.
+
+   There is no mute control on purpose — both files were encoded without an
+   audio track, so a mute button would toggle silence. */
+(function(){
+  var host = document.querySelector('[data-hero-vid]');
+  if (!host) return;
+  var vid = host.querySelector('video');
+  if (!vid) return;
+
+  var saveData = navigator.connection && navigator.connection.saveData;
+  if (RM || saveData) return;
+
+  var attached = false;
+  function attach(){
+    if (attached) return;
+    attached = true;
+    var small = matchMedia('(max-width:900px)').matches;
+    vid.src = vid.getAttribute(small ? 'data-src-sm' : 'data-src-lg');
+    vid.addEventListener('canplay', function(){ vid.setAttribute('data-ready',''); });
+    var p = vid.play();
+    if (p && p.catch) p.catch(function(){ /* autoplay refused; poster stands */ });
+  }
+
+  if (!('IntersectionObserver' in window)){ attach(); return; }
+
+  var io = new IntersectionObserver(function(rows){
+    rows.forEach(function(r){
+      if (r.isIntersecting){
+        attach();
+        if (attached && vid.paused && !document.hidden) vid.play().catch(function(){});
+      } else if (attached && !vid.paused){
+        vid.pause();
+      }
+    });
+  }, {threshold:.01});
+  io.observe(host);
+
+  document.addEventListener('visibilitychange', function(){
+    if (!attached) return;
+    if (document.hidden) vid.pause();
+    else if (io && host.getBoundingClientRect().bottom > 0) vid.play().catch(function(){});
+  });
+})();
+
 /* ---------- header mega-menus ----------
    Modelled on the search overlay below, which is this codebase's reference
    for a scripted disclosure: the hidden attribute does the real hiding, a

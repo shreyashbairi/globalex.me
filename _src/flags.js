@@ -28,10 +28,6 @@
 
 /* ---------------------------------------------------------------- PAGES */
 const PAGES = {
-  /* Needs: names, roles, bios, and written consent from each individual to
-     publish their personal data (UAE PDPL). Checklist 5.1a/5.1b. */
-  leadership: false,
-
   /* Needs: confirmation that any office outside Dubai actually exists. The
      Dubai HQ entry is real; everything else is placeholder. Checklist 4.2b. */
   locations: false,
@@ -44,7 +40,7 @@ const PAGES = {
      options and the documentation set need no company data. The per-port
      figures and the transit matrix are gated separately below.
      Switched on in the same commit that adds the page. */
-  logistics: false,
+  logistics: true,
 
   /* Needs: trade licence number and issuing freezone, Dubai Customs code,
      Dubai Chambers membership, the KYC pack, the sanctions-screening lists
@@ -85,6 +81,14 @@ const SECTIONS = {
   /* Origin-to-destination transit matrix. Needs both axes: which
      destinations we quote, and indicative days per pair. Checklist 4.4b. */
   logisticsTransit: false,
+
+  /* The leadership grid on the About page. Needs names, roles, bios, and
+     written consent from each individual to publish their personal data
+     (UAE PDPL) — a legal gate, not a data gap. Checklist 5.1a/5.1b.
+
+     The nav row for it points at about.html#leadership, so switching this on
+     makes both the section and its menu entry appear. */
+  leadership: false,
 
   /* The company timeline on the About page. 2019 and today's figures are
      known; the three milestones between them need verifiable years.

@@ -287,6 +287,29 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
 .nl:hover::after,.nl[data-on]::after{transform:scaleX(1)}
 .nl[data-on]{color:var(--cyan)}
 
+/* ---------- hero background footage ----------
+   Treated to the palette with the same recipe as .plate on the contact page,
+   so the footage reads as part of the site rather than as stock dropped in.
+   The poster carries the frame until the video can fade over it. */
+.ph.has-vid{padding-top:clamp(9.5rem,19vh,13.5rem)}
+.ph-vid{position:absolute;inset:0;overflow:hidden}
+.ph-vid::after{content:'';position:absolute;inset:0;z-index:2;
+  background:linear-gradient(155deg,rgba(53,214,245,.28),rgba(15,42,56,.62));
+  mix-blend-mode:color}
+.ph-vid-p,.ph-vid-v{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  filter:grayscale(1) contrast(1.1) brightness(.55)}
+.ph-vid-v{opacity:0;transition:opacity .6s var(--ease)}
+.ph-vid-v[data-ready]{opacity:1}
+/* scrim, so the fixed header stays legible over moving footage — the same
+   pattern the homepage hero uses over the globe */
+.ph.has-vid::before{content:'';position:absolute;inset:0 0 auto;height:230px;z-index:3;
+  pointer-events:none;background:linear-gradient(180deg,rgba(var(--void-rgb),.92),rgba(var(--void-rgb),0))}
+.ph.has-vid .wrap{position:relative;z-index:4}
+/* and a floor, so the lead copy does not sit on a bright frame */
+.ph.has-vid .ph-vid::before{content:'';position:absolute;inset:auto 0 0;height:55%;z-index:2;
+  background:linear-gradient(0deg,rgba(var(--void-rgb),.86),rgba(var(--void-rgb),0))}
+@media (prefers-reduced-motion:reduce){.ph-vid-v{display:none}}
+
 /* ---------- dropdowns and mega-menus ----------
    The panel is hidden with the hidden attribute and transitioned with
    data-open, the same two-state pattern the search overlay uses. The old

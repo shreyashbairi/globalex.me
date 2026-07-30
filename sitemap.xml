@@ -38,6 +38,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://globalex.me/logistics</loc>
+    <lastmod>2026-07-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://globalex.me/polymers</loc>
     <lastmod>2026-07-30</lastmod>
     <changefreq>monthly</changefreq>
