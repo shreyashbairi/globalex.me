@@ -11,7 +11,7 @@
    page and in site search at once. There is nowhere else to add it.
    ============================================================ */
 
-const { DOCS } = require("./docs");
+const { RELEASED: DOCS } = require("./docs");
 
 /* Anchor ids are generated, never hand-written, so a rename cannot leave a
    deep link from the products page pointing at nothing. Entities are folded

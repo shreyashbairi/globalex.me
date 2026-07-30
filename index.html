@@ -738,7 +738,7 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
 .dr-k{font-family:var(--f-mono);font-size:.645rem;letter-spacing:.16em;padding:.3em .6em;
   border:1px solid rgba(53,214,245,.3);color:var(--cyan);background:rgba(53,214,245,.07);
   flex:none;white-space:nowrap}
-.dr-k[data-kind=TDS],.dr-k[data-kind=SPEC]{color:var(--sand);
+.dr-k[data-kind=TDS],.dr-k[data-kind=SPEC],.dr-k[data-kind=REPORT]{color:var(--sand);
   border-color:rgba(217,183,120,.34);background:var(--sand-g)}
 
 /* origin ledger. Promoted from the homepage because the product pages render
@@ -1518,35 +1518,35 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
   <div class="dv">
     <div class="dv-reg rv" role="tablist" aria-label="Controlled documents">
       <div class="dv-reg-h"><span>Document register</span><span>5 controlled</span></div>
-      <button class="dr" type="button" role="tab" data-doc="0"
+      <button class="dr" type="button" role="tab" data-doc="msds-sn180" id="doc-msds-sn180"
  aria-selected="true" data-on>
 <span class="dr-ix">01</span>
 <span class="dr-k" data-kind="MSDS">MSDS</span>
 <span class="dr-t"><b>Base Oil SN-180</b><small>Material Safety Data Sheet &middot; Turkmenistan</small></span>
 <span class="dr-lock" aria-hidden="true"><i></i><b></b></span>
 </button>
-<button class="dr" type="button" role="tab" data-doc="1"
+<button class="dr" type="button" role="tab" data-doc="msds-sn350" id="doc-msds-sn350"
  aria-selected="false">
 <span class="dr-ix">02</span>
 <span class="dr-k" data-kind="MSDS">MSDS</span>
 <span class="dr-t"><b>Base Oil SN-350</b><small>Material Safety Data Sheet &middot; Turkmenistan</small></span>
 <span class="dr-lock" aria-hidden="true"><i></i><b></b></span>
 </button>
-<button class="dr" type="button" role="tab" data-doc="2"
+<button class="dr" type="button" role="tab" data-doc="msds-sn600" id="doc-msds-sn600"
  aria-selected="false">
 <span class="dr-ix">03</span>
 <span class="dr-k" data-kind="MSDS">MSDS</span>
 <span class="dr-t"><b>Base Oil SN-600</b><small>Material Safety Data Sheet &middot; Turkmenistan</small></span>
 <span class="dr-lock" aria-hidden="true"><i></i><b></b></span>
 </button>
-<button class="dr" type="button" role="tab" data-doc="3"
+<button class="dr" type="button" role="tab" data-doc="tds-base-oil" id="doc-tds-base-oil"
  aria-selected="false">
 <span class="dr-ix">04</span>
 <span class="dr-k" data-kind="TDS">TDS</span>
 <span class="dr-t"><b>Base Oil — full range</b><small>Technical Data Sheet &middot; Turkmenistan</small></span>
 <span class="dr-lock" aria-hidden="true"><i></i><b></b></span>
 </button>
-<button class="dr" type="button" role="tab" data-doc="4"
+<button class="dr" type="button" role="tab" data-doc="pp-turkmenplen" id="doc-pp-turkmenplen"
  aria-selected="false">
 <span class="dr-ix">05</span>
 <span class="dr-k" data-kind="SPEC">SPEC</span>
@@ -3480,7 +3480,17 @@ var GLXFAM = {
       reg[nx].focus(); select(nx);
     });
   });
-  select(0);
+  /* A #doc-<id> hash selects that row instead of the first. Resolved to one
+     index and selected once — calling select twice would double-fire retarget()
+     and restart the plate animation. */
+  var want = 0;
+  var m = /^#doc-(.+)$/.exec(location.hash || '');
+  if (m){
+    var rows = [].slice.call(el.reg.querySelectorAll('.dr'));
+    for (var i = 0; i < rows.length; i++)
+      if (rows[i].getAttribute('data-doc') === m[1]) { want = i; break; }
+  }
+  select(want);
 
   /* ---------- the gate ---------- */
   if (!gate) return;

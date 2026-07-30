@@ -191,8 +191,10 @@ function emit(mod, srcFiles) {
    catalogue it can import. One source of truth, no drift between what the
    page offers and what the backend will serve. */
 function emitDocCatalogue() {
-  const { DOCS } = require("./docs");
-  const slim = DOCS.map((d) => ({
+  /* Only released documents cross into the Worker: /api/request must not be
+     able to mint a grant for an object that is not in R2. */
+  const { RELEASED } = require("./docs");
+  const slim = RELEASED.map((d) => ({
     id: d.id,
     kind: d.kind,
     code: d.code,

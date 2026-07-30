@@ -12,7 +12,7 @@
    single-recipient token and emails a link to the tracked viewer.
    ============================================================ */
 
-const { DOCS, BASE_OIL_FAMILY, PP_FAMILY } = require('./docs');
+const { RELEASED: DOCS, BASE_OIL_FAMILY, PP_FAMILY } = require('./docs');
 
 const css = `
 /* ---------- register + specimen ---------- */
@@ -159,7 +159,7 @@ const bytes = (n) => (n >= 1048576 ? `${(n / 1048576).toFixed(1)} MB` : `${Math.
    be dropped anywhere in the page without breaking the panel/plain
    alternation that gives the scroll its rhythm. */
 function section(cls = 'sec sec-panel') {
-  const rows = DOCS.map((d, i) => `<button class="dr" type="button" role="tab" data-doc="${i}"
+  const rows = DOCS.map((d, i) => `<button class="dr" type="button" role="tab" data-doc="${d.id}" id="doc-${d.id}"
  aria-selected="${i === 0 ? 'true' : 'false'}"${i === 0 ? ' data-on' : ''}>
 <span class="dr-ix">${String(i + 1).padStart(2, '0')}</span>
 <span class="dr-k" data-kind="${d.kind}">${d.kind}</span>
@@ -451,7 +451,17 @@ var GLXFAM = {
       reg[nx].focus(); select(nx);
     });
   });
-  select(0);
+  /* A #doc-<id> hash selects that row instead of the first. Resolved to one
+     index and selected once — calling select twice would double-fire retarget()
+     and restart the plate animation. */
+  var want = 0;
+  var m = /^#doc-(.+)$/.exec(location.hash || '');
+  if (m){
+    var rows = [].slice.call(el.reg.querySelectorAll('.dr'));
+    for (var i = 0; i < rows.length; i++)
+      if (rows[i].getAttribute('data-doc') === m[1]) { want = i; break; }
+  }
+  select(want);
 
   /* ---------- the gate ---------- */
   if (!gate) return;

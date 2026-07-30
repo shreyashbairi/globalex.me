@@ -1,4 +1,5 @@
 const { hero, cta } = require("../parts");
+const { on } = require("../flags");
 
 const COMMITS = [
   [
@@ -34,6 +35,30 @@ const COMMITS = [
 ];
 
 const CRUMB = ["Sustainability"];
+
+/* KPI band. Each metric is [label, value, unit, note]. A value of null means
+   "not tracked yet" and renders as an em dash with a mono caption rather than a
+   round invention — the checklist is explicit that this reads better, and it is
+   also the only honest option. Gated by SECTIONS.esgKpis until sourced. */
+const KPIS = [
+  ["Verified tonnage handled", null, "MT", "Tracking from 2026"],
+  ["Origin audits completed", null, "", "Tracking from 2026"],
+  ["Suppliers screened", null, "", "Tracking from 2026"],
+  ["Shipments third-party inspected", null, "%", "Tracking from 2026"],
+];
+
+/* Target / status / practice per commitment, keyed to the COMMITS tag. The
+   prose in COMMITS is real and publishes now; this is the measurement layer the
+   phase exists to add, and it is gated until targets are set. Empty accordions
+   would be a downgrade from the current clean cards. */
+const DETAIL = {
+  Environment: ["[Measurable target]", "[Current status]", "[The operational practice behind it]"],
+  Sourcing: ["[Measurable target]", "[Current status]", "[The operational practice behind it]"],
+  Quality: ["[Measurable target]", "[Current status]", "[The operational practice behind it]"],
+  Transparency: ["[Measurable target]", "[Current status]", "[The operational practice behind it]"],
+  Community: ["[Measurable target]", "[Current status]", "[The operational practice behind it]"],
+  Innovation: ["[Measurable target]", "[Current status]", "[The operational practice behind it]"],
+};
 
 module.exports = {
   page: "sustainability",
@@ -77,6 +102,24 @@ module.exports = {
 @media (max-width:820px){.lever{grid-template-columns:1fr}
   .lever div{border-right:0;border-bottom:1px solid var(--line);padding-bottom:1.4rem}
   .lever div:last-child{border-bottom:0}}
+/* ---------- ESG detail ---------- */
+.esg-d{display:grid;gap:.9rem;margin-top:.9rem;padding-top:.9rem;border-top:1px solid var(--line)}
+.esg-d>div{display:grid;gap:.2rem}
+.esg-d dt{font-family:var(--f-mono);font-size:.66rem;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--sand)}
+.esg-d dd{color:var(--haze);font-size:.97rem}
+.cmt-c details{margin-top:.4rem}
+.cmt-c summary{display:flex;align-items:center;gap:.6rem;cursor:pointer;list-style:none;
+  font-family:var(--f-mono);font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--haze-d);transition:color .3s}
+.cmt-c summary::-webkit-details-marker{display:none}
+.cmt-c summary::marker{content:''}
+.cmt-c summary:hover,.cmt-c details[open] summary{color:var(--sand)}
+.cmt-c summary:focus-visible{outline:2px solid var(--sand);outline-offset:2px}
+/* the KPI caption under a metric that is not tracked yet */
+.stat em{font-style:normal;display:block;font-family:var(--f-mono);font-size:.62rem;
+  letter-spacing:.13em;text-transform:uppercase;color:var(--steel);margin-top:.2rem}
+
 `,
 
   body: `
@@ -88,6 +131,27 @@ ${hero({
   tone: "sand",
   sec: "Sustainability",
 })}
+
+${
+  on("esgKpis")
+    ? `<section class="sec is-tight" data-sec="Measured">
+  <div class="wrap">
+    <div class="stats rv" style="--sc:${KPIS.length}">
+${KPIS.map(
+  ([label, value, unit, note]) => `      <div class="stat"${value !== null ? " data-stat" : ""}>
+        <b>${value !== null ? `<span data-to="${value}" data-dur="1400">0</span>${unit ? `<i>${unit}</i>` : ""}` : "&mdash;"}</b>
+        <span>${label}</span>
+        ${value === null ? `<em>${note}</em>` : ""}
+      </div>`,
+).join("\n")}
+    </div>
+    <p class="tbl-n" style="margin-top:1rem">Figures are reported annually and
+    restated if a definition changes. A metric we do not yet track is shown as
+    such rather than estimated.</p>
+  </div>
+</section>`
+    : ""
+}
 
 <section class="sec is-tight" data-sec="Why">
   <div class="wrap">
@@ -129,6 +193,18 @@ ${COMMITS.map(
         <span class="eb mat">${tag}</span>
         <h3>${h}</h3>
         <p>${d}</p>
+${
+  on("esgTargets") && DETAIL[tag]
+    ? `        <details>
+          <summary>Target and status <span class="ac-i" aria-hidden="true"></span></summary>
+          <dl class="esg-d">
+            <div><dt>Target</dt><dd>${DETAIL[tag][0]}</dd></div>
+            <div><dt>Status</dt><dd>${DETAIL[tag][1]}</dd></div>
+            <div><dt>Practice</dt><dd>${DETAIL[tag][2]}</dd></div>
+          </dl>
+        </details>`
+    : ""
+}
       </article>`,
 ).join("\n")}
     </div>

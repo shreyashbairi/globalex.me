@@ -738,7 +738,7 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
 .dr-k{font-family:var(--f-mono);font-size:.645rem;letter-spacing:.16em;padding:.3em .6em;
   border:1px solid rgba(53,214,245,.3);color:var(--cyan);background:rgba(53,214,245,.07);
   flex:none;white-space:nowrap}
-.dr-k[data-kind=TDS],.dr-k[data-kind=SPEC]{color:var(--sand);
+.dr-k[data-kind=TDS],.dr-k[data-kind=SPEC],.dr-k[data-kind=REPORT]{color:var(--sand);
   border-color:rgba(217,183,120,.34);background:var(--sand-g)}
 
 /* origin ledger. Promoted from the homepage because the product pages render
@@ -996,6 +996,24 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
 @media (max-width:820px){.lever{grid-template-columns:1fr}
   .lever div{border-right:0;border-bottom:1px solid var(--line);padding-bottom:1.4rem}
   .lever div:last-child{border-bottom:0}}
+/* ---------- ESG detail ---------- */
+.esg-d{display:grid;gap:.9rem;margin-top:.9rem;padding-top:.9rem;border-top:1px solid var(--line)}
+.esg-d>div{display:grid;gap:.2rem}
+.esg-d dt{font-family:var(--f-mono);font-size:.66rem;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--sand)}
+.esg-d dd{color:var(--haze);font-size:.97rem}
+.cmt-c details{margin-top:.4rem}
+.cmt-c summary{display:flex;align-items:center;gap:.6rem;cursor:pointer;list-style:none;
+  font-family:var(--f-mono);font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--haze-d);transition:color .3s}
+.cmt-c summary::-webkit-details-marker{display:none}
+.cmt-c summary::marker{content:''}
+.cmt-c summary:hover,.cmt-c details[open] summary{color:var(--sand)}
+.cmt-c summary:focus-visible{outline:2px solid var(--sand);outline-offset:2px}
+/* the KPI caption under a metric that is not tracked yet */
+.stat em{font-style:normal;display:block;font-family:var(--f-mono);font-size:.62rem;
+  letter-spacing:.13em;text-transform:uppercase;color:var(--steel);margin-top:.2rem}
+
 </style>
 </head>
 <body data-page="sustainability">
@@ -1193,6 +1211,8 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
 </div>
 </section>
 
+
+
 <section class="sec is-tight" data-sec="Why">
   <div class="wrap">
     <div class="why">
@@ -1232,36 +1252,42 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
         <span class="eb mat">Environment</span>
         <h3>Environmental stewardship</h3>
         <p>Minimising ecological impact through renewable energy adoption, efficiency improvements and greenhouse gas reduction &mdash; alongside resource conservation, waste minimisation and recycling across operations.</p>
+
       </article>
       <article class="cmt-c">
         <svg viewBox="0 0 100 100" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2.5"><path d="M50 4 96 50 50 96 4 50Z"/><path d="M50 22 78 50 50 78 22 50Z"/><path d="M50 38 62 50 50 62 38 50Z" fill="currentColor"/></g></svg>
         <span class="eb mat">Sourcing</span>
         <h3>Ethical sourcing and fair trade</h3>
         <p>Partnering with suppliers who share our position on labour practices and human rights, and supporting the sustainable development of the local economies we operate within.</p>
+
       </article>
       <article class="cmt-c">
         <svg viewBox="0 0 100 100" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2.5"><path d="M50 4 96 50 50 96 4 50Z"/><path d="M50 22 78 50 50 78 22 50Z"/><path d="M50 38 62 50 50 62 38 50Z" fill="currentColor"/></g></svg>
         <span class="eb mat">Quality</span>
         <h3>Product quality and durability</h3>
         <p>Focusing on high-quality, long-lasting products that reduce the need for frequent replacement &mdash; the cheapest waste to eliminate is the waste never created.</p>
+
       </article>
       <article class="cmt-c">
         <svg viewBox="0 0 100 100" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2.5"><path d="M50 4 96 50 50 96 4 50Z"/><path d="M50 22 78 50 50 78 22 50Z"/><path d="M50 38 62 50 50 62 38 50Z" fill="currentColor"/></g></svg>
         <span class="eb mat">Transparency</span>
         <h3>Collaboration and transparency</h3>
         <p>Engaging stakeholders through open dialogue and transparent reporting, so accountability is demonstrable rather than asserted.</p>
+
       </article>
       <article class="cmt-c">
         <svg viewBox="0 0 100 100" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2.5"><path d="M50 4 96 50 50 96 4 50Z"/><path d="M50 22 78 50 50 78 22 50Z"/><path d="M50 38 62 50 50 62 38 50Z" fill="currentColor"/></g></svg>
         <span class="eb mat">Community</span>
         <h3>Social impact</h3>
         <p>Supporting initiatives in education, health and social well-being, alongside philanthropic work in the regions where we operate.</p>
+
       </article>
       <article class="cmt-c">
         <svg viewBox="0 0 100 100" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2.5"><path d="M50 4 96 50 50 96 4 50Z"/><path d="M50 22 78 50 50 78 22 50Z"/><path d="M50 38 62 50 50 62 38 50Z" fill="currentColor"/></g></svg>
         <span class="eb mat">Innovation</span>
         <h3>Continuous improvement</h3>
         <p>Investing in research and development to explore new technologies while monitoring sustainability trends &mdash; doing better tomorrow than today is the standard, not the ambition.</p>
+
       </article>
     </div>
   </div>

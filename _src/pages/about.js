@@ -1,6 +1,38 @@
 const { hero, cta } = require("../parts");
+const { publishable, HEADCOUNT } = require("../team");
+const { on } = require("../flags");
 
 const CRUMB = ["About"];
+
+/* Timeline. 2019 and today's figures are known; the three between them need
+   verifiable years, which is what SECTIONS.timeline is waiting on. The years
+   shown for those are placeholders and the section is off. */
+const TIMELINE_ENTRIES = [
+  ["2019", "Founded in Dubai", "Registered and licensed as a Free Zone Company in the United Arab Emirates, trading from Jumeirah Lakes Towers."],
+  ["[----]", "First Caspian corridor cargo", "[Which grade, which origin, which destination.]"],
+  ["[----]", "Polymer book opened", "[Polyethylene and polypropylene added alongside the fertilizer book.]"],
+  ["[----]", "Industrial chemicals to sixteen grades", "[The specialty book reaches its current breadth.]"],
+  ["Today", "24 grades, 7 origin markets", "Fertilizers, polymers and industrial chemicals sourced across Turkmenistan, Uzbekistan, Kazakhstan, Azerbaijan, the UAE, Saudi Arabia and China."],
+];
+
+const TEAM_LIVE = publishable();
+
+/* Generated geometric avatar — the gül rosette, rotated by a hash of the id so
+   each card differs without pretending to be a photograph. */
+const AVATAR = (id) => {
+  const seed = String(id).split("").reduce((a, c) => a + c.charCodeAt(0), 0);
+  const rot = seed % 45;
+  const d = (x, y, r) => `M${x} ${y - r} L${x + r} ${y} L${x} ${y + r} L${x - r} ${y} Z`;
+  return `<svg viewBox="0 0 100 125" aria-hidden="true" focusable="false">
+<rect width="100" height="125" fill="#0F2A38"/>
+<g transform="rotate(${rot} 50 62)" fill="none" stroke="#35D6F5" stroke-width="1.2" opacity=".55">
+<path d="${d(50, 62, 34)}"/><path d="${d(50, 62, 22)}"/><path d="${d(50, 62, 11)}"/>
+<path d="${d(50, 28, 10)}"/><path d="${d(50, 96, 10)}"/>
+<path d="${d(16, 62, 10)}"/><path d="${d(84, 62, 10)}"/>
+</g>
+<path d="${d(50, 62, 5)}" fill="#D9B778" opacity=".7"/>
+</svg>`;
+};
 
 module.exports = {
   page: "about",
@@ -54,6 +86,74 @@ module.exports = {
 
 /* objectives — genuinely ordered operating goals */
 /* .obj numbered list lives in kernel-css.js — compliance.html reuses it. */
+/* ---------- company timeline ----------
+   A continuous cyan spine with a diamond node per entry, alternating sides on
+   desktop and collapsing to one left rail on mobile. The spine draws downward
+   as the section enters view using the shared reveal observer rather than a
+   second one; under reduced motion the global rule flattens the transition and
+   it simply renders drawn. */
+.tl{position:relative;display:grid;gap:clamp(2rem,4vw,3.2rem);padding-block:1rem}
+.tl::before{content:'';position:absolute;left:50%;top:0;bottom:0;width:1px;
+  background:var(--cyan);transform:translateX(-50%) scaleY(0);transform-origin:top;
+  transition:transform 1.6s var(--ease)}
+.tl[data-in]::before{transform:translateX(-50%) scaleY(1)}
+.tl-e{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:clamp(1.5rem,4vw,3.5rem);
+  align-items:center}
+.tl-e .tl-b{grid-column:1;text-align:right}
+.tl-e:nth-child(even) .tl-b{grid-column:2;text-align:left}
+.tl-y{font-family:var(--f-disp);font-weight:800;font-size:clamp(2rem,4.5vw,3.2rem);
+  line-height:.9;letter-spacing:-.03em;font-variation-settings:'wdth' 118;color:var(--frost);
+  font-variant-numeric:tabular-nums}
+.tl-e h3{font-size:1.14rem;margin-top:.5rem}
+.tl-e p{color:var(--haze);font-size:.99rem;margin-top:.35rem}
+/* the node sits on the spine */
+.tl-n{position:absolute;left:50%;top:50%;width:11px;height:11px;
+  transform:translate(-50%,-50%);background:var(--steel);
+  clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%);
+  transition:background .5s var(--ease),transform .5s var(--ease)}
+.tl[data-in] .tl-n{background:var(--cyan)}
+.tl-e:hover .tl-n{transform:translate(-50%,-50%) scale(1.45)}
+@media (max-width:820px){
+  .tl::before{left:5px}
+  .tl-e{grid-template-columns:1fr;padding-left:2.2rem}
+  .tl-e .tl-b,.tl-e:nth-child(even) .tl-b{grid-column:1;text-align:left}
+  .tl-n{left:5px}
+}
+
+/* ---------- leadership ----------
+   Portrait plates get the same greyscale + palette-blend treatment as .plate
+   on the contact page, so a photograph reads as part of the site. Where no
+   photograph exists a geometric avatar is drawn instead — a stock portrait of
+   a stranger presented as an executive is a misrepresentation. */
+.tm{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(1rem,2.2vw,1.6rem)}
+@media (max-width:940px){.tm{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:620px){.tm{grid-template-columns:1fr}}
+.tm-c{border:1px solid var(--line);background:rgba(var(--deep-rgb),.5);overflow:hidden;
+  transition:border-color .45s var(--ease),transform .5s var(--ease)}
+.tm-c:hover{border-color:var(--line-2);transform:translateY(-4px)}
+.tm-p{position:relative;aspect-ratio:4/5;overflow:hidden;background:var(--void)}
+.tm-p img,.tm-p svg{width:100%;height:100%;object-fit:cover;display:block}
+.tm-p img{filter:grayscale(1) contrast(1.12) brightness(.72)}
+.tm-p::after{content:'';position:absolute;inset:0;
+  background:linear-gradient(155deg,rgba(53,214,245,.34),rgba(15,42,56,.5) 55%,rgba(217,183,120,.2));
+  mix-blend-mode:color}
+.tm-b{padding:clamp(1.1rem,2.2vw,1.5rem);display:grid;gap:.3rem}
+.tm-b h3{font-size:1.14rem}
+.tm-r{font-family:var(--f-mono);font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--cyan)}
+.tm-l{font-family:var(--f-mono);font-size:.68rem;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--haze-d)}
+.tm-c details{margin-top:.7rem}
+.tm-c summary{display:flex;align-items:center;gap:.6rem;cursor:pointer;list-style:none;
+  font-family:var(--f-mono);font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--haze-d);transition:color .3s}
+.tm-c summary::-webkit-details-marker{display:none}
+.tm-c summary::marker{content:''}
+.tm-c summary:hover{color:var(--cyan)}
+.tm-c summary:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+.tm-c details[open] summary{color:var(--cyan)}
+.tm-c details p{color:var(--haze);font-size:.97rem;margin-top:.6rem}
+
 `,
 
   body: `
@@ -108,6 +208,60 @@ ${hero({
     </div>
   </div>
 </section>
+
+${
+  on("timeline")
+    ? `<section class="sec" data-sec="Timeline">
+  <div class="wrap">
+    <div class="hd">
+      <span class="eb">Since 2019</span>
+      <h2>How the book was built.</h2>
+    </div>
+    <div class="tl rv">
+${TIMELINE_ENTRIES.map(
+  ([year, title, note]) => `      <div class="tl-e">
+        <span class="tl-n" aria-hidden="true"></span>
+        <div class="tl-b">
+          <span class="tl-y">${year}</span>
+          <h3>${title}</h3>
+          <p>${note}</p>
+        </div>
+      </div>`,
+).join("\n")}
+    </div>
+  </div>
+</section>`
+    : ""
+}
+
+${
+  on("leadership") && TEAM_LIVE.length
+    ? `<section class="sec sec-panel" id="leadership" data-sec="Leadership">
+  <div class="wrap">
+    <div class="hd">
+      <span class="eb">The desk</span>
+      <h2>Who stands behind the contracts.</h2>
+    </div>
+    <div class="tm rvs">
+${TEAM_LIVE.map(
+  (p) => `      <article class="tm-c nch-s">
+        <div class="tm-p">${p.image ? `<img src="${p.image}" alt="${p.name}" width="800" height="1000" loading="lazy" />` : AVATAR(p.id)}</div>
+        <div class="tm-b">
+          <h3>${p.name}</h3>
+          <span class="tm-r">${p.role}</span>
+          <span class="tm-l">${p.location}</span>
+          <details>
+            <summary>Background <span class="ac-i" aria-hidden="true"></span></summary>
+            <p>${p.bio}</p>
+          </details>
+        </div>
+      </article>`,
+).join("\n")}
+    </div>
+  </div>
+</section>`
+    : ""
+}
 
 <section class="sec" data-sec="Mandate">
   <div class="wrap">

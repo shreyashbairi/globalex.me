@@ -31,6 +31,7 @@ const PP_FAMILY = [
 const DOCS = [
   {
     id: 'msds-sn180',
+    released: true,
     kind: 'MSDS',
     code: 'SN-180',
     title: 'Base Oil SN-180',
@@ -57,6 +58,7 @@ const DOCS = [
   },
   {
     id: 'msds-sn350',
+    released: true,
     kind: 'MSDS',
     code: 'SN-350',
     title: 'Base Oil SN-350',
@@ -80,6 +82,7 @@ const DOCS = [
   },
   {
     id: 'msds-sn600',
+    released: true,
     kind: 'MSDS',
     code: 'SN-600',
     title: 'Base Oil SN-600',
@@ -103,6 +106,7 @@ const DOCS = [
   },
   {
     id: 'tds-base-oil',
+    released: true,
     kind: 'TDS',
     code: 'RANGE',
     title: 'Base Oil — full range',
@@ -126,6 +130,7 @@ const DOCS = [
   },
   {
     id: 'pp-turkmenplen',
+    released: true,
     kind: 'SPEC',
     code: 'TURKMENPLEN',
     title: 'Polypropylene — Turkmenplen',
@@ -147,6 +152,37 @@ const DOCS = [
     ],
     summary: 'Thirteen indices for the three Turkmenplen homopolymer grades, including fluidity, elasticity modulus, gel count and turbidity for film applications.',
   },
+  /* Sustainability report. REPORT is a new kind — sand, like TDS and SPEC,
+     because it describes physical operations rather than a document control
+     process. released:false keeps it out of the register, the search index and
+     the Worker's catalogue: without the PDF in R2 the request path would mint a
+     token for a document that cannot be delivered. Set it true after
+     `npm run docs:upload`. */
+  {
+    id: 'esg-report-2026',
+    released: false,
+    kind: 'REPORT',
+    code: 'ESG-2026',
+    title: 'Sustainability & HSE Report',
+    sub: 'Annual · 2026',
+    source: 'Globalex_ESG_2026.pdf',
+    key: 'esg-report-2026.pdf',
+    pages: 0,
+    bytes: 0,
+    origin: 'Globalex Trading FZCO',
+    plot: null,
+    highlight: null,
+    specs: [
+      ['Reporting period', '[--]'],
+      ['Scope', '[--]'],
+      ['Assurance', '[--]'],
+    ],
+    summary: '[Report summary — one or two sentences for the register row.]',
+  },
 ];
 
-module.exports = { DOCS, BASE_OIL_FAMILY, PP_FAMILY };
+/* The only list any consumer should read. A document without its object in
+   R2 must not appear anywhere that offers to send it. */
+const RELEASED = DOCS.filter((d) => d.released);
+
+module.exports = { DOCS, RELEASED, BASE_OIL_FAMILY, PP_FAMILY };

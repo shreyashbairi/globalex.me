@@ -16,7 +16,7 @@
 const { hero, cta } = require("./parts");
 const { CLASSES, plain } = require("./catalogue");
 const { SPECS, isDraft } = require("./specs");
-const { DOCS } = require("./docs");
+const { RELEASED: DOCS } = require("./docs");
 const S = require("./schema-org");
 const { on } = require("./flags");
 

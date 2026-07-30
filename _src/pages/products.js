@@ -14,7 +14,7 @@
 
 const { hero, cta } = require("../parts");
 const { CLASSES, plain } = require("../catalogue");
-const { DOCS } = require("../docs");
+const { RELEASED: DOCS } = require("../docs");
 const { groups, attrs } = require("../facets");
 const { on } = require("../flags");
 
