@@ -13,10 +13,10 @@
 const fs = require("fs");
 const path = require("path");
 const { execFileSync } = require("child_process");
-const { W, H } = require("./og-plate");
+const plate = require("./og-plate");
+const { W, H } = plate;
 
 const ROOT = path.resolve(__dirname, "..");
-const SVG = path.join(ROOT, "assets/og-default.svg");
 const PNG = path.join(ROOT, "assets/og-default.png");
 
 const CANDIDATES = [
@@ -33,23 +33,20 @@ function chrome() {
   return null;
 }
 
-if (!fs.existsSync(SVG)) {
-  console.error("assets/og-default.svg is missing — run `npm run build` first.");
-  process.exit(1);
-}
-
 const bin = chrome();
 if (!bin) {
   console.error(
-    "No Chrome/Chromium/Edge found. Rasterise assets/og-default.svg to\n" +
-      `assets/og-default.png at ${W}x${H} by hand and commit it.`,
+    "No Chrome/Chromium/Edge found. Produce a " +
+      `${W}x${H} raster from _src/og-plate.js by hand and commit it as\n` +
+      "assets/og-default.png.",
   );
   process.exit(1);
 }
 
-/* The SVG is inlined into a page sized exactly to the plate, with the
-   webfonts linked, so the screenshot is the plate and nothing else — no
-   scrollbars, no margin, no letterboxing. */
+/* The plate is built in memory and inlined into a page sized exactly to it,
+   with the webfonts linked, so the screenshot is the plate and nothing else —
+   no scrollbars, no margin, no letterboxing. Nothing intermediate is written
+   to assets/, because only the raster should ship. */
 const FONTS =
   "https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900" +
   "&family=IBM+Plex+Mono:wght@400;500;600&display=swap";
@@ -65,7 +62,7 @@ fs.writeFileSync(
 <link href="${FONTS}" rel="stylesheet">
 <style>html,body{margin:0;padding:0;background:#0F2A38;overflow:hidden}
 svg{display:block;width:${W}px;height:${H}px}</style></head>
-<body>${fs.readFileSync(SVG, "utf8")}</body></html>`,
+<body>${plate.svg()}</body></html>`,
 );
 
 execFileSync(

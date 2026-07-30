@@ -154,9 +154,12 @@ if (!built) {
   console.log("note: no sitemap.xml yet — run `npm run build` for the SEO checks");
 } else {
   const read = (f) => fs.readFileSync(path.join(ROOT, f), "utf8");
-  const pages = fs
-    .readdirSync(ROOT)
-    .filter((f) => f.endsWith(".html") && f !== "admin.html");
+  const all = fs.readdirSync(ROOT).filter((f) => f.endsWith(".html"));
+  /* Derived from the emitted markup rather than a filename list, so a new
+     noindex page (404, admin, a future gated page) is handled by the rule
+     instead of needing this test edited. */
+  const noindex = (f) => /<meta name="robots" content="noindex/.test(read(f));
+  const pages = all.filter((f) => !noindex(f));
 
   t("every page has exactly one canonical", () => {
     for (const f of pages) {
@@ -201,12 +204,21 @@ if (!built) {
           assert.ok(!li.item.endsWith(".html"), `${f} crumb item ${li.item}`);
     }
   });
-  t("sitemap excludes the dashboard", () =>
-    assert.ok(!read("sitemap.xml").includes("admin")));
-  t("sitemap lists every built marketing page", () => {
+  t("sitemap lists every indexable page and nothing else", () => {
     const sm = read("sitemap.xml");
     const n = (sm.match(/<url>/g) || []).length;
-    assert.strictEqual(n, pages.length, `${n} urls vs ${pages.length} pages`);
+    assert.strictEqual(n, pages.length, `${n} urls vs ${pages.length} indexable`);
+    for (const f of all.filter(noindex)) {
+      const stem = f.replace(/\.html$/, "");
+      assert.ok(
+        !new RegExp(`<loc>[^<]*/${stem}</loc>`).test(sm),
+        `sitemap lists noindex page ${f}`,
+      );
+    }
+  });
+  t("a 404 page is committed, so Pages cannot soft-404 to the homepage", () => {
+    assert.ok(fs.existsSync(path.join(ROOT, "404.html")), "no 404.html");
+    assert.ok(noindex("404.html"), "404.html should be noindex");
   });
   t("robots.txt points at the sitemap and blocks the private routes", () => {
     const r = read("robots.txt");

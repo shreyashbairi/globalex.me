@@ -248,19 +248,22 @@ ${a.body}
   console.log(`  admin.html  ${(fs.statSync(out).size / 1024).toFixed(0)} KB`);
 }
 
-/* The social card. The SVG is generated; the PNG beside it is rasterised by
-   `npm run og` and committed, because that is what a crawler fetches — none
-   of them will follow a data: URI and most reject SVG. */
-function emitOgPlate() {
-  const svgPath = path.join(OUT, "assets/og-default.svg");
-  fs.writeFileSync(svgPath, ogPlate.svg());
+/* The social card is a committed raster, because that is what a crawler
+   fetches — none of them will follow a data: URI and most reject SVG. The
+   build does not produce it (rasterising needs a browser); it only checks
+   that the committed PNG exists and is not older than the plate that
+   describes it, so a forgotten `npm run og` is loud rather than silent. */
+function checkOgPlate() {
   const png = path.join(OUT, OG_IMAGE);
+  const src = path.join(HERE, "og-plate.js");
   if (!fs.existsSync(png)) {
     console.log(
       `  ! ${OG_IMAGE} is missing — run \`npm run og\`. og:image is a dead link until then.`,
     );
-  } else if (fs.statSync(svgPath).mtimeMs > fs.statSync(png).mtimeMs + 1000) {
-    console.log(`  ! ${OG_IMAGE} is older than the plate — run \`npm run og\`.`);
+  } else if (mtime(src) > fs.statSync(png).mtimeMs + 1000) {
+    console.log(
+      `  ! ${OG_IMAGE} is older than _src/og-plate.js — run \`npm run og\`.`,
+    );
   }
 }
 
@@ -310,7 +313,7 @@ function emitRobots() {
 
 function main() {
   emitDocCatalogue();
-  emitOgPlate();
+  checkOgPlate();
 
   const files = fs
     .readdirSync(path.join(HERE, "pages"))
