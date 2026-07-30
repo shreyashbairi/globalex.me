@@ -31,7 +31,7 @@ function cta({ eyebrow = 'Open a lane', h2, lead, primary = ['Contact us', 'cont
 <div class="cta-in">
 <span class="eb${tone === 'sand' ? ' mat' : ''}">${eyebrow}</span>
 <h2>${h2}</h2>
-<p class="lead">${lead}</p>
+${lead ? `<p class="lead">${lead}</p>` : ''}
 <div class="btns">
 <a href="${primary[1]}" class="btn ${tone === 'sand' ? 'btn-m' : 'btn-p'}" data-mag="6">${primary[0]} <span class="ar">&rarr;</span></a>
 <a href="${secondary[1]}" class="btn btn-o" data-mag="6">${secondary[0]}</a>

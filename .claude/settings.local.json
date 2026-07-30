@@ -62,7 +62,18 @@
       "Bash(git checkout *)",
       "Bash(git rm *)",
       "Bash(npm run *)",
-      "Bash(git diff *)"
+      "Bash(git diff *)",
+      "Bash(node -e \"try{require.resolve\\('puppeteer'\\);console.log\\('puppeteer: local'\\)}catch\\(e\\){console.log\\('puppeteer: no'\\)}\")",
+      "Read(//Users/Shreyash/.cache/**)",
+      "Bash(npm ls *)",
+      "Read(//Applications/Google Chrome.app/**)",
+      "Bash(sips -c 1500 2600 --cropOffset 0 0 /private/tmp/claude-501/-Users-Shreyash-Desktop-Globalex-globalex-me/a4ba3a12-eb3f-4511-821f-a0bc38ba9f39/scratchpad/shots/stats-harness.png --out /private/tmp/claude-501/-Users-Shreyash-Desktop-Globalex-globalex-me/a4ba3a12-eb3f-4511-821f-a0bc38ba9f39/scratchpad/shots/stats-h-top.png)",
+      "Bash(sips -Z 1300 /private/tmp/claude-501/-Users-Shreyash-Desktop-Globalex-globalex-me/a4ba3a12-eb3f-4511-821f-a0bc38ba9f39/scratchpad/shots/stats-h-top.png --out /private/tmp/claude-501/-Users-Shreyash-Desktop-Globalex-globalex-me/a4ba3a12-eb3f-4511-821f-a0bc38ba9f39/scratchpad/shots/stats-h-view.png)",
+      "Bash(sips -g pixelWidth -g pixelHeight /private/tmp/claude-501/-Users-Shreyash-Desktop-Globalex-globalex-me/a4ba3a12-eb3f-4511-821f-a0bc38ba9f39/scratchpad/shots/stats-h-view.png)",
+      "Bash(sips -c 1250 2600 --cropOffset 1450 0 /private/tmp/claude-501/-Users-Shreyash-Desktop-Globalex-globalex-me/a4ba3a12-eb3f-4511-821f-a0bc38ba9f39/scratchpad/shots/stats-harness.png --out /private/tmp/claude-501/-Users-Shreyash-Desktop-Globalex-globalex-me/a4ba3a12-eb3f-4511-821f-a0bc38ba9f39/scratchpad/shots/stats-h-bot.png)",
+      "Bash(sips -Z 1300 /private/tmp/claude-501/-Users-Shreyash-Desktop-Globalex-globalex-me/a4ba3a12-eb3f-4511-821f-a0bc38ba9f39/scratchpad/shots/stats-h-bot.png --out /private/tmp/claude-501/-Users-Shreyash-Desktop-Globalex-globalex-me/a4ba3a12-eb3f-4511-821f-a0bc38ba9f39/scratchpad/shots/stats-h-bot-v.png)",
+      "Bash(sips -c 620 2600 --cropOffset 2380 0 /private/tmp/claude-501/-Users-Shreyash-Desktop-Globalex-globalex-me/a4ba3a12-eb3f-4511-821f-a0bc38ba9f39/scratchpad/shots/stats-harness.png --out /private/tmp/claude-501/-Users-Shreyash-Desktop-Globalex-globalex-me/a4ba3a12-eb3f-4511-821f-a0bc38ba9f39/scratchpad/shots/s6.png)",
+      "Bash(sips -Z 1300 /private/tmp/claude-501/-Users-Shreyash-Desktop-Globalex-globalex-me/a4ba3a12-eb3f-4511-821f-a0bc38ba9f39/scratchpad/shots/s6.png --out /private/tmp/claude-501/-Users-Shreyash-Desktop-Globalex-globalex-me/a4ba3a12-eb3f-4511-821f-a0bc38ba9f39/scratchpad/shots/s6v.png)"
     ],
     "additionalDirectories": [
       "/tmp"

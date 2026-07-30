@@ -341,14 +341,21 @@ var PAL = {cyan:'53,214,245', sand:'217,183,120'};
 
 /* ---------- reveal ---------- */
 (function(){
-  var els = document.querySelectorAll('.rv,.rvs,.kin,[data-stat]');
-  if (!('IntersectionObserver' in window)){
-    [].forEach.call(els, function(e){ e.setAttribute('data-in',''); });
-    return;
-  }
+  var SEL = '.rv,.rvs,.kin,[data-stat]';
+
   function show(el){
     el.setAttribute('data-in','');
     if (el.hasAttribute('data-stat')) count(el);
+  }
+
+  /* No observer: reveal everything outright, but still publish glxReveal so
+     callers do not have to care which branch they landed in. */
+  if (!('IntersectionObserver' in window)){
+    window.glxReveal = function(root){
+      [].forEach.call((root || document).querySelectorAll(SEL), function(e){ show(e); });
+    };
+    window.glxReveal(document);
+    return;
   }
 
   var io = new IntersectionObserver(function(rows){
@@ -359,13 +366,23 @@ var PAL = {cyan:'53,214,245', sand:'217,183,120'};
     });
   }, {rootMargin:'0px 0px -12% 0px', threshold:.12});
 
-  // The -12% bottom margin is right for scroll-triggered reveals, but it would
-  // strand anything already on screen at load (hero CTAs, for one). Reveal the
-  // first screenful outright and observe only what is genuinely below it.
-  [].forEach.call(els, function(e){
-    if (e.getBoundingClientRect().top < innerHeight) show(e);
-    else io.observe(e);
-  });
+  /* The -12% bottom margin is right for scroll-triggered reveals, but it would
+     strand anything already on screen at load (hero CTAs, for one). Reveal the
+     first screenful outright and observe only what is genuinely below it.
+
+     Published, because this list used to be snapshotted once at parse time:
+     anything injected or unhidden afterwards never revealed, and an injected
+     [data-stat] never counted up. Call glxReveal(container) after inserting
+     or unhiding content. Nodes already revealed are skipped and re-observing
+     is a no-op, so calling it repeatedly on overlapping roots is safe. */
+  window.glxReveal = function(root){
+    [].forEach.call((root || document).querySelectorAll(SEL), function(e){
+      if (e.hasAttribute('data-in')) return;
+      if (e.getBoundingClientRect().top < innerHeight) show(e);
+      else io.observe(e);
+    });
+  };
+  window.glxReveal(document);
 
   function count(el){
     var node = el.querySelector('[data-to]');

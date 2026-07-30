@@ -180,10 +180,9 @@ module.exports = {
   transition:background .35s var(--ease),padding-left .35s var(--ease)}
 .drow:hover{background:rgba(var(--panel-rgb),.8);padding-left:1.5rem}
 .drow[hidden]{display:none}
-.dr-k{font-family:var(--f-mono);font-size:.645rem;letter-spacing:.16em;padding:.3em .6em;flex:none;
-  border:1px solid rgba(53,214,245,.3);color:var(--cyan);background:var(--cyan-g);white-space:nowrap}
-.dr-k[data-kind=TDS],.dr-k[data-kind=SPEC]{color:var(--sand);border-color:rgba(217,183,120,.34);
-  background:var(--sand-g)}
+/* .dr-k lives in kernel-css.js — the document register renders the same badge.
+   This page's copy had drifted to a heavier cyan fill; the register's is now
+   the single value for both. */
 .drow-t{flex:1;min-width:0}
 .drow-t b{display:block;font-weight:600;font-size:.99rem}
 .drow-t small{display:block;font-family:var(--f-mono);font-size:.67rem;letter-spacing:.1em;
@@ -312,18 +311,15 @@ window.glxPage = function(){
       g.hidden = live === 0;
     });
 
-    /* Then force the survivors visible. The site-wide scroll reveal holds
-       .rvs children at opacity 0 until their container intersects, and a
-       container that rises into view only because everything above it was
-       filtered out never trips the observer's threshold — so the single
-       result somebody searched for would render as blank space. Only while a
-       search or filter is active; an untouched page still reveals on scroll. */
+    /* Then reveal the survivors. The site-wide scroll reveal holds .rvs
+       children at opacity 0 until their container intersects, and a container
+       that rises into view only because everything above it was filtered out
+       never trips the observer's threshold — so the single result somebody
+       searched for would render as blank space. Only while a search or filter
+       is active; an untouched page still reveals on scroll. */
     if (terms.length || cat !== 'all'){
       groups.forEach(function(g){
-        if (g.hidden) return;
-        [].forEach.call(g.querySelectorAll('.rv, .rvs'), function(n){
-          n.setAttribute('data-in', '');
-        });
+        if (!g.hidden && window.glxReveal) window.glxReveal(g);
       });
     }
 

@@ -44,11 +44,7 @@ const css = `
 .dr-ix{font-family:var(--f-mono);font-size:.715rem;color:var(--haze-d);
   font-variant-numeric:tabular-nums;transition:color .4s var(--ease)}
 .dr[data-on] .dr-ix{color:var(--cyan)}
-.dr-k{font-family:var(--f-mono);font-size:.645rem;letter-spacing:.16em;padding:.3em .6em;
-  border:1px solid rgba(53,214,245,.3);color:var(--cyan);background:rgba(53,214,245,.07);
-  flex:none;white-space:nowrap}
-.dr-k[data-kind=TDS]{color:var(--sand);border-color:rgba(217,183,120,.34);background:var(--sand-g)}
-.dr-k[data-kind=SPEC]{color:var(--sand);border-color:rgba(217,183,120,.34);background:var(--sand-g)}
+/* .dr-k lives in kernel-css.js — the products page renders the same badge. */
 .dr-t{min-width:0}
 .dr-t b{display:block;font-weight:600;font-size:.99rem;line-height:1.3;
   overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
