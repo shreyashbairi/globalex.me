@@ -69,8 +69,12 @@ const SECTIONS = [
   ],
 ];
 
+const CRUMB = ["Terms &amp; Conditions"];
+
 module.exports = {
   page: "terms-conditions",
+  tier: "legal",
+  crumb: CRUMB,
   title: "Terms & Conditions — Globalex Trading FZCO",
   desc: "The terms governing use of the Globalex Trading FZCO website and services.",
   css: privacy.css,
@@ -78,7 +82,7 @@ module.exports = {
 
   body: `
 ${hero({
-  crumb: ["Terms &amp; Conditions"],
+  crumb: CRUMB,
   eyebrow: "Legal &middot; Terms of service",
   h1: "Terms &amp; Conditions",
   lead: "These terms govern your use of the Globalex Trading FZCO website and services. By accessing or using our services, you agree to be bound by them.",

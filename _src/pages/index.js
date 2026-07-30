@@ -2,6 +2,7 @@ const docgate = require("../docgate");
 
 module.exports = {
   page: "index",
+  tier: "home",
   title: "Globalex Trading FZCO — The Caspian corridor, operated from Dubai",
   desc: "Dubai FZCO freezone commodity trading house. Urea, sulphur, fertilizers, polymers and 16 industrial chemicals sourced across Turkmenistan, Uzbekistan, Kazakhstan and Azerbaijan, delivered worldwide.",
   three: true,

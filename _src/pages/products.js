@@ -83,8 +83,13 @@ const docRow = (d) => `<a class="drow" href="index.html#specifications"
 <span class="drow-go">Request &rarr;</span>
 </a>`;
 
+const CRUMB = ["Products"];
+
 module.exports = {
   page: "products",
+  tier: "class",
+  nav: "products",
+  crumb: CRUMB,
   title: "Products — Globalex Trading FZCO",
   desc: `Search all ${TOTAL} grades Globalex Trading FZCO supplies across fertilizers, polymers and industrial chemicals — by name, formula, application or origin.`,
 
@@ -204,7 +209,7 @@ module.exports = {
 
   body: `
 ${hero({
-  crumb: ["Products"],
+  crumb: CRUMB,
   eyebrow: `Three classes &middot; ${TOTAL} grades &middot; Caspian, Gulf &amp; East Asia`,
   h1: "Products",
   lead: "Fertilizers, polymers and industrial chemicals &mdash; the whole book in one place. Search by grade name, chemical formula, application or origin, or browse the classes below.",

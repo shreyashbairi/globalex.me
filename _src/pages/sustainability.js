@@ -33,8 +33,13 @@ const COMMITS = [
   ],
 ];
 
+const CRUMB = ["Sustainability"];
+
 module.exports = {
   page: "sustainability",
+  tier: "company",
+  nav: "sustainability",
+  crumb: CRUMB,
   title: "Sustainability — Globalex Trading FZCO",
   desc: "Six commitments — environmental stewardship, ethical sourcing, product quality, transparency, social impact and continuous improvement — applied to product, partner and process decisions.",
 
@@ -76,7 +81,7 @@ module.exports = {
 
   body: `
 ${hero({
-  crumb: ["Sustainability"],
+  crumb: CRUMB,
   eyebrow: "Six commitments &middot; One standard",
   h1: "Sustainable practice is not an option. It is a responsibility we owe the planet and the generations after us.",
   lead: "",

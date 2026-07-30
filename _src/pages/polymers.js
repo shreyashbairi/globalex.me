@@ -12,8 +12,13 @@ const family = (p) => `<article class="fam-c" id="${p.id}">
   </div>
 </article>`;
 
+const CRUMB = [["Products", "products.html"], "Polymers"];
+
 module.exports = {
   page: "polymers",
+  tier: "class",
+  nav: "products",
+  crumb: CRUMB,
   title: "Polymers — Globalex Trading FZCO",
   desc: "Polyethylene (LDPE, HDPE, LLDPE, UHMWPE), polypropylene homopolymer and copolymer, and performance additives — sourced from Turkmenistan, Uzbekistan, UAE, Saudi Arabia and China.",
 
@@ -51,7 +56,7 @@ module.exports = {
 
   body: `
 ${hero({
-  crumb: [["Products", "products.html"], "Polymers"],
+  crumb: CRUMB,
   eyebrow:
     "Class 02 &middot; 3 families &middot; Gulf, Caspian &amp; East Asia",
   h1: "Polymers",

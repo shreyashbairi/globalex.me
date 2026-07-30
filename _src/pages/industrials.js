@@ -19,8 +19,13 @@ const chem = (
 </div>
 </article>`;
 
+const CRUMB = [["Products", "products.html"], "Industrial Chemicals"];
+
 module.exports = {
   page: "industrials",
+  tier: "class",
+  nav: "products",
+  crumb: CRUMB,
   title: "Industrial Chemicals — Globalex Trading FZCO",
   desc: "Sixteen specialty chemicals — sulphur, caustic soda, sulphuric and hydrochloric acid, LABSA 96%, SLES 70%, carbon black, iodine and more — for water treatment, manufacturing, personal care, agriculture and energy.",
 
@@ -60,7 +65,7 @@ module.exports = {
 
   body: `
 ${hero({
-  crumb: [["Products", "products.html"], "Industrial Chemicals"],
+  crumb: CRUMB,
   eyebrow: "Class 03 &middot; 16 grades &middot; Multi-origin",
   h1: "Industrial chemicals",
   lead: "Sulphur and caustic soda through LABSA, SLES, sulphuric acid, carbon black and iodine &mdash; sixteen specialty grades across water treatment, manufacturing, personal care, agriculture and energy.",

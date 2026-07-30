@@ -71,8 +71,13 @@ const panel = (s, i) => `<article class="step" data-i="${i}">
 <span class="step-party" data-p="${s.party === "Buyer" ? "b" : s.party === "Seller" ? "s" : "a"}">${s.party}</span>
 </article>`;
 
+const CRUMB = ["Procedures"];
+
 module.exports = {
   page: "procedures",
+  tier: "company",
+  nav: "trade",
+  crumb: CRUMB,
   title: "Trade Procedures — Globalex Trading FZCO",
   desc: "The ten contractual checkpoints between handshake and hull: NCND, IMFPA, LOI, FCO, letter of credit, proof of product, performance bond and shipment.",
 
@@ -179,7 +184,7 @@ module.exports = {
 
   body: `
 ${hero({
-  crumb: ["Procedures"],
+  crumb: CRUMB,
   eyebrow: "Trade workflow &middot; 10 checkpoints",
   h1: "Ten checkpoints between handshake and hull.",
   lead: "We keep standardised procedures, but the goal is mutual agreement. If any step does not fit the shape of your transaction, tell us &mdash; most of it is negotiable, and the parts that are not exist to protect you.",

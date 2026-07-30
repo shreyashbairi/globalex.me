@@ -73,7 +73,14 @@
       "Bash(sips -c 1250 2600 --cropOffset 1450 0 /private/tmp/claude-501/-Users-Shreyash-Desktop-Globalex-globalex-me/a4ba3a12-eb3f-4511-821f-a0bc38ba9f39/scratchpad/shots/stats-harness.png --out /private/tmp/claude-501/-Users-Shreyash-Desktop-Globalex-globalex-me/a4ba3a12-eb3f-4511-821f-a0bc38ba9f39/scratchpad/shots/stats-h-bot.png)",
       "Bash(sips -Z 1300 /private/tmp/claude-501/-Users-Shreyash-Desktop-Globalex-globalex-me/a4ba3a12-eb3f-4511-821f-a0bc38ba9f39/scratchpad/shots/stats-h-bot.png --out /private/tmp/claude-501/-Users-Shreyash-Desktop-Globalex-globalex-me/a4ba3a12-eb3f-4511-821f-a0bc38ba9f39/scratchpad/shots/stats-h-bot-v.png)",
       "Bash(sips -c 620 2600 --cropOffset 2380 0 /private/tmp/claude-501/-Users-Shreyash-Desktop-Globalex-globalex-me/a4ba3a12-eb3f-4511-821f-a0bc38ba9f39/scratchpad/shots/stats-harness.png --out /private/tmp/claude-501/-Users-Shreyash-Desktop-Globalex-globalex-me/a4ba3a12-eb3f-4511-821f-a0bc38ba9f39/scratchpad/shots/s6.png)",
-      "Bash(sips -Z 1300 /private/tmp/claude-501/-Users-Shreyash-Desktop-Globalex-globalex-me/a4ba3a12-eb3f-4511-821f-a0bc38ba9f39/scratchpad/shots/s6.png --out /private/tmp/claude-501/-Users-Shreyash-Desktop-Globalex-globalex-me/a4ba3a12-eb3f-4511-821f-a0bc38ba9f39/scratchpad/shots/s6v.png)"
+      "Bash(sips -Z 1300 /private/tmp/claude-501/-Users-Shreyash-Desktop-Globalex-globalex-me/a4ba3a12-eb3f-4511-821f-a0bc38ba9f39/scratchpad/shots/s6.png --out /private/tmp/claude-501/-Users-Shreyash-Desktop-Globalex-globalex-me/a4ba3a12-eb3f-4511-821f-a0bc38ba9f39/scratchpad/shots/s6v.png)",
+      "Bash(node _src/test.js)",
+      "Bash(grep -v '^$')",
+      "Bash(echo \"started, pid $!\")",
+      "Bash(curl -s -o /dev/null -m 3 http://localhost:8788/)",
+      "Bash(curl -s http://localhost:8788/fertilizers)",
+      "Bash(curl -s http://localhost:8788/)",
+      "Bash(npm test *)"
     ],
     "additionalDirectories": [
       "/tmp"

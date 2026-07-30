@@ -20,8 +20,13 @@ const row = (p, i) => `<article class="row prod" id="${p.id}">
 </div>
 </article>`;
 
+const CRUMB = [["Products", "products.html"], "Fertilizers"];
+
 module.exports = {
   page: "fertilizers",
+  tier: "class",
+  nav: "products",
+  crumb: CRUMB,
   title: "Fertilizers — Globalex Trading FZCO",
   desc: "Urea B (N46), Potash, Ammonia, Ammonium Nitrate and NPK compound fertilizers sourced from Turkmenistan, Uzbekistan, Kazakhstan and Azerbaijan.",
 
@@ -47,7 +52,7 @@ module.exports = {
 
   body: `
 ${hero({
-  crumb: [["Products", "products.html"], "Fertilizers"],
+  crumb: CRUMB,
   eyebrow: "Class 01 &middot; 5 grades &middot; Caspian origin",
   h1: "Fertilizers",
   lead: "Urea B (N46), potash, ammonia, ammonium nitrate and NPK &mdash; the nitrogen and compound grades that set yield, sourced from Turkmenistan, Uzbekistan, Kazakhstan and Azerbaijan.",

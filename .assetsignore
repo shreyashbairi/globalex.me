@@ -15,3 +15,6 @@ wrangler.toml
 package.json
 package-lock.json
 .gitattributes
+# Source for assets/og-default.png. Kept in the repo so the rasterise step is
+# reproducible and reviewable, but the PNG is what crawlers fetch.
+assets/og-default.svg

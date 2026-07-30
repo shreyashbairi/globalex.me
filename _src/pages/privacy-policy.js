@@ -133,8 +133,12 @@ const SECTIONS = [
   ],
 ];
 
+const CRUMB = ["Privacy Policy"];
+
 module.exports = {
   page: "privacy-policy",
+  tier: "legal",
+  crumb: CRUMB,
   title: "Privacy Policy — Globalex Trading FZCO",
   desc: "How Globalex Trading FZCO collects, uses, discloses and safeguards your personal information.",
   css: LEGAL_CSS,
@@ -142,7 +146,7 @@ module.exports = {
 
   body: `
 ${hero({
-  crumb: ["Privacy Policy"],
+  crumb: CRUMB,
   eyebrow: "Legal &middot; Effective 11.05.2026",
   h1: "Privacy Policy",
   lead: "Globalex Trading FZCO is committed to protecting your privacy. This policy explains how we collect, use, disclose and safeguard your personal information when you use our services.",

@@ -1,7 +1,11 @@
 const { hero } = require("../parts");
 
+const CRUMB = ["Contact"];
+
 module.exports = {
   page: "contact",
+  tier: "company",
+  crumb: CRUMB,
   title: "Contact — Globalex Trading FZCO, Dubai",
   desc: "Contact the Globalex Trading FZCO desk in Jumeirah Lakes Towers, Dubai. Quote requests, trade procedures and partnership enquiries answered within two business days.",
 
@@ -59,7 +63,7 @@ module.exports = {
 
   body: `
 ${hero({
-  crumb: ["Contact"],
+  crumb: CRUMB,
   eyebrow: "Dubai desk &middot; 25.0693&deg;N / 55.1413&deg;E",
   h1: "Tell us the tonnage, the port and the window.",
   lead: "Quote requests, trade procedures, partnership conversations. The Dubai desk responds within two business days &mdash; email is fastest, and for time-sensitive deals, call.",

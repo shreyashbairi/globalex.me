@@ -1,7 +1,12 @@
 const { hero } = require("../parts");
 
+const CRUMB = ["Careers"];
+
 module.exports = {
   page: "careers",
+  tier: "company",
+  nav: "company",
+  crumb: CRUMB,
   title: "Careers — Globalex Trading FZCO",
   desc: "Open roles at Globalex Trading FZCO in Dubai: Digital Marketing Manager (Shopify and D2C growth) and Chemical Engineer. Apply with your CV.",
 
@@ -39,7 +44,7 @@ module.exports = {
 
   body: `
 ${hero({
-  crumb: ["Careers"],
+  crumb: CRUMB,
   eyebrow: "Open roles &middot; Dubai, UAE",
   h1: "Global trade. Real ownership. Full exposure.",
   lead: "Two roles open in Dubai, and a standing interest in professionals who share our standards. We are a trading house where every person touches deals, owns relationships and sees the whole picture &mdash; from sourcing decision to bill of lading.",

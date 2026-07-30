@@ -1,7 +1,12 @@
 const { hero, cta } = require("../parts");
 
+const CRUMB = ["About"];
+
 module.exports = {
   page: "about",
+  tier: "company",
+  nav: "company",
+  crumb: CRUMB,
   title: "About — Globalex Trading FZCO",
   desc: "Established in 2019 on honesty, integrity and trust. A FZCO freezone trading house in Jumeirah Lakes Towers, Dubai, sourcing across the Caspian and Central Asia.",
 
@@ -63,7 +68,7 @@ module.exports = {
 
   body: `
 ${hero({
-  crumb: ["About"],
+  crumb: CRUMB,
   eyebrow: "Established 2019 &middot; FZCO Freezone",
   h1: "An international trading house built in Dubai, sourced from the Caspian.",
   lead: "Globalex Trading FZCO specialises in urea, sulphur, fertilizers and polymers &mdash; registered and licensed as a freezone company under FZCO in the United Arab Emirates.",

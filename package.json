@@ -5,6 +5,8 @@
   "description": "globalex.me — static site, Cloudflare Pages Functions backend",
   "scripts": {
     "build": "node _src/build.js",
+    "test": "node _src/test.js",
+    "og": "node _src/og-render.js",
     "dev": "wrangler pages dev . --port 8788",
     "db:local": "wrangler d1 execute globalex --local --file=./schema.sql",
     "db:remote": "wrangler d1 execute globalex --remote --file=./schema.sql",
