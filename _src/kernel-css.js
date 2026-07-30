@@ -755,6 +755,11 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
   transition:opacity .3s var(--ease),margin-left .3s var(--ease);margin-left:-.25em}
 .row-lk:hover::after{opacity:1;margin-left:.15em}
 
+/* Reopens the consent bar, so a decision can be withdrawn. A button rather
+   than a link because it opens a dialog instead of navigating. */
+.ftr-cc{font:inherit;color:inherit;cursor:pointer;background:none;border:0;padding:0}
+.ftr-cc:hover{color:var(--frost)}
+
 /* chips */
 .chips{display:flex;flex-wrap:wrap;gap:.4rem}
 .chip{display:inline-flex;align-items:center;gap:.45em;padding:.34em .7em;font-family:var(--f-mono);
@@ -888,7 +893,7 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
 .ftr-b{display:flex;flex-wrap:wrap;gap:1rem 2rem;justify-content:space-between;align-items:center;
   padding-top:1.6rem;border-top:1px solid var(--line);font-family:var(--f-mono);font-size:.69rem;
   letter-spacing:.14em;text-transform:uppercase;color:var(--haze-d)}
-.ftr-b a:hover{color:var(--cyan)}
+.ftr-b a:hover,.ftr-b .ftr-cc:hover{color:var(--cyan)}
 .ftr-b div{display:flex;gap:1.5rem;flex-wrap:wrap}
 
 /* giant footer wordmark, clipped */

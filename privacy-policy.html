@@ -785,6 +785,11 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
   transition:opacity .3s var(--ease),margin-left .3s var(--ease);margin-left:-.25em}
 .row-lk:hover::after{opacity:1;margin-left:.15em}
 
+/* Reopens the consent bar, so a decision can be withdrawn. A button rather
+   than a link because it opens a dialog instead of navigating. */
+.ftr-cc{font:inherit;color:inherit;cursor:pointer;background:none;border:0;padding:0}
+.ftr-cc:hover{color:var(--frost)}
+
 /* chips */
 .chips{display:flex;flex-wrap:wrap;gap:.4rem}
 .chip{display:inline-flex;align-items:center;gap:.45em;padding:.34em .7em;font-family:var(--f-mono);
@@ -918,7 +923,7 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
 .ftr-b{display:flex;flex-wrap:wrap;gap:1rem 2rem;justify-content:space-between;align-items:center;
   padding-top:1.6rem;border-top:1px solid var(--line);font-family:var(--f-mono);font-size:.69rem;
   letter-spacing:.14em;text-transform:uppercase;color:var(--haze-d)}
-.ftr-b a:hover{color:var(--cyan)}
+.ftr-b a:hover,.ftr-b .ftr-cc:hover{color:var(--cyan)}
 .ftr-b div{display:flex;gap:1.5rem;flex-wrap:wrap}
 
 /* giant footer wordmark, clipped */
@@ -962,6 +967,42 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
   .grain::before{animation:none}
   .mq-t{animation:none}
 }
+
+/* ---------- consent ---------- */
+.cc{position:fixed;left:var(--frame);right:var(--frame);bottom:var(--frame);z-index:90;
+  max-width:44rem;padding:clamp(1.1rem,2.2vw,1.5rem);
+  background:rgba(var(--deep-rgb),.97);backdrop-filter:blur(20px);
+  border:1px solid var(--line-2);
+  clip-path:polygon(var(--notch-m) 0,100% 0,100% 100%,0 100%,0 var(--notch-m));
+  opacity:0;transform:translateY(14px);
+  transition:opacity 420ms var(--ease),transform 420ms var(--ease)}
+.cc[hidden]{display:none}
+.cc[data-open]{opacity:1;transform:none}
+.cc p{color:var(--haze);font-size:.97rem;max-width:60ch}
+.cc p a{color:var(--cyan);border-bottom:1px solid rgba(53,214,245,.4)}
+.cc p a:hover{color:var(--frost);border-bottom-color:var(--frost)}
+.cc-h{display:flex;align-items:center;gap:.6rem;margin-bottom:.5rem}
+.cc-h .eb{font-size:.66rem}
+/* Three controls at equal visual weight. Decline is not the lesser option —
+   styling it as one is the pattern regulators penalise. */
+.cc-b{display:flex;flex-wrap:wrap;gap:.55rem;margin-top:1rem}
+.cc-b button{flex:1 1 auto;min-width:8.5rem;padding:.78em 1.1em;font-family:var(--f-mono);
+  font-size:.73rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;
+  border:1px solid var(--line-2);color:var(--frost);background:rgba(var(--panel-rgb),.5);
+  cursor:pointer;transition:border-color .3s,color .3s,background .3s}
+.cc-b button:hover{border-color:var(--cyan);color:var(--cyan);background:rgba(53,214,245,.07)}
+.cc-b button:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+.cc-pref{margin-top:1rem;padding-top:1rem;border-top:1px solid var(--line);display:grid;gap:.9rem}
+.cc-pref[hidden]{display:none}
+.cc-row{display:grid;grid-template-columns:auto 1fr;gap:.9rem;align-items:start}
+.cc-row input{margin-top:.25rem;width:15px;height:15px;accent-color:var(--cyan)}
+.cc-row input:disabled{opacity:.5}
+.cc-row b{display:block;font-family:var(--f-disp);font-weight:700;font-size:1rem;
+  font-variation-settings:'wdth' 106;color:var(--frost)}
+.cc-row small{display:block;color:var(--haze-d);font-size:.88rem;margin-top:.15rem}
+@media (max-width:560px){.cc{left:0;right:0;bottom:0;max-width:none;clip-path:none;
+  border-left:0;border-right:0;border-bottom:0}}
+@media (prefers-reduced-motion:reduce){.cc{transform:none}}
 
 .legal{display:grid;grid-template-columns:210px 1fr;gap:clamp(2rem,5vw,4.5rem);align-items:start}
 .toc{position:sticky;top:clamp(6rem,12vh,8rem);display:grid;gap:.1rem}
@@ -1189,6 +1230,8 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
         <a href="#children">Children's privacy</a>
         <a href="#changes">Changes to this policy</a>
         <a href="#contact">Contact us</a>
+        <a href="#cookies">Cookies and consent</a>
+        <a href="#requests">Your rights and how to exercise them</a>
       </nav>
 
       <div class="doc rv">
@@ -1198,7 +1241,7 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
 <ol>
 <li><strong>Personal information.</strong> Name, email address, phone number, shipping address and payment details, collected when you interact with our services or make a purchase.</li>
 <li><strong>Log data.</strong> IP address, browser type, operating system, referring website, pages visited, and the dates and times of your visits &mdash; collected automatically.</li>
-<li><strong>Cookies and similar technologies.</strong> Used to collect information about your browsing activity. You can manage cookie preferences through your browser settings.</li>
+<li><strong>Cookies.</strong> We set two, both listed in <a href="#cookies">Cookies and consent</a> below. Neither is used for advertising and neither is shared. Analytics are not collected at all unless you agree.</li>
 </ol>
         <h2 id="use">How we use it</h2>
 <p>We use the information we collect to:</p>
@@ -1246,6 +1289,79 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
         <h2 id="contact">Contact us</h2>
 <p>Questions or concerns about this policy or our privacy practices? Contact us at <a href="mailto:info@globalex.me">info@globalex.me</a> or <a href="tel:+97145667713">+971 4 566 7713</a>.</p>
 <p>By using our services you acknowledge that you have read and understood this Privacy Policy, and consent to the collection, use, disclosure and storage of your personal information as described here.</p>
+        <h2 id="cookies">Cookies and consent</h2>
+<p>Two cookies, and no third-party trackers, tag managers or advertising
+pixels of any kind.</p>
+
+<div class="tbl-wrap" role="region" tabindex="0" aria-label="Cookies set by this site">
+<table class="tbl is-wide">
+<caption>Cookies set by globalex.me</caption>
+<thead><tr>
+<th scope="col">Name</th><th scope="col">Purpose</th>
+<th scope="col">Duration</th><th scope="col">Type</th>
+</tr></thead>
+<tbody>
+<tr>
+<th scope="row"><code>glx_consent</code></th>
+<td>Records whether you agreed to analytics, so you are not asked again.</td>
+<td class="num">12 months</td>
+<td class="sys">Strictly necessary</td>
+</tr>
+<tr>
+<th scope="row"><code>glx_admin</code></th>
+<td>Keeps a member of staff signed in to the internal dashboard. Never set for
+ordinary visitors.</td>
+<td class="num">Session</td>
+<td class="sys">Strictly necessary</td>
+</tr>
+</tbody></table>
+</div>
+
+<h3>The visitor identifier is not a cookie</h3>
+<p>When you have agreed to analytics, a page view is recorded against an
+identifier derived by hashing your IP address, your browser's user-agent
+string, a secret held only on our server, and the current date. That
+identifier is stored; the IP address and user agent are not.</p>
+<p>Because the date is part of the hash, the identifier changes at midnight
+UTC. The same person is a different identifier tomorrow, so visits cannot be
+joined across days, and the value cannot be reversed to recover an IP
+address. Nothing is written to your device by this mechanism &mdash; it is
+not a cookie, and clearing your cookies does not affect it.</p>
+
+<h3>Giving and withdrawing consent</h3>
+<p>Nothing is measured before you choose. Until you do, page views are held in
+your browser and discarded if you decline. Declining leaves the site fully
+functional &mdash; nothing here depends on analytics.</p>
+<p>You can change your mind at any time using the
+<button type="button" class="lk" data-cc-open>Cookie preferences</button>
+control, which also sits in the footer of every page. Withdrawing consent stops
+collection immediately.</p>
+<p>We also honour the <code>DNT</code> (Do Not Track) browser signal
+independently of the choice above.</p>
+
+<h3>How long we keep it</h3>
+<p><strong>[Retention period to be confirmed.]</strong> Page-view records and
+document-access records are held for a defined period and then deleted. That
+period is being set and will be stated here; if you need it before then, ask
+using the contact route below.</p>
+
+<h3>Who processes it on our behalf</h3>
+<p>Cloudflare, Inc. provides our hosting, database and file storage. Resend
+provides email delivery for document requests and enquiries. Both act on our
+instructions as processors. We do not sell or share personal data with anyone
+else.</p>
+
+        <h2 id="requests">Your rights and how to exercise them</h2>
+<p>You can ask us what personal data we hold about you, ask for it to be
+corrected, ask for it to be deleted, or object to how it is used.</p>
+<p><strong>[Data-protection contact to be confirmed.]</strong> Requests should
+go to a named route rather than the general enquiry inbox, and that address is
+being set up. Until it is, write to
+<a href="mailto:info@globalex.me">info@globalex.me</a> marking the message for
+the attention of the data-protection contact, and it will be routed.</p>
+<p>We respond to a request within the period the applicable law requires. If we
+cannot act on a request we will explain why.</p>
+
       </div>
     </div>
   </div>
@@ -1314,11 +1430,41 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
 <div>
 <a href="terms-conditions.html">Terms &amp; Conditions</a>
 <a href="privacy-policy.html">Privacy Policy</a>
+<button type="button" class="ftr-cc" data-cc-open>Cookie preferences</button>
 <a href="https://www.linkedin.com/company/globalex-trading-FZCO-uae/" target="_blank" rel="noopener noreferrer">LinkedIn &nearr;</a>
 </div>
 </div>
 </div>
 </footer>
+
+<div class="cc" id="cc" role="dialog" aria-label="Cookie preferences"
+ aria-live="polite" hidden>
+<div class="cc-h"><span class="eb">Privacy</span></div>
+<p>We would like to count page views and document requests so we know which
+grades people look for. It is anonymised and never sold. Nothing is measured
+unless you agree. <a href="privacy-policy.html">How we handle data</a>.</p>
+<div class="cc-b">
+<button type="button" data-cc="accept">Accept</button>
+<button type="button" data-cc="decline">Decline</button>
+<button type="button" data-cc="prefs" aria-expanded="false" aria-controls="cc-p">Preferences</button>
+</div>
+<div class="cc-pref" id="cc-p" hidden>
+<div class="cc-row">
+<input type="checkbox" id="cc-e" checked disabled />
+<label for="cc-e"><b>Essential</b><small>Always on. Remembers this choice, and
+keeps a staff login signed in. No analytics, and nothing shared.</small></label>
+</div>
+<div class="cc-row">
+<input type="checkbox" id="cc-a" />
+<label for="cc-a"><b>Analytics</b><small>Page views and document requests, with
+a visitor identifier that is re-derived daily and cannot be traced back to you
+or joined across days.</small></label>
+</div>
+<div class="cc-b">
+<button type="button" data-cc="save">Save preferences</button>
+</div>
+</div>
+</div>
 
 <script>
 (function(){
@@ -2254,18 +2400,21 @@ if (document.readyState === 'loading') addEventListener('DOMContentLoaded', boot
 });
 
 /* ---------- pageview beacon ----------
-   Cookie-free and fire-and-forget. Skipped on file:// so local previews do
-   not spray failed requests into the console. */
+   The kernel only ENQUEUES. _src/consent.js owns the single code path to the
+   network and flushes this queue on an explicit grant, discards it on refusal,
+   and holds it while there is no decision.
+
+   Inverted this way on purpose: "default to not sending" becomes structural
+   rather than conditional. If consent.js is absent for any reason — admin.html,
+   a future minimal shell, a build mistake — nothing is ever sent.
+
+   Skipped on file:// so local previews do not queue requests that cannot go. */
+window.glxQ = window.glxQ || [];
 if (location.protocol.indexOf('http') === 0){
-  try {
-    var pv = JSON.stringify({path: location.pathname, ref: document.referrer || ''});
-    if (navigator.sendBeacon){
-      navigator.sendBeacon('/api/pv', new Blob([pv], {type:'application/json'}));
-    } else {
-      fetch('/api/pv', {method:'POST', headers:{'Content-Type':'application/json'},
-        body: pv, keepalive:true}).catch(function(){});
-    }
-  } catch (e){}
+  var pv = {path: location.pathname, ref: document.referrer || ''};
+  /* glxSend exists only after consent has been granted this page load */
+  if (window.glxSend) window.glxSend('/api/pv', pv);
+  else window.glxQ.push(['/api/pv', pv]);
 }
 })();
 </script>
@@ -2285,6 +2434,137 @@ window.glxPage = function(){
   }, {rootMargin:'-15% 0px -70% 0px'});
   heads.forEach(function(h){ io.observe(h); });
 };
+</script>
+<script>
+/* ---------- consent ----------
+   The only code path to the network. kernel-js pushes onto window.glxQ and
+   never sends, so if this script is missing nothing is sent at all. */
+(function(){
+  var NAME = 'glx_consent';
+  var YEAR = 31536000;
+
+  function read(){
+    var m = new RegExp('(?:^|; )' + NAME + '=(granted|denied)').exec(document.cookie);
+    return m ? m[1] : null;
+  }
+  function write(v){
+    /* Secure only over https: Chrome treats http://localhost as trustworthy
+       but Safari does not, and an unconditional Secure silently breaks the
+       whole flow under wrangler pages dev there. */
+    document.cookie = NAME + '=' + v + ';Max-Age=' + YEAR + ';Path=/;SameSite=Lax'
+      + (location.protocol === 'https:' ? ';Secure' : '');
+  }
+
+  function send(url, payload){
+    try {
+      var body = JSON.stringify(payload);
+      if (navigator.sendBeacon){
+        navigator.sendBeacon(url, new Blob([body], {type:'application/json'}));
+      } else {
+        fetch(url, {method:'POST', headers:{'Content-Type':'application/json'},
+          body: body, keepalive:true}).catch(function(){});
+      }
+    } catch (e){}
+  }
+
+  function flush(){
+    var q = window.glxQ || [];
+    /* splice so anything queued later still goes, and nothing double-sends */
+    var out = q.splice(0);
+    out.forEach(function(a){ send(a[0], a[1]); });
+    /* from here on, sending is immediate */
+    window.glxSend = send;
+    return out.length;
+  }
+  function drop(){ if (window.glxQ) window.glxQ.length = 0; window.glxSend = null; }
+
+  /* Three states, not two. Granted flushes, DENIED drops, and no decision at
+     all HOLDS — the queue is left alone so a page view that happened before
+     the visitor chose is still delivered if they then accept. Dropping on
+     undecided silently lost the first page view of every session. */
+  var state = read();
+  if (state === 'granted') flush();
+  else if (state === 'denied') drop();
+
+  var el = document.getElementById('cc');
+  if (!el) return;
+
+  var prefs = document.getElementById('cc-p');
+  var analytics = document.getElementById('cc-a');
+  var lastFocus = null;
+  var t = null;
+
+  function open(){
+    lastFocus = document.activeElement;
+    el.hidden = false;
+    requestAnimationFrame(function(){
+      requestAnimationFrame(function(){ el.setAttribute('data-open',''); });
+    });
+    /* Focus the panel itself, not a button — the visitor should hear what is
+       being asked before landing on Accept. */
+    el.setAttribute('tabindex','-1');
+    el.focus();
+  }
+  function close(){
+    el.removeAttribute('data-open');
+    /* RM, because the global reduced-motion rule flattens the transition to
+       .001ms — waiting the full duration there leaves an invisible bar over
+       the content swallowing clicks. */
+    clearTimeout(t);
+    t = setTimeout(function(){ el.hidden = true; }, RM ? 0 : 420);
+    if (lastFocus && lastFocus.focus) lastFocus.focus();
+  }
+
+  function decide(v){
+    write(v);
+    if (v === 'granted'){
+      var n = flush();
+      /* Reversing an earlier refusal part-way through a session: the queue was
+         legitimately emptied when the page loaded under a denied cookie, so
+         there is nothing to flush. Count this page now rather than measuring
+         nothing until the visitor happens to navigate. */
+      if (!n && location.protocol.indexOf('http') === 0)
+        send('/api/pv', {path: location.pathname, ref: document.referrer || ''});
+    } else {
+      drop();
+    }
+    close();
+  }
+
+  el.addEventListener('click', function(e){
+    var b = e.target.closest('[data-cc]');
+    if (!b) return;
+    var a = b.getAttribute('data-cc');
+    if (a === 'accept') decide('granted');
+    else if (a === 'decline') decide('denied');
+    else if (a === 'save') decide(analytics && analytics.checked ? 'granted' : 'denied');
+    else if (a === 'prefs'){
+      var showing = prefs.hidden;
+      prefs.hidden = !showing;
+      b.setAttribute('aria-expanded', showing ? 'true' : 'false');
+    }
+  });
+
+  /* Escape is equivalent to Decline: dismissing a consent request is not
+     consent. */
+  el.addEventListener('keydown', function(e){
+    if (e.key === 'Escape'){ e.preventDefault(); decide('denied'); }
+  });
+
+  /* Any footer or in-page control can reopen it, which is how a decision gets
+     withdrawn. */
+  document.addEventListener('click', function(e){
+    if (e.target.closest('[data-cc-open]')){
+      e.preventDefault();
+      if (analytics) analytics.checked = read() === 'granted';
+      open();
+    }
+  });
+
+  /* Only ask if there is no decision on file. Once decided the bar never
+     reappears for the cookie lifetime. */
+  if (!state) setTimeout(open, 800);
+})();
 </script>
 </body>
 </html>

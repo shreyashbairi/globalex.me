@@ -89,7 +89,12 @@ CREATE INDEX IF NOT EXISTS idx_msg_ts ON messages (ts DESC);
 
 -- Pageviews. `vid` is a daily-rotating hash of IP+UA+salt, never the IP
 -- itself: unique-visitor counts work, but nothing here identifies a person
--- or survives midnight, so the site needs no cookie banner.
+-- or survives midnight.
+--
+-- This comment used to end "so the site needs no cookie banner". There is one
+-- now, and a row is written only for a visitor who accepted analytics: see
+-- _src/consent.js and the glx_consent check in functions/api/pv.js. The daily
+-- hash applies on top of that consent, not instead of it.
 CREATE TABLE IF NOT EXISTS pageviews (
   id      INTEGER PRIMARY KEY AUTOINCREMENT,
   path    TEXT NOT NULL,

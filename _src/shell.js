@@ -237,6 +237,7 @@ ${c.links.map((l) => `<li><a href="${l.href}">${l.label}</a></li>`).join("\n")}
 <div>
 <a href="terms-conditions.html">Terms &amp; Conditions</a>
 <a href="privacy-policy.html">Privacy Policy</a>
+<button type="button" class="ftr-cc" data-cc-open>Cookie preferences</button>
 <a href="https://www.linkedin.com/company/globalex-trading-FZCO-uae/" target="_blank" rel="noopener noreferrer">LinkedIn &nearr;</a>
 </div>
 </div>

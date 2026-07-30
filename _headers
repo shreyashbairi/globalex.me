@@ -1,0 +1,20 @@
+# Cloudflare Pages custom headers.
+#
+# Only caching lives here. Every security header is set at runtime in
+# functions/_middleware.js, which also 404s the private paths — see the warning
+# in DEPLOY.md about never adding _routes.json, which would bypass it.
+#
+# _headers itself is safe: it does not affect whether the middleware runs.
+
+/assets/*
+  # Content-addressed by hand rather than by hash: these filenames change when
+  # the asset changes, so a long immutable cache is correct. The two hero MP4s
+  # are 8.5 MB and 3.3 MB, and re-fetching them per visit is the single largest
+  # avoidable cost on the site.
+  Cache-Control: public, max-age=31536000, immutable
+
+/sitemap.xml
+  Cache-Control: public, max-age=3600
+
+/robots.txt
+  Cache-Control: public, max-age=3600

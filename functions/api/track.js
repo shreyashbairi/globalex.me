@@ -4,9 +4,23 @@
    Arrives via sendBeacon, so it must stay cheap and must never fail loudly:
    the reader gets a 204 regardless. Only the four known event kinds are
    accepted, and the grant is verified before anything is written, so this
-   endpoint cannot be used to stuff the events table. */
+   endpoint cannot be used to stuff the events table.
+
+   ON CONSENT: this is NOT anonymous marketing analytics. The recipient
+   supplied their email and asked for the document; DEPLOY.md records that raw
+   IP and full user agent are stored against that named address, and that is a
+   contractual relationship rather than a cookie-notice one. The token-gated
+   viewer is deliberately not fitted with a banner — putting one in front of a
+   document somebody specifically requested is hostile.
+
+   An explicit refusal in the same browser is honoured anyway, so a visitor who
+   declined is not tracked here either. In practice that is close to a no-op:
+   the viewer is served by the Worker and never inlines the site kernel, so it
+   usually carries no glx_consent cookie at all. Kept because "we said we would
+   not measure you" should hold everywhere it can. */
 
 import { geo, now } from '../_lib/util.js';
+import { consented } from '../_lib/consent.js';
 
 const KINDS = new Set(['page', 'download', 'heartbeat', 'close']);
 const ok = () => new Response(null, { status: 204, headers: { 'Cache-Control': 'no-store' } });
@@ -25,6 +39,11 @@ export async function onRequestPost(ctx) {
   const token = typeof body.token === 'string' ? body.token.slice(0, 64) : '';
   const kind = String(body.kind || '');
   if (!token || !KINDS.has(kind)) return ok();
+
+  /* An explicit refusal is honoured. No cookie at all is the normal case here
+     and does not block the write: the grant itself is the lawful basis. */
+  if (/(?:^|;\s*)glx_consent=denied(?:;|$)/.test(request.headers.get('Cookie') || ''))
+    return ok();
 
   const grant = await env.DB
     .prepare('SELECT doc_id, email, revoked, expires_at FROM grants WHERE token = ?1')

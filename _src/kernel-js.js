@@ -935,18 +935,21 @@ if (document.readyState === 'loading') addEventListener('DOMContentLoaded', boot
 });
 
 /* ---------- pageview beacon ----------
-   Cookie-free and fire-and-forget. Skipped on file:// so local previews do
-   not spray failed requests into the console. */
+   The kernel only ENQUEUES. _src/consent.js owns the single code path to the
+   network and flushes this queue on an explicit grant, discards it on refusal,
+   and holds it while there is no decision.
+
+   Inverted this way on purpose: "default to not sending" becomes structural
+   rather than conditional. If consent.js is absent for any reason — admin.html,
+   a future minimal shell, a build mistake — nothing is ever sent.
+
+   Skipped on file:// so local previews do not queue requests that cannot go. */
+window.glxQ = window.glxQ || [];
 if (location.protocol.indexOf('http') === 0){
-  try {
-    var pv = JSON.stringify({path: location.pathname, ref: document.referrer || ''});
-    if (navigator.sendBeacon){
-      navigator.sendBeacon('/api/pv', new Blob([pv], {type:'application/json'}));
-    } else {
-      fetch('/api/pv', {method:'POST', headers:{'Content-Type':'application/json'},
-        body: pv, keepalive:true}).catch(function(){});
-    }
-  } catch (e){}
+  var pv = {path: location.pathname, ref: document.referrer || ''};
+  /* glxSend exists only after consent has been granted this page load */
+  if (window.glxSend) window.glxSend('/api/pv', pv);
+  else window.glxQ.push(['/api/pv', pv]);
 }
 })();
 `;

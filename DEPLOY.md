@@ -341,6 +341,63 @@ site and the backend cannot disagree about what exists.
 
 ---
 
+## Caching
+
+`_headers` at the repo root sets cache lifetimes. There was no cache policy at
+all before it, which meant the 8.5 MB and 3.3 MB hero MP4s were re-fetched on
+whatever Cloudflare's default happened to be.
+
+| Path | Policy | Why |
+|---|---|---|
+| `/assets/*` | `max-age=31536000, immutable` | Filenames change when the asset changes, so a year is safe. This is what stops the hero video being re-downloaded. |
+| `/sitemap.xml`, `/robots.txt` | `max-age=3600` | Regenerated every build; an hour is short enough. |
+| everything else (HTML) | Pages default | `no-store`-ish via `must-revalidate`; the pages are cheap and must not go stale after a deploy. |
+
+**If you change a file under `assets/` without renaming it, the year-long cache
+will serve the old one.** Rename it, or purge the cache from the dashboard.
+
+**Never add `_routes.json`.** It is the standard advice for speeding up Pages
+Functions and it would silently break this site's security model:
+`functions/_middleware.js` returns 404 for `.dev.vars`, `_src/`, `functions/`,
+`.md`, `.sql`, `.toml` and every `.pdf` outside `/f/`, and that protection
+exists *only because the middleware runs on every request*. Adding
+`_routes.json` would re-expose `.dev.vars`, which is the bug commit `2751044`
+fixed. `_headers` does not have this problem.
+
+## Analytics and consent
+
+Nothing is measured until a visitor accepts. `_src/consent.js` owns the only
+code path to the network: `kernel-js.js` pushes a page view onto `window.glxQ`
+and never sends it, so if the consent script is missing for any reason nothing
+is sent at all — fail-closed by construction rather than by a conditional.
+
+`functions/api/pv.js` and `functions/api/track.js` also check the
+`glx_consent` cookie server-side and refuse unconsented writes. Client-side
+gating alone is not a control: anyone can POST to the endpoint directly.
+
+The `ANALYTICS_SALT` daily-hash visitor identification applies **on top of**
+consent, not instead of it. An accepted visitor is still only ever a rotating
+daily hash, never a stored IP address.
+
+Two things in `privacy-policy.html` are still marked as unconfirmed and need
+answering: the **retention period** for page-view and document-event rows, and
+the **data-protection contact** for subject-access requests. Both are stated on
+the page as pending rather than omitted.
+
+To verify the gate after a deploy: open the site in a private window, watch the
+network panel, and confirm nothing hits `/api/pv` before you choose. Decline,
+reload, and confirm it stays that way.
+
+## Switching gated content on
+
+`_src/flags.js` is the one place. Each entry names the data it is waiting on.
+Flip a value to `true`, run `npm run build`, commit the regenerated HTML and
+deploy.
+
+`npm run build` fails if a page flag is on for a page that does not exist, and
+removes the HTML of any page whose flag is off — so switching something off
+actually un-publishes it rather than leaving the last build's file in place.
+
 ## Things worth knowing
 
 - **The PDFs are blocked at the edge.** `functions/_middleware.js` returns 404

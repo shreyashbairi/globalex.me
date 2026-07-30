@@ -7,10 +7,16 @@
      - the same person is a different id tomorrow,
      - nothing stored can be reversed to an IP or joined across days.
 
-   That is the Plausible/Fathom model. It keeps the site out of consent-
-   banner territory while still answering "how many people, from where". */
+   That is the Plausible/Fathom model, and on the ePrivacy reading that the
+   consent trigger is storing information on the device, it was already
+   compliant on its own.
+
+   It is nonetheless gated on explicit consent as of the consent banner, and
+   the daily-hash design applies ON TOP of that rather than instead of it: an
+   accepted visitor is still only ever a rotating hash, never an IP. */
 
 import { geo, sha256, clean, now, device } from '../_lib/util.js';
+import { consented } from '../_lib/consent.js';
 
 const ok = () => new Response(null, { status: 204, headers: { 'Cache-Control': 'no-store' } });
 
@@ -30,6 +36,11 @@ export async function onRequestPost(ctx) {
 
   // Do-Not-Track is honoured. Losing a few rows is the correct trade.
   if (request.headers.get('DNT') === '1') return ok();
+
+  /* No consent, no row. sendBeacon is same-origin credentialed by default and
+     the fetch fallback defaults to credentials:'same-origin', so the cookie
+     does reach us. Absent means undecided, which is not consent. */
+  if (!consented(request)) return ok();
 
   const day = new Date().toISOString().slice(0, 10);
   const salt = env.ANALYTICS_SALT || env.ADMIN_SECRET || 'globalex';

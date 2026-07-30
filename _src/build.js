@@ -7,6 +7,7 @@ const { header, footer, chrome, loader } = require("./shell");
 const { html, jsonScript, xml } = require("./esc");
 const S = require("./schema-org");
 const ogPlate = require("./og-plate");
+const consent = require("./consent");
 
 /* Repo root, derived rather than hardcoded — LOGO_B64 below reads through it
    at module load, so a wrong value fails at require() time, not at write. */
@@ -113,7 +114,7 @@ ${p.noindex ? `<meta name="robots" content="noindex, nofollow" />\n` : ""}<link 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="${FONTS}" rel="stylesheet" />
-${ld ? jsonScript(ld) + "\n" : ""}<style>${KCSS}${p.css || ""}</style>
+${ld ? jsonScript(ld) + "\n" : ""}<style>${KCSS}${consent.css}${p.css || ""}</style>
 </head>
 <body data-page="${p.page}">
 
@@ -129,8 +130,11 @@ ${p.draft ? `<div class="draft-flag" role="status">Draft &mdash; placeholder con
 
 ${footer()}
 
+${consent.html}
+
 ${three}<script>${KJS}</script>
 ${p.js ? `<script>${p.js}</script>` : ""}
+<script>${consent.js}</script>
 </body>
 </html>
 `;

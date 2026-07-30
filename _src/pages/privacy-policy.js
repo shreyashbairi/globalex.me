@@ -42,7 +42,7 @@ const SECTIONS = [
 <ol>
 <li><strong>Personal information.</strong> Name, email address, phone number, shipping address and payment details, collected when you interact with our services or make a purchase.</li>
 <li><strong>Log data.</strong> IP address, browser type, operating system, referring website, pages visited, and the dates and times of your visits &mdash; collected automatically.</li>
-<li><strong>Cookies and similar technologies.</strong> Used to collect information about your browsing activity. You can manage cookie preferences through your browser settings.</li>
+<li><strong>Cookies.</strong> We set two, both listed in <a href="#cookies">Cookies and consent</a> below. Neither is used for advertising and neither is shared. Analytics are not collected at all unless you agree.</li>
 </ol>`,
   ],
   [
@@ -130,6 +130,87 @@ const SECTIONS = [
     `
 <p>Questions or concerns about this policy or our privacy practices? Contact us at <a href="mailto:info@globalex.me">info@globalex.me</a> or <a href="tel:+97145667713">+971 4 566 7713</a>.</p>
 <p>By using our services you acknowledge that you have read and understood this Privacy Policy, and consent to the collection, use, disclosure and storage of your personal information as described here.</p>`,
+  ],
+  [
+    "cookies",
+    "Cookies and consent",
+    `
+<p>Two cookies, and no third-party trackers, tag managers or advertising
+pixels of any kind.</p>
+
+<div class="tbl-wrap" role="region" tabindex="0" aria-label="Cookies set by this site">
+<table class="tbl is-wide">
+<caption>Cookies set by globalex.me</caption>
+<thead><tr>
+<th scope="col">Name</th><th scope="col">Purpose</th>
+<th scope="col">Duration</th><th scope="col">Type</th>
+</tr></thead>
+<tbody>
+<tr>
+<th scope="row"><code>glx_consent</code></th>
+<td>Records whether you agreed to analytics, so you are not asked again.</td>
+<td class="num">12 months</td>
+<td class="sys">Strictly necessary</td>
+</tr>
+<tr>
+<th scope="row"><code>glx_admin</code></th>
+<td>Keeps a member of staff signed in to the internal dashboard. Never set for
+ordinary visitors.</td>
+<td class="num">Session</td>
+<td class="sys">Strictly necessary</td>
+</tr>
+</tbody></table>
+</div>
+
+<h3>The visitor identifier is not a cookie</h3>
+<p>When you have agreed to analytics, a page view is recorded against an
+identifier derived by hashing your IP address, your browser's user-agent
+string, a secret held only on our server, and the current date. That
+identifier is stored; the IP address and user agent are not.</p>
+<p>Because the date is part of the hash, the identifier changes at midnight
+UTC. The same person is a different identifier tomorrow, so visits cannot be
+joined across days, and the value cannot be reversed to recover an IP
+address. Nothing is written to your device by this mechanism &mdash; it is
+not a cookie, and clearing your cookies does not affect it.</p>
+
+<h3>Giving and withdrawing consent</h3>
+<p>Nothing is measured before you choose. Until you do, page views are held in
+your browser and discarded if you decline. Declining leaves the site fully
+functional &mdash; nothing here depends on analytics.</p>
+<p>You can change your mind at any time using the
+<button type="button" class="lk" data-cc-open>Cookie preferences</button>
+control, which also sits in the footer of every page. Withdrawing consent stops
+collection immediately.</p>
+<p>We also honour the <code>DNT</code> (Do Not Track) browser signal
+independently of the choice above.</p>
+
+<h3>How long we keep it</h3>
+<p><strong>[Retention period to be confirmed.]</strong> Page-view records and
+document-access records are held for a defined period and then deleted. That
+period is being set and will be stated here; if you need it before then, ask
+using the contact route below.</p>
+
+<h3>Who processes it on our behalf</h3>
+<p>Cloudflare, Inc. provides our hosting, database and file storage. Resend
+provides email delivery for document requests and enquiries. Both act on our
+instructions as processors. We do not sell or share personal data with anyone
+else.</p>
+`,
+  ],
+  [
+    "requests",
+    "Your rights and how to exercise them",
+    `
+<p>You can ask us what personal data we hold about you, ask for it to be
+corrected, ask for it to be deleted, or object to how it is used.</p>
+<p><strong>[Data-protection contact to be confirmed.]</strong> Requests should
+go to a named route rather than the general enquiry inbox, and that address is
+being set up. Until it is, write to
+<a href="mailto:info@globalex.me">info@globalex.me</a> marking the message for
+the attention of the data-protection contact, and it will be routed.</p>
+<p>We respond to a request within the period the applicable law requires. If we
+cannot act on a request we will explain why.</p>
+`,
   ],
 ];
 
