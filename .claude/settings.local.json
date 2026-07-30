@@ -85,7 +85,8 @@
       "Bash(curl -s \"http://localhost:8788/assets/og-default.svg\")",
       "Bash(pkill -f \"wrangler pages dev\")",
       "Bash(pkill -f \"http.server 8799\")",
-      "Bash(git merge *)"
+      "Bash(git merge *)",
+      "Bash(curl -s -o /dev/null -D - -m 15 https://globalex.me/)"
     ],
     "additionalDirectories": [
       "/tmp"

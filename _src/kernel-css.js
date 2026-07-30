@@ -688,6 +688,50 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
 .dr-k[data-kind=TDS],.dr-k[data-kind=SPEC]{color:var(--sand);
   border-color:rgba(217,183,120,.34);background:var(--sand-g)}
 
+/* origin ledger. Promoted from the homepage because the product pages render
+   the same row per origin; --led-cols lets each caller set its own column
+   template so the homepage renders byte-identically. */
+.led{display:grid;border-top:1px solid var(--line)}
+.led-r{display:grid;grid-template-columns:var(--led-cols,2.2rem 1.35fr .85fr 1.6fr auto);gap:clamp(.75rem,2vw,1.75rem);
+  align-items:center;padding:1.1rem .5rem;border-bottom:1px solid var(--line);
+  font-family:var(--f-mono);font-size:.765rem;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--haze-d);transition:background .38s var(--ease),color .38s}
+.led-r:hover{background:rgba(53,214,245,.04);color:var(--haze)}
+.led-r b{font-family:var(--f-disp);font-weight:700;font-size:1rem;letter-spacing:0;
+  font-variation-settings:'wdth' 106;color:var(--frost);text-transform:none}
+.led-r .co{color:var(--cyan)}
+.led-r .fl{justify-self:end;width:44px;height:1px;background:var(--line-2);position:relative}
+.led-r:hover .fl{background:var(--cyan)}
+.led-r .fl::after{content:'';position:absolute;right:0;top:-2.5px;width:6px;height:6px;
+  clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%);background:var(--line-2)}
+.led-r:hover .fl::after{background:var(--cyan)}
+@media (max-width:820px){
+  .led-r{grid-template-columns:2rem 1fr;gap:.3rem .9rem;padding-block:1.15rem}
+  .led-r .co,.led-r .cg{grid-column:2}
+  .led-r .fl{display:none}
+}
+
+/* numbered objective list. Promoted from the About page for compliance.html. */
+.obj{display:grid;counter-reset:o}
+.obj li{position:relative;display:grid;grid-template-columns:3rem 1fr;gap:1.5rem;
+  padding:1.5rem 0;border-bottom:1px solid var(--line);counter-increment:o;
+  transition:padding-left .4s var(--ease)}
+.obj li:first-child{border-top:1px solid var(--line)}
+.obj li:hover{padding-left:.6rem}
+.obj li::before{content:counter(o,decimal-leading-zero);font-family:var(--f-mono);font-size:.78rem;
+  letter-spacing:.12em;color:var(--cyan);padding-top:.35rem}
+.obj h4{margin-bottom:.35rem}
+.obj p{color:var(--haze);font-size:1.02rem;max-width:64ch}
+@media (max-width:560px){.obj li{grid-template-columns:2.2rem 1fr;gap:.9rem}}
+
+/* A grade heading on a class page links to that grade's own page. The row
+   keeps its id, so inbound links to the old anchor still land here. */
+.row-lk{color:inherit;transition:color .3s var(--ease)}
+.row-lk:hover{color:var(--cyan)}
+.row-lk::after{content:' →';font-family:var(--f-mono);font-size:.62em;opacity:0;
+  transition:opacity .3s var(--ease),margin-left .3s var(--ease);margin-left:-.25em}
+.row-lk:hover::after{opacity:1;margin-left:.15em}
+
 /* chips */
 .chips{display:flex;flex-wrap:wrap;gap:.4rem}
 .chip{display:inline-flex;align-items:center;gap:.45em;padding:.34em .7em;font-family:var(--f-mono);

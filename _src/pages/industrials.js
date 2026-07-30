@@ -9,7 +9,7 @@ const chem = (
 ) => `<article class="row chem" id="${c.id}" data-tags="${c.t.join(" ")}">
 <span class="row-ix">${String(i + 1).padStart(2, "0")}</span>
 <div class="row-b">
-  <div class="chem-h"><h3>${c.name}</h3><span class="formula">${c.f}</span></div>
+  <div class="chem-h"><h3><a class="row-lk" href="${c.url}">${c.name}</a></h3><span class="formula">${c.f}</span></div>
   <div class="chips">${c.specs.map((s) => `<span class="chip spec">${s}</span>`).join("")}</div>
   <p>${c.body}</p>
   ${c.origins.length ? `<div class="chips">${c.origins.map((o) => `<span class="chip org">${o}</span>`).join("")}</div>` : ""}

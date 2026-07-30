@@ -53,17 +53,7 @@ module.exports = {
   .val{border-right:0}.val:last-child{grid-column:auto}}
 
 /* objectives — genuinely ordered operating goals */
-.obj{display:grid;counter-reset:o}
-.obj li{position:relative;display:grid;grid-template-columns:3rem 1fr;gap:1.5rem;
-  padding:1.5rem 0;border-bottom:1px solid var(--line);counter-increment:o;
-  transition:padding-left .4s var(--ease)}
-.obj li:first-child{border-top:1px solid var(--line)}
-.obj li:hover{padding-left:.6rem}
-.obj li::before{content:counter(o,decimal-leading-zero);font-family:var(--f-mono);font-size:.78rem;
-  letter-spacing:.12em;color:var(--cyan);padding-top:.35rem}
-.obj h4{margin-bottom:.35rem}
-.obj p{color:var(--haze);font-size:1.02rem;max-width:64ch}
-@media (max-width:560px){.obj li{grid-template-columns:2.2rem 1fr;gap:.9rem}}
+/* .obj numbered list lives in kernel-css.js — compliance.html reuses it. */
 `,
 
   body: `

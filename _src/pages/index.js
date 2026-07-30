@@ -72,27 +72,7 @@ module.exports = {
 @keyframes cueRun{0%{transform:translateX(-12px)}100%{transform:translateX(38px)}}
 @media (max-width:1080px){.cue{display:none}}
 
-/* ---------- origin ledger ---------- */
-.led{display:grid;border-top:1px solid var(--line)}
-.led-r{display:grid;grid-template-columns:2.2rem 1.35fr .85fr 1.6fr auto;gap:clamp(.75rem,2vw,1.75rem);
-  align-items:center;padding:1.1rem .5rem;border-bottom:1px solid var(--line);
-  font-family:var(--f-mono);font-size:.765rem;letter-spacing:.1em;text-transform:uppercase;
-  color:var(--haze-d);transition:background .38s var(--ease),color .38s}
-.led-r:hover{background:rgba(53,214,245,.04);color:var(--haze)}
-.led-r b{font-family:var(--f-disp);font-weight:700;font-size:1rem;letter-spacing:0;
-  font-variation-settings:'wdth' 106;color:var(--frost);text-transform:none}
-.led-r .co{color:var(--cyan)}
-.led-r .fl{justify-self:end;width:44px;height:1px;background:var(--line-2);position:relative}
-.led-r:hover .fl{background:var(--cyan)}
-.led-r .fl::after{content:'';position:absolute;right:0;top:-2.5px;width:6px;height:6px;
-  background:currentColor;color:inherit;clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%);
-  background:var(--line-2)}
-.led-r:hover .fl::after{background:var(--cyan)}
-@media (max-width:820px){
-  .led-r{grid-template-columns:2rem 1fr;gap:.3rem .9rem;padding-block:1.15rem}
-  .led-r .co,.led-r .cg{grid-column:2}
-  .led-r .fl{display:none}
-}
+/* .led origin ledger lives in kernel-css.js — product pages reuse it. */
 
 /* ---------- procedure strip ---------- */
 .strip{display:grid;grid-template-columns:repeat(10,1fr);gap:0;border:1px solid var(--line);

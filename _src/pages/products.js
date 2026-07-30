@@ -15,6 +15,8 @@
 const { hero, cta } = require("../parts");
 const { CLASSES, plain } = require("../catalogue");
 const { DOCS } = require("../docs");
+const { groups, attrs } = require("../facets");
+const { on } = require("../flags");
 
 const TOTAL = CLASSES.reduce((n, c) => n + c.items.length, 0);
 
@@ -34,8 +36,8 @@ const haystack = (p, cls) =>
     ].join(" "),
   ).toLowerCase();
 
-const card = (p, cls, i) => `<a class="pc" href="${cls.href}#${p.id}"
- data-cat="${cls.key}" data-h="${haystack(p, cls)}" data-cur="Open grade">
+const card = (p, cls, i) => `<a class="pc" href="${p.url}"
+ data-cat="${cls.key}"${attrs(p, cls)} data-h="${haystack(p, cls)}" data-cur="Open grade">
 <span class="pc-top">
   <span class="pc-ix">${String(i + 1).padStart(2, "0")}</span>
   <span class="pc-cls${cls.tone === "sand" ? " mat" : ""}">${cls.title}</span>
@@ -120,12 +122,25 @@ module.exports = {
   color:var(--haze-d);border:1px solid var(--line);padding:.28em .5em}
 @media (max-width:620px){.psearch-k{display:none}}
 
-.pfilters{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;margin-top:1.15rem}
+.pfacets{display:flex;flex-wrap:wrap;gap:.5rem 1.35rem;align-items:center;margin-top:1.15rem}
+.pfg{display:flex;flex-wrap:wrap;gap:.4rem;align-items:center}
+.pfg-l{font-family:var(--f-mono);font-size:.65rem;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--steel);margin-right:.15rem}
+.pfg-x{margin-left:auto}
+/* a facet value nobody has data for. Named rather than hidden, so the gap is
+   visible to us every time we look at the page. */
+.pf.gap{border-style:dashed;color:var(--haze-d)}
+.pf.gap[aria-checked=true]{border-style:solid}
+.pf-doc{display:inline-flex;align-items:center;gap:.5em;cursor:pointer}
+.pf-doc input{width:13px;height:13px;accent-color:var(--cyan)}
+.pf-clr{border-color:rgba(217,183,120,.4);color:var(--sand)}
+.pf-clr[hidden]{display:none}
 .pf{font-family:var(--f-mono);font-size:.715rem;letter-spacing:.14em;text-transform:uppercase;
   padding:.5em .95em;border:1px solid var(--line);color:var(--haze-d);cursor:pointer;
   transition:border-color .3s,color .3s,background .3s}
 .pf:hover{border-color:var(--line-2);color:var(--frost)}
-.pf[data-on]{border-color:var(--cyan);color:var(--cyan);background:var(--cyan-g)}
+.pf[aria-checked=true]{border-color:var(--cyan);color:var(--cyan);background:var(--cyan-g)}
+.pf:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
 .pf b{font-weight:400;opacity:.65;margin-left:.45em}
 .pcount{font-family:var(--f-mono);font-size:.715rem;letter-spacing:.14em;text-transform:uppercase;
   color:var(--haze-d);margin-left:auto;padding-left:.6rem}
@@ -228,10 +243,24 @@ ${hero({
         <span class="psearch-k">${TOTAL} GRADES</span>
       </form>
 
-      <div class="pfilters">
-        <button class="pf" type="button" data-filter="all" data-on>All<b>${TOTAL + DOCS.length}</b></button>
-${CLASSES.map((c) => `        <button class="pf" type="button" data-filter="${c.key}">${c.title}<b>${c.items.length}</b></button>`).join("\n")}
-        <button class="pf" type="button" data-filter="documents">Documents<b>${DOCS.length}</b></button>
+      <div class="pfacets">
+${groups()
+  .map(
+    (g) => `        <div class="pfg" role="group" aria-labelledby="fg-${g.key}">
+          <span class="pfg-l" id="fg-${g.key}">${g.label}</span>
+${g.values
+  .map(
+    (v) =>
+      `          <button class="pf${v.gap ? " gap" : ""}" type="button" role="switch" aria-checked="false" data-fg="${g.key}" data-fv="${v.v}">${v.label}<b>${v.count}</b></button>`,
+  )
+  .join("\n")}
+        </div>`,
+  )
+  .join("\n")}
+        <div class="pfg pfg-x">
+          <label class="pf pf-doc"><input type="checkbox" data-docs checked /> Include documents</label>
+          <button class="pf pf-clr" type="button" data-clear-all hidden>Clear all <span aria-hidden="true">&times;</span></button>
+        </div>
         <span class="pcount" data-count aria-live="polite"></span>
       </div>
     </div>
@@ -275,19 +304,38 @@ ${cta({
 `,
 
   js: `
-/* Catalogue filtering. Every card carries its own lowercase haystack in
-   data-h, so a keystroke is one string scan per card and no re-render. */
+/* Faceted catalogue filtering.
+
+   Multi-select within a group (OR), intersected across groups (AND), composed
+   with the free-text box rather than replacing it. Every card carries its own
+   lowercase haystack and its facet values as attributes, so a keystroke is one
+   string scan and a few attribute reads per card — no re-render.
+
+   Active filters go into the query string with replaceState, not pushState:
+   otherwise Back would walk the visitor through every individual chip click. */
 window.glxPage = function(){
   var box = document.getElementById('pq');
   if (!box) return;
   var cards   = [].slice.call(document.querySelectorAll('.pc, .drow'));
-  var groups  = [].slice.call(document.querySelectorAll('.pcls'));
-  var filters = [].slice.call(document.querySelectorAll('[data-filter]'));
+  var groups  = [].slice.call(document.querySelectorAll('.pfg[role=group]'));
+  var chips   = [].slice.call(document.querySelectorAll('[data-fg]'));
+  var docsBox = document.querySelector('[data-docs]');
+  var clearAll= document.querySelector('[data-clear-all]');
+  var sections= [].slice.call(document.querySelectorAll('.pcls'));
   var countEl = document.querySelector('[data-count]');
   var noneEl  = document.querySelector('[data-none]');
   var noneQ   = document.querySelector('[data-none-q]');
   var clears  = [].slice.call(document.querySelectorAll('[data-clear]'));
-  var cat = 'all';
+  var TOTAL   = document.querySelectorAll('.pc').length;
+
+  /* group key -> Set of selected values */
+  var sel = {};
+  chips.forEach(function(c){ sel[c.getAttribute('data-fg')] = sel[c.getAttribute('data-fg')] || new Set(); });
+
+  function anySel(){
+    for (var k in sel) if (sel[k].size) return true;
+    return false;
+  }
 
   /* Every term must appear somewhere in the haystack, in any order, so
      "urea turkmenistan" narrows rather than widens. */
@@ -296,71 +344,126 @@ window.glxPage = function(){
     return true;
   }
 
+  /* AND across groups, OR within one. A card's attribute holds every value it
+     has for that group, space separated. */
+  function facetOk(card){
+    for (var k in sel){
+      if (!sel[k].size) continue;
+      var have = (card.getAttribute('data-f-' + k) || '').split(' ');
+      var any = false;
+      sel[k].forEach(function(v){ if (have.indexOf(v) >= 0) any = true; });
+      if (!any) return false;
+    }
+    return true;
+  }
+
   function apply(){
     var q = box.value.trim().toLowerCase();
-    var terms = q ? q.split(/\\s+/) : [];
-    var shown = 0;
+    var terms = q ? q.split(/\s+/) : [];
+    var showDocs = !docsBox || docsBox.checked;
+    var shown = 0, shownGrades = 0;
 
     cards.forEach(function(c){
-      var ok = (cat === 'all' || c.getAttribute('data-cat') === cat)
-        && (!terms.length || hit(c.getAttribute('data-h'), terms));
+      var isDoc = c.classList.contains('drow');
+      var ok;
+      if (isDoc){
+        /* Documents are not commodity grades, so the facets do not apply to
+           them — they are included or excluded, which is what the separate
+           toggle is for. */
+        ok = showDocs && (!terms.length || hit(c.getAttribute('data-h'), terms));
+      } else {
+        ok = facetOk(c) && (!terms.length || hit(c.getAttribute('data-h'), terms));
+      }
       c.hidden = !ok;
-      if (ok) shown++;
+      if (ok){ shown++; if (!isDoc) shownGrades++; }
     });
 
     /* A class with nothing left in it drops out entirely rather than leaving a
-       heading over empty space. The page-level empty state covers the case
-       where every class drops out. */
-    groups.forEach(function(g){
-      var live = g.querySelectorAll('.pc:not([hidden]), .drow:not([hidden])').length;
-      g.hidden = live === 0;
+       heading over empty space. */
+    sections.forEach(function(g){
+      g.hidden = g.querySelectorAll('.pc:not([hidden]), .drow:not([hidden])').length === 0;
     });
 
-    /* Then reveal the survivors. The site-wide scroll reveal holds .rvs
-       children at opacity 0 until their container intersects, and a container
-       that rises into view only because everything above it was filtered out
-       never trips the observer's threshold — so the single result somebody
-       searched for would render as blank space. Only while a search or filter
-       is active; an untouched page still reveals on scroll. */
-    if (terms.length || cat !== 'all'){
-      groups.forEach(function(g){
-        if (!g.hidden && window.glxReveal) window.glxReveal(g);
-      });
-    }
+    var active = terms.length > 0 || anySel() || !showDocs;
+
+    /* Reveal the survivors. The site-wide scroll reveal holds .rvs children at
+       opacity 0 until their container intersects, and a container that rises
+       into view only because everything above it was filtered out never trips
+       the observer — so a single result would render as blank space. */
+    if (active) sections.forEach(function(g){
+      if (!g.hidden && window.glxReveal) window.glxReveal(g);
+    });
 
     if (noneEl){
       noneEl.hidden = shown > 0;
       if (noneQ) noneQ.textContent = q ? '"' + box.value.trim() + '"' : 'that filter';
     }
-    if (countEl){
-      countEl.innerHTML = (terms.length || cat !== 'all')
-        ? '<b>' + shown + '</b> shown' : '';
-    }
+    if (countEl) countEl.innerHTML = active
+      ? '<b>' + shownGrades + '</b> of ' + TOTAL + ' grades' : '';
+    if (clearAll) clearAll.hidden = !active;
     var clr = document.querySelector('.psearch-clr');
     if (clr) clr.hidden = !q;
+
+    writeUrl(q, showDocs);
   }
+
+  /* Shareable state. replaceState so the Back button leaves the page rather
+     than stepping back through chip clicks. */
+  function writeUrl(q, showDocs){
+    var parts = [];
+    for (var k in sel) if (sel[k].size)
+      /* Array.from, not [].join.call: join needs .length and a Set has .size */
+      parts.push(k + '=' + encodeURIComponent(Array.from(sel[k]).join(',')));
+    if (q) parts.push('q=' + encodeURIComponent(q));
+    if (!showDocs) parts.push('docs=0');
+    var url = location.pathname + (parts.length ? '?' + parts.join('&') : '');
+    try { history.replaceState(null, '', url); } catch (e){}
+  }
+
+  function readUrl(){
+    var p = new URLSearchParams(location.search);
+    var q = p.get('q');
+    if (q){ box.value = q; }
+    if (p.get('docs') === '0' && docsBox) docsBox.checked = false;
+    chips.forEach(function(c){
+      var g = c.getAttribute('data-fg'), v = c.getAttribute('data-fv');
+      var want = (p.get(g) || '').split(',').indexOf(v) >= 0;
+      if (want){ sel[g].add(v); c.setAttribute('aria-checked','true'); }
+    });
+  }
+
+  chips.forEach(function(c){
+    c.addEventListener('click', function(){
+      var g = c.getAttribute('data-fg'), v = c.getAttribute('data-fv');
+      var nowOn = c.getAttribute('aria-checked') !== 'true';
+      c.setAttribute('aria-checked', nowOn ? 'true' : 'false');
+      if (nowOn) sel[g].add(v); else sel[g].delete(v);
+      apply();
+    });
+  });
+
+  if (docsBox) docsBox.addEventListener('change', apply);
+
+  if (clearAll) clearAll.addEventListener('click', function(){
+    chips.forEach(function(c){ c.setAttribute('aria-checked','false'); });
+    for (var k in sel) sel[k].clear();
+    box.value = '';
+    if (docsBox) docsBox.checked = true;
+    apply();
+    box.focus();
+  });
 
   box.addEventListener('input', apply);
   box.addEventListener('keydown', function(e){
     if (e.key === 'Escape'){ box.value = ''; apply(); }
   });
-
-  filters.forEach(function(b){
-    b.addEventListener('click', function(){
-      cat = b.getAttribute('data-filter');
-      filters.forEach(function(o){ o.toggleAttribute('data-on', o === b); });
-      apply();
-    });
-  });
-
   clears.forEach(function(b){
     b.addEventListener('click', function(){ box.value = ''; box.focus(); apply(); });
   });
 
-  /* Arriving from site search with ?q= should land already filtered. */
-  var q0 = new URLSearchParams(location.search).get('q');
-  if (q0){ box.value = q0; box.focus(); }
+  readUrl();
   apply();
+  if (new URLSearchParams(location.search).get('q')) box.focus();
 };
 `,
 };

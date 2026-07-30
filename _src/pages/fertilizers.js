@@ -7,7 +7,7 @@ const { FERTILIZERS: PRODUCTS } = require("../catalogue");
 const row = (p, i) => `<article class="row prod" id="${p.id}">
 <span class="row-ix">${String(i + 1).padStart(2, "0")}</span>
 <div class="row-b">
-  <h3>${p.name}</h3>
+  <h3><a class="row-lk" href="${p.url}">${p.name}</a></h3>
   <div class="chips">${p.specs.map((s) => `<span class="chip spec">${s}</span>`).join("")}</div>
   <p>${p.body}</p>
   <div class="chips">${p.origins.map((o) => `<span class="chip org">${o}</span>`).join("")}</div>

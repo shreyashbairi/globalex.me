@@ -6,7 +6,7 @@ const { POLYMERS } = require("../catalogue");
 const family = (p) => `<article class="fam-c" id="${p.id}">
   <div class="fam-vis"><span class="ix">${p.ix}</span><canvas data-poly="${p.vis}"></canvas></div>
   <div class="fam-b">
-    <h3>${p.name}</h3>
+    <h3><a class="row-lk" href="${p.url}">${p.name}</a></h3>
     <div class="chips">${p.specs.map((s) => `<span class="chip spec">${s}</span>`).join("")}</div>
     <p>${p.body}</p>
   </div>

@@ -48,6 +48,10 @@ const plain = (s) =>
     .replace(/\s+/g, " ")
     .trim();
 
+/* Per-grade page filename. One rule, exported, so the generator, the nav and
+   every link derive the same value — a grade cannot end up with two URLs. */
+const purl = (cat, id) => `${cat}-${id}.html`;
+
 // ------------------------------------------------------------------
 // Class 01 — Fertilizers
 // ------------------------------------------------------------------
@@ -104,7 +108,10 @@ const FERTILIZERS = [
     body: "Nitrogen, phosphorus and potassium in one granule, so every application delivers a balanced ration. The general-purpose workhorse across soil types and cropping systems.",
     alias: "npk 15-15-15 compound blend phosphorus",
   },
-].map((p) => ({ ...p, id: slug(p.name), cat: "fertilizers" }));
+].map((p) => {
+  const id = slug(p.name);
+  return { ...p, id, cat: "fertilizers", url: purl("fertilizers", id) };
+});
 
 // ------------------------------------------------------------------
 // Class 02 — Polymers
@@ -151,6 +158,7 @@ const POLYMERS = [
 ].map((p, i) => ({
   ...p,
   id: slug(p.name),
+  url: purl("polymers", slug(p.name)),
   cat: "polymers",
   origins: POLYMER_ORIGINS,
   ix: `${String(i + 1).padStart(2, "0")} &mdash; ${p.name}`,
@@ -316,6 +324,7 @@ const CHEMICALS = [
 ].map((c) => ({
   ...c,
   id: slug(c.name),
+  url: purl("industrials", slug(c.name)),
   cat: "industrials",
   /* A chemical's kind label is its sector tags, not an authored string. An
      unknown tag used to throw a bare TypeError at require() time with no
@@ -425,6 +434,24 @@ const PAGES = [
     "msds tds sds spec sheet datasheet safety data download documents",
   ],
   [
+    "logistics.html",
+    "Logistics & Shipping",
+    "Incoterms, load ports, shipping modes, packaging options and the documentation set behind every Globalex shipment.",
+    "incoterms fob cfr cif dap exw bill of lading certificate of origin packing list iso tank big bag break bulk containerised",
+  ],
+  [
+    "compliance.html",
+    "Compliance & Certifications",
+    "Freezone licensing, Dubai Customs registration, counterparty due diligence, sanctions screening and third-party inspection.",
+    "kyc ubo sanctions ofac eu un screening sgs intertek bureau veritas certificate of analysis anti-bribery trade controls",
+  ],
+  [
+    "news.html",
+    "News",
+    "Market notes and corridor updates from the Globalex trading desk.",
+    "market note corridor company product announcement",
+  ],
+  [
     "privacy-policy.html",
     "Privacy Policy",
     "How we collect, use and safeguard personal information.",
@@ -477,7 +504,7 @@ function searchIndex() {
       add({
         t: plain(p.name),
         k: plain(cls.title),
-        u: `${cls.href}#${p.id}`,
+        u: p.url,
         c: cls.key,
         d:
           plain(p.body)
@@ -521,6 +548,7 @@ function searchIndex() {
 module.exports = {
   slug,
   plain,
+  purl,
   SECTORS,
   FERTILIZERS,
   POLYMERS,

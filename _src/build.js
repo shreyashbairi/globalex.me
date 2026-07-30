@@ -143,6 +143,8 @@ ${p.js ? `<script>${p.js}</script>` : ""}
    page that was never written, and cannot omit one that was. */
 const MANIFEST = [];
 const SEEN = new Set();
+const HELD = [];
+const { CLASSES } = require("./catalogue");
 
 const mtimes = new Map();
 const mtime = (f) => {
@@ -272,7 +274,7 @@ function checkOgPlate() {
    the sitemap on every page of the site. Fail the build instead: flipping the
    switch too early should be a local error, not a live 404. */
 function checkFlags() {
-  const { PAGES } = require("./flags");
+  const { PAGES, SECTIONS } = require("./flags");
   const missing = Object.keys(PAGES).filter(
     (k) => PAGES[k] === true && !SEEN.has(`${k}.html`),
   );
@@ -282,9 +284,24 @@ function checkFlags() {
         `but _src/pages/${missing[0]}.js does not exist.\n` +
         `       Build the page first, or set the flag back to false.`,
     );
-  const off = Object.keys(PAGES).filter((k) => PAGES[k] !== true);
-  if (off.length)
-    console.log(`  flags: ${off.length} page(s) hidden — ${off.join(", ")}`);
+
+  /* Warn rather than fail: switching a section on while its data is still
+     "[--]" publishes an invented figure, which is the one failure mode §0.6
+     of the brief is written to prevent. */
+  if (SECTIONS.productSpecs) {
+    const { SPECS } = require("./specs");
+    const draft = Object.keys(SPECS).filter((k) => SPECS[k].DRAFT);
+    if (draft.length)
+      console.log(
+        `  ! productSpecs is ON but ${draft.length} grade(s) still carry DRAFT ` +
+          `placeholder figures — those tables will publish "[--]".`,
+      );
+  }
+
+  const offP = Object.keys(PAGES).filter((k) => PAGES[k] !== true);
+  const offS = Object.keys(SECTIONS).filter((k) => SECTIONS[k] !== true);
+  if (offP.length) console.log(`  flags: pages hidden — ${offP.join(", ")}`);
+  if (offS.length) console.log(`  flags: sections hidden — ${offS.join(", ")}`);
 }
 
 function emitSitemap() {
@@ -335,13 +352,39 @@ function main() {
   emitDocCatalogue();
   checkOgPlate();
 
+  const { pageLive } = require("./flags");
   const files = fs
     .readdirSync(path.join(HERE, "pages"))
     .filter((f) => f.endsWith(".js"))
     .sort();
   for (const f of files) {
     const mod = require(path.join(HERE, "pages", f));
+    /* A page switched off in flags.js is not written at all, rather than
+       written and left unlinked — an orphan URL is still a crawlable URL. */
+    if (mod.gate && !pageLive(mod.gate)) {
+      HELD.push(mod.page);
+      continue;
+    }
     emit(mod, [path.join(HERE, "pages", f)]);
+  }
+
+  /* Second pass: pages generated from data rather than authored one by one.
+     Both factories return the same object shape a page module exports, so
+     render() and emit() need no knowledge of where a page came from. */
+  const productPage = require("./product-page");
+  const SRC_PRODUCT = [
+    path.join(HERE, "catalogue.js"),
+    path.join(HERE, "specs.js"),
+    path.join(HERE, "product-page.js"),
+  ];
+  for (const cls of CLASSES)
+    for (const item of cls.items) emit(productPage(item, cls), SRC_PRODUCT);
+
+  if (pageLive("news")) {
+    const newsPost = require("./news-post");
+    const { NEWS } = require("./news");
+    const SRC_NEWS = [path.join(HERE, "news.js"), path.join(HERE, "news-post.js")];
+    for (const post of NEWS) emit(newsPost(post), SRC_NEWS);
   }
 
   emitAdmin();
