@@ -18,14 +18,15 @@
    ============================================================ */
 
 const { CLASSES } = require("./catalogue");
+const { pageLive } = require("./flags");
 
-/* Rows marked hold:true are declared but not yet linked — the page does not
-   exist. That keeps the intended IA visible in one place while the rendered
-   menu only offers pages that resolve, so there are no 404s in the header.
-   Building the page is then a one-word edit here.
+/* A row carrying `gate` is only rendered when its switch in _src/flags.js is
+   on. That keeps the intended IA visible here in full while the rendered menu
+   offers only pages that resolve, so there are no 404s in the header — and
+   publishing one is a one-word edit in flags.js, not a change to this tree.
 
-   The five held rows are the Phase 4 and Phase 5 pages, which are blocked on
-   company data rather than on engineering. */
+   The five gated rows are the Phase 4 and Phase 5 pages, blocked on company
+   data rather than on engineering. */
 const NAV = [
   {
     id: "company",
@@ -43,19 +44,19 @@ const NAV = [
         href: "leadership.html",
         label: "Leadership",
         desc: "The people behind the trades",
-        hold: true,
+        gate: "leadership",
       },
       {
         href: "locations.html",
         label: "Locations",
         desc: "Dubai HQ and origin desks",
-        hold: true,
+        gate: "locations",
       },
       {
         href: "news.html",
         label: "News",
         desc: "Market notes from the corridor",
-        hold: true,
+        gate: "news",
       },
       {
         href: "careers.html",
@@ -90,13 +91,13 @@ const NAV = [
         href: "logistics.html",
         label: "Logistics &amp; Shipping",
         desc: "Incoterms, load ports and packing",
-        hold: true,
+        gate: "logistics",
       },
       {
         href: "compliance.html",
         label: "Compliance &amp; Certifications",
         desc: "Licensing, KYC and inspection",
-        hold: true,
+        gate: "compliance",
       },
     ],
   },
@@ -115,7 +116,7 @@ const NAV = [
    this drops LABSA, SLES and Sulphuric Acid from the menu. */
 const MENU_GRADE_CAP = 8;
 
-const live = (n) => !n.hold;
+const live = (n) => !n.gate || pageLive(n.gate);
 
 /* The tree as rendered: held rows removed, and a top-level item with a menu
    that has lost every row degrades to a plain link rather than presenting an

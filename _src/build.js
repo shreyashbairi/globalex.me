@@ -267,6 +267,26 @@ function checkOgPlate() {
   }
 }
 
+/* A visibility switch in _src/flags.js turned on for a page that does not
+   exist would put a dead link in the header, the mobile nav, the footer and
+   the sitemap on every page of the site. Fail the build instead: flipping the
+   switch too early should be a local error, not a live 404. */
+function checkFlags() {
+  const { PAGES } = require("./flags");
+  const missing = Object.keys(PAGES).filter(
+    (k) => PAGES[k] === true && !SEEN.has(`${k}.html`),
+  );
+  if (missing.length)
+    throw new Error(
+      `build: flags.js switches on ${missing.map((m) => `"${m}"`).join(", ")}, ` +
+        `but _src/pages/${missing[0]}.js does not exist.\n` +
+        `       Build the page first, or set the flag back to false.`,
+    );
+  const off = Object.keys(PAGES).filter((k) => PAGES[k] !== true);
+  if (off.length)
+    console.log(`  flags: ${off.length} page(s) hidden — ${off.join(", ")}`);
+}
+
 function emitSitemap() {
   const rows = MANIFEST.filter((p) => !p.noindex);
   const body = rows
@@ -325,6 +345,7 @@ function main() {
   }
 
   emitAdmin();
+  checkFlags();
   emitSitemap();
   emitRobots();
 

@@ -82,7 +82,9 @@
       "Bash(curl -s http://localhost:8788/)",
       "Bash(npm test *)",
       "Bash(curl -s -o /dev/null -w \"  /assets/og-default.svg -> %{http_code}\\\\n\" http://localhost:8788/assets/og-default.svg)",
-      "Bash(curl -s \"http://localhost:8788/assets/og-default.svg\")"
+      "Bash(curl -s \"http://localhost:8788/assets/og-default.svg\")",
+      "Bash(pkill -f \"wrangler pages dev\")",
+      "Bash(pkill -f \"http.server 8799\")"
     ],
     "additionalDirectories": [
       "/tmp"

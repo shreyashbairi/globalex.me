@@ -275,17 +275,30 @@ if (!built) {
     );
   });
 
-  t("the held pages are declared in nav.js but linked nowhere", () => {
-    const { NAV } = require("./nav");
-    const held = NAV.flatMap((n) => (n.rows || []).filter((r) => r.hold)).map(
-      (r) => r.href,
-    );
-    assert.ok(held.length > 0, "expected some held rows while Phase 4/5 are pending");
-    for (const f of pages)
-      for (const h of held)
+  /* The switch has to actually hide things, or it is decoration. Every page
+     whose flag is off must appear nowhere in the shipped output. */
+  t("a page switched off in flags.js is linked from nowhere", () => {
+    const { PAGES } = require("./flags");
+    const off = Object.keys(PAGES).filter((k) => PAGES[k] !== true);
+    for (const f of all)
+      for (const k of off)
         assert.ok(
-          !read(f).includes(`href="${h}"`),
-          `${f} links to held page ${h}`,
+          !read(f).includes(`href="${k}.html"`),
+          `${f} links to ${k}.html, which flags.js has switched off`,
+        );
+    assert.ok(
+      !off.some((k) => read("sitemap.xml").includes(`/${k}<`)),
+      "sitemap lists a page that flags.js has switched off",
+    );
+  });
+
+  t("every page switched on in flags.js actually exists", () => {
+    const { PAGES } = require("./flags");
+    for (const [k, on] of Object.entries(PAGES))
+      if (on)
+        assert.ok(
+          fs.existsSync(path.join(ROOT, `${k}.html`)),
+          `flags.js switches on ${k} but ${k}.html was not built`,
         );
   });
 }
