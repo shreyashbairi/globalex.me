@@ -8,7 +8,7 @@ const { html, jsonScript, xml } = require("./esc");
 const S = require("./schema-org");
 const ogPlate = require("./og-plate");
 const consent = require("./consent");
-const { THEME } = require("./theme");
+const { THEME, POLARITY } = require("./theme");
 
 /* Repo root, derived rather than hardcoded — LOGO_B64 below reads through it
    at module load, so a wrong value fails at require() time, not at write. */
@@ -91,7 +91,7 @@ function render(p) {
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <meta name="theme-color" content="${THEME.pageBackground}" />
-<meta name="color-scheme" content="dark" />
+<meta name="color-scheme" content="${POLARITY}" />
 <title>${title}</title>
 <meta name="description" content="${desc}" />
 ${p.noindex ? `<meta name="robots" content="noindex, nofollow" />\n` : ""}<link rel="canonical" href="${canonical}" />
@@ -237,7 +237,7 @@ function emitAdmin() {
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="robots" content="noindex, nofollow" />
 <meta name="theme-color" content="${THEME.pageBackground}" />
-<meta name="color-scheme" content="dark" />
+<meta name="color-scheme" content="${POLARITY}" />
 <title>Control — Globalex Trading FZCO</title>
 <link rel="icon" type="image/svg+xml" href="${faviconPlate}" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />

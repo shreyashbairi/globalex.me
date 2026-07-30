@@ -38,7 +38,7 @@ module.exports = {
   border:1px solid var(--line)}
 .npk-b i::after{content:'';position:absolute;left:-1px;right:-1px;bottom:-1px;height:var(--v);
   min-height:2px;background:var(--sand);box-shadow:0 0 8px rgba(var(--sand-rgb),.5)}
-.npk-b b{font-family:var(--f-mono);font-size:.715rem;font-weight:500;color:var(--sand);letter-spacing:.1em}
+.npk-b b{font-family:var(--f-mono);font-size:.715rem;font-weight:500;color:var(--sand-t);letter-spacing:.1em}
 .npk-b em{font-style:normal;font-family:var(--f-mono);font-size:.67rem;color:var(--haze-d)}
 @media (max-width:760px){.npk{margin-top:.7rem}}
 

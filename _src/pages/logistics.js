@@ -147,7 +147,7 @@ ${crossCss}
 .pk-r{display:grid;grid-template-columns:auto 1fr;gap:1rem 1.4rem;align-items:baseline;
   padding:1rem 1.15rem;background:rgba(var(--deep-rgb),.72)}
 .pk-r b{font-family:var(--f-mono);font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;
-  color:var(--sand);white-space:nowrap}
+  color:var(--sand-t);white-space:nowrap}
 .pk-r span{color:var(--haze);font-size:.99rem}
 @media (max-width:640px){.pk-r{grid-template-columns:1fr;gap:.35rem}}
 

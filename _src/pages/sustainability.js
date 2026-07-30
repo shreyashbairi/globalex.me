@@ -76,7 +76,7 @@ module.exports = {
   clip-path:polygon(0 0,calc(100% - 18px) 0,100% 18px,100% 100%,18px 100%,0 calc(100% - 18px));
   transition:border-color .45s var(--ease),transform .55s var(--ease)}
 .cmt-c:hover{border-color:rgba(var(--sand-rgb),.42);transform:translateY(-4px)}
-.cmt-c svg{position:absolute;right:-30px;top:-30px;width:150px;height:150px;color:var(--sand);
+.cmt-c svg{position:absolute;right:-30px;top:-30px;width:150px;height:150px;color:var(--sand-t);
   opacity:.07;transition:opacity .55s var(--ease),transform .9s var(--ease)}
 .cmt-c:hover svg{opacity:.16;transform:rotate(45deg)}
 .cmt-c h3{font-size:1.22rem;line-height:1.2;max-width:20ch}
@@ -96,7 +96,7 @@ module.exports = {
   align-content:start;border-right:1px solid var(--line)}
 .lever div:last-child{border-right:0}
 .lever b{font-family:var(--f-mono);font-size:.715rem;letter-spacing:.18em;text-transform:uppercase;
-  color:var(--sand)}
+  color:var(--sand-t)}
 .lever p{color:var(--frost);font-family:var(--f-disp);font-weight:600;font-size:1.05rem;
   font-variation-settings:'wdth' 104;line-height:1.32}
 @media (max-width:820px){.lever{grid-template-columns:1fr}
@@ -106,7 +106,7 @@ module.exports = {
 .esg-d{display:grid;gap:.9rem;margin-top:.9rem;padding-top:.9rem;border-top:1px solid var(--line)}
 .esg-d>div{display:grid;gap:.2rem}
 .esg-d dt{font-family:var(--f-mono);font-size:.66rem;letter-spacing:.15em;text-transform:uppercase;
-  color:var(--sand)}
+  color:var(--sand-t)}
 .esg-d dd{color:var(--haze);font-size:.97rem}
 .cmt-c details{margin-top:.4rem}
 .cmt-c summary{display:flex;align-items:center;gap:.6rem;cursor:pointer;list-style:none;
@@ -114,7 +114,7 @@ module.exports = {
   color:var(--haze-d);transition:color .3s}
 .cmt-c summary::-webkit-details-marker{display:none}
 .cmt-c summary::marker{content:''}
-.cmt-c summary:hover,.cmt-c details[open] summary{color:var(--sand)}
+.cmt-c summary:hover,.cmt-c details[open] summary{color:var(--sand-t)}
 .cmt-c summary:focus-visible{outline:2px solid var(--sand);outline-offset:2px}
 /* the KPI caption under a metric that is not tracked yet */
 .stat em{font-style:normal;display:block;font-family:var(--f-mono);font-size:.62rem;

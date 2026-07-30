@@ -31,7 +31,7 @@ module.exports = {
 
   css: `
 .chem-h{display:flex;align-items:baseline;gap:.9rem;flex-wrap:wrap}
-.formula{font-family:var(--f-mono);font-size:.825rem;letter-spacing:.06em;color:var(--sand);
+.formula{font-family:var(--f-mono);font-size:.825rem;letter-spacing:.06em;color:var(--sand-t);
   padding:.2em .55em;border:1px solid rgba(var(--sand-rgb),.3);background:var(--sand-g)}
 .chem[hidden]{display:none}
 
@@ -55,7 +55,7 @@ module.exports = {
   align-content:start}
 .sect div:last-child{border-right:0}
 .sect b{font-family:var(--f-disp);font-weight:800;font-size:clamp(1.7rem,3.4vw,2.5rem);line-height:1;
-  font-variation-settings:'wdth' 118;color:var(--sand);font-variant-numeric:tabular-nums}
+  font-variation-settings:'wdth' 118;color:var(--sand-t);font-variant-numeric:tabular-nums}
 .sect span{font-family:var(--f-mono);font-size:.69rem;letter-spacing:.16em;text-transform:uppercase;
   color:var(--haze-d)}
 @media (max-width:820px){.sect{grid-template-columns:1fr 1fr}

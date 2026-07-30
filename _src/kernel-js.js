@@ -21,6 +21,10 @@ var TOUCH = matchMedia('(hover: none)').matches || innerWidth < 901;
 var GLXC = ${JSON.stringify(theme.jsPalette(), null, 0)};
 window.GLXC = GLXC;
 var PAL = GLXC.rgb;
+/* The ornament field was tuned against a dark ground; the same alpha over a
+   light one reads as loud wallpaper. Scaled from the active preset. */
+var ORN_SCALE = parseFloat(getComputedStyle(document.documentElement)
+  .getPropertyValue('--orn-scale')) || 1;
 
 /* ---------- procedural film grain ---------- */
 (function(){
@@ -855,7 +859,7 @@ function boot(){
     ornamentField(cv, {tone: cv.getAttribute('data-orn') || 'cyan',
       tile: +cv.getAttribute('data-tile') || 132,
       nodes: cv.hasAttribute('data-nodes') ? +cv.getAttribute('data-nodes') : 7,
-      alpha: +cv.getAttribute('data-alpha') || .30});
+      alpha: (+cv.getAttribute('data-alpha') || .30) * ORN_SCALE});
   });
   [].forEach.call(document.querySelectorAll('[data-lat]'), function(cv){
     latticeField(cv, {tone: cv.getAttribute('data-lat') || 'cyan',

@@ -386,6 +386,30 @@ t("theme: every custom property used in CSS is defined", () => {
   assert.strictEqual(missing.length, 0, "undefined: " + missing.join(", "));
 });
 
+/* A bare identifier inside a template literal emits its own name as text. In
+   an SVG attribute that is an invalid value which silently falls back — the
+   share card's gradient rendered a black corner for two commits because
+   stop-color=THEME.surfaceDeepest was never interpolated. */
+t("og plate: every SVG attribute value is quoted and interpolated", () => {
+  const svg = require("./og-plate").svg();
+  const bare = [...svg.matchAll(/(?:stop-color|fill|stroke|x|y|width|height)=(?!")[^\s>/]+/g)];
+  assert.strictEqual(
+    bare.length,
+    0,
+    "unquoted attribute value(s): " + bare.map((m) => m[0]).join(", "),
+  );
+  assert.ok(!svg.includes("THEME."), "an uninterpolated THEME reference reached the output");
+  /* and every colour it does emit must be a real hex */
+  for (const m of svg.matchAll(/(?:stop-color|fill|stroke)="([^"]+)"/g))
+    if (m[1] !== "none" && !m[1].startsWith("url("))
+      assert.match(m[1], /^#[0-9A-Fa-f]{6}$/, `bad colour ${m[1]}`);
+});
+
+/* The two presets have to stay swappable, which means the light one has to be
+   as readable as the dark one. Checked for whichever is active. */
+t("theme: the active preset names a polarity", () =>
+  assert.ok(["light", "dark"].includes(theme.POLARITY), theme.POLARITY));
+
 // ------------------------------------------------------------------- runner
 const failures = [];
 for (const [name, fn] of cases) {

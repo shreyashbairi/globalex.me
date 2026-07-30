@@ -24,7 +24,7 @@ const H = 630;
    rasterised on its own, outside any page, so there is no :root for a var() to
    resolve against. Recolouring the site therefore also recolours the share
    card — but the PNG has to be regenerated with `npm run og` for it to show. */
-const { THEME } = require("./theme");
+const { THEME, POLARITY } = require("./theme");
 const VOID = THEME.pageBackground;
 const DEEP = THEME.surfaceRaised;
 const CYAN = THEME.accentSystem;
@@ -32,6 +32,12 @@ const SAND = THEME.accentMaterial;
 const FROST = THEME.textHeading;
 const HAZE = THEME.textBody;
 const LINE = THEME.hairline;
+/* The far corner of the card gradient. surfaceDeepest means "a hole" and is
+   near-black, which is right on a dark palette and a harsh slab on a light
+   one — so on light the gradient only deepens to the sage band. */
+const FAR = POLARITY === "light" ? THEME.surfacePanel : THEME.surfaceDeepest;
+/* The origin strip is type, not a fill: gold on off-white is about 2:1. */
+const MATERIAL_TEXT = THEME.accentMaterialText;
 
 const TAGLINE = "The Caspian corridor, operated from Dubai.";
 
@@ -65,7 +71,7 @@ function svg() {
       `<linearGradient id="g" x1="0" y1="0" x2="1" y2="1">` +
       `<stop offset="0" stop-color="${DEEP}"/>` +
       `<stop offset=".55" stop-color="${VOID}"/>` +
-      `<stop offset="1" stop-color=THEME.surfaceDeepest/>` +
+      `<stop offset="1" stop-color="${FAR}"/>` +
       `</linearGradient>` +
       /* the corridor sweep: cyan inbound, sand outbound, same law as the site */
       `<linearGradient id="arc" x1="0" y1="0" x2="1" y2="0">` +
@@ -156,7 +162,7 @@ function svg() {
   // footer strip
   parts.push(
     `<text x="112" y="536" font-family="${mono}" font-size="18" letter-spacing="3.4" ` +
-      `fill="${SAND}">TURKMENISTAN &#183; UZBEKISTAN &#183; KAZAKHSTAN &#183; AZERBAIJAN</text>`,
+      `fill="${MATERIAL_TEXT}">TURKMENISTAN &#183; UZBEKISTAN &#183; KAZAKHSTAN &#183; AZERBAIJAN</text>`,
   );
   parts.push(
     `<text x="112" y="566" font-family="${mono}" font-size="16" letter-spacing="3" ` +

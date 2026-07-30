@@ -73,7 +73,7 @@ module.exports = {
 .loc-c .map{margin-top:1.1rem}
 .map{position:relative;aspect-ratio:16/9;border:1px solid var(--line);overflow:hidden}
 .map iframe{position:absolute;inset:0;width:100%;height:100%;border:0;
-  filter:grayscale(1) invert(.92) hue-rotate(165deg) saturate(1.5) brightness(.86) contrast(1.05)}
+  filter:grayscale(1) invert(var(--map-invert)) hue-rotate(var(--map-hue)) saturate(1.5) brightness(var(--map-brightness)) contrast(1.05)}
 .map-tag{position:absolute;left:0;bottom:0;z-index:2;padding:.5rem .8rem;
   background:rgba(var(--void-rgb),.86);font-family:var(--f-mono);font-size:.66rem;
   letter-spacing:.15em;text-transform:uppercase;color:var(--haze)}

@@ -124,7 +124,7 @@ ${crossCss}
   border-left:2px solid var(--cyan);background:rgba(var(--deep-rgb),.5);display:grid;gap:.85rem}
 .pos-c h3{font-size:var(--t-h4)}
 .pos-c p{color:var(--haze);max-width:74ch}
-.pos-c.mat{border-left-color:var(--sand)}
+.pos-c.mat{border-left-color:var(--sand-t)}
 `,
 
   body: `

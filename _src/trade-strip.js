@@ -77,7 +77,7 @@ const crossCss = `
 .xs-c i{font-style:normal;margin-top:.35rem;font-family:var(--f-mono);font-size:.66rem;
   letter-spacing:.15em;text-transform:uppercase;color:var(--cyan)}
 .xs-c.is-here{background:rgba(var(--panel-rgb),.5)}
-.xs-c.is-here i{color:var(--sand)}
+.xs-c.is-here i{color:var(--sand-t)}
 .xs-c.is-here b{color:var(--haze)}
 `;
 

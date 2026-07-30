@@ -109,7 +109,7 @@ const CSS = `
 .pp-dl dt{color:var(--haze);font-size:.95rem;min-width:0}
 .pp-dl dd{font-family:var(--f-mono);font-size:.79rem;color:var(--frost);text-align:right;
   white-space:nowrap;flex:none}
-.pp-dl dd.mat{color:var(--sand)}
+.pp-dl dd.mat{color:var(--sand-t)}
 
 /* the "no figures yet" panel that stands in for the tables */
 .pp-req{display:grid;gap:.9rem;padding:clamp(1.5rem,3vw,2.3rem);border:1px dashed var(--line-2);

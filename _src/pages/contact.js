@@ -17,7 +17,7 @@ module.exports = {
 .map{position:relative;border:1px solid var(--line);overflow:hidden;aspect-ratio:4/3;
   clip-path:polygon(0 0,calc(100% - 20px) 0,100% 20px,100% 100%,20px 100%,0 calc(100% - 20px))}
 .map iframe{position:absolute;inset:0;width:100%;height:100%;border:0;
-  filter:grayscale(1) invert(.92) hue-rotate(165deg) saturate(1.5) brightness(.86) contrast(1.05)}
+  filter:grayscale(1) invert(var(--map-invert)) hue-rotate(var(--map-hue)) saturate(1.5) brightness(var(--map-brightness)) contrast(1.05)}
 .map-tag{position:absolute;top:12px;left:12px;z-index:2;padding:.4em .75em;font-family:var(--f-mono);
   font-size:.67rem;letter-spacing:.17em;text-transform:uppercase;background:rgba(var(--void-rgb),.86);
   border:1px solid var(--line-2);color:var(--cyan);pointer-events:none}
@@ -25,7 +25,7 @@ module.exports = {
 /* the one owned photograph on the site, treated to sit in the palette */
 .plate{position:relative;border:1px solid var(--line);overflow:hidden;aspect-ratio:16/9;
   clip-path:polygon(0 0,calc(100% - 20px) 0,100% 20px,100% 100%,20px 100%,0 calc(100% - 20px))}
-.plate img{width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.12) brightness(.72)}
+.plate img{width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(var(--photo-contrast)) brightness(var(--photo-brightness))}
 .plate::after{content:'';position:absolute;inset:0;
   background:linear-gradient(155deg,rgba(var(--cyan-rgb),.34),rgba(var(--void-rgb),.5) 55%,rgba(var(--sand-rgb),.2));
   mix-blend-mode:color}

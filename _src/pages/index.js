@@ -37,13 +37,13 @@ module.exports = {
 .g-labels{position:absolute;inset:0;z-index:2;pointer-events:none}
 .g-lab{position:absolute;top:0;left:0;display:flex;align-items:center;gap:7px;
   font-family:var(--f-mono);font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;
-  white-space:nowrap;color:var(--haze);opacity:0;transition:opacity .45s var(--ease),color .3s;
+  white-space:nowrap;color:var(--glabel);opacity:0;transition:opacity .45s var(--ease),color .3s;
   will-change:transform}
 .g-lab::before{content:'';width:1px;height:11px;background:currentColor;opacity:.5}
 .g-lab[data-flip]{flex-direction:row-reverse}
 .g-lab[data-on]{opacity:1}
-.g-lab[data-hub]{color:var(--frost);font-size:.76rem;letter-spacing:.2em}
-.g-lab[data-out]{color:var(--sand-d)}
+.g-lab[data-hub]{color:var(--glabel-hub);font-size:.76rem;letter-spacing:.2em}
+.g-lab[data-out]{color:var(--sand-t)}
 @media (max-width:820px){.g-lab{display:none}}
 
 /* hero telemetry readout */
@@ -55,7 +55,7 @@ module.exports = {
 .hud-r dt{color:var(--haze-d)}
 .hud-r dd{color:var(--frost)}
 .hud-r dd.sys{color:var(--cyan)}
-.hud-r dd.mat{color:var(--sand)}
+.hud-r dd.mat{color:var(--sand-t)}
 .hud-legend{display:flex;gap:1.25rem;margin-top:.85rem;padding-top:.75rem;border-top:1px solid var(--line);
   font-family:var(--f-mono);font-size:.64rem;letter-spacing:.15em;text-transform:uppercase;
   color:var(--haze-d);flex-wrap:wrap}
@@ -490,6 +490,13 @@ function globeFallback(cv){
 }
 
 function buildGlobe(){
+  /* The globe is built out of six additively-blended materials. Additive
+     blending adds light: an arc glows against a near-black sphere and
+     disappears against a pale one, because adding to near-white is still
+     near-white. On a light palette every one of them draws normally instead,
+     darker than the sphere, and the thin ones need more opacity to hold. */
+  var LIGHT = GLXC.polarity === 'light';
+  var BLEND = LIGHT ? THREE.NormalBlending : THREE.AdditiveBlending;
   var cv = document.getElementById('globe');
   if (!cv) return;
   var labelBox = document.getElementById('glabels');
@@ -526,7 +533,7 @@ function buildGlobe(){
   /* --- occluding core so back-side points hide --- */
   var core = new THREE.Mesh(
     new THREE.SphereGeometry(.985, 64, 48),
-    new THREE.MeshBasicMaterial({color:new THREE.Color(GLXC.int.abyss)})
+    new THREE.MeshBasicMaterial({color:new THREE.Color(GLXC.int.globeCore)})
   );
   inner.add(core);
 
@@ -534,7 +541,7 @@ function buildGlobe(){
   var atmo = new THREE.Mesh(
     new THREE.SphereGeometry(1.06, 64, 48),
     new THREE.ShaderMaterial({
-      transparent:true, blending:THREE.AdditiveBlending, side:THREE.BackSide, depthWrite:false,
+      transparent:true, blending:BLEND, side:THREE.BackSide, depthWrite:false,
       uniforms:{uC:{value:new THREE.Color(GLXC.int.cyan)}},
       vertexShader:[
         'varying vec3 vN; varying vec3 vP;',
@@ -597,7 +604,7 @@ function buildGlobe(){
     var g = new THREE.BufferGeometry().setFromPoints(pts);
     ar.line = new THREE.Line(g, new THREE.LineBasicMaterial({
       color: ar.kind === 'in' ? GLXC.int.cyan : GLXC.int.sand,
-      transparent:true, opacity:.34, blending:THREE.AdditiveBlending, depthWrite:false
+      transparent:true, opacity:LIGHT?.8:.34, blending:BLEND, depthWrite:false
     }));
     inner.add(ar.line);
   });
@@ -626,7 +633,7 @@ function buildGlobe(){
     g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
     g.setAttribute('aGlow', new THREE.Float32BufferAttribute(glow, 1));
     var m = new THREE.ShaderMaterial({
-      transparent:true, depthWrite:false, blending:THREE.AdditiveBlending,
+      transparent:true, depthWrite:false, blending:BLEND,
       uniforms:{uPx:uPx, uDim:{value:new THREE.Color(GLXC.int.globeSurface)}, uHot:{value:new THREE.Color(GLXC.int.globeGlow)}},
       vertexShader:[
         'attribute float aGlow; varying float vG; uniform float uPx;',
@@ -668,7 +675,7 @@ function buildGlobe(){
     flowGeo.setAttribute('position', new THREE.BufferAttribute(flowPos, 3));
     flowGeo.setAttribute('aCol', new THREE.BufferAttribute(col, 3));
     var m = new THREE.ShaderMaterial({
-      transparent:true, depthWrite:false, blending:THREE.AdditiveBlending,
+      transparent:true, depthWrite:false, blending:BLEND,
       uniforms:{uPx:uPx},
       vertexShader:[
         'attribute vec3 aCol; varying vec3 vC; uniform float uPx;',
@@ -700,7 +707,7 @@ function buildGlobe(){
     var m = new THREE.Mesh(
       new THREE.PlaneGeometry(size, size),
       new THREE.MeshBasicMaterial({color:col, transparent:true, opacity:.95,
-        blending:THREE.AdditiveBlending, depthWrite:false, side:THREE.DoubleSide})
+        blending:BLEND, depthWrite:false, side:THREE.DoubleSide})
     );
     m.position.copy(v);
     m.lookAt(v.clone().multiplyScalar(2));
@@ -710,7 +717,7 @@ function buildGlobe(){
     var tg = new THREE.BufferGeometry().setFromPoints([
       v.clone(), v.clone().normalize().multiplyScalar(isHub ? 1.13 : 1.07)]);
     inner.add(new THREE.Line(tg, new THREE.LineBasicMaterial({
-      color:col, transparent:true, opacity:.5, blending:THREE.AdditiveBlending, depthWrite:false})));
+      color:col, transparent:true, opacity:LIGHT?.85:.5, blending:BLEND, depthWrite:false})));
 
     var lab = document.createElement('div');
     lab.className = 'g-lab';

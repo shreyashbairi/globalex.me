@@ -133,7 +133,7 @@ module.exports = {
 .tm-c:hover{border-color:var(--line-2);transform:translateY(-4px)}
 .tm-p{position:relative;aspect-ratio:4/5;overflow:hidden;background:var(--void)}
 .tm-p img,.tm-p svg{width:100%;height:100%;object-fit:cover;display:block}
-.tm-p img{filter:grayscale(1) contrast(1.12) brightness(.72)}
+.tm-p img{filter:grayscale(1) contrast(var(--photo-contrast)) brightness(var(--photo-brightness))}
 .tm-p::after{content:'';position:absolute;inset:0;
   background:linear-gradient(155deg,rgba(var(--cyan-rgb),.34),rgba(var(--void-rgb),.5) 55%,rgba(var(--sand-rgb),.2));
   mix-blend-mode:color}

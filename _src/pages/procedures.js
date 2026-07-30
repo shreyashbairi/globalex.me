@@ -125,7 +125,7 @@ module.exports = {
 .step-n i{font-family:var(--f-mono);font-style:normal;font-size:.69rem;letter-spacing:.16em;
   color:var(--haze-d)}
 .step-tag{font-family:var(--f-mono);font-size:.69rem;letter-spacing:.17em;text-transform:uppercase;
-  color:var(--sand);padding:.3em .6em;border:1px solid rgba(var(--sand-rgb),.3);background:var(--sand-g);
+  color:var(--sand-t);padding:.3em .6em;border:1px solid rgba(var(--sand-rgb),.3);background:var(--sand-g);
   justify-self:start}
 .step h3{font-size:1.28rem;line-height:1.16}
 .step p{color:var(--haze);font-size:1rem;line-height:1.56}

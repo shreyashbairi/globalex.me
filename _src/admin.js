@@ -88,7 +88,7 @@ section{margin-bottom:clamp(1.7rem,3.4vw,2.6rem)}
   font-size:clamp(1.6rem,3.4vw,2.15rem);line-height:1.1;margin-top:.5rem;
   font-variant-numeric:tabular-nums}
 .kpi.hi b{color:var(--cyan)}
-.kpi.mat b{color:var(--sand)}
+.kpi.mat b{color:var(--sand-t)}
 
 /* ---------- chart ---------- */
 .chart{border:1px solid var(--line);background:var(--deep);padding:1rem;height:250px;position:relative}
@@ -114,7 +114,7 @@ td.em small{display:block;font-weight:400;color:var(--haze-d);font-size:.76rem;m
 .k{font-family:var(--f-mono);font-size:.645rem;letter-spacing:.14em;padding:.24em .5em;
   border:1px solid rgba(var(--cyan-rgb),.3);color:var(--cyan);background:rgba(var(--cyan-rgb),.07);
   white-space:nowrap}
-.k[data-kind=TDS],.k[data-kind=SPEC]{color:var(--sand);border-color:rgba(var(--sand-rgb),.34);
+.k[data-kind=TDS],.k[data-kind=SPEC]{color:var(--sand-t);border-color:rgba(var(--sand-rgb),.34);
   background:rgba(var(--sand-rgb),.1)}
 .pill{font-family:var(--f-mono);font-size:.645rem;letter-spacing:.1em;padding:.2em .5em;
   border:1px solid var(--line-2);color:var(--haze-d)}
@@ -157,7 +157,7 @@ td.em small{display:block;font-weight:400;color:var(--haze-d);font-size:.76rem;m
 .share-meta{font-family:var(--f-mono);font-size:.72rem;letter-spacing:.1em;color:var(--haze-d);
   margin-top:.75rem;display:flex;gap:1.1rem;flex-wrap:wrap}
 .share-meta b{color:var(--haze);font-weight:500}
-.share-warn{color:var(--sand);font-size:.84rem;margin-top:.7rem;line-height:1.5}
+.share-warn{color:var(--sand-t);font-size:.84rem;margin-top:.7rem;line-height:1.5}
 
 /* ---------- drill-down ---------- */
 .dd{position:fixed;inset:0;z-index:40;display:grid;justify-items:end;

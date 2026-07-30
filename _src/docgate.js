@@ -253,7 +253,7 @@ const modal = `<div class="gate" id="gate" role="dialog" aria-modal="true" aria-
 
 <div data-when="error">
   <div class="gate-ok">
-    <i aria-hidden="true" style="border-color:var(--sand);color:var(--sand)"><b>!</b></i>
+    <i aria-hidden="true" style="border-color:var(--sand-t);color:var(--sand-t)"><b>!</b></i>
     <h4>That did not go through</h4>
     <p data-g-err>Something broke on our side.</p>
     <div class="btns" style="justify-content:center;margin-top:.9rem">
