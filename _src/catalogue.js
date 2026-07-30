@@ -41,7 +41,9 @@ const plain = (s) =>
     .replace(/&#8327;/g, "7")
     .replace(/&#8328;/g, "8")
     .replace(/&#8329;/g, "9")
-    .replace(/&#8330;/g, "0")
+    /* U+208A is subscript PLUS, not a tenth digit. It used to fold to "0",
+       which made any formula containing it unsearchable by its real text. */
+    .replace(/&#8330;/g, "+")
     .replace(/&[a-z]+;|&#\d+;/gi, " ")
     .replace(/\s+/g, " ")
     .trim();
@@ -241,7 +243,7 @@ const CHEMICALS = [
   },
   {
     name: "LABSA",
-    f: "C&#8321;&#8328;H&#8330;&#8320;O&#8323;S",
+    f: "C&#8321;&#8328;H&#8323;&#8320;O&#8323;S",
     specs: ["96% purity"],
     t: ["care"],
     origins: [],
@@ -315,8 +317,18 @@ const CHEMICALS = [
   ...c,
   id: slug(c.name),
   cat: "industrials",
+  /* A chemical's kind label is its sector tags, not an authored string. An
+     unknown tag used to throw a bare TypeError at require() time with no
+     grade name in the trace — name the offender instead. */
   kind: c.t
-    .map((k) => plain(SECTORS.find((s) => s[0] === k)[1]))
+    .map((k) => {
+      const s = SECTORS.find((row) => row[0] === k);
+      if (!s)
+        throw new Error(
+          `catalogue: "${c.name}" has sector tag "${k}", which is not in SECTORS`,
+        );
+      return plain(s[1]);
+    })
     .join(" &middot; "),
 }));
 

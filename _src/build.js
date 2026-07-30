@@ -5,7 +5,9 @@ const KCSS = require("./kernel-css");
 const KJS = require("./kernel-js");
 const { gul, header, footer, chrome, loader } = require("./shell");
 
-const OUT = "/Users/Shreyash/Desktop/Globalex/globalex.me";
+/* Repo root, derived rather than hardcoded — LOGO_B64 below reads through it
+   at module load, so a wrong value fails at require() time, not at write. */
+const OUT = path.resolve(__dirname, "..");
 const HERE = __dirname;
 
 const FONTS =

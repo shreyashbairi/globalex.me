@@ -8,7 +8,10 @@ node_modules
 .gitignore
 .claude
 DEPLOY.md
+globalex-upgrade-prompt.md
+globalex-upgrade-data-checklist.md
 schema.sql
 wrangler.toml
 package.json
 package-lock.json
+.gitattributes

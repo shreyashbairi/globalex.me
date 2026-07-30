@@ -58,7 +58,11 @@
       "Bash(sort -k1 -n -r)",
       "WebFetch(domain:hexagon-group.com)",
       "Bash(git add *)",
-      "Bash(git commit *)"
+      "Bash(git commit *)",
+      "Bash(git checkout *)",
+      "Bash(git rm *)",
+      "Bash(npm run *)",
+      "Bash(git diff *)"
     ],
     "additionalDirectories": [
       "/tmp"
