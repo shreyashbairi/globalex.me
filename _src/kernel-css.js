@@ -280,22 +280,89 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
   transition:color .3s var(--ease)}
 .nl::after{content:'';position:absolute;left:.7rem;right:.7rem;bottom:.28rem;height:1px;
   background:var(--cyan);transform:scaleX(0);transform-origin:left;transition:transform .4s var(--ease)}
-.nl:hover,.nl[data-cur]{color:var(--frost)}
-.nl:hover::after,.nl[data-cur]::after{transform:scaleX(1)}
-.nl[data-cur]{color:var(--cyan)}
+/* data-on, not data-cur: kernel-js reads data-cur as the custom-cursor tag
+   label, so a nav item carrying a value there would print it beside the
+   pointer. data-on is what .pf, .srch-o and .dr already use for this state. */
+.nl:hover,.nl[data-on]{color:var(--frost)}
+.nl:hover::after,.nl[data-on]::after{transform:scaleX(1)}
+.nl[data-on]{color:var(--cyan)}
 
-.has-menu{position:relative}
-.menu{position:absolute;top:calc(100% + 12px);left:-.7rem;width:330px;padding:.5rem;
-  background:rgba(20,53,68,.96);backdrop-filter:blur(22px);border:1px solid var(--line);
-  opacity:0;visibility:hidden;transform:translateY(-8px);transition:.34s var(--ease);
-  clip-path:polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,0 100%)}
-.has-menu:hover .menu,.has-menu:focus-within .menu{opacity:1;visibility:visible;transform:none}
+/* ---------- dropdowns and mega-menus ----------
+   The panel is hidden with the hidden attribute and transitioned with
+   data-open, the same two-state pattern the search overlay uses. The old
+   version was visibility-only with no script behind it, which meant it
+   claimed role="menu" keyboard semantics it did not implement. */
+.has-menu{position:relative;display:flex;align-items:center}
+.nl-x{flex:none;width:20px;height:26px;display:grid;place-items:center;margin-left:-.5rem;
+  color:var(--haze-d);transition:color .3s,transform .3s var(--ease);cursor:pointer}
+.nl-x i{width:6px;height:6px;border-right:1.4px solid currentColor;
+  border-bottom:1.4px solid currentColor;transform:rotate(45deg) translate(-1px,-1px)}
+.has-menu:hover .nl-x,.nl-x:focus-visible{color:var(--cyan)}
+.nl-x[aria-expanded=true]{color:var(--cyan);transform:rotate(180deg)}
+.nl-x:focus-visible{outline:2px solid var(--cyan);outline-offset:1px}
+
+.menu{position:absolute;top:calc(100% + 12px);left:-.7rem;width:340px;padding:.5rem;z-index:4;
+  background:rgba(var(--deep-rgb),.97);backdrop-filter:blur(22px);border:1px solid var(--line-2);
+  opacity:0;transform:translateY(-8px);transition:opacity .26s var(--ease),transform .26s var(--ease);
+  clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,0 100%)}
+.menu[hidden]{display:none}
+.menu[data-open]{opacity:1;transform:none}
+.menu-l{display:grid}
 .menu a{display:grid;gap:2px;padding:.8rem .85rem;border-left:1px solid transparent;
   transition:background .28s,border-color .28s}
-.menu a:hover{background:rgba(53,214,245,.06);border-left-color:var(--cyan)}
-.menu a b{font-family:var(--f-disp);font-weight:700;font-size:.99rem;font-variation-settings:'wdth' 106}
-.menu a small{font-family:var(--f-mono);font-size:.69rem;letter-spacing:.11em;color:var(--haze-d);
-  text-transform:uppercase}
+.menu a:hover,.menu a:focus-visible{background:rgba(53,214,245,.06);border-left-color:var(--cyan)}
+.menu a:focus-visible{outline:none;background:rgba(53,214,245,.1)}
+.menu a b{display:block;font-family:var(--f-disp);font-weight:700;font-size:.99rem;
+  font-variation-settings:'wdth' 106;color:var(--frost)}
+.menu a small{display:block;font-family:var(--f-mono);font-size:.69rem;letter-spacing:.11em;
+  color:var(--haze-d);text-transform:uppercase}
+
+/* the full-bleed Products panel. Anchored to the header rather than the item,
+   so it spans the page instead of hanging off one nav link. */
+.menu.mm{position:fixed;left:var(--frame);right:var(--frame);width:auto;
+  top:calc(var(--frame) + 68px);padding:clamp(1.2rem,2vw,1.9rem);
+  clip-path:polygon(0 0,calc(100% - 20px) 0,100% 20px,100% 100%,20px 100%,0 calc(100% - 20px))}
+.mm-grid{display:grid;grid-template-columns:repeat(3,1fr) 1.15fr;gap:clamp(1rem,2vw,2.2rem)}
+@media (max-width:1240px){.mm-grid{grid-template-columns:repeat(2,1fr)}}
+.mm-col{min-width:0}
+.mm-h{display:grid;grid-template-columns:auto 1fr;gap:0 .6rem;padding:0 0 .7rem;
+  border-bottom:1px solid var(--line);border-left:0}
+.mm-h:hover,.mm-h:focus-visible{background:none;border-left:0}
+.mm-no{grid-row:1/3;font-family:var(--f-mono);font-size:.7rem;letter-spacing:.14em;
+  color:var(--cyan);padding-top:.2rem}
+.mm-h.mat .mm-no{color:var(--sand)}
+.mm-h b{font-size:1.04rem}
+.mm-h:hover b{color:var(--cyan)}
+.mm-h.mat:hover b{color:var(--sand)}
+.mm-l{display:grid;gap:0;margin-top:.35rem}
+.mm-l a{padding:.4rem .5rem;font-size:.95rem;color:var(--haze);border-left:1px solid transparent;
+  transition:color .26s,background .26s,border-color .26s}
+.mm-l a:hover,.mm-l a:focus-visible{color:var(--frost);background:rgba(53,214,245,.06);
+  border-left-color:var(--cyan)}
+/* two classes, so this outbids .mm-l a on specificity rather than with
+   !important; inline-flex keeps the arrow on the label's line.
+   NB this file is one JS template literal — no backticks in comments. */
+.mm-l .mm-more{display:inline-flex;align-items:center;gap:.5em;white-space:nowrap;
+  font-family:var(--f-mono);font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--cyan);margin-top:.2rem}
+
+.mm-feat{display:grid;gap:.8rem;align-content:start}
+.mm-card{position:relative;overflow:hidden;padding:1.1rem;border:1px solid var(--line);
+  background:rgba(var(--panel-rgb),.5);border-left:1px solid var(--line);
+  clip-path:polygon(0 0,calc(100% - 14px) 0,100% 14px,100% 100%,14px 100%,0 calc(100% - 14px))}
+.mm-card canvas{position:absolute;inset:0;width:100%;height:100%;opacity:.5}
+.mm-card-b{position:relative;display:grid;gap:.45rem}
+.mm-card:hover{border-color:var(--line-2);background:rgba(var(--panel-rgb),.7)}
+.mm-card .lk{margin-top:.35rem;justify-self:start}
+.mm-doc b{color:var(--frost)}
+
+/* Under reduced motion the panel appears without travel. The global rule
+   already flattens the duration; this drops the transform so it does not
+   snap in from an offset position. */
+@media (prefers-reduced-motion:reduce){
+  .menu{transform:none}
+  .nl-x[aria-expanded=true]{transform:none}
+}
 
 /* ============ buttons ============ */
 .btn{position:relative;display:inline-flex;align-items:center;gap:.7em;
@@ -355,6 +422,36 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
 .mnav a i{font-family:var(--f-mono);font-size:.69rem;font-style:normal;letter-spacing:.14em;
   color:var(--cyan);opacity:.55}
 .mnav a:hover{color:var(--cyan)}
+
+/* Collapsible groups, so the four-item IA survives on a phone. Only the four
+   groups are numbered — a running counter across every leaf would print
+   twenty numerals and stop meaning anything. */
+.mnav-g summary{display:flex;align-items:baseline;gap:1rem;padding:.5rem 0;cursor:pointer;
+  list-style:none;font-family:var(--f-disp);font-weight:700;
+  font-size:clamp(1.6rem,7.5vw,2.6rem);font-variation-settings:'wdth' 112;
+  letter-spacing:-.025em;color:var(--frost);opacity:0;transform:translateY(24px);
+  transition:opacity .5s var(--ease),transform .5s var(--ease),color .3s}
+.mnav[data-open] .mnav-g summary{opacity:1;transform:none}
+.mnav-g summary::-webkit-details-marker{display:none}
+.mnav-g summary::marker{content:''}
+.mnav-g summary:hover{color:var(--cyan)}
+.mnav-g summary:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
+.mnav-g summary i{font-family:var(--f-mono);font-size:.69rem;font-style:normal;
+  letter-spacing:.14em;color:var(--cyan);opacity:.55}
+/* margin-right so the rotated glyph never presses the panel edge, and the
+   long labels ("Sustainability") keep a hair of slack at 390px */
+.mnav-g summary .ac-i{margin-left:auto;margin-right:.35rem;align-self:center;flex:none;
+  width:10px;height:10px;color:var(--haze-d);
+  border-right:1.6px solid currentColor;border-bottom:1.6px solid currentColor;
+  transform:rotate(45deg);transition:transform .3s var(--ease),color .3s}
+.mnav-g[open] summary .ac-i{transform:rotate(225deg);color:var(--cyan)}
+.mnav-g[open] summary{color:var(--cyan)}
+/* leaves: quieter than the group heads, and always revealed once the panel is
+   open — they are inside a details that the user just opened */
+.mnav-s{display:grid;gap:.1rem;padding:.2rem 0 .9rem 2.1rem;
+  border-left:1px solid var(--line);margin-left:.35rem}
+.mnav-s a{font-size:1.06rem;font-family:var(--f-body);font-weight:500;letter-spacing:0;
+  color:var(--haze);padding:.42rem 0;opacity:1;transform:none}
 .mnav-f{margin-top:2rem;display:grid;gap:.5rem;font-family:var(--f-mono);font-size:.75rem;
   letter-spacing:.13em;text-transform:uppercase;color:var(--haze-d);opacity:0;transition:opacity .6s .35s}
 .mnav[data-open] .mnav-f{opacity:1}
@@ -704,9 +801,14 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
 /* ============ footer ============ */
 .ftr{position:relative;z-index:1;padding-top:clamp(3.5rem,7vw,6rem);padding-bottom:2rem;
   border-top:1px solid var(--line);background:linear-gradient(180deg,rgba(20,53,68,0),rgba(20,53,68,.7))}
-.ftr-g{display:grid;gap:clamp(2rem,4vw,3.5rem);grid-template-columns:1.5fr .8fr .8fr 1.1fr;
+/* brand, then the three IA columns, then the Dubai desk */
+.ftr-g{display:grid;gap:clamp(1.6rem,3vw,3rem);grid-template-columns:1.35fr .75fr .75fr .75fr 1.05fr;
   padding-bottom:clamp(2.5rem,5vw,4rem)}
-@media (max-width:960px){.ftr-g{grid-template-columns:1fr 1fr}}
+/* the brand cell spans the row so the three link columns stay side by side
+   for one more step before they stack */
+@media (max-width:1180px){.ftr-g{grid-template-columns:repeat(3,1fr)}
+  .ftr-g>:first-child{grid-column:1/-1}}
+@media (max-width:760px){.ftr-g{grid-template-columns:1fr 1fr}}
 @media (max-width:560px){.ftr-g{grid-template-columns:1fr}}
 .ftr-blurb{margin-top:1.15rem;max-width:38ch;color:var(--haze);font-size:.98rem}
 .ftr-col h6{font-family:var(--f-mono);font-size:.715rem;font-weight:500;letter-spacing:.2em;

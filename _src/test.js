@@ -119,6 +119,28 @@ t("catalogue: every grade id is a safe filename stem", () => {
 t("slug: folds entities rather than transliterating them", () =>
   assert.strictEqual(slug("Urea B &middot; N46"), "urea-b-n46"));
 
+// ------------------------------------------------------- template-literal files
+/* kernel-css.js and kernel-js.js are each one big JS template literal. A stray
+   backtick anywhere in them — including inside a CSS or JS comment — ends the
+   string and the build dies with a syntax error pointing at the wrong thing.
+   Cheap to assert, and it has already happened once. */
+t("kernel files contain no backticks beyond the two that open and close them", () => {
+  const fsx = require("fs");
+  const px = require("path");
+  for (const f of ["kernel-css.js", "kernel-js.js"]) {
+    const lines = fsx
+      .readFileSync(px.join(__dirname, f), "utf8")
+      .split("\n")
+      .map((l, i) => [i + 1, l])
+      .filter(([, l]) => l.includes("`"));
+    assert.strictEqual(
+      lines.length,
+      2,
+      `${f}: backticks on lines ${lines.map(([n]) => n).join(", ")} — expected only the open and close`,
+    );
+  }
+});
+
 // ------------------------------------------------------------- generated SEO
 /* These read the built output, so they only mean something after a build.
    Skipped rather than failed when it has not run, so `npm test` is useful on
@@ -213,6 +235,46 @@ if (!built) {
   t("no page leaks the literal word undefined", () => {
     for (const f of pages)
       assert.ok(!read(f).includes(">undefined<"), `${f} renders "undefined"`);
+  });
+
+  /* nav.js declares the full intended IA but marks unbuilt pages hold:true and
+     renders only the live rows. This is the check that the hold actually holds:
+     every internal link in the shipped chrome must resolve to a real file. */
+  t("every internal link resolves to a file that exists", () => {
+    const missing = new Map();
+    for (const f of pages) {
+      const s = read(f);
+      for (const m of s.matchAll(/href="([^"#?:][^"]*)"/g)) {
+        const href = m[1];
+        if (/^(https?:|mailto:|tel:|data:|\/\/)/.test(href)) continue;
+        const target = href.split("#")[0].split("?")[0];
+        if (!target || !target.endsWith(".html")) continue;
+        if (!fs.existsSync(path.join(ROOT, target)))
+          missing.set(target, (missing.get(target) || new Set()).add(f));
+      }
+    }
+    assert.strictEqual(
+      missing.size,
+      0,
+      "dead links: " +
+        [...missing]
+          .map(([t2, from]) => `${t2} (from ${[...from].join(", ")})`)
+          .join("; "),
+    );
+  });
+
+  t("the held pages are declared in nav.js but linked nowhere", () => {
+    const { NAV } = require("./nav");
+    const held = NAV.flatMap((n) => (n.rows || []).filter((r) => r.hold)).map(
+      (r) => r.href,
+    );
+    assert.ok(held.length > 0, "expected some held rows while Phase 4/5 are pending");
+    for (const f of pages)
+      for (const h of held)
+        assert.ok(
+          !read(f).includes(`href="${h}"`),
+          `${f} links to held page ${h}`,
+        );
   });
 }
 

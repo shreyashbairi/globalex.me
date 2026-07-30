@@ -156,6 +156,154 @@ var PAL = {cyan:'53,214,245', sand:'217,183,120'};
   addEventListener('keydown', function(e){ if (e.key === 'Escape') set(false); });
 })();
 
+/* ---------- header mega-menus ----------
+   Modelled on the search overlay below, which is this codebase's reference
+   for a scripted disclosure: the hidden attribute does the real hiding, a
+   data-open attribute drives the transition, and focus is restored to
+   whatever opened the panel.
+
+   The previous dropdown was CSS hover and :focus-within only, yet declared
+   role="menu" and role="menuitem" — an ARIA contract promising arrow-key
+   navigation that nothing implemented. That is why the roving tabindex here
+   is not optional: the roles are only honest if the keys work. */
+(function(){
+  var groups = [].slice.call(document.querySelectorAll('.has-menu[data-menu]'));
+  if (!groups.length) return;
+
+  var OPEN_MS = 120;   // hover intent, so a passing pointer does not open it
+  var SHUT_MS = 240;   // grace, so a diagonal path to a row does not lose it
+  var open = null, t = null;
+
+  function items(g){
+    /* Visible rows only, so a row inside a hidden panel is never a target —
+       the same offsetParent test docgate's focus trap uses. */
+    return [].filter.call(g.panel.querySelectorAll('[role=menuitem]'), function(n){
+      return n.offsetParent !== null;
+    });
+  }
+
+  function show(g){
+    if (open && open !== g) hide(open, true);
+    clearTimeout(t);
+    if (open === g) return;
+    g.panel.hidden = false;
+    /* Two frames: the element must be laid out before the transition class
+       lands, or it appears at its final position with no travel. */
+    requestAnimationFrame(function(){
+      requestAnimationFrame(function(){ g.panel.setAttribute('data-open',''); });
+    });
+    g.btn.setAttribute('aria-expanded','true');
+    open = g;
+  }
+
+  function hide(g, now){
+    if (!g) return;
+    clearTimeout(g.t);
+    g.panel.removeAttribute('data-open');
+    g.btn.setAttribute('aria-expanded','false');
+    /* RM is checked because the global reduced-motion rule flattens every
+       transition to 0.001ms — waiting the full duration there would leave the
+       panel present but invisible, swallowing clicks. */
+    var wait = (now || RM) ? 0 : 260;
+    g.t = setTimeout(function(){
+      if (!g.panel.hasAttribute('data-open')) g.panel.hidden = true;
+    }, wait);
+    if (open === g) open = null;
+  }
+
+  function focusItem(g, i){
+    var list = items(g);
+    if (!list.length) return;
+    var n = (i + list.length) % list.length;
+    list.forEach(function(el, k){ el.tabIndex = k === n ? 0 : -1; });
+    list[n].focus();
+  }
+
+  groups.forEach(function(g0){
+    var g = {
+      el: g0,
+      btn: g0.querySelector('.nl-x'),
+      panel: g0.querySelector('.menu'),
+      link: g0.querySelector('.nl'),
+      t: null,
+    };
+    if (!g.btn || !g.panel) return;
+    g0.__g = g;
+
+    g.btn.addEventListener('click', function(e){
+      e.preventDefault();
+      if (open === g) hide(g, true); else show(g);
+    });
+
+    /* Hover opens on the whole group, including the panel, so travelling from
+       the trigger into a row never crosses a gap that closes it. */
+    g0.addEventListener('mouseenter', function(){
+      clearTimeout(t);
+      t = setTimeout(function(){ show(g); }, OPEN_MS);
+    });
+    g0.addEventListener('mouseleave', function(){
+      clearTimeout(t);
+      t = setTimeout(function(){ hide(g); }, SHUT_MS);
+    });
+
+    g.btn.addEventListener('keydown', function(e){
+      if (e.key === 'ArrowDown' || e.key === 'Enter' || e.key === ' '){
+        e.preventDefault();
+        show(g);
+        setTimeout(function(){ focusItem(g, 0); }, 0);
+      } else if (e.key === 'ArrowUp'){
+        e.preventDefault();
+        show(g);
+        setTimeout(function(){ focusItem(g, -1); }, 0);
+      }
+    });
+
+    g.panel.addEventListener('keydown', function(e){
+      var list = items(g), i = list.indexOf(document.activeElement);
+      if (e.key === 'ArrowDown'){ e.preventDefault(); focusItem(g, i + 1); }
+      else if (e.key === 'ArrowUp'){ e.preventDefault(); focusItem(g, i - 1); }
+      else if (e.key === 'Home'){ e.preventDefault(); focusItem(g, 0); }
+      else if (e.key === 'End'){ e.preventDefault(); focusItem(g, -1); }
+      else if (e.key === 'Escape'){
+        e.preventDefault();
+        hide(g, true);
+        g.btn.focus();
+      } else if (e.key === 'Tab'){
+        /* Tab leaves the menu rather than cycling inside it: this is a
+           navigation menu, not a modal, so the rest of the page stays
+           reachable. */
+        hide(g, true);
+      }
+    });
+
+    /* Focus moving out of the group by any route closes it. Deferred one tick
+       because relatedTarget is unreliable across browsers for this. */
+    g0.addEventListener('focusout', function(){
+      setTimeout(function(){
+        if (open === g && !g0.contains(document.activeElement)) hide(g, true);
+      }, 0);
+    });
+
+    g.panel.addEventListener('click', function(e){
+      if (e.target.closest('a')) hide(g, true);
+    });
+  });
+
+  document.addEventListener('click', function(e){
+    if (open && !open.el.contains(e.target)) hide(open, true);
+  });
+  addEventListener('keydown', function(e){
+    if (e.key === 'Escape' && open){
+      var g = open;
+      hide(g, true);
+      g.btn.focus();
+    }
+  });
+  /* A resize below the desktop breakpoint hides .nav outright; drop any open
+     panel so it is not left expanded when the layout comes back. */
+  addEventListener('resize', function(){ if (open) hide(open, true); });
+})();
+
 /* ---------- site search ----------
    Every product, document and page is in GLXSEARCH with a pre-lowercased
    haystack, so a query is a scan of ~50 short strings — fast enough to run

@@ -1,21 +1,12 @@
 // Shared chrome: mark, header, search, mobile nav, footer, frame, loader.
-const NAV = [
-  ["index.html", "Home"],
-  ["about.html", "About"],
-  ["__products__", "Products"],
-  ["procedures.html", "Procedures"],
-  ["sustainability.html", "Sustainability"],
-  ["careers.html", "Careers"],
-];
-
-/* The dropdown leads with the index page rather than jumping straight into
-   Fertilizers — the header used to imply fertilizer was the whole book. */
-const PRODUCTS = [
-  ["products.html", "All products", "Search 24 grades"],
-  ["fertilizers.html", "Fertilizers", "5 grades · Caspian origin"],
-  ["polymers.html", "Polymers", "PE · PP · Additives"],
-  ["industrials.html", "Industrial Chemicals", "16 specialty grades"],
-];
+// The IA itself lives in _src/nav.js — this file only renders it.
+const { CLASSES } = require("./catalogue");
+const {
+  NAV_LIVE,
+  ownerOf,
+  footerColumns,
+  MENU_GRADE_CAP,
+} = require("./nav");
 
 /* The company mark — the supplied logo file, used as-is.
    Native raster is 70x60, so every placement is a whole-ratio scale of that. */
@@ -24,23 +15,117 @@ const gul = () =>
 
 const magnifier = `<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="10.5" cy="10.5" r="6.75"/><path d="M15.4 15.4 21 21"/></svg>`;
 
-function header(page) {
-  const links = NAV.map(([href, label]) => {
-    if (href === "__products__") {
-      const cur = [
-        "products",
-        "fertilizers",
-        "polymers",
-        "industrials",
-      ].includes(page);
-      return `<li class="has-menu">
-<a class="nl"${cur ? " data-cur" : ""} href="products.html" aria-haspopup="true">Products</a>
-<div class="menu" role="menu">
-${PRODUCTS.map(([h, t, s]) => `<a role="menuitem" href="${h}"><b>${t}</b><small>${s}</small></a>`).join("\n")}
-</div></li>`;
-    }
-    const cur = href === `${page}.html`;
-    return `<li><a class="nl"${cur ? ' data-cur aria-current="page"' : ""} href="${href}">${label}</a></li>`;
+/* A row inside a dropdown or mega-menu column. role="menuitem" is honoured by
+   the roving-tabindex implementation in kernel-js — tabindex is -1 here and
+   the open panel promotes exactly one item to 0. */
+const menuRow = (r) =>
+  `<a role="menuitem" tabindex="-1" href="${r.href}"><b>${r.label}</b>${
+    r.desc ? `<small>${r.desc}</small>` : ""
+  }</a>`;
+
+/* One Products column per commodity class, driven entirely by CLASSES. The
+   grade list is capped so the panel stays a menu rather than becoming the
+   products page; the overflow link is generated from the real remainder, so
+   it cannot claim the wrong number. */
+const productColumn = (cls) => {
+  const shown = cls.items.slice(0, MENU_GRADE_CAP);
+  const rest = cls.items.length - shown.length;
+  return `<div class="mm-col">
+<a class="mm-h${cls.tone === "sand" ? " mat" : ""}" href="${cls.href}">
+<span class="mm-no">${cls.no}</span><b>${cls.title}</b><small>${cls.count}</small>
+</a>
+<ul class="mm-l">
+${shown
+  .map(
+    (p) =>
+      `<li><a role="menuitem" tabindex="-1" href="${p.url || `${cls.href}#${p.id}`}">${p.name}</a></li>`,
+  )
+  .join("\n")}
+${
+  rest > 0
+    ? `<li><a class="mm-more" role="menuitem" tabindex="-1" href="${cls.href}">+ ${rest} more <span class="ar">&rarr;</span></a></li>`
+    : ""
+}
+</ul>
+</div>`;
+};
+
+/* The fourth column: a static canvas ornament, the document register and the
+   full index. data-orn is the shared ornament stage from kernel-js, not a
+   second three.js instance — the WebGL budget belongs to the homepage. */
+const featuredColumn = () => `<div class="mm-col mm-feat">
+<a class="mm-card" href="products.html">
+<canvas data-orn="cyan" data-tile="104" data-nodes="4" data-alpha="0.3" aria-hidden="true"></canvas>
+<span class="mm-card-b">
+<b>The whole book</b>
+<small>Search every grade by name, formula, application or origin</small>
+<span class="lk">All products <span class="ar">&rarr;</span></span>
+</span>
+</a>
+<a class="mm-doc" role="menuitem" tabindex="-1" href="index.html#specifications">
+<b>Document register</b><small>MSDS, TDS and specifications on request</small>
+</a>
+</div>`;
+
+function header(page, navOwner) {
+  const owner = ownerOf(page, navOwner);
+
+  const items = NAV_LIVE.map((n) => {
+    /* Exact page match takes aria-current; an ancestor match gets the visual
+       state only. Two aria-current="page" links on one page is a spec
+       violation and a screen reader announces both. */
+    const exact = n.href === `${page}.html`;
+    const on = exact || owner === n.id;
+    const state = exact ? ' data-on aria-current="page"' : on ? " data-on" : "";
+
+    if (n.kind === "link")
+      return `<li><a class="nl"${state} href="${n.href}">${n.label}</a></li>`;
+
+    const panelId = `mm-${n.id}`;
+    const mega = n.kind === "mega";
+    const body = mega
+      ? `<div class="mm-grid">
+${CLASSES.map(productColumn).join("\n")}
+${featuredColumn()}
+</div>`
+      : `<div class="menu-l">
+${n.rows.map(menuRow).join("\n")}
+</div>`;
+
+    /* The label stays a real link — Products *is* products.html — and the
+       disclosure is a separate button beside it. That is the only
+       arrangement where both "click the label to go to the page" and
+       "open the panel from the keyboard" are true at once. */
+    return `<li class="has-menu" data-menu>
+<a class="nl"${state} href="${n.href}">${n.label}</a>
+<button class="nl-x" type="button" aria-haspopup="true" aria-expanded="false"
+ aria-controls="${panelId}" aria-label="Open the ${n.label} menu"><i></i></button>
+<div class="menu${mega ? " mm" : ""}" id="${panelId}" role="menu"
+ aria-label="${n.label}" hidden>${body}</div>
+</li>`;
+  }).join("\n");
+
+  /* Mobile. Groups are numbered, leaves are not: a running counter over
+     twenty leaves reads as noise, where four group numerals keep the
+     original treatment and make the boundaries legible. */
+  const mobile = NAV_LIVE.map((n, i) => {
+    const no = String(i + 1).padStart(2, "0");
+    if (n.kind === "link")
+      return `<a class="mnav-lk" href="${n.href}"><i>${no}</i>${n.label}</a>`;
+
+    const rows =
+      n.kind === "mega"
+        ? [{ href: "products.html", label: "All products" }].concat(
+            CLASSES.map((c) => ({ href: c.href, label: c.title })),
+          )
+        : n.rows;
+
+    return `<details class="mnav-g">
+<summary><i>${no}</i>${n.label}<span class="ac-i" aria-hidden="true"></span></summary>
+<div class="mnav-s">
+${rows.map((r) => `<a href="${r.href}">${r.label}</a>`).join("\n")}
+</div>
+</details>`;
   }).join("\n");
 
   return `<header class="hdr">
@@ -56,7 +141,7 @@ ${magnifier}
 <kbd>&#8984;K</kbd>
 </button>
 <nav class="nav" aria-label="Primary">
-<ul class="nav-l">${links}</ul>
+<ul class="nav-l">${items}</ul>
 <a href="contact.html" class="btn btn-p btn-sm" data-mag="5">Get in touch <span class="ar">&rarr;</span></a>
 </nav>
 <button class="tog" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mnav"><i></i><i></i></button>
@@ -65,16 +150,9 @@ ${magnifier}
 </header>
 
 <nav id="mnav" class="mnav" aria-label="Mobile">
-<a href="index.html"><i>01</i>Home</a>
-<a href="about.html"><i>02</i>About</a>
-<a href="products.html"><i>03</i>Products</a>
-<a href="fertilizers.html"><i>04</i>Fertilizers</a>
-<a href="polymers.html"><i>05</i>Polymers</a>
-<a href="industrials.html"><i>06</i>Industrials</a>
-<a href="procedures.html"><i>07</i>Procedures</a>
-<a href="sustainability.html"><i>08</i>Sustainability</a>
-<a href="careers.html"><i>09</i>Careers</a>
-<a href="contact.html"><i>10</i>Contact</a>
+<a class="mnav-lk" href="index.html"><i>00</i>Home</a>
+${mobile}
+<a class="mnav-lk" href="contact.html"><i>&rarr;</i>Contact</a>
 <div class="mnav-f">
 <span>info@globalex.me</span>
 <span>+971 4 566 7713</span>
@@ -129,26 +207,16 @@ ${gul()}
 <span class="chip org">Dubai Chambers</span>
 </div>
 </div>
-<div class="ftr-col">
-<h6>Commodities</h6>
+${footerColumns()
+  .map(
+    (c) => `<div class="ftr-col">
+<h6>${c.title}</h6>
 <ul>
-<li><a href="products.html">All products</a></li>
-<li><a href="fertilizers.html">Fertilizers</a></li>
-<li><a href="polymers.html">Polymers</a></li>
-<li><a href="industrials.html">Industrial Chemicals</a></li>
-<li><a href="procedures.html">Trade Procedures</a></li>
-<li><a href="index.html#specifications">Specifications &amp; MSDS</a></li>
+${c.links.map((l) => `<li><a href="${l.href}">${l.label}</a></li>`).join("\n")}
 </ul>
-</div>
-<div class="ftr-col">
-<h6>Company</h6>
-<ul>
-<li><a href="about.html">About</a></li>
-<li><a href="sustainability.html">Sustainability</a></li>
-<li><a href="careers.html">Careers</a></li>
-<li><a href="contact.html">Contact</a></li>
-</ul>
-</div>
+</div>`,
+  )
+  .join("\n")}
 <div class="ftr-col">
 <h6>Dubai Desk</h6>
 <span class="ftr-line hi"><a href="tel:+97145667713">+971 4 566 7713</a></span>

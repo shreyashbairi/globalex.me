@@ -310,22 +310,89 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
   transition:color .3s var(--ease)}
 .nl::after{content:'';position:absolute;left:.7rem;right:.7rem;bottom:.28rem;height:1px;
   background:var(--cyan);transform:scaleX(0);transform-origin:left;transition:transform .4s var(--ease)}
-.nl:hover,.nl[data-cur]{color:var(--frost)}
-.nl:hover::after,.nl[data-cur]::after{transform:scaleX(1)}
-.nl[data-cur]{color:var(--cyan)}
+/* data-on, not data-cur: kernel-js reads data-cur as the custom-cursor tag
+   label, so a nav item carrying a value there would print it beside the
+   pointer. data-on is what .pf, .srch-o and .dr already use for this state. */
+.nl:hover,.nl[data-on]{color:var(--frost)}
+.nl:hover::after,.nl[data-on]::after{transform:scaleX(1)}
+.nl[data-on]{color:var(--cyan)}
 
-.has-menu{position:relative}
-.menu{position:absolute;top:calc(100% + 12px);left:-.7rem;width:330px;padding:.5rem;
-  background:rgba(20,53,68,.96);backdrop-filter:blur(22px);border:1px solid var(--line);
-  opacity:0;visibility:hidden;transform:translateY(-8px);transition:.34s var(--ease);
-  clip-path:polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,0 100%)}
-.has-menu:hover .menu,.has-menu:focus-within .menu{opacity:1;visibility:visible;transform:none}
+/* ---------- dropdowns and mega-menus ----------
+   The panel is hidden with the hidden attribute and transitioned with
+   data-open, the same two-state pattern the search overlay uses. The old
+   version was visibility-only with no script behind it, which meant it
+   claimed role="menu" keyboard semantics it did not implement. */
+.has-menu{position:relative;display:flex;align-items:center}
+.nl-x{flex:none;width:20px;height:26px;display:grid;place-items:center;margin-left:-.5rem;
+  color:var(--haze-d);transition:color .3s,transform .3s var(--ease);cursor:pointer}
+.nl-x i{width:6px;height:6px;border-right:1.4px solid currentColor;
+  border-bottom:1.4px solid currentColor;transform:rotate(45deg) translate(-1px,-1px)}
+.has-menu:hover .nl-x,.nl-x:focus-visible{color:var(--cyan)}
+.nl-x[aria-expanded=true]{color:var(--cyan);transform:rotate(180deg)}
+.nl-x:focus-visible{outline:2px solid var(--cyan);outline-offset:1px}
+
+.menu{position:absolute;top:calc(100% + 12px);left:-.7rem;width:340px;padding:.5rem;z-index:4;
+  background:rgba(var(--deep-rgb),.97);backdrop-filter:blur(22px);border:1px solid var(--line-2);
+  opacity:0;transform:translateY(-8px);transition:opacity .26s var(--ease),transform .26s var(--ease);
+  clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,0 100%)}
+.menu[hidden]{display:none}
+.menu[data-open]{opacity:1;transform:none}
+.menu-l{display:grid}
 .menu a{display:grid;gap:2px;padding:.8rem .85rem;border-left:1px solid transparent;
   transition:background .28s,border-color .28s}
-.menu a:hover{background:rgba(53,214,245,.06);border-left-color:var(--cyan)}
-.menu a b{font-family:var(--f-disp);font-weight:700;font-size:.99rem;font-variation-settings:'wdth' 106}
-.menu a small{font-family:var(--f-mono);font-size:.69rem;letter-spacing:.11em;color:var(--haze-d);
-  text-transform:uppercase}
+.menu a:hover,.menu a:focus-visible{background:rgba(53,214,245,.06);border-left-color:var(--cyan)}
+.menu a:focus-visible{outline:none;background:rgba(53,214,245,.1)}
+.menu a b{display:block;font-family:var(--f-disp);font-weight:700;font-size:.99rem;
+  font-variation-settings:'wdth' 106;color:var(--frost)}
+.menu a small{display:block;font-family:var(--f-mono);font-size:.69rem;letter-spacing:.11em;
+  color:var(--haze-d);text-transform:uppercase}
+
+/* the full-bleed Products panel. Anchored to the header rather than the item,
+   so it spans the page instead of hanging off one nav link. */
+.menu.mm{position:fixed;left:var(--frame);right:var(--frame);width:auto;
+  top:calc(var(--frame) + 68px);padding:clamp(1.2rem,2vw,1.9rem);
+  clip-path:polygon(0 0,calc(100% - 20px) 0,100% 20px,100% 100%,20px 100%,0 calc(100% - 20px))}
+.mm-grid{display:grid;grid-template-columns:repeat(3,1fr) 1.15fr;gap:clamp(1rem,2vw,2.2rem)}
+@media (max-width:1240px){.mm-grid{grid-template-columns:repeat(2,1fr)}}
+.mm-col{min-width:0}
+.mm-h{display:grid;grid-template-columns:auto 1fr;gap:0 .6rem;padding:0 0 .7rem;
+  border-bottom:1px solid var(--line);border-left:0}
+.mm-h:hover,.mm-h:focus-visible{background:none;border-left:0}
+.mm-no{grid-row:1/3;font-family:var(--f-mono);font-size:.7rem;letter-spacing:.14em;
+  color:var(--cyan);padding-top:.2rem}
+.mm-h.mat .mm-no{color:var(--sand)}
+.mm-h b{font-size:1.04rem}
+.mm-h:hover b{color:var(--cyan)}
+.mm-h.mat:hover b{color:var(--sand)}
+.mm-l{display:grid;gap:0;margin-top:.35rem}
+.mm-l a{padding:.4rem .5rem;font-size:.95rem;color:var(--haze);border-left:1px solid transparent;
+  transition:color .26s,background .26s,border-color .26s}
+.mm-l a:hover,.mm-l a:focus-visible{color:var(--frost);background:rgba(53,214,245,.06);
+  border-left-color:var(--cyan)}
+/* two classes, so this outbids .mm-l a on specificity rather than with
+   !important; inline-flex keeps the arrow on the label's line.
+   NB this file is one JS template literal — no backticks in comments. */
+.mm-l .mm-more{display:inline-flex;align-items:center;gap:.5em;white-space:nowrap;
+  font-family:var(--f-mono);font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--cyan);margin-top:.2rem}
+
+.mm-feat{display:grid;gap:.8rem;align-content:start}
+.mm-card{position:relative;overflow:hidden;padding:1.1rem;border:1px solid var(--line);
+  background:rgba(var(--panel-rgb),.5);border-left:1px solid var(--line);
+  clip-path:polygon(0 0,calc(100% - 14px) 0,100% 14px,100% 100%,14px 100%,0 calc(100% - 14px))}
+.mm-card canvas{position:absolute;inset:0;width:100%;height:100%;opacity:.5}
+.mm-card-b{position:relative;display:grid;gap:.45rem}
+.mm-card:hover{border-color:var(--line-2);background:rgba(var(--panel-rgb),.7)}
+.mm-card .lk{margin-top:.35rem;justify-self:start}
+.mm-doc b{color:var(--frost)}
+
+/* Under reduced motion the panel appears without travel. The global rule
+   already flattens the duration; this drops the transform so it does not
+   snap in from an offset position. */
+@media (prefers-reduced-motion:reduce){
+  .menu{transform:none}
+  .nl-x[aria-expanded=true]{transform:none}
+}
 
 /* ============ buttons ============ */
 .btn{position:relative;display:inline-flex;align-items:center;gap:.7em;
@@ -385,6 +452,36 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
 .mnav a i{font-family:var(--f-mono);font-size:.69rem;font-style:normal;letter-spacing:.14em;
   color:var(--cyan);opacity:.55}
 .mnav a:hover{color:var(--cyan)}
+
+/* Collapsible groups, so the four-item IA survives on a phone. Only the four
+   groups are numbered — a running counter across every leaf would print
+   twenty numerals and stop meaning anything. */
+.mnav-g summary{display:flex;align-items:baseline;gap:1rem;padding:.5rem 0;cursor:pointer;
+  list-style:none;font-family:var(--f-disp);font-weight:700;
+  font-size:clamp(1.6rem,7.5vw,2.6rem);font-variation-settings:'wdth' 112;
+  letter-spacing:-.025em;color:var(--frost);opacity:0;transform:translateY(24px);
+  transition:opacity .5s var(--ease),transform .5s var(--ease),color .3s}
+.mnav[data-open] .mnav-g summary{opacity:1;transform:none}
+.mnav-g summary::-webkit-details-marker{display:none}
+.mnav-g summary::marker{content:''}
+.mnav-g summary:hover{color:var(--cyan)}
+.mnav-g summary:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
+.mnav-g summary i{font-family:var(--f-mono);font-size:.69rem;font-style:normal;
+  letter-spacing:.14em;color:var(--cyan);opacity:.55}
+/* margin-right so the rotated glyph never presses the panel edge, and the
+   long labels ("Sustainability") keep a hair of slack at 390px */
+.mnav-g summary .ac-i{margin-left:auto;margin-right:.35rem;align-self:center;flex:none;
+  width:10px;height:10px;color:var(--haze-d);
+  border-right:1.6px solid currentColor;border-bottom:1.6px solid currentColor;
+  transform:rotate(45deg);transition:transform .3s var(--ease),color .3s}
+.mnav-g[open] summary .ac-i{transform:rotate(225deg);color:var(--cyan)}
+.mnav-g[open] summary{color:var(--cyan)}
+/* leaves: quieter than the group heads, and always revealed once the panel is
+   open — they are inside a details that the user just opened */
+.mnav-s{display:grid;gap:.1rem;padding:.2rem 0 .9rem 2.1rem;
+  border-left:1px solid var(--line);margin-left:.35rem}
+.mnav-s a{font-size:1.06rem;font-family:var(--f-body);font-weight:500;letter-spacing:0;
+  color:var(--haze);padding:.42rem 0;opacity:1;transform:none}
 .mnav-f{margin-top:2rem;display:grid;gap:.5rem;font-family:var(--f-mono);font-size:.75rem;
   letter-spacing:.13em;text-transform:uppercase;color:var(--haze-d);opacity:0;transition:opacity .6s .35s}
 .mnav[data-open] .mnav-f{opacity:1}
@@ -734,9 +831,14 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
 /* ============ footer ============ */
 .ftr{position:relative;z-index:1;padding-top:clamp(3.5rem,7vw,6rem);padding-bottom:2rem;
   border-top:1px solid var(--line);background:linear-gradient(180deg,rgba(20,53,68,0),rgba(20,53,68,.7))}
-.ftr-g{display:grid;gap:clamp(2rem,4vw,3.5rem);grid-template-columns:1.5fr .8fr .8fr 1.1fr;
+/* brand, then the three IA columns, then the Dubai desk */
+.ftr-g{display:grid;gap:clamp(1.6rem,3vw,3rem);grid-template-columns:1.35fr .75fr .75fr .75fr 1.05fr;
   padding-bottom:clamp(2.5rem,5vw,4rem)}
-@media (max-width:960px){.ftr-g{grid-template-columns:1fr 1fr}}
+/* the brand cell spans the row so the three link columns stay side by side
+   for one more step before they stack */
+@media (max-width:1180px){.ftr-g{grid-template-columns:repeat(3,1fr)}
+  .ftr-g>:first-child{grid-column:1/-1}}
+@media (max-width:760px){.ftr-g{grid-template-columns:1fr 1fr}}
 @media (max-width:560px){.ftr-g{grid-template-columns:1fr}}
 .ftr-blurb{margin-top:1.15rem;max-width:38ch;color:var(--haze);font-size:.98rem}
 .ftr-col h6{font-family:var(--f-mono);font-size:.715rem;font-weight:500;letter-spacing:.2em;
@@ -863,19 +965,87 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
 <kbd>&#8984;K</kbd>
 </button>
 <nav class="nav" aria-label="Primary">
-<ul class="nav-l"><li><a class="nl" href="index.html">Home</a></li>
-<li><a class="nl" href="about.html">About</a></li>
-<li class="has-menu">
-<a class="nl" data-cur href="products.html" aria-haspopup="true">Products</a>
-<div class="menu" role="menu">
-<a role="menuitem" href="products.html"><b>All products</b><small>Search 24 grades</small></a>
-<a role="menuitem" href="fertilizers.html"><b>Fertilizers</b><small>5 grades · Caspian origin</small></a>
-<a role="menuitem" href="polymers.html"><b>Polymers</b><small>PE · PP · Additives</small></a>
-<a role="menuitem" href="industrials.html"><b>Industrial Chemicals</b><small>16 specialty grades</small></a>
-</div></li>
-<li><a class="nl" href="procedures.html">Procedures</a></li>
-<li><a class="nl" href="sustainability.html">Sustainability</a></li>
-<li><a class="nl" href="careers.html">Careers</a></li></ul>
+<ul class="nav-l"><li class="has-menu" data-menu>
+<a class="nl" href="about.html">Company</a>
+<button class="nl-x" type="button" aria-haspopup="true" aria-expanded="false"
+ aria-controls="mm-company" aria-label="Open the Company menu"><i></i></button>
+<div class="menu" id="mm-company" role="menu"
+ aria-label="Company" hidden><div class="menu-l">
+<a role="menuitem" tabindex="-1" href="about.html"><b>About</b><small>Who we are, and how the desk operates</small></a>
+<a role="menuitem" tabindex="-1" href="careers.html"><b>Careers</b><small>Open roles and speculative applications</small></a>
+</div></div>
+</li>
+<li class="has-menu" data-menu>
+<a class="nl" data-on href="products.html">Products</a>
+<button class="nl-x" type="button" aria-haspopup="true" aria-expanded="false"
+ aria-controls="mm-products" aria-label="Open the Products menu"><i></i></button>
+<div class="menu mm" id="mm-products" role="menu"
+ aria-label="Products" hidden><div class="mm-grid">
+<div class="mm-col">
+<a class="mm-h mat" href="fertilizers.html">
+<span class="mm-no">01</span><b>Fertilizers</b><small>5 grades</small>
+</a>
+<ul class="mm-l">
+<li><a role="menuitem" tabindex="-1" href="fertilizers.html#urea-b-n46">Urea B (N46)</a></li>
+<li><a role="menuitem" tabindex="-1" href="fertilizers.html#potash">Potash</a></li>
+<li><a role="menuitem" tabindex="-1" href="fertilizers.html#ammonia">Ammonia</a></li>
+<li><a role="menuitem" tabindex="-1" href="fertilizers.html#ammonium-nitrate">Ammonium Nitrate</a></li>
+<li><a role="menuitem" tabindex="-1" href="fertilizers.html#npk-compound">NPK Compound</a></li>
+
+</ul>
+</div>
+<div class="mm-col">
+<a class="mm-h" href="polymers.html">
+<span class="mm-no">02</span><b>Polymers</b><small>3 families</small>
+</a>
+<ul class="mm-l">
+<li><a role="menuitem" tabindex="-1" href="polymers.html#polyethylene">Polyethylene</a></li>
+<li><a role="menuitem" tabindex="-1" href="polymers.html#polypropylene">Polypropylene</a></li>
+<li><a role="menuitem" tabindex="-1" href="polymers.html#performance-additives">Performance additives</a></li>
+
+</ul>
+</div>
+<div class="mm-col">
+<a class="mm-h" href="industrials.html">
+<span class="mm-no">03</span><b>Industrial Chemicals</b><small>16 grades</small>
+</a>
+<ul class="mm-l">
+<li><a role="menuitem" tabindex="-1" href="industrials.html#sulphur">Sulphur</a></li>
+<li><a role="menuitem" tabindex="-1" href="industrials.html#urea-a-technical">Urea-A (technical)</a></li>
+<li><a role="menuitem" tabindex="-1" href="industrials.html#caustic-soda">Caustic Soda</a></li>
+<li><a role="menuitem" tabindex="-1" href="industrials.html#sodium-hypochlorite">Sodium Hypochlorite</a></li>
+<li><a role="menuitem" tabindex="-1" href="industrials.html#hydrochloric-acid">Hydrochloric Acid</a></li>
+<li><a role="menuitem" tabindex="-1" href="industrials.html#liquid-chlorine">Liquid Chlorine</a></li>
+<li><a role="menuitem" tabindex="-1" href="industrials.html#calcium-chloride">Calcium Chloride</a></li>
+<li><a role="menuitem" tabindex="-1" href="industrials.html#sodium-sulphate">Sodium Sulphate</a></li>
+<li><a class="mm-more" role="menuitem" tabindex="-1" href="industrials.html">+ 8 more <span class="ar">&rarr;</span></a></li>
+</ul>
+</div>
+<div class="mm-col mm-feat">
+<a class="mm-card" href="products.html">
+<canvas data-orn="cyan" data-tile="104" data-nodes="4" data-alpha="0.3" aria-hidden="true"></canvas>
+<span class="mm-card-b">
+<b>The whole book</b>
+<small>Search every grade by name, formula, application or origin</small>
+<span class="lk">All products <span class="ar">&rarr;</span></span>
+</span>
+</a>
+<a class="mm-doc" role="menuitem" tabindex="-1" href="index.html#specifications">
+<b>Document register</b><small>MSDS, TDS and specifications on request</small>
+</a>
+</div>
+</div></div>
+</li>
+<li class="has-menu" data-menu>
+<a class="nl" href="procedures.html">Trade</a>
+<button class="nl-x" type="button" aria-haspopup="true" aria-expanded="false"
+ aria-controls="mm-trade" aria-label="Open the Trade menu"><i></i></button>
+<div class="menu" id="mm-trade" role="menu"
+ aria-label="Trade" hidden><div class="menu-l">
+<a role="menuitem" tabindex="-1" href="procedures.html"><b>Trade Procedures</b><small>How an enquiry becomes a shipment</small></a>
+</div></div>
+</li>
+<li><a class="nl" href="sustainability.html">Sustainability</a></li></ul>
 <a href="contact.html" class="btn btn-p btn-sm" data-mag="5">Get in touch <span class="ar">&rarr;</span></a>
 </nav>
 <button class="tog" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mnav"><i></i><i></i></button>
@@ -884,16 +1054,31 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
 </header>
 
 <nav id="mnav" class="mnav" aria-label="Mobile">
-<a href="index.html"><i>01</i>Home</a>
-<a href="about.html"><i>02</i>About</a>
-<a href="products.html"><i>03</i>Products</a>
-<a href="fertilizers.html"><i>04</i>Fertilizers</a>
-<a href="polymers.html"><i>05</i>Polymers</a>
-<a href="industrials.html"><i>06</i>Industrials</a>
-<a href="procedures.html"><i>07</i>Procedures</a>
-<a href="sustainability.html"><i>08</i>Sustainability</a>
-<a href="careers.html"><i>09</i>Careers</a>
-<a href="contact.html"><i>10</i>Contact</a>
+<a class="mnav-lk" href="index.html"><i>00</i>Home</a>
+<details class="mnav-g">
+<summary><i>01</i>Company<span class="ac-i" aria-hidden="true"></span></summary>
+<div class="mnav-s">
+<a href="about.html">About</a>
+<a href="careers.html">Careers</a>
+</div>
+</details>
+<details class="mnav-g">
+<summary><i>02</i>Products<span class="ac-i" aria-hidden="true"></span></summary>
+<div class="mnav-s">
+<a href="products.html">All products</a>
+<a href="fertilizers.html">Fertilizers</a>
+<a href="polymers.html">Polymers</a>
+<a href="industrials.html">Industrial Chemicals</a>
+</div>
+</details>
+<details class="mnav-g">
+<summary><i>03</i>Trade<span class="ac-i" aria-hidden="true"></span></summary>
+<div class="mnav-s">
+<a href="procedures.html">Trade Procedures</a>
+</div>
+</details>
+<a class="mnav-lk" href="sustainability.html"><i>04</i>Sustainability</a>
+<a class="mnav-lk" href="contact.html"><i>&rarr;</i>Contact</a>
 <div class="mnav-f">
 <span>info@globalex.me</span>
 <span>+971 4 566 7713</span>
@@ -1219,7 +1404,6 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
 <li><a href="fertilizers.html">Fertilizers</a></li>
 <li><a href="polymers.html">Polymers</a></li>
 <li><a href="industrials.html">Industrial Chemicals</a></li>
-<li><a href="procedures.html">Trade Procedures</a></li>
 <li><a href="index.html#specifications">Specifications &amp; MSDS</a></li>
 </ul>
 </div>
@@ -1227,9 +1411,15 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
 <h6>Company</h6>
 <ul>
 <li><a href="about.html">About</a></li>
-<li><a href="sustainability.html">Sustainability</a></li>
 <li><a href="careers.html">Careers</a></li>
+<li><a href="sustainability.html">Sustainability</a></li>
 <li><a href="contact.html">Contact</a></li>
+</ul>
+</div>
+<div class="ftr-col">
+<h6>Trade</h6>
+<ul>
+<li><a href="procedures.html">Trade Procedures</a></li>
 </ul>
 </div>
 <div class="ftr-col">
@@ -1411,6 +1601,154 @@ var PAL = {cyan:'53,214,245', sand:'217,183,120'};
   tog.addEventListener('click', function(){ set(tog.getAttribute('aria-expanded') !== 'true'); });
   nav.addEventListener('click', function(e){ if (e.target.closest('a')) set(false); });
   addEventListener('keydown', function(e){ if (e.key === 'Escape') set(false); });
+})();
+
+/* ---------- header mega-menus ----------
+   Modelled on the search overlay below, which is this codebase's reference
+   for a scripted disclosure: the hidden attribute does the real hiding, a
+   data-open attribute drives the transition, and focus is restored to
+   whatever opened the panel.
+
+   The previous dropdown was CSS hover and :focus-within only, yet declared
+   role="menu" and role="menuitem" — an ARIA contract promising arrow-key
+   navigation that nothing implemented. That is why the roving tabindex here
+   is not optional: the roles are only honest if the keys work. */
+(function(){
+  var groups = [].slice.call(document.querySelectorAll('.has-menu[data-menu]'));
+  if (!groups.length) return;
+
+  var OPEN_MS = 120;   // hover intent, so a passing pointer does not open it
+  var SHUT_MS = 240;   // grace, so a diagonal path to a row does not lose it
+  var open = null, t = null;
+
+  function items(g){
+    /* Visible rows only, so a row inside a hidden panel is never a target —
+       the same offsetParent test docgate's focus trap uses. */
+    return [].filter.call(g.panel.querySelectorAll('[role=menuitem]'), function(n){
+      return n.offsetParent !== null;
+    });
+  }
+
+  function show(g){
+    if (open && open !== g) hide(open, true);
+    clearTimeout(t);
+    if (open === g) return;
+    g.panel.hidden = false;
+    /* Two frames: the element must be laid out before the transition class
+       lands, or it appears at its final position with no travel. */
+    requestAnimationFrame(function(){
+      requestAnimationFrame(function(){ g.panel.setAttribute('data-open',''); });
+    });
+    g.btn.setAttribute('aria-expanded','true');
+    open = g;
+  }
+
+  function hide(g, now){
+    if (!g) return;
+    clearTimeout(g.t);
+    g.panel.removeAttribute('data-open');
+    g.btn.setAttribute('aria-expanded','false');
+    /* RM is checked because the global reduced-motion rule flattens every
+       transition to 0.001ms — waiting the full duration there would leave the
+       panel present but invisible, swallowing clicks. */
+    var wait = (now || RM) ? 0 : 260;
+    g.t = setTimeout(function(){
+      if (!g.panel.hasAttribute('data-open')) g.panel.hidden = true;
+    }, wait);
+    if (open === g) open = null;
+  }
+
+  function focusItem(g, i){
+    var list = items(g);
+    if (!list.length) return;
+    var n = (i + list.length) % list.length;
+    list.forEach(function(el, k){ el.tabIndex = k === n ? 0 : -1; });
+    list[n].focus();
+  }
+
+  groups.forEach(function(g0){
+    var g = {
+      el: g0,
+      btn: g0.querySelector('.nl-x'),
+      panel: g0.querySelector('.menu'),
+      link: g0.querySelector('.nl'),
+      t: null,
+    };
+    if (!g.btn || !g.panel) return;
+    g0.__g = g;
+
+    g.btn.addEventListener('click', function(e){
+      e.preventDefault();
+      if (open === g) hide(g, true); else show(g);
+    });
+
+    /* Hover opens on the whole group, including the panel, so travelling from
+       the trigger into a row never crosses a gap that closes it. */
+    g0.addEventListener('mouseenter', function(){
+      clearTimeout(t);
+      t = setTimeout(function(){ show(g); }, OPEN_MS);
+    });
+    g0.addEventListener('mouseleave', function(){
+      clearTimeout(t);
+      t = setTimeout(function(){ hide(g); }, SHUT_MS);
+    });
+
+    g.btn.addEventListener('keydown', function(e){
+      if (e.key === 'ArrowDown' || e.key === 'Enter' || e.key === ' '){
+        e.preventDefault();
+        show(g);
+        setTimeout(function(){ focusItem(g, 0); }, 0);
+      } else if (e.key === 'ArrowUp'){
+        e.preventDefault();
+        show(g);
+        setTimeout(function(){ focusItem(g, -1); }, 0);
+      }
+    });
+
+    g.panel.addEventListener('keydown', function(e){
+      var list = items(g), i = list.indexOf(document.activeElement);
+      if (e.key === 'ArrowDown'){ e.preventDefault(); focusItem(g, i + 1); }
+      else if (e.key === 'ArrowUp'){ e.preventDefault(); focusItem(g, i - 1); }
+      else if (e.key === 'Home'){ e.preventDefault(); focusItem(g, 0); }
+      else if (e.key === 'End'){ e.preventDefault(); focusItem(g, -1); }
+      else if (e.key === 'Escape'){
+        e.preventDefault();
+        hide(g, true);
+        g.btn.focus();
+      } else if (e.key === 'Tab'){
+        /* Tab leaves the menu rather than cycling inside it: this is a
+           navigation menu, not a modal, so the rest of the page stays
+           reachable. */
+        hide(g, true);
+      }
+    });
+
+    /* Focus moving out of the group by any route closes it. Deferred one tick
+       because relatedTarget is unreliable across browsers for this. */
+    g0.addEventListener('focusout', function(){
+      setTimeout(function(){
+        if (open === g && !g0.contains(document.activeElement)) hide(g, true);
+      }, 0);
+    });
+
+    g.panel.addEventListener('click', function(e){
+      if (e.target.closest('a')) hide(g, true);
+    });
+  });
+
+  document.addEventListener('click', function(e){
+    if (open && !open.el.contains(e.target)) hide(open, true);
+  });
+  addEventListener('keydown', function(e){
+    if (e.key === 'Escape' && open){
+      var g = open;
+      hide(g, true);
+      g.btn.focus();
+    }
+  });
+  /* A resize below the desktop breakpoint hides .nav outright; drop any open
+     panel so it is not left expanded when the layout comes back. */
+  addEventListener('resize', function(){ if (open) hide(open, true); });
 })();
 
 /* ---------- site search ----------
