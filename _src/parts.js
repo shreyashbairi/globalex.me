@@ -23,6 +23,7 @@ function hero({
   lead,
   tone = 'cyan',
   meta = [],
+  details = [],
   sec = 'Overview',
   video = null,
 }) {
@@ -34,6 +35,18 @@ function hero({
   const metaHtml = meta.length
     ? `<div class="ph-meta rv" style="--d:220ms">${meta.map(([v, l]) => `<span><b>${v}</b>${l}</span>`).join('')}</div>`
     : '';
+  /* Contact facts in the hero itself, rather than in a band below it. Each is
+     [label, value, href?, sub?]; a value with an href becomes a real tel: or
+     mailto: link. */
+  const detailHtml = details.length
+    ? `<dl class="ph-det rv" style="--d:280ms">${details
+        .map(([label, value, href, sub]) => `<div>
+<dt>${label}</dt>
+<dd>${href ? `<a href="${href}">${value}</a>` : value}</dd>
+${sub ? `<dd class="ph-det-s">${sub}</dd>` : ''}
+</div>`)
+        .join('')}</dl>`
+    : '';
   return `<section class="ph${video ? ' has-vid' : ''}" data-sec="${sec}">
 ${video ? heroVideo() : `<canvas data-orn="${tone}" data-tile="146" data-nodes="5" data-alpha="0.26" aria-hidden="true"></canvas>`}
 <div class="wrap">
@@ -43,6 +56,7 @@ ${video ? heroVideo() : `<canvas data-orn="${tone}" data-tile="146" data-nodes="
 <h1 class="kin">${h1}</h1>
 ${lead ? `<p class="lead rv" style="--d:160ms">${lead}</p>` : ''}
 ${metaHtml}
+${detailHtml}
 </div>
 </div>
 </section>`;

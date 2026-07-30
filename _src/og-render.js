@@ -14,6 +14,7 @@ const fs = require("fs");
 const path = require("path");
 const { execFileSync } = require("child_process");
 const plate = require("./og-plate");
+const { THEME } = require("./theme");
 const { W, H } = plate;
 
 const ROOT = path.resolve(__dirname, "..");
@@ -60,7 +61,7 @@ fs.writeFileSync(
   `<!DOCTYPE html><html><head><meta charset="utf-8">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="${FONTS}" rel="stylesheet">
-<style>html,body{margin:0;padding:0;background:#0F2A38;overflow:hidden}
+<style>html,body{margin:0;padding:0;background:${THEME.pageBackground};overflow:hidden}
 svg{display:block;width:${W}px;height:${H}px}</style></head>
 <body>${plate.svg()}</body></html>`,
 );

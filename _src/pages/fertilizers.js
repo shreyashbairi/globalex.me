@@ -34,10 +34,10 @@ module.exports = {
 .prod .row-side{min-width:170px}
 .npk{display:flex;gap:.85rem;align-items:flex-end;margin-top:.3rem}
 .npk-b{display:grid;justify-items:center;gap:.35rem;width:34px}
-.npk-b i{display:block;width:8px;height:62px;background:rgba(146,190,204,.16);position:relative;
+.npk-b i{display:block;width:8px;height:62px;background:rgba(var(--hairline-rgb),.16);position:relative;
   border:1px solid var(--line)}
 .npk-b i::after{content:'';position:absolute;left:-1px;right:-1px;bottom:-1px;height:var(--v);
-  min-height:2px;background:var(--sand);box-shadow:0 0 8px rgba(217,183,120,.5)}
+  min-height:2px;background:var(--sand);box-shadow:0 0 8px rgba(var(--sand-rgb),.5)}
 .npk-b b{font-family:var(--f-mono);font-size:.715rem;font-weight:500;color:var(--sand);letter-spacing:.1em}
 .npk-b em{font-style:normal;font-family:var(--f-mono);font-size:.67rem;color:var(--haze-d)}
 @media (max-width:760px){.npk{margin-top:.7rem}}

@@ -14,7 +14,7 @@ module.exports = {
   padding-top:clamp(6rem,12vh,8rem);padding-bottom:clamp(4rem,8vh,6rem)}
 /* scrim keeps the header legible where the globe rides beneath it */
 .hero::before{content:'';position:absolute;inset:0 0 auto;height:210px;z-index:1;pointer-events:none;
-  background:linear-gradient(180deg,rgba(15,42,56,.9),rgba(15,42,56,0))}
+  background:linear-gradient(180deg,rgba(var(--void-rgb),.9),rgba(var(--void-rgb),0))}
 .hero-stage{position:absolute;top:50%;right:calc(var(--pad-x) * .1);
   width:min(86vh,46vw,880px);aspect-ratio:1;transform:translateY(-50%);z-index:0;
   transition:opacity .3s linear}
@@ -48,7 +48,7 @@ module.exports = {
 
 /* hero telemetry readout */
 .hud{position:relative;z-index:3;margin-top:.4rem;padding:1.05rem 1.25rem;max-width:44ch;
-  background:rgba(15,42,56,.62);backdrop-filter:blur(9px);border:1px solid var(--line);
+  background:rgba(var(--void-rgb),.62);backdrop-filter:blur(9px);border:1px solid var(--line);
   clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px))}
 .hud-r{display:grid;grid-template-columns:6.6rem 1fr;gap:.35rem .9rem;font-family:var(--f-mono);
   font-size:.725rem;letter-spacing:.13em;text-transform:uppercase}
@@ -81,7 +81,7 @@ module.exports = {
   display:grid;gap:.6rem;align-content:start;min-height:170px;
   transition:background .4s var(--ease)}
 .strip a:last-child{border-right:0}
-.strip a:hover{background:rgba(53,214,245,.06)}
+.strip a:hover{background:rgba(var(--cyan-rgb),.06)}
 .strip a i{font-family:var(--f-mono);font-style:normal;font-size:.715rem;letter-spacing:.14em;
   color:var(--cyan)}
 .strip a span{font-family:var(--f-disp);font-weight:600;font-size:.86rem;line-height:1.3;
@@ -367,7 +367,7 @@ function visCrystal(cv){
   glxStage(cv, function(x,w,h,t){
     x.clearRect(0,0,w,h);
     var g = x.createLinearGradient(0,0,0,h);
-    g.addColorStop(0,'rgba(217,183,120,.07)'); g.addColorStop(1,'rgba(15,42,56,0)');
+    g.addColorStop(0,'rgba('+GLXC.rgb.sand+',.07)'); g.addColorStop(1,'rgba('+GLXC.rgb.void+',0)');
     x.fillStyle=g; x.fillRect(0,0,w,h);
     seeds.forEach(function(s,si){
       var cx = s.x*w, cy = s.y*h;
@@ -375,7 +375,7 @@ function visCrystal(cv){
       for (var a=0;a<6;a++){
         var ang = a*Math.PI/3 + t*.05 + si;
         var L = Math.min(w,h)*.42*grow;
-        x.strokeStyle='rgba(217,183,120,.42)'; x.lineWidth=1;
+        x.strokeStyle='rgba(var(--sand-rgb),.42)'; x.lineWidth=1;
         x.beginPath(); x.moveTo(cx,cy);
         x.lineTo(cx+Math.cos(ang)*L, cy+Math.sin(ang)*L); x.stroke();
         for (var b=.28;b<1;b+=.24){
@@ -383,14 +383,14 @@ function visCrystal(cv){
           var bl = L*.22*(1-b);
           [-1,1].forEach(function(sd){
             var ba = ang + sd*Math.PI/3;
-            x.strokeStyle='rgba(217,183,120,.26)';
+            x.strokeStyle='rgba(var(--sand-rgb),.26)';
             x.beginPath(); x.moveTo(bx,by);
             x.lineTo(bx+Math.cos(ba)*bl, by+Math.sin(ba)*bl); x.stroke();
           });
         }
       }
       x.save(); x.translate(cx,cy); x.rotate(Math.PI/4);
-      x.fillStyle='rgba(217,183,120,.9)'; x.fillRect(-2.5,-2.5,5,5); x.restore();
+      x.fillStyle='rgba(var(--sand-rgb),.9)'; x.fillRect(-2.5,-2.5,5,5); x.restore();
     });
   });
 }
@@ -403,7 +403,7 @@ function visChain(cv){
   glxStage(cv, function(x,w,h,t){
     x.clearRect(0,0,w,h);
     chains.forEach(function(c,ci){
-      x.strokeStyle='rgba(53,214,245,.3)'; x.lineWidth=1.1;
+      x.strokeStyle='rgba(var(--cyan-rgb),.3)'; x.lineWidth=1.1;
       x.beginPath();
       for (var px=0;px<=w;px+=4){
         var u = px/w;
@@ -418,7 +418,7 @@ function visChain(cv){
         var pulse = Math.sin(t*1.4 - k*.4 + ci)*.5+.5;
         x.save(); x.translate(mx,my); x.rotate(Math.PI/4);
         var r = 1.9+pulse*1.5;
-        x.fillStyle='rgba(53,214,245,'+(.35+pulse*.5)+')';
+        x.fillStyle='rgba('+GLXC.rgb.cyan+','+(.35+pulse*.5)+')';
         x.fillRect(-r,-r,r*2,r*2); x.restore();
       }
     });
@@ -440,7 +440,7 @@ function visReact(cv){
       var ax=P[i].x*w,ay=P[i].y*h,bx=P[j].x*w,by=P[j].y*h;
       var d=Math.hypot(ax-bx,ay-by), lim=Math.min(w,h)*.30;
       if (d<lim){
-        x.strokeStyle='rgba(217,183,120,'+(.30*(1-d/lim)).toFixed(3)+')';
+        x.strokeStyle='rgba('+GLXC.rgb.sand+','+(.30*(1-d/lim)).toFixed(3)+')';
         x.lineWidth=1; x.beginPath(); x.moveTo(ax,ay); x.lineTo(bx,by); x.stroke();
       }
     }
@@ -448,7 +448,7 @@ function visReact(cv){
       var bx=p.x*w, by=p.y*h, pulse=Math.sin(t*.9+i)*.5+.5;
       x.save(); x.translate(bx,by); x.rotate(Math.PI/4);
       var r=p.r*(1+pulse*.5);
-      x.fillStyle='rgba(217,183,120,'+(.4+pulse*.45)+')';
+      x.fillStyle='rgba('+GLXC.rgb.sand+','+(.4+pulse*.45)+')';
       x.fillRect(-r,-r,r*2,r*2); x.restore();
     });
   });
@@ -526,7 +526,7 @@ function buildGlobe(){
   /* --- occluding core so back-side points hide --- */
   var core = new THREE.Mesh(
     new THREE.SphereGeometry(.985, 64, 48),
-    new THREE.MeshBasicMaterial({color:new THREE.Color(0x061C27)})
+    new THREE.MeshBasicMaterial({color:new THREE.Color(GLXC.int.abyss)})
   );
   inner.add(core);
 
@@ -535,7 +535,7 @@ function buildGlobe(){
     new THREE.SphereGeometry(1.06, 64, 48),
     new THREE.ShaderMaterial({
       transparent:true, blending:THREE.AdditiveBlending, side:THREE.BackSide, depthWrite:false,
-      uniforms:{uC:{value:new THREE.Color(0x35D6F5)}},
+      uniforms:{uC:{value:new THREE.Color(GLXC.int.cyan)}},
       vertexShader:[
         'varying vec3 vN; varying vec3 vP;',
         'void main(){ vN = normalize(normalMatrix * normal);',
@@ -571,7 +571,7 @@ function buildGlobe(){
     var g = new THREE.BufferGeometry();
     g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
     inner.add(new THREE.LineSegments(g, new THREE.LineBasicMaterial({
-      color:0x1B5468, transparent:true, opacity:.34, depthWrite:false
+      color:GLXC.int.globeGraticule, transparent:true, opacity:.34, depthWrite:false
     })));
   })();
 
@@ -596,7 +596,7 @@ function buildGlobe(){
     var pts = ar.curve.getPoints(72);
     var g = new THREE.BufferGeometry().setFromPoints(pts);
     ar.line = new THREE.Line(g, new THREE.LineBasicMaterial({
-      color: ar.kind === 'in' ? 0x35D6F5 : 0xD9B778,
+      color: ar.kind === 'in' ? GLXC.int.cyan : GLXC.int.sand,
       transparent:true, opacity:.34, blending:THREE.AdditiveBlending, depthWrite:false
     }));
     inner.add(ar.line);
@@ -627,7 +627,7 @@ function buildGlobe(){
     g.setAttribute('aGlow', new THREE.Float32BufferAttribute(glow, 1));
     var m = new THREE.ShaderMaterial({
       transparent:true, depthWrite:false, blending:THREE.AdditiveBlending,
-      uniforms:{uPx:uPx, uDim:{value:new THREE.Color(0x2A6E85)}, uHot:{value:new THREE.Color(0x9BEEFF)}},
+      uniforms:{uPx:uPx, uDim:{value:new THREE.Color(GLXC.int.globeSurface)}, uHot:{value:new THREE.Color(GLXC.int.globeGlow)}},
       vertexShader:[
         'attribute float aGlow; varying float vG; uniform float uPx;',
         'void main(){ vG = aGlow;',
@@ -696,7 +696,7 @@ function buildGlobe(){
     var v = ll2v(nd.lat, nd.lon, 1.006);
     var isHub = nd.k === 'hub';
     var size = isHub ? .05 : .028;
-    var col = isHub ? 0xFFFFFF : (nd.k === 'in' ? 0x35D6F5 : 0xD9B778);
+    var col = isHub ? GLXC.int.highlight : (nd.k === 'in' ? GLXC.int.cyan : GLXC.int.sand);
     var m = new THREE.Mesh(
       new THREE.PlaneGeometry(size, size),
       new THREE.MeshBasicMaterial({color:col, transparent:true, opacity:.95,

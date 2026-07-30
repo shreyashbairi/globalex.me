@@ -42,7 +42,7 @@ module.exports = {
 .app-c{padding:clamp(1.5rem,2.8vw,2.2rem);border-right:1px solid var(--line);display:grid;gap:.85rem;
   align-content:start;position:relative;overflow:hidden;transition:background .45s var(--ease)}
 .app-c:last-child{border-right:0}
-.app-c:hover{background:rgba(53,214,245,.05)}
+.app-c:hover{background:rgba(var(--cyan-rgb),.05)}
 .app-c .eb{font-size:.69rem}
 .app-c p{color:var(--haze);font-size:.99rem}
 .app-c ul{display:grid;gap:.4rem;margin-top:.3rem}
@@ -162,15 +162,15 @@ function chains(cv, mode){
         var ax=mol[a].x*w, ay=mol[a].y*h, bx=mol[b].x*w, by=mol[b].y*h;
         var d=Math.hypot(ax-bx,ay-by), lim=Math.min(w,h)*.34;
         if (d<lim){
-          x.strokeStyle='rgba(53,214,245,'+(.20*(1-d/lim)).toFixed(3)+')';
+          x.strokeStyle='rgba('+GLXC.rgb.cyan+','+(.20*(1-d/lim)).toFixed(3)+')';
           x.lineWidth=1; x.beginPath(); x.moveTo(ax,ay); x.lineTo(bx,by); x.stroke();
         }
       }
       mol.forEach(function(p,k){
         var bx=p.x*w, by=p.y*h, pulse=Math.sin(t*.95+k)*.5+.5, r=p.r*(1+pulse*.55);
         x.save(); x.translate(bx,by); x.rotate(Math.PI/4);
-        x.fillStyle = p.sand ? 'rgba(217,183,120,'+(.45+pulse*.4)+')'
-                             : 'rgba(53,214,245,'+(.4+pulse*.45)+')';
+        x.fillStyle = p.sand ? 'rgba('+GLXC.rgb.sand+','+(.45+pulse*.4)+')'
+                             : 'rgba('+GLXC.rgb.cyan+','+(.4+pulse*.45)+')';
         x.fillRect(-r,-r,r*2,r*2); x.restore();
       });
       return;
@@ -182,7 +182,7 @@ function chains(cv, mode){
         var u=px/w;
         pts.push([px,(c.y + Math.sin(u*Math.PI*2*c.f + t*c.sp*2 + c.ph)*c.amp)*h]);
       }
-      x.strokeStyle='rgba(53,214,245,.32)'; x.lineWidth=1.2;
+      x.strokeStyle='rgba(var(--cyan-rgb),.32)'; x.lineWidth=1.2;
       x.beginPath(); pts.forEach(function(p,k){ k?x.lineTo(p[0],p[1]):x.moveTo(p[0],p[1]); }); x.stroke();
 
       // LDPE branches: the short side chains that stop the polymer packing tight
@@ -190,11 +190,11 @@ function chains(cv, mode){
         for (var s=0.12;s<1;s+=.19){
           var k2 = Math.floor(s*(pts.length-1)), p0 = pts[k2];
           var dir = (ci%4<2) ? -1 : 1;
-          x.strokeStyle='rgba(53,214,245,.22)';
+          x.strokeStyle='rgba(var(--cyan-rgb),.22)';
           x.beginPath(); x.moveTo(p0[0],p0[1]);
           x.lineTo(p0[0]+9, p0[1]+dir*h*.075); x.stroke();
           x.save(); x.translate(p0[0]+9, p0[1]+dir*h*.075); x.rotate(Math.PI/4);
-          x.fillStyle='rgba(53,214,245,.5)'; x.fillRect(-1.5,-1.5,3,3); x.restore();
+          x.fillStyle='rgba(var(--cyan-rgb),.5)'; x.fillRect(-1.5,-1.5,3,3); x.restore();
         }
       }
 
@@ -205,7 +205,7 @@ function chains(cv, mode){
         var pulse=Math.sin(t*1.3 - k*.38 + ci)*.5+.5;
         x.save(); x.translate(mx,my); x.rotate(Math.PI/4);
         var r=1.9+pulse*1.4;
-        x.fillStyle='rgba(53,214,245,'+(.35+pulse*.5)+')';
+        x.fillStyle='rgba('+GLXC.rgb.cyan+','+(.35+pulse*.5)+')';
         x.fillRect(-r,-r,r*2,r*2); x.restore();
       }
     });

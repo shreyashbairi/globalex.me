@@ -20,16 +20,18 @@
 const W = 1200;
 const H = 630;
 
-/* Palette, restated rather than imported: kernel-css.js is one CSS string,
-   and an SVG cannot read a custom property. If the tokens change, these
-   change with them. */
-const VOID = "#0F2A38";
-const DEEP = "#143544";
-const CYAN = "#35D6F5";
-const SAND = "#D9B778";
-const FROST = "#E9F3F6";
-const HAZE = "#B4C9D2";
-const LINE = "#5C7F8C";
+/* Literal hex from the theme, not CSS custom properties: this SVG is
+   rasterised on its own, outside any page, so there is no :root for a var() to
+   resolve against. Recolouring the site therefore also recolours the share
+   card — but the PNG has to be regenerated with `npm run og` for it to show. */
+const { THEME } = require("./theme");
+const VOID = THEME.pageBackground;
+const DEEP = THEME.surfaceRaised;
+const CYAN = THEME.accentSystem;
+const SAND = THEME.accentMaterial;
+const FROST = THEME.textHeading;
+const HAZE = THEME.textBody;
+const LINE = THEME.hairline;
 
 const TAGLINE = "The Caspian corridor, operated from Dubai.";
 
@@ -63,7 +65,7 @@ function svg() {
       `<linearGradient id="g" x1="0" y1="0" x2="1" y2="1">` +
       `<stop offset="0" stop-color="${DEEP}"/>` +
       `<stop offset=".55" stop-color="${VOID}"/>` +
-      `<stop offset="1" stop-color="#0B2029"/>` +
+      `<stop offset="1" stop-color=THEME.surfaceDeepest/>` +
       `</linearGradient>` +
       /* the corridor sweep: cyan inbound, sand outbound, same law as the site */
       `<linearGradient id="arc" x1="0" y1="0" x2="1" y2="0">` +

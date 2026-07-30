@@ -109,7 +109,7 @@ ${crossCss}
 .std-c{display:grid;gap:.6rem;align-content:start;padding:clamp(1.4rem,2.6vw,2rem);
   border:1px solid var(--line);background:linear-gradient(160deg,rgba(var(--panel-rgb),.46),rgba(var(--deep-rgb),.7));
   transition:border-color .45s var(--ease),transform .5s var(--ease)}
-.std-c:hover{border-color:rgba(53,214,245,.42);transform:translateY(-4px)}
+.std-c:hover{border-color:rgba(var(--cyan-rgb),.42);transform:translateY(-4px)}
 .std-c h3{font-size:1.12rem}
 .std-c p{color:var(--haze);font-size:.99rem}
 /* the withheld identifier, shown as withheld rather than invented */

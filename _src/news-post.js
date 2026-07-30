@@ -11,7 +11,7 @@ const CSS = `
 .np-by{display:flex;align-items:center;gap:1rem;flex-wrap:wrap;padding-bottom:1.2rem;
   margin-bottom:1.8rem;border-bottom:1px solid var(--line);font-family:var(--f-mono);
   font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--haze-d)}
-.np p{color:#C6D8DF;margin-bottom:1.1rem;line-height:1.65}
+.np p{color:var(--lead);margin-bottom:1.1rem;line-height:1.65}
 .np h3{font-size:var(--t-h4);margin:2rem 0 .7rem}
 .np ul{display:grid;gap:.5rem;margin:0 0 1.2rem 1.1rem;color:var(--haze)}
 .np ul li{list-style:disc}

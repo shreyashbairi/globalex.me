@@ -100,7 +100,7 @@ module.exports = {
 
 /* the read head: fixed marker the steps travel past */
 .corr-head-line{position:absolute;top:0;bottom:0;left:var(--head,22%);width:1px;z-index:3;
-  background:linear-gradient(180deg,transparent,rgba(53,214,245,.42) 22%,rgba(53,214,245,.42) 78%,transparent);
+  background:linear-gradient(180deg,transparent,rgba(var(--cyan-rgb),.42) 22%,rgba(var(--cyan-rgb),.42) 78%,transparent);
   pointer-events:none}
 .corr-head-line::before,.corr-head-line::after{content:'';position:absolute;left:-4px;width:9px;height:9px;
   background:var(--cyan);clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%)}
@@ -112,11 +112,11 @@ module.exports = {
   padding-left:var(--head,22%);will-change:transform}
 
 .step{position:relative;width:min(74vw,392px);flex:none;padding:clamp(1.5rem,2.6vw,2.1rem);
-  border:1px solid var(--line);background:linear-gradient(160deg,rgba(35,89,107,.34),rgba(20,53,68,.7));
+  border:1px solid var(--line);background:linear-gradient(160deg,rgba(var(--steel-rgb),.34),rgba(var(--deep-rgb),.7));
   display:grid;gap:.85rem;align-content:start;min-height:clamp(300px,46vh,392px);
   clip-path:polygon(0 0,calc(100% - 18px) 0,100% 18px,100% 100%,18px 100%,0 calc(100% - 18px));
   opacity:.34;transition:opacity .5s var(--ease),border-color .5s var(--ease),transform .5s var(--ease)}
-.step[data-on]{opacity:1;border-color:rgba(53,214,245,.5);transform:translateY(-6px)}
+.step[data-on]{opacity:1;border-color:rgba(var(--cyan-rgb),.5);transform:translateY(-6px)}
 .step[data-done]{opacity:.6}
 .step-n{display:flex;align-items:baseline;gap:.5rem}
 .step-n span{font-family:var(--f-disp);font-weight:800;font-size:2rem;line-height:1;
@@ -125,7 +125,7 @@ module.exports = {
 .step-n i{font-family:var(--f-mono);font-style:normal;font-size:.69rem;letter-spacing:.16em;
   color:var(--haze-d)}
 .step-tag{font-family:var(--f-mono);font-size:.69rem;letter-spacing:.17em;text-transform:uppercase;
-  color:var(--sand);padding:.3em .6em;border:1px solid rgba(217,183,120,.3);background:var(--sand-g);
+  color:var(--sand);padding:.3em .6em;border:1px solid rgba(var(--sand-rgb),.3);background:var(--sand-g);
   justify-self:start}
 .step h3{font-size:1.28rem;line-height:1.16}
 .step p{color:var(--haze);font-size:1rem;line-height:1.56}

@@ -28,6 +28,12 @@
    kernel-js, so no beacon fires there and there is nothing to gate;
    glx_admin is strictly necessary, and a consent banner on a staff-only
    noindex dashboard is noise with no legal purpose.
+   NAMING: every selector here is prefixed glx-cc. An earlier version used
+   plain `.cc`, which contact.js already used for its contact-details grid —
+   so the consent bar's position:fixed and z-index landed on that page's
+   content and pinned it over the layout. Page CSS is inlined after this
+   module's CSS on every page, so a bare class name here is capturable by any
+   of twelve page modules. Keep the prefix.
    ============================================================ */
 
 /* One place for the duration, interpolated into both the CSS and the JS below
@@ -36,68 +42,68 @@ const MS = 420;
 
 const css = `
 /* ---------- consent ---------- */
-.cc{position:fixed;left:var(--frame);right:var(--frame);bottom:var(--frame);z-index:90;
+.glx-cc{position:fixed;left:var(--frame);right:var(--frame);bottom:var(--frame);z-index:90;
   max-width:44rem;padding:clamp(1.1rem,2.2vw,1.5rem);
   background:rgba(var(--deep-rgb),.97);backdrop-filter:blur(20px);
   border:1px solid var(--line-2);
   clip-path:polygon(var(--notch-m) 0,100% 0,100% 100%,0 100%,0 var(--notch-m));
   opacity:0;transform:translateY(14px);
   transition:opacity ${MS}ms var(--ease),transform ${MS}ms var(--ease)}
-.cc[hidden]{display:none}
-.cc[data-open]{opacity:1;transform:none}
-.cc p{color:var(--haze);font-size:.97rem;max-width:60ch}
-.cc p a{color:var(--cyan);border-bottom:1px solid rgba(53,214,245,.4)}
-.cc p a:hover{color:var(--frost);border-bottom-color:var(--frost)}
-.cc-h{display:flex;align-items:center;gap:.6rem;margin-bottom:.5rem}
-.cc-h .eb{font-size:.66rem}
+.glx-cc[hidden]{display:none}
+.glx-cc[data-open]{opacity:1;transform:none}
+.glx-cc p{color:var(--haze);font-size:.97rem;max-width:60ch}
+.glx-cc p a{color:var(--cyan);border-bottom:1px solid rgba(var(--cyan-rgb),.4)}
+.glx-cc p a:hover{color:var(--frost);border-bottom-color:var(--frost)}
+.glx-cc-h{display:flex;align-items:center;gap:.6rem;margin-bottom:.5rem}
+.glx-cc-h .eb{font-size:.66rem}
 /* Three controls at equal visual weight. Decline is not the lesser option —
    styling it as one is the pattern regulators penalise. */
-.cc-b{display:flex;flex-wrap:wrap;gap:.55rem;margin-top:1rem}
-.cc-b button{flex:1 1 auto;min-width:8.5rem;padding:.78em 1.1em;font-family:var(--f-mono);
+.glx-cc-b{display:flex;flex-wrap:wrap;gap:.55rem;margin-top:1rem}
+.glx-cc-b button{flex:1 1 auto;min-width:8.5rem;padding:.78em 1.1em;font-family:var(--f-mono);
   font-size:.73rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;
   border:1px solid var(--line-2);color:var(--frost);background:rgba(var(--panel-rgb),.5);
   cursor:pointer;transition:border-color .3s,color .3s,background .3s}
-.cc-b button:hover{border-color:var(--cyan);color:var(--cyan);background:rgba(53,214,245,.07)}
-.cc-b button:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
-.cc-pref{margin-top:1rem;padding-top:1rem;border-top:1px solid var(--line);display:grid;gap:.9rem}
-.cc-pref[hidden]{display:none}
-.cc-row{display:grid;grid-template-columns:auto 1fr;gap:.9rem;align-items:start}
-.cc-row input{margin-top:.25rem;width:15px;height:15px;accent-color:var(--cyan)}
-.cc-row input:disabled{opacity:.5}
-.cc-row b{display:block;font-family:var(--f-disp);font-weight:700;font-size:1rem;
+.glx-cc-b button:hover{border-color:var(--cyan);color:var(--cyan);background:rgba(var(--cyan-rgb),.07)}
+.glx-cc-b button:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+.glx-cc-pref{margin-top:1rem;padding-top:1rem;border-top:1px solid var(--line);display:grid;gap:.9rem}
+.glx-cc-pref[hidden]{display:none}
+.glx-cc-row{display:grid;grid-template-columns:auto 1fr;gap:.9rem;align-items:start}
+.glx-cc-row input{margin-top:.25rem;width:15px;height:15px;accent-color:var(--cyan)}
+.glx-cc-row input:disabled{opacity:.5}
+.glx-cc-row b{display:block;font-family:var(--f-disp);font-weight:700;font-size:1rem;
   font-variation-settings:'wdth' 106;color:var(--frost)}
-.cc-row small{display:block;color:var(--haze-d);font-size:.88rem;margin-top:.15rem}
-@media (max-width:560px){.cc{left:0;right:0;bottom:0;max-width:none;clip-path:none;
+.glx-cc-row small{display:block;color:var(--haze-d);font-size:.88rem;margin-top:.15rem}
+@media (max-width:560px){.glx-cc{left:0;right:0;bottom:0;max-width:none;clip-path:none;
   border-left:0;border-right:0;border-bottom:0}}
-@media (prefers-reduced-motion:reduce){.cc{transform:none}}
+@media (prefers-reduced-motion:reduce){.glx-cc{transform:none}}
 `;
 
 /* aria-live so the appearance is announced, but NOT a focus trap: this is a
    bar rather than a modal and the visitor must be able to keep reading. */
-const html = `<div class="cc" id="cc" role="dialog" aria-label="Cookie preferences"
+const html = `<div class="glx-cc" id="glx-cc" role="dialog" aria-label="Cookie preferences"
  aria-live="polite" hidden>
-<div class="cc-h"><span class="eb">Privacy</span></div>
+<div class="glx-cc-h"><span class="eb">Privacy</span></div>
 <p>We would like to count page views and document requests so we know which
 grades people look for. It is anonymised and never sold. Nothing is measured
 unless you agree. <a href="privacy-policy.html">How we handle data</a>.</p>
-<div class="cc-b">
+<div class="glx-cc-b">
 <button type="button" data-cc="accept">Accept</button>
 <button type="button" data-cc="decline">Decline</button>
-<button type="button" data-cc="prefs" aria-expanded="false" aria-controls="cc-p">Preferences</button>
+<button type="button" data-cc="prefs" aria-expanded="false" aria-controls="glx-cc-p">Preferences</button>
 </div>
-<div class="cc-pref" id="cc-p" hidden>
-<div class="cc-row">
-<input type="checkbox" id="cc-e" checked disabled />
-<label for="cc-e"><b>Essential</b><small>Always on. Remembers this choice, and
+<div class="glx-cc-pref" id="glx-cc-p" hidden>
+<div class="glx-cc-row">
+<input type="checkbox" id="glx-cc-e" checked disabled />
+<label for="glx-cc-e"><b>Essential</b><small>Always on. Remembers this choice, and
 keeps a staff login signed in. No analytics, and nothing shared.</small></label>
 </div>
-<div class="cc-row">
-<input type="checkbox" id="cc-a" />
-<label for="cc-a"><b>Analytics</b><small>Page views and document requests, with
+<div class="glx-cc-row">
+<input type="checkbox" id="glx-cc-a" />
+<label for="glx-cc-a"><b>Analytics</b><small>Page views and document requests, with
 a visitor identifier that is re-derived daily and cannot be traced back to you
 or joined across days.</small></label>
 </div>
-<div class="cc-b">
+<div class="glx-cc-b">
 <button type="button" data-cc="save">Save preferences</button>
 </div>
 </div>
@@ -154,11 +160,11 @@ const js = `
   if (state === 'granted') flush();
   else if (state === 'denied') drop();
 
-  var el = document.getElementById('cc');
+  var el = document.getElementById('glx-cc');
   if (!el) return;
 
-  var prefs = document.getElementById('cc-p');
-  var analytics = document.getElementById('cc-a');
+  var prefs = document.getElementById('glx-cc-p');
+  var analytics = document.getElementById('glx-cc-a');
   var lastFocus = null;
   var t = null;
 

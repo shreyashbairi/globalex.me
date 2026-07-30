@@ -10,20 +10,6 @@ module.exports = {
   desc: "Contact the Globalex Trading FZCO desk in Jumeirah Lakes Towers, Dubai. Quote requests, trade procedures and partnership enquiries answered within two business days.",
 
   css: `
-.cc{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--line)}
-.cc-c{padding:clamp(1.6rem,2.8vw,2.3rem);border-right:1px solid var(--line);display:grid;gap:.7rem;
-  align-content:start;position:relative;overflow:hidden;transition:background .45s var(--ease)}
-.cc-c:last-child{border-right:0}
-.cc-c:hover{background:rgba(53,214,245,.05)}
-.cc-c .lbl{font-family:var(--f-mono);font-size:.69rem;letter-spacing:.2em;text-transform:uppercase;
-  color:var(--cyan)}
-.cc-c .val{font-family:var(--f-disp);font-weight:700;font-size:clamp(1.05rem,1.9vw,1.3rem);
-  line-height:1.32;font-variation-settings:'wdth' 106;color:var(--frost)}
-.cc-c .val a:hover{color:var(--cyan)}
-.cc-c .sub{font-family:var(--f-mono);font-size:.7rem;letter-spacing:.13em;text-transform:uppercase;
-  color:var(--haze-d)}
-@media (max-width:900px){.cc{grid-template-columns:1fr}
-  .cc-c{border-right:0;border-bottom:1px solid var(--line)}.cc-c:last-child{border-bottom:0}}
 
 .cs{display:grid;grid-template-columns:1fr 1fr;gap:clamp(2rem,5vw,4.5rem);align-items:start}
 @media (max-width:940px){.cs{grid-template-columns:1fr}}
@@ -33,7 +19,7 @@ module.exports = {
 .map iframe{position:absolute;inset:0;width:100%;height:100%;border:0;
   filter:grayscale(1) invert(.92) hue-rotate(165deg) saturate(1.5) brightness(.86) contrast(1.05)}
 .map-tag{position:absolute;top:12px;left:12px;z-index:2;padding:.4em .75em;font-family:var(--f-mono);
-  font-size:.67rem;letter-spacing:.17em;text-transform:uppercase;background:rgba(15,42,56,.86);
+  font-size:.67rem;letter-spacing:.17em;text-transform:uppercase;background:rgba(var(--void-rgb),.86);
   border:1px solid var(--line-2);color:var(--cyan);pointer-events:none}
 
 /* the one owned photograph on the site, treated to sit in the palette */
@@ -41,10 +27,10 @@ module.exports = {
   clip-path:polygon(0 0,calc(100% - 20px) 0,100% 20px,100% 100%,20px 100%,0 calc(100% - 20px))}
 .plate img{width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.12) brightness(.72)}
 .plate::after{content:'';position:absolute;inset:0;
-  background:linear-gradient(155deg,rgba(53,214,245,.34),rgba(15,42,56,.5) 55%,rgba(217,183,120,.2));
+  background:linear-gradient(155deg,rgba(var(--cyan-rgb),.34),rgba(var(--void-rgb),.5) 55%,rgba(var(--sand-rgb),.2));
   mix-blend-mode:color}
 .plate figcaption{position:absolute;left:0;right:0;bottom:0;z-index:2;padding:1.1rem 1.3rem;
-  background:linear-gradient(0deg,rgba(15,42,56,.92),transparent);font-family:var(--f-mono);
+  background:linear-gradient(0deg,rgba(var(--void-rgb),.92),transparent);font-family:var(--f-mono);
   font-size:.69rem;letter-spacing:.17em;text-transform:uppercase;color:var(--haze)}
 
 .hrs{display:grid;gap:.55rem;margin-top:1.6rem;padding-top:1.4rem;border-top:1px solid var(--line)}
@@ -55,7 +41,7 @@ module.exports = {
 .soc{display:inline-flex;align-items:center;gap:.75rem;margin-top:1.6rem;padding:.8em 1.15em;
   border:1px solid var(--line);font-family:var(--f-mono);font-size:.75rem;letter-spacing:.15em;
   text-transform:uppercase;color:var(--haze);transition:color .3s,border-color .3s,background .3s}
-.soc:hover{color:var(--frost);border-color:var(--cyan);background:rgba(53,214,245,.06)}
+.soc:hover{color:var(--frost);border-color:var(--cyan);background:rgba(var(--cyan-rgb),.06)}
 .soc svg{width:15px;height:15px;flex:none;color:var(--cyan)}
 .sent{font-family:var(--f-mono);font-size:.725rem;letter-spacing:.13em;text-transform:uppercase;
   color:var(--cyan);min-height:1.2em}
@@ -70,32 +56,32 @@ ${hero({
   meta: [
     ["48h", "Typical response"],
     ["GST", "Mon&ndash;Fri 09:00&ndash;18:00"],
-    ["Cluster X", "JLT, Dubai"],
+  ],
+  /* Address, email and phone sit in the hero rather than in a band below it,
+     so the three things a visitor came for are above the fold. */
+  details: [
+    [
+      "Our address",
+      "2605 X3 Tower, Cluster X,<br />Jumeirah Lakes Towers",
+      null,
+      "337622 Dubai, United Arab Emirates",
+    ],
+    [
+      "Email us",
+      "info@globalex.me",
+      "mailto:info@globalex.me",
+      "General enquiries &amp; quote requests",
+    ],
+    [
+      "Call us",
+      "+971 4 566 7713",
+      "tel:+97145667713",
+      "Mon&ndash;Fri &middot; 09:00&ndash;18:00 GST",
+    ],
   ],
   sec: "Contact",
 })}
 
-<section class="sec is-tight" data-sec="Reach us">
-  <div class="wrap">
-    <div class="cc rv">
-      <article class="cc-c">
-        <span class="lbl">Our address</span>
-        <p class="val">2605 X3 Tower, Cluster X,<br />Jumeirah Lakes Towers</p>
-        <span class="sub">337622 Dubai, United Arab Emirates</span>
-      </article>
-      <article class="cc-c">
-        <span class="lbl">Email us</span>
-        <p class="val"><a href="mailto:info@globalex.me">info@globalex.me</a></p>
-        <span class="sub">General enquiries &amp; quote requests</span>
-      </article>
-      <article class="cc-c">
-        <span class="lbl">Call us</span>
-        <p class="val"><a href="tel:+97145667713">+971 4 566 7713</a></p>
-        <span class="sub">Mon&ndash;Fri &middot; 09:00&ndash;18:00 GST</span>
-      </article>
-    </div>
-  </div>
-</section>
 
 <section class="sec" data-sec="Enquiry">
   <div class="wrap">

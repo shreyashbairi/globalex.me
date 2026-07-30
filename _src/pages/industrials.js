@@ -32,14 +32,14 @@ module.exports = {
   css: `
 .chem-h{display:flex;align-items:baseline;gap:.9rem;flex-wrap:wrap}
 .formula{font-family:var(--f-mono);font-size:.825rem;letter-spacing:.06em;color:var(--sand);
-  padding:.2em .55em;border:1px solid rgba(217,183,120,.3);background:var(--sand-g)}
+  padding:.2em .55em;border:1px solid rgba(var(--sand-rgb),.3);background:var(--sand-g)}
 .chem[hidden]{display:none}
 
 /* sector filter */
 .filt{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;margin-bottom:.5rem}
 .filt button{position:relative;padding:.6em 1.05em;font-family:var(--f-mono);font-size:.725rem;
   font-weight:500;letter-spacing:.15em;text-transform:uppercase;color:var(--haze);
-  border:1px solid var(--line);background:rgba(15,42,56,.4);cursor:pointer;
+  border:1px solid var(--line);background:rgba(var(--void-rgb),.4);cursor:pointer;
   transition:color .3s var(--ease),border-color .3s var(--ease),background .3s var(--ease)}
 .filt button:hover{color:var(--frost);border-color:var(--line-2)}
 .filt button[aria-pressed=true]{color:var(--void);background:var(--cyan);border-color:var(--cyan);

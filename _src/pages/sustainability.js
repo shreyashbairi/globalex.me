@@ -71,11 +71,11 @@ module.exports = {
   css: `
 .cmt{display:grid;grid-template-columns:repeat(2,1fr);gap:var(--gut)}
 .cmt-c{position:relative;padding:clamp(1.6rem,2.8vw,2.3rem);border:1px solid var(--line);
-  background:linear-gradient(160deg,rgba(35,89,107,.32),rgba(20,53,68,.66));
+  background:linear-gradient(160deg,rgba(var(--steel-rgb),.32),rgba(var(--deep-rgb),.66));
   display:grid;gap:.9rem;align-content:start;overflow:hidden;
   clip-path:polygon(0 0,calc(100% - 18px) 0,100% 18px,100% 100%,18px 100%,0 calc(100% - 18px));
   transition:border-color .45s var(--ease),transform .55s var(--ease)}
-.cmt-c:hover{border-color:rgba(217,183,120,.42);transform:translateY(-4px)}
+.cmt-c:hover{border-color:rgba(var(--sand-rgb),.42);transform:translateY(-4px)}
 .cmt-c svg{position:absolute;right:-30px;top:-30px;width:150px;height:150px;color:var(--sand);
   opacity:.07;transition:opacity .55s var(--ease),transform .9s var(--ease)}
 .cmt-c:hover svg{opacity:.16;transform:rotate(45deg)}

@@ -45,42 +45,107 @@ a{color:inherit;text-decoration:none}
 :where(svg){fill:currentColor}
 
 :root{
-  /* Ground — petrol blue, never neutral black. The ramp sits well above
-     black on purpose: the old near-black base made the accents shout and
-     the whole site read as a dark console rather than a trading desk.
-     Each step is roughly one perceptual notch, so panels separate from the
-     ground without a border doing all the work. */
-  --void:#0F2A38;
-  --deep:#143544;
-  --panel:#173B4A;
-  --steel:#23596B;
+/* ------------------------------------------------------------------
+   COLOUR. Generated from _src/theme.js — edit that file, not this block.
+   Each colour appears as a hex value and as bare RGB channels, so a
+   component can write rgba(var(--x-rgb), .06) and follow the theme.
+   ------------------------------------------------------------------ */
+  --page-background:#0F2A38;
+  --page-background-rgb:15,42,56;
+  --surface-raised:#143544;
+  --surface-raised-rgb:20,53,68;
+  --surface-panel:#173B4A;
+  --surface-panel-rgb:23,59,74;
+  --surface-muted:#23596B;
+  --surface-muted-rgb:35,89,107;
+  --surface-deepest:#061C27;
+  --surface-deepest-rgb:6,28,39;
+  --text-heading:#E9F3F6;
+  --text-heading-rgb:233,243,246;
+  --text-lead:#C6D8DF;
+  --text-lead-rgb:198,216,223;
+  --text-body:#B4C9D2;
+  --text-body-rgb:180,201,210;
+  --text-muted:#8FAAB6;
+  --text-muted-rgb:143,170,182;
+  --text-on-system:#0F2A38;
+  --text-on-system-rgb:15,42,56;
+  --text-on-material:#2A1F0C;
+  --text-on-material-rgb:42,31,12;
+  --overlay-scrim:#06141B;
+  --overlay-scrim-rgb:6,20,27;
+  --overlay-panel:#1B4356;
+  --overlay-panel-rgb:27,67,86;
+  --highlight:#FFFFFF;
+  --highlight-rgb:255,255,255;
+  --accent-system:#35D6F5;
+  --accent-system-rgb:53,214,245;
+  --accent-system-dark:#0FA8C9;
+  --accent-system-dark-rgb:15,168,201;
+  --accent-material:#D9B778;
+  --accent-material-rgb:217,183,120;
+  --accent-material-dark:#B8934E;
+  --accent-material-dark-rgb:184,147,78;
+  --accent-alert:#F5748A;
+  --accent-alert-rgb:245,116,138;
+  --globe-graticule:#1B5468;
+  --globe-graticule-rgb:27,84,104;
+  --globe-surface:#2A6E85;
+  --globe-surface-rgb:42,110,133;
+  --globe-glow:#9BEEFF;
+  --globe-glow-rgb:155,238,255;
+  --hairline:#92BECC;
+  --hairline-rgb:146,190,204;
 
-  /* The same three as bare channels, for the many surfaces that need the
-     ground at partial opacity. One place to retune the whole site. */
-  --void-rgb:15,42,56;
-  --deep-rgb:20,53,68;
-  --panel-rgb:23,59,74;
+  /* hairline at the two weights the design uses */
+  --line:rgba(var(--hairline-rgb),.19);
+  --line-2:rgba(var(--hairline-rgb),.34);
+  /* Accent washes: the faint tinted fill behind an active chip or a
+     highlighted panel. --cyan-g / --sand-g are the names the component CSS has
+     always used; the longer names are aliases for readability. */
+  --system-wash:rgba(var(--accent-system-rgb),.16);
+  --material-wash:rgba(var(--accent-material-rgb),.14);
+  --cyan-g:var(--system-wash);
+  --sand-g:var(--material-wash);
 
-  --line:rgba(146,190,204,.19);
-  --line-2:rgba(146,190,204,.34);
-
-  /* system accent (from the wordmark) */
-  --cyan:#35D6F5;
-  --cyan-d:#0FA8C9;
-  --cyan-g:rgba(53,214,245,.16);
-
-  /* material accent — physical cargo */
-  --sand:#D9B778;
-  --sand-d:#B8934E;
-  --sand-g:rgba(217,183,120,.14);
-
-  /* Text greys. Both sit on --void (#0F2A38) and are tuned for contrast there:
-     --frost reads 13.2:1, --haze 8.9:1 and --haze-d 6.1:1, so even mono
-     captions clear AA comfortably at small sizes on the lifted ground.
-     They stay in the petrol family — brighter, never neutral grey. */
-  --frost:#E9F3F6;
-  --haze:#B4C9D2;
-  --haze-d:#8FAAB6;
+/* Short aliases. --cyan is easier to scan than --accent-system in a
+   500-line stylesheet; both resolve to the same value. */
+  --void:var(--page-background);
+  --void-rgb:var(--page-background-rgb);
+  --deep:var(--surface-raised);
+  --deep-rgb:var(--surface-raised-rgb);
+  --panel:var(--surface-panel);
+  --panel-rgb:var(--surface-panel-rgb);
+  --steel:var(--surface-muted);
+  --steel-rgb:var(--surface-muted-rgb);
+  --abyss:var(--surface-deepest);
+  --abyss-rgb:var(--surface-deepest-rgb);
+  --frost:var(--text-heading);
+  --frost-rgb:var(--text-heading-rgb);
+  --lead:var(--text-lead);
+  --lead-rgb:var(--text-lead-rgb);
+  --haze:var(--text-body);
+  --haze-rgb:var(--text-body-rgb);
+  --haze-d:var(--text-muted);
+  --haze-d-rgb:var(--text-muted-rgb);
+  --cyan:var(--accent-system);
+  --cyan-rgb:var(--accent-system-rgb);
+  --cyan-d:var(--accent-system-dark);
+  --cyan-d-rgb:var(--accent-system-dark-rgb);
+  --sand:var(--accent-material);
+  --sand-rgb:var(--accent-material-rgb);
+  --sand-d:var(--accent-material-dark);
+  --sand-d-rgb:var(--accent-material-dark-rgb);
+  --alert:var(--accent-alert);
+  --alert-rgb:var(--accent-alert-rgb);
+  --on-cyan:var(--text-on-system);
+  --on-cyan-rgb:var(--text-on-system-rgb);
+  --on-sand:var(--text-on-material);
+  --on-sand-rgb:var(--text-on-material-rgb);
+  --scrim:var(--overlay-scrim);
+  --scrim-rgb:var(--overlay-scrim-rgb);
+  --ov-panel:var(--overlay-panel);
+  --ov-panel-rgb:var(--overlay-panel-rgb);
 
   --f-disp:'Archivo','Archivo Expanded',ui-sans-serif,system-ui,sans-serif;
   --f-body:'Instrument Sans',ui-sans-serif,system-ui,-apple-system,sans-serif;
@@ -137,9 +202,9 @@ body[data-lock]{overflow:hidden}
 body::before{
   content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
   background:
-    radial-gradient(115% 78% at 8% -12%,rgba(53,214,245,.075),transparent 62%),
-    radial-gradient(95% 70% at 104% 8%,rgba(217,183,120,.05),transparent 60%),
-    radial-gradient(140% 100% at 50% 118%,rgba(35,89,107,.34),transparent 68%);
+    radial-gradient(115% 78% at 8% -12%,rgba(var(--cyan-rgb),.075),transparent 62%),
+    radial-gradient(95% 70% at 104% 8%,rgba(var(--sand-rgb),.05),transparent 60%),
+    radial-gradient(140% 100% at 50% 118%,rgba(var(--steel-rgb),.34),transparent 68%);
 }
 
 /* ============ film grain + scanline (compositing layer) ============ */
@@ -154,7 +219,7 @@ body::before{
 }
 .grain::after{
   content:'';position:absolute;inset:0;
-  background:repeating-linear-gradient(to bottom,rgba(255,255,255,.028) 0 1px,transparent 1px 3px);
+  background:repeating-linear-gradient(to bottom,rgba(var(--highlight-rgb),.028) 0 1px,transparent 1px 3px);
 }
 @keyframes grainShift{
   0%{transform:translate(0,0)}20%{transform:translate(-6%,3%)}40%{transform:translate(4%,-5%)}
@@ -197,7 +262,7 @@ body::before{
   will-change:transform}
 .cur .dot{position:absolute;width:5px;height:5px;background:#fff;transform:translate(-50%,-50%);
   clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%)}
-.cur .ring{position:absolute;width:34px;height:34px;border:1px solid rgba(255,255,255,.55);
+.cur .ring{position:absolute;width:34px;height:34px;border:1px solid rgba(var(--highlight-rgb),.55);
   transform:translate(-50%,-50%) rotate(45deg);transition:width .32s var(--ease),height .32s var(--ease),
   border-color .32s var(--ease),border-radius .32s var(--ease)}
 .cur[data-hot] .ring{width:56px;height:56px;border-color:#fff;border-radius:50%;transform:translate(-50%,-50%) rotate(0deg)}
@@ -251,7 +316,7 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
 .eb.mat{color:var(--sand)}
 .eb.dim{color:var(--haze-d)}
 
-.lead{font-size:var(--t-lead);line-height:1.55;color:#C6D8DF;text-wrap:pretty}
+.lead{font-size:var(--t-lead);line-height:1.55;color:var(--lead);text-wrap:pretty}
 .mut{color:var(--haze);text-wrap:pretty}
 .mono{font-family:var(--f-mono);font-size:var(--t-mono);letter-spacing:.16em;text-transform:uppercase;
   color:var(--haze-d)}
@@ -266,7 +331,7 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
 :target,section[id]{scroll-margin-top:clamp(74px,8.5vh,96px)}
 .sec.is-tight{padding-block:clamp(3rem,6vh,4.75rem)}
 .sec.is-flush{padding-block:0}
-.sec-panel{background:linear-gradient(180deg,rgba(23,59,74,.52),rgba(15,42,56,0))}
+.sec-panel{background:linear-gradient(180deg,rgba(var(--panel-rgb),.52),rgba(var(--void-rgb),0))}
 .hd{display:grid;gap:1.1rem;max-width:62ch;margin-bottom:clamp(2.6rem,5vw,4.25rem)}
 .hd .lead{margin-top:.35rem}
 
@@ -285,7 +350,7 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
   backdrop-filter .45s,border-color .45s}
 .hdr::after{content:'';position:absolute;inset:auto 0 0;height:1px;background:var(--line);opacity:0;
   transition:opacity .45s}
-.hdr[data-solid]{background:rgba(15,42,56,.82);backdrop-filter:blur(18px) saturate(1.4)}
+.hdr[data-solid]{background:rgba(var(--void-rgb),.82);backdrop-filter:blur(18px) saturate(1.4)}
 .hdr[data-solid]::after{opacity:1}
 .hdr[data-hide]{transform:translateY(-104%);transition:transform .5s var(--ease)}
 .hdr-in{display:flex;align-items:center;justify-content:space-between;gap:1.5rem;
@@ -324,7 +389,7 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
 .ph.has-vid{padding-top:clamp(9.5rem,19vh,13.5rem)}
 .ph-vid{position:absolute;inset:0;overflow:hidden}
 .ph-vid::after{content:'';position:absolute;inset:0;z-index:2;
-  background:linear-gradient(155deg,rgba(53,214,245,.28),rgba(15,42,56,.62));
+  background:linear-gradient(155deg,rgba(var(--cyan-rgb),.28),rgba(var(--void-rgb),.62));
   mix-blend-mode:color}
 .ph-vid-p,.ph-vid-v{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
   filter:grayscale(1) contrast(1.1) brightness(.55)}
@@ -363,8 +428,8 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
 .menu-l{display:grid}
 .menu a{display:grid;gap:2px;padding:.8rem .85rem;border-left:1px solid transparent;
   transition:background .28s,border-color .28s}
-.menu a:hover,.menu a:focus-visible{background:rgba(53,214,245,.06);border-left-color:var(--cyan)}
-.menu a:focus-visible{outline:none;background:rgba(53,214,245,.1)}
+.menu a:hover,.menu a:focus-visible{background:rgba(var(--cyan-rgb),.06);border-left-color:var(--cyan)}
+.menu a:focus-visible{outline:none;background:rgba(var(--cyan-rgb),.1)}
 .menu a b{display:block;font-family:var(--f-disp);font-weight:700;font-size:.99rem;
   font-variation-settings:'wdth' 106;color:var(--frost)}
 .menu a small{display:block;font-family:var(--f-mono);font-size:.69rem;letter-spacing:.11em;
@@ -390,7 +455,7 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
 .mm-l{display:grid;gap:0;margin-top:.35rem}
 .mm-l a{padding:.4rem .5rem;font-size:.95rem;color:var(--haze);border-left:1px solid transparent;
   transition:color .26s,background .26s,border-color .26s}
-.mm-l a:hover,.mm-l a:focus-visible{color:var(--frost);background:rgba(53,214,245,.06);
+.mm-l a:hover,.mm-l a:focus-visible{color:var(--frost);background:rgba(var(--cyan-rgb),.06);
   border-left-color:var(--cyan)}
 /* two classes, so this outbids .mm-l a on specificity rather than with
    !important; inline-flex keeps the arrow on the label's line.
@@ -430,13 +495,13 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
   transition:transform .44s var(--ease)}
 .btn:hover::before{transform:translateY(0)}
 
-.btn-p{background:var(--cyan);color:var(--void);font-weight:600}
+.btn-p{background:var(--cyan);color:var(--on-cyan);font-weight:600}
 .btn-p::before{background:var(--frost)}
-.btn-m{background:var(--sand);color:#2A1F0C;font-weight:600}
+.btn-m{background:var(--sand);color:var(--on-sand);font-weight:600}
 .btn-m::before{background:var(--frost)}
 .btn-o{border:1px solid var(--line-2);color:var(--frost)}
 .btn-o::before{background:var(--cyan)}
-.btn-o:hover{color:var(--void);border-color:var(--cyan)}
+.btn-o:hover{color:var(--on-cyan);border-color:var(--cyan)}
 .btn-g{padding-inline:0;color:var(--cyan);clip-path:none}
 .btn-g::before{display:none}
 .btn-g::after{content:'';position:absolute;left:0;bottom:.55em;width:100%;height:1px;
@@ -447,9 +512,9 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
 
 .lk{display:inline-flex;align-items:center;gap:.5em;font-family:var(--f-mono);font-size:.79rem;
   font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--cyan);
-  padding-bottom:.3em;border-bottom:1px solid rgba(53,214,245,.32);transition:border-color .3s,gap .3s}
+  padding-bottom:.3em;border-bottom:1px solid rgba(var(--cyan-rgb),.32);transition:border-color .3s,gap .3s}
 .lk:hover{border-color:var(--cyan);gap:.85em}
-.lk.mat{color:var(--sand);border-bottom-color:rgba(217,183,120,.32)}
+.lk.mat{color:var(--sand);border-bottom-color:rgba(var(--sand-rgb),.32)}
 .lk.mat:hover{border-color:var(--sand)}
 
 /* ============ nav toggle + mobile ============ */
@@ -462,7 +527,7 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
 .tog[aria-expanded=true] i:nth-child(2){width:22px;transform:translateY(-4.5px) rotate(-45deg)}
 @media (max-width:1080px){.nav{display:none}.tog{display:block}}
 
-.mnav{position:fixed;inset:0;z-index:75;background:rgba(15,42,56,.97);backdrop-filter:blur(24px);
+.mnav{position:fixed;inset:0;z-index:75;background:rgba(var(--void-rgb),.97);backdrop-filter:blur(24px);
   display:grid;align-content:center;gap:.4rem;padding:5.5rem var(--pad-x) 2.5rem;
   clip-path:circle(0% at calc(100% - 44px) 44px);transition:clip-path .78s var(--ease);
   overflow-y:auto}
@@ -534,12 +599,12 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
   align-content:start;padding:clamp(3.5rem,11vh,8rem) 1.1rem 1.1rem;
   opacity:0;visibility:hidden;transition:opacity .32s var(--ease),visibility .32s}
 .srch[data-open]{opacity:1;visibility:visible}
-.srch-bd{position:absolute;inset:0;background:rgba(6,20,27,.78);backdrop-filter:blur(7px);
+.srch-bd{position:absolute;inset:0;background:rgba(var(--scrim-rgb),.78);backdrop-filter:blur(7px);
   -webkit-backdrop-filter:blur(7px)}
 .srch-p{position:relative;width:min(100%,640px);max-height:calc(100svh - clamp(4.6rem,13vh,9.1rem));
   display:flex;flex-direction:column;overflow:hidden;
-  background:linear-gradient(168deg,rgba(27,67,86,.97),rgba(20,53,68,.97));
-  border:1px solid var(--line-2);box-shadow:0 34px 90px -30px rgba(6,20,27,.9);
+  background:linear-gradient(168deg,rgba(var(--ov-panel-rgb),.97),rgba(var(--deep-rgb),.97));
+  border:1px solid var(--line-2);box-shadow:0 34px 90px -30px rgba(var(--scrim-rgb),.9);
   transform:translateY(-14px) scale(.99);transition:transform .38s var(--ease);
   clip-path:polygon(0 0,calc(100% - 17px) 0,100% 17px,100% 100%,17px 100%,0 calc(100% - 17px))}
 .srch[data-open] .srch-p{transform:none}
@@ -576,7 +641,7 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
 .srch-o[data-on] i{color:var(--cyan)}
 .srch-none{padding:2.4rem 1rem;text-align:center;color:var(--haze-d);font-size:.92rem;line-height:1.6}
 .srch-none b{display:block;color:var(--frost);font-size:1.02rem;margin-bottom:.45rem}
-.srch-none a{color:var(--cyan);border-bottom:1px solid rgba(53,214,245,.4)}
+.srch-none a{color:var(--cyan);border-bottom:1px solid rgba(var(--cyan-rgb),.4)}
 
 .srch-ft{display:flex;align-items:center;gap:1.1rem;flex-wrap:wrap;flex:none;
   padding:.6rem 1.1rem;border-top:1px solid var(--line);background:rgba(var(--void-rgb),.4);
@@ -597,6 +662,23 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
 .crumb a:hover{color:var(--cyan)}
 .crumb i{font-style:normal;color:var(--steel)}
 .crumb b{color:var(--frost);font-weight:400}
+/* Contact facts inside an interior hero. Sits with .ph-meta rather than in a
+   separate band, so the address, email and phone are above the fold on the
+   contact page instead of in a strip that has to be scrolled to. */
+.ph-det{display:flex;flex-wrap:wrap;gap:1.4rem 2.6rem;margin-top:1.6rem;padding-top:1.5rem;
+  border-top:1px solid var(--line)}
+.ph-det>div{display:grid;gap:.3rem;min-width:0}
+.ph-det dt{font-family:var(--f-mono);font-size:.67rem;letter-spacing:.19em;text-transform:uppercase;
+  color:var(--cyan)}
+.ph-det dd{font-family:var(--f-disp);font-weight:700;font-size:1.06rem;
+  font-variation-settings:'wdth' 106;color:var(--frost);line-height:1.35}
+.ph-det dd a{color:inherit;border-bottom:1px solid rgba(var(--cyan-rgb),.34);
+  transition:color .3s,border-color .3s}
+.ph-det dd a:hover{color:var(--cyan);border-bottom-color:var(--cyan)}
+.ph-det .ph-det-s{font-family:var(--f-mono);font-weight:400;font-size:.68rem;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--haze-d);margin-top:.1rem}
+@media (max-width:640px){.ph-det{gap:1.1rem;flex-direction:column}}
+
 .ph-meta{display:flex;flex-wrap:wrap;gap:0 2.25rem;margin-top:.5rem;font-family:var(--f-mono);
   font-size:.76rem;letter-spacing:.13em;text-transform:uppercase;color:var(--haze-d)}
 .ph-meta b{display:block;color:var(--frost);font-weight:500;font-size:1rem;letter-spacing:.04em;
@@ -604,7 +686,7 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
 
 /* ============ surfaces / cards ============ */
 .card{position:relative;padding:clamp(1.5rem,2.6vw,2.2rem);background:linear-gradient(160deg,
-  rgba(35,89,107,.44),rgba(20,53,68,.72));border:1px solid var(--line);
+  rgba(var(--steel-rgb),.44),rgba(var(--deep-rgb),.72));border:1px solid var(--line);
   clip-path:polygon(0 0,calc(100% - 16px) 0,100% 16px,100% 100%,16px 100%,0 calc(100% - 16px));
   transition:border-color .45s var(--ease),transform .55s var(--ease),background .45s var(--ease)}
 .card::after{content:'';position:absolute;top:0;left:0;width:100%;height:1px;
@@ -624,16 +706,16 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
 
 /* commodity class card */
 .cls{display:grid;grid-template-rows:auto 1fr auto;gap:1.15rem;padding:0;overflow:hidden;
-  background:linear-gradient(165deg,rgba(35,89,107,.4),rgba(20,53,68,.78));border:1px solid var(--line);
+  background:linear-gradient(165deg,rgba(var(--steel-rgb),.4),rgba(var(--deep-rgb),.78));border:1px solid var(--line);
   clip-path:polygon(0 0,calc(100% - 18px) 0,100% 18px,100% 100%,18px 100%,0 calc(100% - 18px));
   transition:border-color .45s var(--ease),transform .55s var(--ease)}
-.cls:hover{border-color:rgba(53,214,245,.45);transform:translateY(-6px)}
+.cls:hover{border-color:rgba(var(--cyan-rgb),.45);transform:translateY(-6px)}
 .cls-vis{position:relative;aspect-ratio:16/10;background:var(--deep);overflow:hidden;
   border-bottom:1px solid var(--line)}
 .cls-vis canvas{position:absolute;inset:0;width:100%;height:100%}
 .cls-vis .tag{position:absolute;top:12px;left:12px;z-index:2;padding:.34em .7em;
   font-family:var(--f-mono);font-size:.67rem;letter-spacing:.18em;text-transform:uppercase;
-  background:rgba(15,42,56,.78);border:1px solid var(--line-2);color:var(--frost)}
+  background:rgba(var(--void-rgb),.78);border:1px solid var(--line-2);color:var(--frost)}
 .cls-b{padding:0 clamp(1.35rem,2.3vw,1.9rem);display:grid;gap:.7rem;align-content:start}
 .cls-b p{color:var(--haze);font-size:1.02rem}
 .cls-f{display:flex;justify-content:space-between;align-items:center;gap:1rem;
@@ -647,7 +729,7 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
 .row{position:relative;display:grid;grid-template-columns:auto 1fr auto;gap:clamp(1rem,3vw,2.5rem);
   align-items:start;padding:clamp(1.4rem,2.6vw,2.1rem) clamp(.5rem,1.5vw,1.25rem);
   border-bottom:1px solid var(--line);transition:background .4s var(--ease),padding-inline .4s var(--ease)}
-.row:hover{background:rgba(53,214,245,.035)}
+.row:hover{background:rgba(var(--cyan-rgb),.035)}
 .row-ix{font-family:var(--f-mono);font-size:.76rem;letter-spacing:.12em;color:var(--steel);
   padding-top:.45rem;transition:color .4s}
 .row:hover .row-ix{color:var(--cyan)}
@@ -678,7 +760,7 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
    that scrolls sideways has to be reachable by keyboard, not only by trackpad.
    Give it role="region" and an aria-label naming the table. */
 .tbl-wrap{overflow-x:auto;overscroll-behavior-x:contain;border:1px solid var(--line);
-  background:rgba(20,53,68,.42)}
+  background:rgba(var(--deep-rgb),.42)}
 .tbl-wrap:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
 .tbl{width:100%;border-collapse:collapse;font-size:.95rem}
 /* opt-in floor for genuinely wide sheets: squeezing an assay table into 390px
@@ -697,7 +779,7 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
 .tbl td{color:var(--frost);font-variant-numeric:tabular-nums}
 .tbl tbody tr:last-child>*{border-bottom:0}
 .tbl tbody tr{transition:background .3s var(--ease)}
-.tbl tbody tr:hover{background:rgba(53,214,245,.04)}
+.tbl tbody tr:hover{background:rgba(var(--cyan-rgb),.04)}
 .tbl .num{text-align:right;font-family:var(--f-mono);font-size:.87rem}
 .tbl .mat{color:var(--sand)}
 .tbl .sys{color:var(--cyan)}
@@ -714,7 +796,7 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
   transition:color .3s var(--ease),background .3s var(--ease)}
 .acc summary::-webkit-details-marker{display:none}
 .acc summary::marker{content:''}
-.acc summary:hover{color:var(--cyan);background:rgba(53,214,245,.04)}
+.acc summary:hover{color:var(--cyan);background:rgba(var(--cyan-rgb),.04)}
 .acc summary:focus-visible{outline:2px solid var(--cyan);outline-offset:-2px}
 .acc .ac-i{margin-left:auto;flex:none;width:9px;height:9px;color:var(--haze-d);
   border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;
@@ -727,7 +809,7 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
 /* placeholder-data banner. In flow at the top of <main> rather than fixed:
    no z-index argument with the header, and it cannot be scrolled past
    without being read. */
-.draft-flag{position:relative;z-index:2;background:var(--sand);color:#2A1F0C;
+.draft-flag{position:relative;z-index:2;background:var(--sand);color:var(--on-sand);
   padding:.72rem var(--pad-x);font-family:var(--f-mono);font-size:.72rem;font-weight:500;
   letter-spacing:.16em;text-transform:uppercase;text-align:center}
 
@@ -736,10 +818,10 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
    two edit sites for one token pair guarantees drift. Cyan is the default
    (system, document); sand marks a sheet that describes physical material. */
 .dr-k{font-family:var(--f-mono);font-size:.645rem;letter-spacing:.16em;padding:.3em .6em;
-  border:1px solid rgba(53,214,245,.3);color:var(--cyan);background:rgba(53,214,245,.07);
+  border:1px solid rgba(var(--cyan-rgb),.3);color:var(--cyan);background:rgba(var(--cyan-rgb),.07);
   flex:none;white-space:nowrap}
 .dr-k[data-kind=TDS],.dr-k[data-kind=SPEC],.dr-k[data-kind=REPORT]{color:var(--sand);
-  border-color:rgba(217,183,120,.34);background:var(--sand-g)}
+  border-color:rgba(var(--sand-rgb),.34);background:var(--sand-g)}
 
 /* origin ledger. Promoted from the homepage because the product pages render
    the same row per origin; --led-cols lets each caller set its own column
@@ -749,7 +831,7 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
   align-items:center;padding:1.1rem .5rem;border-bottom:1px solid var(--line);
   font-family:var(--f-mono);font-size:.765rem;letter-spacing:.1em;text-transform:uppercase;
   color:var(--haze-d);transition:background .38s var(--ease),color .38s}
-.led-r:hover{background:rgba(53,214,245,.04);color:var(--haze)}
+.led-r:hover{background:rgba(var(--cyan-rgb),.04);color:var(--haze)}
 .led-r b{font-family:var(--f-disp);font-weight:700;font-size:1rem;letter-spacing:0;
   font-variation-settings:'wdth' 106;color:var(--frost);text-transform:none}
 .led-r .co{color:var(--cyan)}
@@ -787,6 +869,7 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
 
 /* Reopens the consent bar, so a decision can be withdrawn. A button rather
    than a link because it opens a dialog instead of navigating. */
+/* the consent-reopen control in the footer legal row */
 .ftr-cc{font:inherit;color:inherit;cursor:pointer;background:none;border:0;padding:0}
 .ftr-cc:hover{color:var(--frost)}
 
@@ -794,12 +877,12 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
 .chips{display:flex;flex-wrap:wrap;gap:.4rem}
 .chip{display:inline-flex;align-items:center;gap:.45em;padding:.34em .7em;font-family:var(--f-mono);
   font-size:.69rem;letter-spacing:.13em;text-transform:uppercase;color:var(--haze);
-  border:1px solid var(--line);background:rgba(15,42,56,.4)}
-.chip.spec{color:var(--sand);border-color:rgba(217,183,120,.34);background:var(--sand-g)}
-.chip.org{color:var(--cyan);border-color:rgba(53,214,245,.28);background:rgba(53,214,245,.06)}
+  border:1px solid var(--line);background:rgba(var(--void-rgb),.4)}
+.chip.spec{color:var(--sand);border-color:rgba(var(--sand-rgb),.34);background:var(--sand-g)}
+.chip.org{color:var(--cyan);border-color:rgba(var(--cyan-rgb),.28);background:rgba(var(--cyan-rgb),.06)}
 .chip.org::before{content:'';width:5px;height:5px;background:currentColor;
   clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%)}
-.chip.hot{color:var(--void);background:var(--cyan);border-color:var(--cyan);font-weight:600}
+.chip.hot{color:var(--on-cyan);background:var(--cyan);border-color:var(--cyan);font-weight:600}
 
 /* stat readouts.
    Dividers are a 1px shadow on the right and bottom of every cell, clipped at
@@ -807,7 +890,7 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
    any wrap point, where the nth-child border patching this replaces only ever
    worked for exactly four. Column count is declarative: set --sc on .stats. */
 .stats{display:grid;grid-template-columns:repeat(var(--sc,4),1fr);border:1px solid var(--line);
-  background:rgba(20,53,68,.5);overflow:hidden}
+  background:rgba(var(--deep-rgb),.5);overflow:hidden}
 .stat{padding:clamp(1.5rem,3vw,2.4rem) clamp(1.1rem,2vw,1.6rem);
   box-shadow:1px 0 0 var(--line),0 1px 0 var(--line);
   display:grid;gap:.5rem;position:relative;overflow:hidden}
@@ -858,13 +941,13 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
 .fld label{font-family:var(--f-mono);font-size:.715rem;letter-spacing:.17em;text-transform:uppercase;
   color:var(--haze-d);transition:color .3s}
 .fld:focus-within label{color:var(--cyan)}
-.fld input,.fld select,.fld textarea{width:100%;padding:.82rem .95rem;background:rgba(15,42,56,.6);
+.fld input,.fld select,.fld textarea{width:100%;padding:.82rem .95rem;background:rgba(var(--void-rgb),.6);
   border:1px solid var(--line);color:var(--frost);font-size:1.02rem;
   transition:border-color .3s,background .3s,box-shadow .3s}
 .fld textarea{min-height:132px;resize:vertical}
 .fld input:hover,.fld select:hover,.fld textarea:hover{border-color:var(--line-2)}
 .fld input:focus,.fld select:focus,.fld textarea:focus{outline:none;border-color:var(--cyan);
-  background:rgba(53,214,245,.05);box-shadow:0 0 0 1px var(--cyan)}
+  background:rgba(var(--cyan-rgb),.05);box-shadow:0 0 0 1px var(--cyan)}
 .fld select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--cyan) 50%),
   linear-gradient(135deg,var(--cyan) 50%,transparent 50%);
   background-position:calc(100% - 19px) 50%,calc(100% - 13px) 50%;
@@ -882,13 +965,13 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
 .doc h2{font-size:clamp(1.2rem,2.4vw,1.6rem);margin-top:2.4rem;padding-top:1.5rem;
   border-top:1px solid var(--line);font-variation-settings:'wdth' 108}
 .doc h2:first-of-type{margin-top:1rem}
-.doc p{color:#B9CDD5}
+.doc p{color:var(--lead)}
 .doc ol{display:grid;gap:.85rem;counter-reset:d}
 .doc ol li{position:relative;padding-left:2.6rem;color:var(--haze);counter-increment:d}
 .doc ol li::before{content:counter(d,decimal-leading-zero);position:absolute;left:0;top:.1em;
   font-family:var(--f-mono);font-size:.76rem;letter-spacing:.1em;color:var(--cyan)}
 .doc ol li strong{color:var(--frost);font-weight:600}
-.doc a{color:var(--cyan);border-bottom:1px solid rgba(53,214,245,.3)}
+.doc a{color:var(--cyan);border-bottom:1px solid rgba(var(--cyan-rgb),.3)}
 .doc a:hover{border-color:var(--cyan)}
 .doc-meta{font-family:var(--f-mono);font-size:.725rem;letter-spacing:.17em;text-transform:uppercase;
   color:var(--sand)}
@@ -902,7 +985,7 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
 
 /* ============ footer ============ */
 .ftr{position:relative;z-index:1;padding-top:clamp(3.5rem,7vw,6rem);padding-bottom:2rem;
-  border-top:1px solid var(--line);background:linear-gradient(180deg,rgba(20,53,68,0),rgba(20,53,68,.7))}
+  border-top:1px solid var(--line);background:linear-gradient(180deg,rgba(var(--deep-rgb),0),rgba(var(--deep-rgb),.7))}
 /* brand, then the three IA columns, then the Dubai desk */
 .ftr-g{display:grid;gap:clamp(1.6rem,3vw,3rem);grid-template-columns:1.35fr .75fr .75fr .75fr 1.05fr;
   padding-bottom:clamp(2.5rem,5vw,4rem)}
@@ -969,40 +1052,40 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
 }
 
 /* ---------- consent ---------- */
-.cc{position:fixed;left:var(--frame);right:var(--frame);bottom:var(--frame);z-index:90;
+.glx-cc{position:fixed;left:var(--frame);right:var(--frame);bottom:var(--frame);z-index:90;
   max-width:44rem;padding:clamp(1.1rem,2.2vw,1.5rem);
   background:rgba(var(--deep-rgb),.97);backdrop-filter:blur(20px);
   border:1px solid var(--line-2);
   clip-path:polygon(var(--notch-m) 0,100% 0,100% 100%,0 100%,0 var(--notch-m));
   opacity:0;transform:translateY(14px);
   transition:opacity 420ms var(--ease),transform 420ms var(--ease)}
-.cc[hidden]{display:none}
-.cc[data-open]{opacity:1;transform:none}
-.cc p{color:var(--haze);font-size:.97rem;max-width:60ch}
-.cc p a{color:var(--cyan);border-bottom:1px solid rgba(53,214,245,.4)}
-.cc p a:hover{color:var(--frost);border-bottom-color:var(--frost)}
-.cc-h{display:flex;align-items:center;gap:.6rem;margin-bottom:.5rem}
-.cc-h .eb{font-size:.66rem}
+.glx-cc[hidden]{display:none}
+.glx-cc[data-open]{opacity:1;transform:none}
+.glx-cc p{color:var(--haze);font-size:.97rem;max-width:60ch}
+.glx-cc p a{color:var(--cyan);border-bottom:1px solid rgba(var(--cyan-rgb),.4)}
+.glx-cc p a:hover{color:var(--frost);border-bottom-color:var(--frost)}
+.glx-cc-h{display:flex;align-items:center;gap:.6rem;margin-bottom:.5rem}
+.glx-cc-h .eb{font-size:.66rem}
 /* Three controls at equal visual weight. Decline is not the lesser option —
    styling it as one is the pattern regulators penalise. */
-.cc-b{display:flex;flex-wrap:wrap;gap:.55rem;margin-top:1rem}
-.cc-b button{flex:1 1 auto;min-width:8.5rem;padding:.78em 1.1em;font-family:var(--f-mono);
+.glx-cc-b{display:flex;flex-wrap:wrap;gap:.55rem;margin-top:1rem}
+.glx-cc-b button{flex:1 1 auto;min-width:8.5rem;padding:.78em 1.1em;font-family:var(--f-mono);
   font-size:.73rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;
   border:1px solid var(--line-2);color:var(--frost);background:rgba(var(--panel-rgb),.5);
   cursor:pointer;transition:border-color .3s,color .3s,background .3s}
-.cc-b button:hover{border-color:var(--cyan);color:var(--cyan);background:rgba(53,214,245,.07)}
-.cc-b button:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
-.cc-pref{margin-top:1rem;padding-top:1rem;border-top:1px solid var(--line);display:grid;gap:.9rem}
-.cc-pref[hidden]{display:none}
-.cc-row{display:grid;grid-template-columns:auto 1fr;gap:.9rem;align-items:start}
-.cc-row input{margin-top:.25rem;width:15px;height:15px;accent-color:var(--cyan)}
-.cc-row input:disabled{opacity:.5}
-.cc-row b{display:block;font-family:var(--f-disp);font-weight:700;font-size:1rem;
+.glx-cc-b button:hover{border-color:var(--cyan);color:var(--cyan);background:rgba(var(--cyan-rgb),.07)}
+.glx-cc-b button:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+.glx-cc-pref{margin-top:1rem;padding-top:1rem;border-top:1px solid var(--line);display:grid;gap:.9rem}
+.glx-cc-pref[hidden]{display:none}
+.glx-cc-row{display:grid;grid-template-columns:auto 1fr;gap:.9rem;align-items:start}
+.glx-cc-row input{margin-top:.25rem;width:15px;height:15px;accent-color:var(--cyan)}
+.glx-cc-row input:disabled{opacity:.5}
+.glx-cc-row b{display:block;font-family:var(--f-disp);font-weight:700;font-size:1rem;
   font-variation-settings:'wdth' 106;color:var(--frost)}
-.cc-row small{display:block;color:var(--haze-d);font-size:.88rem;margin-top:.15rem}
-@media (max-width:560px){.cc{left:0;right:0;bottom:0;max-width:none;clip-path:none;
+.glx-cc-row small{display:block;color:var(--haze-d);font-size:.88rem;margin-top:.15rem}
+@media (max-width:560px){.glx-cc{left:0;right:0;bottom:0;max-width:none;clip-path:none;
   border-left:0;border-right:0;border-bottom:0}}
-@media (prefers-reduced-motion:reduce){.cc{transform:none}}
+@media (prefers-reduced-motion:reduce){.glx-cc{transform:none}}
 
 /* ---------- product page ---------- */
 .pp-grid{display:grid;grid-template-columns:1.55fr .95fr;gap:clamp(1.6rem,3.5vw,3rem);align-items:start}
@@ -1243,6 +1326,7 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
 <h1 class="kin">Acetex Plus</h1>
 <p class="lead rv" style="--d:160ms">A versatile process chemical for coatings, adhesives and general chemical manufacture.</p>
 <div class="ph-meta rv" style="--d:220ms"><span><b>Industrial Chemicals</b>Class</span><span><b>&mdash;</b>Form</span><span><b>&mdash;</b>Origins</span></div>
+
 </div>
 </div>
 </section>
@@ -1375,30 +1459,30 @@ and intended use and the desk will send the current sheet.</p>
 </div>
 </footer>
 
-<div class="cc" id="cc" role="dialog" aria-label="Cookie preferences"
+<div class="glx-cc" id="glx-cc" role="dialog" aria-label="Cookie preferences"
  aria-live="polite" hidden>
-<div class="cc-h"><span class="eb">Privacy</span></div>
+<div class="glx-cc-h"><span class="eb">Privacy</span></div>
 <p>We would like to count page views and document requests so we know which
 grades people look for. It is anonymised and never sold. Nothing is measured
 unless you agree. <a href="privacy-policy.html">How we handle data</a>.</p>
-<div class="cc-b">
+<div class="glx-cc-b">
 <button type="button" data-cc="accept">Accept</button>
 <button type="button" data-cc="decline">Decline</button>
-<button type="button" data-cc="prefs" aria-expanded="false" aria-controls="cc-p">Preferences</button>
+<button type="button" data-cc="prefs" aria-expanded="false" aria-controls="glx-cc-p">Preferences</button>
 </div>
-<div class="cc-pref" id="cc-p" hidden>
-<div class="cc-row">
-<input type="checkbox" id="cc-e" checked disabled />
-<label for="cc-e"><b>Essential</b><small>Always on. Remembers this choice, and
+<div class="glx-cc-pref" id="glx-cc-p" hidden>
+<div class="glx-cc-row">
+<input type="checkbox" id="glx-cc-e" checked disabled />
+<label for="glx-cc-e"><b>Essential</b><small>Always on. Remembers this choice, and
 keeps a staff login signed in. No analytics, and nothing shared.</small></label>
 </div>
-<div class="cc-row">
-<input type="checkbox" id="cc-a" />
-<label for="cc-a"><b>Analytics</b><small>Page views and document requests, with
+<div class="glx-cc-row">
+<input type="checkbox" id="glx-cc-a" />
+<label for="glx-cc-a"><b>Analytics</b><small>Page views and document requests, with
 a visitor identifier that is re-derived daily and cannot be traced back to you
 or joined across days.</small></label>
 </div>
-<div class="cc-b">
+<div class="glx-cc-b">
 <button type="button" data-cc="save">Save preferences</button>
 </div>
 </div>
@@ -1413,7 +1497,16 @@ or joined across days.</small></label>
 var GLXSEARCH = [{"t":"Fertilizers","k":"Commodity class","u":"fertilizers.html","c":"fertilizers","d":"Urea B (N46), potash, ammonia, ammonium nitrate and NPK the nitrogen and compound grades that set yield.","h":"fertilizers urea b (n46), potash, ammonia, ammonium nitrate and npk the nitrogen and compound grades that set yield. 5 grades commodity class products"},{"t":"Urea B (N46)","k":"Fertilizers","u":"fertilizers-urea-b-n46.html","c":"fertilizers","d":"The most widely used nitrogen fertilizer, and the backbone of our fertilizer book. A white crystalline solid, highly soluble, releasing nitrogen…","h":"urea b (n46) nitrogen fertilizer the most widely used nitrogen fertilizer, and the backbone of our fertilizer book. a white crystalline solid, highly soluble, releasing nitrogen slowly and steadily which lifts yield while reducing runoff. supplied bulk, prilled, granular and liquid. carbamide n46 nitrogen prill n46 46% nitrogen prilled granular bulk liquid turkmenistan uzbekistan azerbaijan"},{"t":"Potash","k":"Fertilizers","u":"fertilizers-potash.html","c":"fertilizers","d":"Potash governs how well a crop handles stress drought, disease, temperature swing. It is the input that protects the yield the nitrogen created, and…","h":"potash crop resilience potash governs how well a crop handles stress drought, disease, temperature swing. it is the input that protects the yield the nitrogen created, and it holds quality through storage and transport. potassium chloride mop kcl muriate potassium-rich mop grade turkmenistan uzbekistan"},{"t":"Ammonia","k":"Fertilizers","u":"fertilizers-ammonia.html","c":"fertilizers","d":"The upstream input from which most nitrogen fertilizers are made, and a direct-application fertilizer in its own right. Handled to specification,…","h":"ammonia upstream nitrogen the upstream input from which most nitrogen fertilizers are made, and a direct-application fertilizer in its own right. handled to specification, with the shipping and storage discipline anhydrous ammonia demands. nh3 anhydrous aqua ammonia anhydrous aqueous kazakhstan uzbekistan"},{"t":"Ammonium Nitrate","k":"Fertilizers","u":"fertilizers-ammonium-nitrate.html","c":"fertilizers","d":"Where urea releases slowly, ammonium nitrate is immediately available the grade to reach for when the growing window is short or a crop needs…","h":"ammonium nitrate quick-release nitrogen where urea releases slowly, ammonium nitrate is immediately available the grade to reach for when the growing window is short or a crop needs correcting mid-season. an 34-0-0 nh4no3 calcium ammonium nitrate 34-0-0 high-yield kazakhstan uzbekistan"},{"t":"NPK Compound","k":"Fertilizers","u":"fertilizers-npk-compound.html","c":"fertilizers","d":"Nitrogen, phosphorus and potassium in one granule, so every application delivers a balanced ration. The general-purpose workhorse across soil types…","h":"npk compound balanced blend nitrogen, phosphorus and potassium in one granule, so every application delivers a balanced ration. the general-purpose workhorse across soil types and cropping systems. npk 15-15-15 compound blend phosphorus n p k blend compound granular turkmenistan kazakhstan uzbekistan azerbaijan"},{"t":"Polymers","k":"Commodity class","u":"polymers.html","c":"polymers","d":"Polyethylene across LDPE, HDPE, LLDPE and UHMWPE, polypropylene homo- and copolymer, plus performance additives.","h":"polymers polyethylene across ldpe, hdpe, lldpe and uhmwpe, polypropylene homo- and copolymer, plus performance additives. 3 families commodity class products"},{"t":"Polyethylene","k":"Polymers","u":"polymers-polyethylene.html","c":"polymers","d":"One monomer, four very different materials the difference is how tightly the chains pack. Low-density (LDPE) stays branched and flexible, which is…","h":"polyethylene resin family one monomer, four very different materials the difference is how tightly the chains pack. low-density (ldpe) stays branched and flexible, which is why it becomes film and bags. high-density (hdpe) packs straight and stiff, so it becomes pipe, containers and automotive parts. linear low-density (lldpe) trades stiffness for puncture resistance in stretch film, and ultra-high molecular weight (uhmwpe) runs chains so long the material outwears steel in abrasion service. pe resin film bags pipe pe100 stretch film blow moulding ldpe hdpe lldpe uhmwpe turkmenistan uzbekistan uae saudi arabia china"},{"t":"Polypropylene","k":"Polymers","u":"polymers-polypropylene.html","c":"polymers","d":"Lighter than polyethylene and considerably stiffer, with a higher melting point which is what makes it the default for packaging that gets…","h":"polypropylene resin family lighter than polyethylene and considerably stiffer, with a higher melting point which is what makes it the default for packaging that gets hot-filled, automotive interiors, textiles and rigid consumer goods. homopolymer for stiffness and clarity; copolymer where impact strength at low temperature matters more. pp turkmenplen tpp melt flow mfi hot-fill raffia homopolymer copolymer ppr ppc turkmenistan uzbekistan uae saudi arabia china"},{"t":"Performance additives","k":"Polymers","u":"polymers-performance-additives.html","c":"polymers","d":"A resin only becomes a product once it is tuned. Plasticizers for flexibility, UV stabilizers so outdoor parts do not chalk and crack, flame…","h":"performance additives resin modifiers a resin only becomes a product once it is tuned. plasticizers for flexibility, uv stabilizers so outdoor parts do not chalk and crack, flame retardants for building and electrical compliance, antimicrobials for medical and food contact. specified by application, supplied to grade. masterbatch antioxidant slip agent compounding plasticizers uv stabilizers flame retardants antimicrobials turkmenistan uzbekistan uae saudi arabia china"},{"t":"Industrial Chemicals","k":"Commodity class","u":"industrials.html","c":"industrials","d":"Sulphur, caustic soda, sulphuric and hydrochloric acid, LABSA 96%, SLES 70%, carbon black, iodine and more.","h":"industrial chemicals sulphur, caustic soda, sulphuric and hydrochloric acid, labsa 96%, sles 70%, carbon black, iodine and more. 16 grades commodity class products"},{"t":"Sulphur","k":"Industrial Chemicals","u":"industrials-sulphur.html","c":"industrials","d":"High-quality granular and lump sulphur the upstream input for sulphuric acid, and from there for phosphate fertilizer and a long list of industrial…","h":"sulphur manufacturing agriculture & energy high-quality granular and lump sulphur the upstream input for sulphuric acid, and from there for phosphate fertilizer and a long list of industrial processes. sulfur brimstone s granular lump turkmenistan uzbekistan kazakhstan"},{"t":"Urea-A (technical)","k":"Industrial Chemicals","u":"industrials-urea-a-technical.html","c":"industrials","d":"High-purity urea for industrial rather than agricultural use: resin and adhesive production, and as the reducing agent in selective catalytic…","h":"urea-a (technical) manufacturing high-purity urea for industrial rather than agricultural use: resin and adhesive production, and as the reducing agent in selective catalytic reduction (scr) systems on diesel exhaust. adblue def scr technical urea ch4n2o technical grade a uzbekistan"},{"t":"Caustic Soda","k":"Industrial Chemicals","u":"industrials-caustic-soda.html","c":"industrials","d":"Sodium hydroxide, the most broadly used industrial alkali pulp and paper, textiles, alumina, soap, and pH correction in water treatment. Supplied…","h":"caustic soda manufacturing water treatment sodium hydroxide, the most broadly used industrial alkali pulp and paper, textiles, alumina, soap, and ph correction in water treatment. supplied solid and liquid. sodium hydroxide lye flakes pearls naoh solid liquid"},{"t":"Sodium Hypochlorite","k":"Industrial Chemicals","u":"industrials-sodium-hypochlorite.html","c":"industrials","d":"The workhorse disinfectant and bleaching agent for municipal water purification and cleaning product…","h":"sodium hypochlorite water treatment the workhorse disinfectant and bleaching agent for municipal water purification and cleaning product manufacture. bleach hypo disinfectant naocl disinfectant grade"},{"t":"Hydrochloric Acid","k":"Industrial Chemicals","u":"industrials-hydrochloric-acid.html","c":"industrials","d":"Steel pickling, chemical synthesis and pH control. Supplied at industrial concentration with the handling documentation the grade…","h":"hydrochloric acid manufacturing water treatment steel pickling, chemical synthesis and ph control. supplied at industrial concentration with the handling documentation the grade requires. muriatic acid pickling hcl industrial grade"},{"t":"Liquid Chlorine","k":"Industrial Chemicals","u":"industrials-liquid-chlorine.html","c":"industrials","d":"Bulk chlorine for water treatment, disinfection and chemical manufacture, shipped under pressure to…","h":"liquid chlorine water treatment bulk chlorine for water treatment, disinfection and chemical manufacture, shipped under pressure to specification. cl2 chlorine gas cl2 bulk supply"},{"t":"Calcium Chloride","k":"Industrial Chemicals","u":"industrials-calcium-chloride.html","c":"industrials","d":"De-icing, dust suppression on unsealed roads, concrete acceleration and industrial drying. Hygroscopic enough to pull moisture out of almost…","h":"calcium chloride manufacturing de-icing, dust suppression on unsealed roads, concrete acceleration and industrial drying. hygroscopic enough to pull moisture out of almost anything. cacl2 de-icing desiccant cacl2 solid liquid"},{"t":"Sodium Sulphate","k":"Industrial Chemicals","u":"industrials-sodium-sulphate.html","c":"industrials","d":"The bulk filler and processing aid in powder detergents, and a flux in glass manufacture and…","h":"sodium sulphate detergents & care manufacturing the bulk filler and processing aid in powder detergents, and a flux in glass manufacture and pulping. sodium sulfate glauber salt na2so4 detergent grade"},{"t":"LABSA","k":"Industrial Chemicals","u":"industrials-labsa.html","c":"industrials","d":"Linear alkyl benzene sulphonic acid at 96% the primary anionic surfactant behind most detergent and cleaning formulations sold in the…","h":"labsa detergents & care linear alkyl benzene sulphonic acid at 96% the primary anionic surfactant behind most detergent and cleaning formulations sold in the region. linear alkyl benzene sulphonic acid surfactant 96% c18h30o3s 96% purity"},{"t":"SLES","k":"Industrial Chemicals","u":"industrials-sles.html","c":"industrials","d":"Sodium lauryl ether sulphate at 70% the foaming surfactant in shampoo, body wash and liquid…","h":"sles detergents & care sodium lauryl ether sulphate at 70% the foaming surfactant in shampoo, body wash and liquid detergent. sodium lauryl ether sulphate sles 70 surfactant shampoo c12h25nao4s 70% concentration"},{"t":"Sulphuric Acid","k":"Industrial Chemicals","u":"industrials-sulphuric-acid.html","c":"industrials","d":"The single most produced industrial chemical on earth. Phosphate fertilizer production, oil refining, metal processing and wastewater…","h":"sulphuric acid manufacturing agriculture & energy the single most produced industrial chemical on earth. phosphate fertilizer production, oil refining, metal processing and wastewater neutralisation. sulfuric acid h2so4 oleum h2so4 industrial"},{"t":"Formic Acid","k":"Industrial Chemicals","u":"industrials-formic-acid.html","c":"industrials","d":"Silage preservation in agriculture, plus leather tanning and textile dyeing where a strong, volatile acid is needed that leaves no…","h":"formic acid agriculture & energy manufacturing silage preservation in agriculture, plus leather tanning and textile dyeing where a strong, volatile acid is needed that leaves no residue. methanoic acid silage tanning ch2o2 preservative grade"},{"t":"Acetex Plus","k":"Industrial Chemicals","u":"industrials-acetex-plus.html","c":"industrials","d":"A versatile process chemical for coatings, adhesives and general chemical…","h":"acetex plus manufacturing a versatile process chemical for coatings, adhesives and general chemical manufacture. coatings adhesives process chemical multi-purpose"},{"t":"Aluminium Sulphate","k":"Industrial Chemicals","u":"industrials-aluminium-sulphate.html","c":"industrials","d":"The standard coagulant in drinking water and effluent treatment it pulls suspended solids together so they settle. Also used in paper sizing and…","h":"aluminium sulphate water treatment manufacturing the standard coagulant in drinking water and effluent treatment it pulls suspended solids together so they settle. also used in paper sizing and dyeing. alum aluminum sulfate coagulant flocculant al2(so4)3 water treatment"},{"t":"Iodine","k":"Industrial Chemicals","u":"industrials-iodine.html","c":"industrials","d":"Pharmaceutical synthesis, X-ray contrast media, disinfectants and LCD polarising film. A genuinely scarce element, and one of the few we source…","h":"iodine manufacturing pharmaceutical synthesis, x-ray contrast media, disinfectants and lcd polarising film. a genuinely scarce element, and one of the few we source single-origin. i2 pharma contrast media i2 pharma grade turkmenistan"},{"t":"Carbon Black","k":"Industrial Chemicals","u":"industrials-carbon-black.html","c":"industrials","d":"The reinforcing filler that makes a tyre last. Also pigment and UV protection in plastics, coatings and…","h":"carbon black manufacturing the reinforcing filler that makes a tyre last. also pigment and uv protection in plastics, coatings and inks. n330 n660 furnace black tyre filler pigment c rubber grade turkmenistan"},{"t":"Base Oil SN-180 (MSDS)","k":"Document","u":"index.html#specifications","c":"documents","d":"Full 16-section GHS safety sheet for the SN-180 cut — hazard identification, first aid, firefighting, spill response, exposure controls and transport…","h":"base oil sn-180 msds sn-180 material safety data sheet turkmenistan full 16-section ghs safety sheet for the sn-180 cut — hazard identification, first aid, firefighting, spill response, exposure controls and transport classification. kinematic viscosity @ 100 °c 4.5 – 6.0 cst flash point > 207 °c pour point −12 °c viscosity index 95 density @ 20 °c 880 kg/m³ cas number 64742-54-7 document sheet pdf"},{"t":"Base Oil SN-350 (MSDS)","k":"Document","u":"index.html#specifications","c":"documents","d":"Mid-range solvent-neutral grade. Not classified as hazardous; biodegradable under favourable conditions and unregulated for…","h":"base oil sn-350 msds sn-350 material safety data sheet turkmenistan mid-range solvent-neutral grade. not classified as hazardous; biodegradable under favourable conditions and unregulated for transport. kinematic viscosity @ 100 °c 8.0 – 9.5 cst flash point ≥ 220 °c pour point −12 °c viscosity index 95 density @ 20 °c ≤ 890 kg/m³ colour (astm) 1.0 document sheet pdf"},{"t":"Base Oil SN-600 (MSDS)","k":"Document","u":"index.html#specifications","c":"documents","d":"Heavy solvent-neutral grade for higher-viscosity blends. Same hazard profile as the lighter cuts, with a correspondingly higher flash…","h":"base oil sn-600 msds sn-600 material safety data sheet turkmenistan heavy solvent-neutral grade for higher-viscosity blends. same hazard profile as the lighter cuts, with a correspondingly higher flash point. kinematic viscosity @ 100 °c 11.5 – 13.5 cst flash point ≥ 225 °c pour point −9 °c viscosity index 95 density @ 20 °c ≤ 900 kg/m³ colour (astm) 2.0 document sheet pdf"},{"t":"Base Oil — full range (TDS)","k":"Document","u":"index.html#specifications","c":"documents","d":"The comparison table for all five solvent-neutral cuts — eleven indices side by side, including sulphur, ash, acidity and mechanical impurities.…","h":"base oil — full range tds range technical data sheet turkmenistan the comparison table for all five solvent-neutral cuts — eleven indices side by side, including sulphur, ash, acidity and mechanical impurities. start here when selecting a grade. grades covered sn-80 · 180 · 350 · 600 · 1200 viscosity span @ 100 °c 2.5 – 23.0 cst flash point span 170 – 250 °c density span @ 20 °c 870 – 905 kg/m³ sulphur content ≤ 0.03 % ash / mechanical impurities ≤ 0.005 % document sheet pdf"},{"t":"Polypropylene — Turkmenplen (SPEC)","k":"Document","u":"index.html#specifications","c":"documents","d":"Thirteen indices for the three Turkmenplen homopolymer grades, including fluidity, elasticity modulus, gel count and turbidity for film…","h":"polypropylene — turkmenplen spec turkmenplen origin & grade specification turkmenistan thirteen indices for the three turkmenplen homopolymer grades, including fluidity, elasticity modulus, gel count and turbidity for film applications. grades covered tpp d30 s · f 79 fb · d 382 bf melt flow rate 2.7 – 15 g/10 min flexural modulus 1300 – 1450 n/mm² vicat softening point 145 – 150 °c thermooxidising stability @ 150 °c 120 – 360 h granule size 40 – 60 pcs/g document sheet pdf"},{"t":"Home","k":"Page","u":"index.html","c":"company","d":"Caspian and Central Asian commodity trading out of Dubai, across fertilizers, polymers and industrial chemicals.","h":"home caspian and central asian commodity trading out of dubai, across fertilizers, polymers and industrial chemicals. globalex trading fzco home landing"},{"t":"Products","k":"Page","u":"products.html","c":"company","d":"Every grade we trade, searchable in one place across all three commodity classes.","h":"products every grade we trade, searchable in one place across all three commodity classes. catalogue catalog grades search all products"},{"t":"About","k":"Page","u":"about.html","c":"company","d":"Established 2019 on honesty, integrity and trust. A FZCO freezone trading house in Jumeirah Lakes Towers, Dubai.","h":"about established 2019 on honesty, integrity and trust. a fzco freezone trading house in jumeirah lakes towers, dubai. company history mission vision values leadership team fzco freezone licence"},{"t":"Trade Procedures","k":"Page","u":"procedures.html","c":"company","d":"The ten contractual checkpoints between handshake and hull.","h":"trade procedures the ten contractual checkpoints between handshake and hull. ncnd imfpa loi fco letter of credit lc proof of product pop performance bond sgs inspection incoterms cif fob shipment"},{"t":"Sustainability","k":"Page","u":"sustainability.html","c":"company","d":"Six commitments applied to product, partner and process decisions.","h":"sustainability six commitments applied to product, partner and process decisions. esg environment ethical sourcing transparency social impact"},{"t":"Careers","k":"Page","u":"careers.html","c":"company","d":"Open roles in Dubai, and how to apply.","h":"careers open roles in dubai, and how to apply. jobs vacancies hiring apply cv digital marketing manager chemical engineer"},{"t":"Contact","k":"Page","u":"contact.html","c":"company","d":"The Dubai desk — address, phone, and the enquiry form. Replies within two business days.","h":"contact the dubai desk — address, phone, and the enquiry form. replies within two business days. enquiry quote rfq phone email address jlt cluster x map get in touch"},{"t":"Specifications & MSDS","k":"Page","u":"index.html#specifications","c":"company","d":"The controlled document register — safety, technical and origin sheets, delivered by secure link.","h":"specifications & msds the controlled document register — safety, technical and origin sheets, delivered by secure link. msds tds sds spec sheet datasheet safety data download documents"},{"t":"Logistics & Shipping","k":"Page","u":"logistics.html","c":"company","d":"Incoterms, load ports, shipping modes, packaging options and the documentation set behind every Globalex shipment.","h":"logistics & shipping incoterms, load ports, shipping modes, packaging options and the documentation set behind every globalex shipment. incoterms fob cfr cif dap exw bill of lading certificate of origin packing list iso tank big bag break bulk containerised"},{"t":"Compliance & Certifications","k":"Page","u":"compliance.html","c":"company","d":"Freezone licensing, Dubai Customs registration, counterparty due diligence, sanctions screening and third-party inspection.","h":"compliance & certifications freezone licensing, dubai customs registration, counterparty due diligence, sanctions screening and third-party inspection. kyc ubo sanctions ofac eu un screening sgs intertek bureau veritas certificate of analysis anti-bribery trade controls"},{"t":"News","k":"Page","u":"news.html","c":"company","d":"Market notes and corridor updates from the Globalex trading desk.","h":"news market notes and corridor updates from the globalex trading desk. market note corridor company product announcement"},{"t":"Privacy Policy","k":"Page","u":"privacy-policy.html","c":"company","d":"How we collect, use and safeguard personal information.","h":"privacy policy how we collect, use and safeguard personal information. gdpr data protection cookies tracking"},{"t":"Terms & Conditions","k":"Page","u":"terms-conditions.html","c":"company","d":"The terms governing use of this website and our services.","h":"terms & conditions the terms governing use of this website and our services. legal terms conditions liability"}];
 var RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
 var TOUCH = matchMedia('(hover: none)').matches || innerWidth < 901;
-var PAL = {cyan:'53,214,245', sand:'217,183,120'};
+/* Theme colours for canvas work. A 2D context takes a string, not a CSS
+   custom property, so anything drawn to a canvas reads them from here —
+   generated from _src/theme.js like everything else, so recolouring the site
+   recolours the ornaments and the globe too.
+
+   GLXC.<name> is the hex; GLXC.rgb.<name> is bare channels for building an
+   rgba() string with a computed alpha. */
+var GLXC = {"rgb":{"pageBackground":"15,42,56","surfaceRaised":"20,53,68","surfacePanel":"23,59,74","surfaceMuted":"35,89,107","surfaceDeepest":"6,28,39","textHeading":"233,243,246","textLead":"198,216,223","textBody":"180,201,210","textMuted":"143,170,182","textOnSystem":"15,42,56","textOnMaterial":"42,31,12","overlayScrim":"6,20,27","overlayPanel":"27,67,86","highlight":"255,255,255","accentSystem":"53,214,245","accentSystemDark":"15,168,201","accentMaterial":"217,183,120","accentMaterialDark":"184,147,78","accentAlert":"245,116,138","globeGraticule":"27,84,104","globeSurface":"42,110,133","globeGlow":"155,238,255","hairline":"146,190,204","void":"15,42,56","deep":"20,53,68","panel":"23,59,74","steel":"35,89,107","abyss":"6,28,39","frost":"233,243,246","lead":"198,216,223","haze":"180,201,210","cyan":"53,214,245","sand":"217,183,120","alert":"245,116,138","scrim":"6,20,27"},"int":{"pageBackground":993848,"surfaceRaised":1324356,"surfacePanel":1522506,"surfaceMuted":2316651,"surfaceDeepest":400423,"textHeading":15332342,"textLead":13031647,"textBody":11848146,"textMuted":9415350,"textOnSystem":993848,"textOnMaterial":2760460,"overlayScrim":398363,"overlayPanel":1786710,"highlight":16777215,"accentSystem":3528437,"accentSystemDark":1026249,"accentMaterial":14268280,"accentMaterialDark":12096334,"accentAlert":16086154,"globeGraticule":1791080,"globeSurface":2780805,"globeGlow":10219263,"hairline":9617100,"void":993848,"deep":1324356,"panel":1522506,"steel":2316651,"abyss":400423,"frost":15332342,"lead":13031647,"haze":11848146,"cyan":3528437,"sand":14268280,"alert":16086154,"scrim":398363},"pageBackground":"#0F2A38","surfaceRaised":"#143544","surfacePanel":"#173B4A","surfaceMuted":"#23596B","surfaceDeepest":"#061C27","textHeading":"#E9F3F6","textLead":"#C6D8DF","textBody":"#B4C9D2","textMuted":"#8FAAB6","textOnSystem":"#0F2A38","textOnMaterial":"#2A1F0C","overlayScrim":"#06141B","overlayPanel":"#1B4356","highlight":"#FFFFFF","accentSystem":"#35D6F5","accentSystemDark":"#0FA8C9","accentMaterial":"#D9B778","accentMaterialDark":"#B8934E","accentAlert":"#F5748A","globeGraticule":"#1B5468","globeSurface":"#2A6E85","globeGlow":"#9BEEFF","hairline":"#92BECC","void":"#0F2A38","deep":"#143544","panel":"#173B4A","steel":"#23596B","abyss":"#061C27","frost":"#E9F3F6","lead":"#C6D8DF","haze":"#B4C9D2","cyan":"#35D6F5","sand":"#D9B778","alert":"#F5748A","scrim":"#06141B"};
+window.GLXC = GLXC;
+var PAL = GLXC.rgb;
 
 /* ---------- procedural film grain ---------- */
 (function(){
@@ -2165,9 +2258,9 @@ function ornamentField(cv, opt){
 
     // radial vignette mask keeps the pattern a whisper at the edges
     var g = x.createRadialGradient(w*0.5+px*.4, h*0.42+py*.4, 0, w*0.5, h*0.5, R*0.52);
-    g.addColorStop(0,'rgba(15,42,56,0)');
-    g.addColorStop(.55,'rgba(15,42,56,.5)');
-    g.addColorStop(1,'rgba(15,42,56,.97)');
+    g.addColorStop(0,'rgba(' + GLXC.rgb.pageBackground + ',0)');
+    g.addColorStop(.55,'rgba(' + GLXC.rgb.pageBackground + ',.5)');
+    g.addColorStop(1,'rgba(' + GLXC.rgb.pageBackground + ',.97)');
     x.fillStyle = g; x.fillRect(0,0,w,h);
 
     // live nodes — diamond markers with breathing halo
@@ -2408,11 +2501,11 @@ if (location.protocol.indexOf('http') === 0){
   if (state === 'granted') flush();
   else if (state === 'denied') drop();
 
-  var el = document.getElementById('cc');
+  var el = document.getElementById('glx-cc');
   if (!el) return;
 
-  var prefs = document.getElementById('cc-p');
-  var analytics = document.getElementById('cc-a');
+  var prefs = document.getElementById('glx-cc-p');
+  var analytics = document.getElementById('glx-cc-a');
   var lastFocus = null;
   var t = null;
 

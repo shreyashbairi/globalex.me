@@ -1,4 +1,10 @@
 // Globalex design system — inlined into every page.
+//
+// COLOURS ARE NOT DEFINED HERE. They all come from _src/theme.js, which is the
+// one file to edit to recolour the site. This file consumes them as custom
+// properties and never writes a literal — `npm test` enforces that.
+const theme = require("./theme");
+
 module.exports = `
 /* ============================================================
    GLOBALEX — Caspian corridor instrument system
@@ -15,42 +21,16 @@ a{color:inherit;text-decoration:none}
 :where(svg){fill:currentColor}
 
 :root{
-  /* Ground — petrol blue, never neutral black. The ramp sits well above
-     black on purpose: the old near-black base made the accents shout and
-     the whole site read as a dark console rather than a trading desk.
-     Each step is roughly one perceptual notch, so panels separate from the
-     ground without a border doing all the work. */
-  --void:#0F2A38;
-  --deep:#143544;
-  --panel:#173B4A;
-  --steel:#23596B;
+/* ------------------------------------------------------------------
+   COLOUR. Generated from _src/theme.js — edit that file, not this block.
+   Each colour appears as a hex value and as bare RGB channels, so a
+   component can write rgba(var(--x-rgb), .06) and follow the theme.
+   ------------------------------------------------------------------ */
+${theme.cssVars()}
 
-  /* The same three as bare channels, for the many surfaces that need the
-     ground at partial opacity. One place to retune the whole site. */
-  --void-rgb:15,42,56;
-  --deep-rgb:20,53,68;
-  --panel-rgb:23,59,74;
-
-  --line:rgba(146,190,204,.19);
-  --line-2:rgba(146,190,204,.34);
-
-  /* system accent (from the wordmark) */
-  --cyan:#35D6F5;
-  --cyan-d:#0FA8C9;
-  --cyan-g:rgba(53,214,245,.16);
-
-  /* material accent — physical cargo */
-  --sand:#D9B778;
-  --sand-d:#B8934E;
-  --sand-g:rgba(217,183,120,.14);
-
-  /* Text greys. Both sit on --void (#0F2A38) and are tuned for contrast there:
-     --frost reads 13.2:1, --haze 8.9:1 and --haze-d 6.1:1, so even mono
-     captions clear AA comfortably at small sizes on the lifted ground.
-     They stay in the petrol family — brighter, never neutral grey. */
-  --frost:#E9F3F6;
-  --haze:#B4C9D2;
-  --haze-d:#8FAAB6;
+/* Short aliases. --cyan is easier to scan than --accent-system in a
+   500-line stylesheet; both resolve to the same value. */
+${theme.cssAliases()}
 
   --f-disp:'Archivo','Archivo Expanded',ui-sans-serif,system-ui,sans-serif;
   --f-body:'Instrument Sans',ui-sans-serif,system-ui,-apple-system,sans-serif;
@@ -107,9 +87,9 @@ body[data-lock]{overflow:hidden}
 body::before{
   content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
   background:
-    radial-gradient(115% 78% at 8% -12%,rgba(53,214,245,.075),transparent 62%),
-    radial-gradient(95% 70% at 104% 8%,rgba(217,183,120,.05),transparent 60%),
-    radial-gradient(140% 100% at 50% 118%,rgba(35,89,107,.34),transparent 68%);
+    radial-gradient(115% 78% at 8% -12%,rgba(var(--cyan-rgb),.075),transparent 62%),
+    radial-gradient(95% 70% at 104% 8%,rgba(var(--sand-rgb),.05),transparent 60%),
+    radial-gradient(140% 100% at 50% 118%,rgba(var(--steel-rgb),.34),transparent 68%);
 }
 
 /* ============ film grain + scanline (compositing layer) ============ */
@@ -124,7 +104,7 @@ body::before{
 }
 .grain::after{
   content:'';position:absolute;inset:0;
-  background:repeating-linear-gradient(to bottom,rgba(255,255,255,.028) 0 1px,transparent 1px 3px);
+  background:repeating-linear-gradient(to bottom,rgba(var(--highlight-rgb),.028) 0 1px,transparent 1px 3px);
 }
 @keyframes grainShift{
   0%{transform:translate(0,0)}20%{transform:translate(-6%,3%)}40%{transform:translate(4%,-5%)}
@@ -167,7 +147,7 @@ body::before{
   will-change:transform}
 .cur .dot{position:absolute;width:5px;height:5px;background:#fff;transform:translate(-50%,-50%);
   clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%)}
-.cur .ring{position:absolute;width:34px;height:34px;border:1px solid rgba(255,255,255,.55);
+.cur .ring{position:absolute;width:34px;height:34px;border:1px solid rgba(var(--highlight-rgb),.55);
   transform:translate(-50%,-50%) rotate(45deg);transition:width .32s var(--ease),height .32s var(--ease),
   border-color .32s var(--ease),border-radius .32s var(--ease)}
 .cur[data-hot] .ring{width:56px;height:56px;border-color:#fff;border-radius:50%;transform:translate(-50%,-50%) rotate(0deg)}
@@ -221,7 +201,7 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
 .eb.mat{color:var(--sand)}
 .eb.dim{color:var(--haze-d)}
 
-.lead{font-size:var(--t-lead);line-height:1.55;color:#C6D8DF;text-wrap:pretty}
+.lead{font-size:var(--t-lead);line-height:1.55;color:var(--lead);text-wrap:pretty}
 .mut{color:var(--haze);text-wrap:pretty}
 .mono{font-family:var(--f-mono);font-size:var(--t-mono);letter-spacing:.16em;text-transform:uppercase;
   color:var(--haze-d)}
@@ -236,7 +216,7 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
 :target,section[id]{scroll-margin-top:clamp(74px,8.5vh,96px)}
 .sec.is-tight{padding-block:clamp(3rem,6vh,4.75rem)}
 .sec.is-flush{padding-block:0}
-.sec-panel{background:linear-gradient(180deg,rgba(23,59,74,.52),rgba(15,42,56,0))}
+.sec-panel{background:linear-gradient(180deg,rgba(var(--panel-rgb),.52),rgba(var(--void-rgb),0))}
 .hd{display:grid;gap:1.1rem;max-width:62ch;margin-bottom:clamp(2.6rem,5vw,4.25rem)}
 .hd .lead{margin-top:.35rem}
 
@@ -255,7 +235,7 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
   backdrop-filter .45s,border-color .45s}
 .hdr::after{content:'';position:absolute;inset:auto 0 0;height:1px;background:var(--line);opacity:0;
   transition:opacity .45s}
-.hdr[data-solid]{background:rgba(15,42,56,.82);backdrop-filter:blur(18px) saturate(1.4)}
+.hdr[data-solid]{background:rgba(var(--void-rgb),.82);backdrop-filter:blur(18px) saturate(1.4)}
 .hdr[data-solid]::after{opacity:1}
 .hdr[data-hide]{transform:translateY(-104%);transition:transform .5s var(--ease)}
 .hdr-in{display:flex;align-items:center;justify-content:space-between;gap:1.5rem;
@@ -294,7 +274,7 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
 .ph.has-vid{padding-top:clamp(9.5rem,19vh,13.5rem)}
 .ph-vid{position:absolute;inset:0;overflow:hidden}
 .ph-vid::after{content:'';position:absolute;inset:0;z-index:2;
-  background:linear-gradient(155deg,rgba(53,214,245,.28),rgba(15,42,56,.62));
+  background:linear-gradient(155deg,rgba(var(--cyan-rgb),.28),rgba(var(--void-rgb),.62));
   mix-blend-mode:color}
 .ph-vid-p,.ph-vid-v{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
   filter:grayscale(1) contrast(1.1) brightness(.55)}
@@ -333,8 +313,8 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
 .menu-l{display:grid}
 .menu a{display:grid;gap:2px;padding:.8rem .85rem;border-left:1px solid transparent;
   transition:background .28s,border-color .28s}
-.menu a:hover,.menu a:focus-visible{background:rgba(53,214,245,.06);border-left-color:var(--cyan)}
-.menu a:focus-visible{outline:none;background:rgba(53,214,245,.1)}
+.menu a:hover,.menu a:focus-visible{background:rgba(var(--cyan-rgb),.06);border-left-color:var(--cyan)}
+.menu a:focus-visible{outline:none;background:rgba(var(--cyan-rgb),.1)}
 .menu a b{display:block;font-family:var(--f-disp);font-weight:700;font-size:.99rem;
   font-variation-settings:'wdth' 106;color:var(--frost)}
 .menu a small{display:block;font-family:var(--f-mono);font-size:.69rem;letter-spacing:.11em;
@@ -360,7 +340,7 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
 .mm-l{display:grid;gap:0;margin-top:.35rem}
 .mm-l a{padding:.4rem .5rem;font-size:.95rem;color:var(--haze);border-left:1px solid transparent;
   transition:color .26s,background .26s,border-color .26s}
-.mm-l a:hover,.mm-l a:focus-visible{color:var(--frost);background:rgba(53,214,245,.06);
+.mm-l a:hover,.mm-l a:focus-visible{color:var(--frost);background:rgba(var(--cyan-rgb),.06);
   border-left-color:var(--cyan)}
 /* two classes, so this outbids .mm-l a on specificity rather than with
    !important; inline-flex keeps the arrow on the label's line.
@@ -400,13 +380,13 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
   transition:transform .44s var(--ease)}
 .btn:hover::before{transform:translateY(0)}
 
-.btn-p{background:var(--cyan);color:var(--void);font-weight:600}
+.btn-p{background:var(--cyan);color:var(--on-cyan);font-weight:600}
 .btn-p::before{background:var(--frost)}
-.btn-m{background:var(--sand);color:#2A1F0C;font-weight:600}
+.btn-m{background:var(--sand);color:var(--on-sand);font-weight:600}
 .btn-m::before{background:var(--frost)}
 .btn-o{border:1px solid var(--line-2);color:var(--frost)}
 .btn-o::before{background:var(--cyan)}
-.btn-o:hover{color:var(--void);border-color:var(--cyan)}
+.btn-o:hover{color:var(--on-cyan);border-color:var(--cyan)}
 .btn-g{padding-inline:0;color:var(--cyan);clip-path:none}
 .btn-g::before{display:none}
 .btn-g::after{content:'';position:absolute;left:0;bottom:.55em;width:100%;height:1px;
@@ -417,9 +397,9 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
 
 .lk{display:inline-flex;align-items:center;gap:.5em;font-family:var(--f-mono);font-size:.79rem;
   font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--cyan);
-  padding-bottom:.3em;border-bottom:1px solid rgba(53,214,245,.32);transition:border-color .3s,gap .3s}
+  padding-bottom:.3em;border-bottom:1px solid rgba(var(--cyan-rgb),.32);transition:border-color .3s,gap .3s}
 .lk:hover{border-color:var(--cyan);gap:.85em}
-.lk.mat{color:var(--sand);border-bottom-color:rgba(217,183,120,.32)}
+.lk.mat{color:var(--sand);border-bottom-color:rgba(var(--sand-rgb),.32)}
 .lk.mat:hover{border-color:var(--sand)}
 
 /* ============ nav toggle + mobile ============ */
@@ -432,7 +412,7 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
 .tog[aria-expanded=true] i:nth-child(2){width:22px;transform:translateY(-4.5px) rotate(-45deg)}
 @media (max-width:1080px){.nav{display:none}.tog{display:block}}
 
-.mnav{position:fixed;inset:0;z-index:75;background:rgba(15,42,56,.97);backdrop-filter:blur(24px);
+.mnav{position:fixed;inset:0;z-index:75;background:rgba(var(--void-rgb),.97);backdrop-filter:blur(24px);
   display:grid;align-content:center;gap:.4rem;padding:5.5rem var(--pad-x) 2.5rem;
   clip-path:circle(0% at calc(100% - 44px) 44px);transition:clip-path .78s var(--ease);
   overflow-y:auto}
@@ -504,12 +484,12 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
   align-content:start;padding:clamp(3.5rem,11vh,8rem) 1.1rem 1.1rem;
   opacity:0;visibility:hidden;transition:opacity .32s var(--ease),visibility .32s}
 .srch[data-open]{opacity:1;visibility:visible}
-.srch-bd{position:absolute;inset:0;background:rgba(6,20,27,.78);backdrop-filter:blur(7px);
+.srch-bd{position:absolute;inset:0;background:rgba(var(--scrim-rgb),.78);backdrop-filter:blur(7px);
   -webkit-backdrop-filter:blur(7px)}
 .srch-p{position:relative;width:min(100%,640px);max-height:calc(100svh - clamp(4.6rem,13vh,9.1rem));
   display:flex;flex-direction:column;overflow:hidden;
-  background:linear-gradient(168deg,rgba(27,67,86,.97),rgba(20,53,68,.97));
-  border:1px solid var(--line-2);box-shadow:0 34px 90px -30px rgba(6,20,27,.9);
+  background:linear-gradient(168deg,rgba(var(--ov-panel-rgb),.97),rgba(var(--deep-rgb),.97));
+  border:1px solid var(--line-2);box-shadow:0 34px 90px -30px rgba(var(--scrim-rgb),.9);
   transform:translateY(-14px) scale(.99);transition:transform .38s var(--ease);
   clip-path:polygon(0 0,calc(100% - 17px) 0,100% 17px,100% 100%,17px 100%,0 calc(100% - 17px))}
 .srch[data-open] .srch-p{transform:none}
@@ -546,7 +526,7 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
 .srch-o[data-on] i{color:var(--cyan)}
 .srch-none{padding:2.4rem 1rem;text-align:center;color:var(--haze-d);font-size:.92rem;line-height:1.6}
 .srch-none b{display:block;color:var(--frost);font-size:1.02rem;margin-bottom:.45rem}
-.srch-none a{color:var(--cyan);border-bottom:1px solid rgba(53,214,245,.4)}
+.srch-none a{color:var(--cyan);border-bottom:1px solid rgba(var(--cyan-rgb),.4)}
 
 .srch-ft{display:flex;align-items:center;gap:1.1rem;flex-wrap:wrap;flex:none;
   padding:.6rem 1.1rem;border-top:1px solid var(--line);background:rgba(var(--void-rgb),.4);
@@ -567,6 +547,23 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
 .crumb a:hover{color:var(--cyan)}
 .crumb i{font-style:normal;color:var(--steel)}
 .crumb b{color:var(--frost);font-weight:400}
+/* Contact facts inside an interior hero. Sits with .ph-meta rather than in a
+   separate band, so the address, email and phone are above the fold on the
+   contact page instead of in a strip that has to be scrolled to. */
+.ph-det{display:flex;flex-wrap:wrap;gap:1.4rem 2.6rem;margin-top:1.6rem;padding-top:1.5rem;
+  border-top:1px solid var(--line)}
+.ph-det>div{display:grid;gap:.3rem;min-width:0}
+.ph-det dt{font-family:var(--f-mono);font-size:.67rem;letter-spacing:.19em;text-transform:uppercase;
+  color:var(--cyan)}
+.ph-det dd{font-family:var(--f-disp);font-weight:700;font-size:1.06rem;
+  font-variation-settings:'wdth' 106;color:var(--frost);line-height:1.35}
+.ph-det dd a{color:inherit;border-bottom:1px solid rgba(var(--cyan-rgb),.34);
+  transition:color .3s,border-color .3s}
+.ph-det dd a:hover{color:var(--cyan);border-bottom-color:var(--cyan)}
+.ph-det .ph-det-s{font-family:var(--f-mono);font-weight:400;font-size:.68rem;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--haze-d);margin-top:.1rem}
+@media (max-width:640px){.ph-det{gap:1.1rem;flex-direction:column}}
+
 .ph-meta{display:flex;flex-wrap:wrap;gap:0 2.25rem;margin-top:.5rem;font-family:var(--f-mono);
   font-size:.76rem;letter-spacing:.13em;text-transform:uppercase;color:var(--haze-d)}
 .ph-meta b{display:block;color:var(--frost);font-weight:500;font-size:1rem;letter-spacing:.04em;
@@ -574,7 +571,7 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
 
 /* ============ surfaces / cards ============ */
 .card{position:relative;padding:clamp(1.5rem,2.6vw,2.2rem);background:linear-gradient(160deg,
-  rgba(35,89,107,.44),rgba(20,53,68,.72));border:1px solid var(--line);
+  rgba(var(--steel-rgb),.44),rgba(var(--deep-rgb),.72));border:1px solid var(--line);
   clip-path:polygon(0 0,calc(100% - 16px) 0,100% 16px,100% 100%,16px 100%,0 calc(100% - 16px));
   transition:border-color .45s var(--ease),transform .55s var(--ease),background .45s var(--ease)}
 .card::after{content:'';position:absolute;top:0;left:0;width:100%;height:1px;
@@ -594,16 +591,16 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
 
 /* commodity class card */
 .cls{display:grid;grid-template-rows:auto 1fr auto;gap:1.15rem;padding:0;overflow:hidden;
-  background:linear-gradient(165deg,rgba(35,89,107,.4),rgba(20,53,68,.78));border:1px solid var(--line);
+  background:linear-gradient(165deg,rgba(var(--steel-rgb),.4),rgba(var(--deep-rgb),.78));border:1px solid var(--line);
   clip-path:polygon(0 0,calc(100% - 18px) 0,100% 18px,100% 100%,18px 100%,0 calc(100% - 18px));
   transition:border-color .45s var(--ease),transform .55s var(--ease)}
-.cls:hover{border-color:rgba(53,214,245,.45);transform:translateY(-6px)}
+.cls:hover{border-color:rgba(var(--cyan-rgb),.45);transform:translateY(-6px)}
 .cls-vis{position:relative;aspect-ratio:16/10;background:var(--deep);overflow:hidden;
   border-bottom:1px solid var(--line)}
 .cls-vis canvas{position:absolute;inset:0;width:100%;height:100%}
 .cls-vis .tag{position:absolute;top:12px;left:12px;z-index:2;padding:.34em .7em;
   font-family:var(--f-mono);font-size:.67rem;letter-spacing:.18em;text-transform:uppercase;
-  background:rgba(15,42,56,.78);border:1px solid var(--line-2);color:var(--frost)}
+  background:rgba(var(--void-rgb),.78);border:1px solid var(--line-2);color:var(--frost)}
 .cls-b{padding:0 clamp(1.35rem,2.3vw,1.9rem);display:grid;gap:.7rem;align-content:start}
 .cls-b p{color:var(--haze);font-size:1.02rem}
 .cls-f{display:flex;justify-content:space-between;align-items:center;gap:1rem;
@@ -617,7 +614,7 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
 .row{position:relative;display:grid;grid-template-columns:auto 1fr auto;gap:clamp(1rem,3vw,2.5rem);
   align-items:start;padding:clamp(1.4rem,2.6vw,2.1rem) clamp(.5rem,1.5vw,1.25rem);
   border-bottom:1px solid var(--line);transition:background .4s var(--ease),padding-inline .4s var(--ease)}
-.row:hover{background:rgba(53,214,245,.035)}
+.row:hover{background:rgba(var(--cyan-rgb),.035)}
 .row-ix{font-family:var(--f-mono);font-size:.76rem;letter-spacing:.12em;color:var(--steel);
   padding-top:.45rem;transition:color .4s}
 .row:hover .row-ix{color:var(--cyan)}
@@ -648,7 +645,7 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
    that scrolls sideways has to be reachable by keyboard, not only by trackpad.
    Give it role="region" and an aria-label naming the table. */
 .tbl-wrap{overflow-x:auto;overscroll-behavior-x:contain;border:1px solid var(--line);
-  background:rgba(20,53,68,.42)}
+  background:rgba(var(--deep-rgb),.42)}
 .tbl-wrap:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
 .tbl{width:100%;border-collapse:collapse;font-size:.95rem}
 /* opt-in floor for genuinely wide sheets: squeezing an assay table into 390px
@@ -667,7 +664,7 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
 .tbl td{color:var(--frost);font-variant-numeric:tabular-nums}
 .tbl tbody tr:last-child>*{border-bottom:0}
 .tbl tbody tr{transition:background .3s var(--ease)}
-.tbl tbody tr:hover{background:rgba(53,214,245,.04)}
+.tbl tbody tr:hover{background:rgba(var(--cyan-rgb),.04)}
 .tbl .num{text-align:right;font-family:var(--f-mono);font-size:.87rem}
 .tbl .mat{color:var(--sand)}
 .tbl .sys{color:var(--cyan)}
@@ -684,7 +681,7 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
   transition:color .3s var(--ease),background .3s var(--ease)}
 .acc summary::-webkit-details-marker{display:none}
 .acc summary::marker{content:''}
-.acc summary:hover{color:var(--cyan);background:rgba(53,214,245,.04)}
+.acc summary:hover{color:var(--cyan);background:rgba(var(--cyan-rgb),.04)}
 .acc summary:focus-visible{outline:2px solid var(--cyan);outline-offset:-2px}
 .acc .ac-i{margin-left:auto;flex:none;width:9px;height:9px;color:var(--haze-d);
   border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;
@@ -697,7 +694,7 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
 /* placeholder-data banner. In flow at the top of <main> rather than fixed:
    no z-index argument with the header, and it cannot be scrolled past
    without being read. */
-.draft-flag{position:relative;z-index:2;background:var(--sand);color:#2A1F0C;
+.draft-flag{position:relative;z-index:2;background:var(--sand);color:var(--on-sand);
   padding:.72rem var(--pad-x);font-family:var(--f-mono);font-size:.72rem;font-weight:500;
   letter-spacing:.16em;text-transform:uppercase;text-align:center}
 
@@ -706,10 +703,10 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
    two edit sites for one token pair guarantees drift. Cyan is the default
    (system, document); sand marks a sheet that describes physical material. */
 .dr-k{font-family:var(--f-mono);font-size:.645rem;letter-spacing:.16em;padding:.3em .6em;
-  border:1px solid rgba(53,214,245,.3);color:var(--cyan);background:rgba(53,214,245,.07);
+  border:1px solid rgba(var(--cyan-rgb),.3);color:var(--cyan);background:rgba(var(--cyan-rgb),.07);
   flex:none;white-space:nowrap}
 .dr-k[data-kind=TDS],.dr-k[data-kind=SPEC],.dr-k[data-kind=REPORT]{color:var(--sand);
-  border-color:rgba(217,183,120,.34);background:var(--sand-g)}
+  border-color:rgba(var(--sand-rgb),.34);background:var(--sand-g)}
 
 /* origin ledger. Promoted from the homepage because the product pages render
    the same row per origin; --led-cols lets each caller set its own column
@@ -719,7 +716,7 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
   align-items:center;padding:1.1rem .5rem;border-bottom:1px solid var(--line);
   font-family:var(--f-mono);font-size:.765rem;letter-spacing:.1em;text-transform:uppercase;
   color:var(--haze-d);transition:background .38s var(--ease),color .38s}
-.led-r:hover{background:rgba(53,214,245,.04);color:var(--haze)}
+.led-r:hover{background:rgba(var(--cyan-rgb),.04);color:var(--haze)}
 .led-r b{font-family:var(--f-disp);font-weight:700;font-size:1rem;letter-spacing:0;
   font-variation-settings:'wdth' 106;color:var(--frost);text-transform:none}
 .led-r .co{color:var(--cyan)}
@@ -757,6 +754,7 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
 
 /* Reopens the consent bar, so a decision can be withdrawn. A button rather
    than a link because it opens a dialog instead of navigating. */
+/* the consent-reopen control in the footer legal row */
 .ftr-cc{font:inherit;color:inherit;cursor:pointer;background:none;border:0;padding:0}
 .ftr-cc:hover{color:var(--frost)}
 
@@ -764,12 +762,12 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
 .chips{display:flex;flex-wrap:wrap;gap:.4rem}
 .chip{display:inline-flex;align-items:center;gap:.45em;padding:.34em .7em;font-family:var(--f-mono);
   font-size:.69rem;letter-spacing:.13em;text-transform:uppercase;color:var(--haze);
-  border:1px solid var(--line);background:rgba(15,42,56,.4)}
-.chip.spec{color:var(--sand);border-color:rgba(217,183,120,.34);background:var(--sand-g)}
-.chip.org{color:var(--cyan);border-color:rgba(53,214,245,.28);background:rgba(53,214,245,.06)}
+  border:1px solid var(--line);background:rgba(var(--void-rgb),.4)}
+.chip.spec{color:var(--sand);border-color:rgba(var(--sand-rgb),.34);background:var(--sand-g)}
+.chip.org{color:var(--cyan);border-color:rgba(var(--cyan-rgb),.28);background:rgba(var(--cyan-rgb),.06)}
 .chip.org::before{content:'';width:5px;height:5px;background:currentColor;
   clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%)}
-.chip.hot{color:var(--void);background:var(--cyan);border-color:var(--cyan);font-weight:600}
+.chip.hot{color:var(--on-cyan);background:var(--cyan);border-color:var(--cyan);font-weight:600}
 
 /* stat readouts.
    Dividers are a 1px shadow on the right and bottom of every cell, clipped at
@@ -777,7 +775,7 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
    any wrap point, where the nth-child border patching this replaces only ever
    worked for exactly four. Column count is declarative: set --sc on .stats. */
 .stats{display:grid;grid-template-columns:repeat(var(--sc,4),1fr);border:1px solid var(--line);
-  background:rgba(20,53,68,.5);overflow:hidden}
+  background:rgba(var(--deep-rgb),.5);overflow:hidden}
 .stat{padding:clamp(1.5rem,3vw,2.4rem) clamp(1.1rem,2vw,1.6rem);
   box-shadow:1px 0 0 var(--line),0 1px 0 var(--line);
   display:grid;gap:.5rem;position:relative;overflow:hidden}
@@ -828,13 +826,13 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
 .fld label{font-family:var(--f-mono);font-size:.715rem;letter-spacing:.17em;text-transform:uppercase;
   color:var(--haze-d);transition:color .3s}
 .fld:focus-within label{color:var(--cyan)}
-.fld input,.fld select,.fld textarea{width:100%;padding:.82rem .95rem;background:rgba(15,42,56,.6);
+.fld input,.fld select,.fld textarea{width:100%;padding:.82rem .95rem;background:rgba(var(--void-rgb),.6);
   border:1px solid var(--line);color:var(--frost);font-size:1.02rem;
   transition:border-color .3s,background .3s,box-shadow .3s}
 .fld textarea{min-height:132px;resize:vertical}
 .fld input:hover,.fld select:hover,.fld textarea:hover{border-color:var(--line-2)}
 .fld input:focus,.fld select:focus,.fld textarea:focus{outline:none;border-color:var(--cyan);
-  background:rgba(53,214,245,.05);box-shadow:0 0 0 1px var(--cyan)}
+  background:rgba(var(--cyan-rgb),.05);box-shadow:0 0 0 1px var(--cyan)}
 .fld select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--cyan) 50%),
   linear-gradient(135deg,var(--cyan) 50%,transparent 50%);
   background-position:calc(100% - 19px) 50%,calc(100% - 13px) 50%;
@@ -852,13 +850,13 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
 .doc h2{font-size:clamp(1.2rem,2.4vw,1.6rem);margin-top:2.4rem;padding-top:1.5rem;
   border-top:1px solid var(--line);font-variation-settings:'wdth' 108}
 .doc h2:first-of-type{margin-top:1rem}
-.doc p{color:#B9CDD5}
+.doc p{color:var(--lead)}
 .doc ol{display:grid;gap:.85rem;counter-reset:d}
 .doc ol li{position:relative;padding-left:2.6rem;color:var(--haze);counter-increment:d}
 .doc ol li::before{content:counter(d,decimal-leading-zero);position:absolute;left:0;top:.1em;
   font-family:var(--f-mono);font-size:.76rem;letter-spacing:.1em;color:var(--cyan)}
 .doc ol li strong{color:var(--frost);font-weight:600}
-.doc a{color:var(--cyan);border-bottom:1px solid rgba(53,214,245,.3)}
+.doc a{color:var(--cyan);border-bottom:1px solid rgba(var(--cyan-rgb),.3)}
 .doc a:hover{border-color:var(--cyan)}
 .doc-meta{font-family:var(--f-mono);font-size:.725rem;letter-spacing:.17em;text-transform:uppercase;
   color:var(--sand)}
@@ -872,7 +870,7 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
 
 /* ============ footer ============ */
 .ftr{position:relative;z-index:1;padding-top:clamp(3.5rem,7vw,6rem);padding-bottom:2rem;
-  border-top:1px solid var(--line);background:linear-gradient(180deg,rgba(20,53,68,0),rgba(20,53,68,.7))}
+  border-top:1px solid var(--line);background:linear-gradient(180deg,rgba(var(--deep-rgb),0),rgba(var(--deep-rgb),.7))}
 /* brand, then the three IA columns, then the Dubai desk */
 .ftr-g{display:grid;gap:clamp(1.6rem,3vw,3rem);grid-template-columns:1.35fr .75fr .75fr .75fr 1.05fr;
   padding-bottom:clamp(2.5rem,5vw,4rem)}

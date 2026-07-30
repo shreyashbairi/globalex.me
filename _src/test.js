@@ -124,20 +124,28 @@ t("slug: folds entities rather than transliterating them", () =>
    backtick anywhere in them — including inside a CSS or JS comment — ends the
    string and the build dies with a syntax error pointing at the wrong thing.
    Cheap to assert, and it has already happened once. */
-t("kernel files contain no backticks beyond the two that open and close them", () => {
+t("no backtick inside the kernel template literals", () => {
+  /* kernel-css.js and kernel-js.js each wrap their whole body in one template
+     literal. A backtick anywhere inside ends the string and the build dies
+     pointing at the wrong line — that has happened twice. Backticks in the
+     file's preamble comments are fine, so the check is scoped to the region
+     between the opening backtick and the closing one. */
   const fsx = require("fs");
   const px = require("path");
   for (const f of ["kernel-css.js", "kernel-js.js"]) {
-    const lines = fsx
-      .readFileSync(px.join(__dirname, f), "utf8")
-      .split("\n")
-      .map((l, i) => [i + 1, l])
-      .filter(([, l]) => l.includes("`"));
-    assert.strictEqual(
-      lines.length,
-      2,
-      `${f}: backticks on lines ${lines.map(([n]) => n).join(", ")} — expected only the open and close`,
-    );
+    const src = fsx.readFileSync(px.join(__dirname, f), "utf8");
+    /* Anchored on the export, not on the first backtick in the file — the
+       preamble comments contain backticks and are allowed to. */
+    const marker = "module.exports = `";
+    const open = src.indexOf(marker) + marker.length - 1;
+    const close = src.lastIndexOf("`");
+    assert.ok(src.includes(marker) && close > open, `${f}: no template literal found`);
+    const inner = src.slice(open + 1, close);
+    const at = inner.indexOf("`");
+    if (at > -1) {
+      const line = src.slice(0, open + 1 + at).split("\n").length;
+      assert.fail(`${f}:${line} has a backtick inside the template literal`);
+    }
   }
 });
 
@@ -302,6 +310,81 @@ if (!built) {
         );
   });
 }
+
+// ------------------------------------------------------------------- theme
+const theme = require("./theme");
+
+t("theme: every colour is a valid 6-digit hex", () => {
+  for (const [k, v] of Object.entries(theme.THEME)) {
+    assert.match(v, /^#[0-9A-Fa-f]{6}$/, `${k} = ${v}`);
+    theme.rgb(v); // throws if unparseable
+  }
+});
+
+/* The point of theme.js is that it is the ONLY place a colour is written. If a
+   literal creeps back into a component, changing the theme stops changing the
+   whole site and the file's promise quietly becomes false. */
+t("theme: no colour literal survives outside theme.js", () => {
+  const fsx = require("fs");
+  const px = require("path");
+  const files = [
+    ...fsx.readdirSync(__dirname).filter((f) => f.endsWith(".js") && f !== "theme.js"),
+    ...fsx.readdirSync(px.join(__dirname, "pages")).map((f) => px.join("pages", f)),
+  ];
+  const rgba = /rgba\(\s*\d{1,3}\s*,\s*\d{1,3}\s*,\s*\d{1,3}\s*,/;
+  const hex = /(?<![&#\w])#[0-9A-Fa-f]{6}\b/;
+  const found = [];
+  for (const f of files) {
+    const src = fsx.readFileSync(px.join(__dirname, f), "utf8");
+    src.split("\n").forEach((line, i) => {
+      if (rgba.test(line) || hex.test(line)) found.push(`${f}:${i + 1}`);
+    });
+  }
+  assert.strictEqual(found.length, 0, "colour literals at " + found.join(", "));
+});
+
+/* A recolour must not make text unreadable. Anyone editing theme.js gets a
+   failing build rather than a shipped accessibility regression. */
+t("theme: text clears WCAG AA on the page background", () => {
+  const bg = theme.THEME.pageBackground;
+  for (const k of ["textHeading", "textLead", "textBody", "textMuted"]) {
+    const r = theme.contrast(theme.THEME[k], bg);
+    assert.ok(r >= 4.5, `${k} is ${r.toFixed(2)}:1 on pageBackground, needs 4.5:1`);
+  }
+  for (const [fg, on] of [
+    ["textOnSystem", "accentSystem"],
+    ["textOnMaterial", "accentMaterial"],
+  ]) {
+    const r = theme.contrast(theme.THEME[fg], theme.THEME[on]);
+    assert.ok(r >= 4.5, `${fg} is ${r.toFixed(2)}:1 on ${on}, needs 4.5:1`);
+  }
+});
+
+/* Every var() a stylesheet reaches for has to resolve, or the declaration is
+   silently dropped and the surface renders transparent. This caught --cyan-g
+   and --sand-g going undefined during the theme refactor. */
+t("theme: every custom property used in CSS is defined", () => {
+  const fsx = require("fs");
+  const px = require("path");
+  let all = require("./kernel-css");
+  for (const f of fsx.readdirSync(px.join(__dirname, "pages")))
+    all += require("./pages/" + f).css || "";
+  all += require("./docgate").css;
+  all += require("./consent").css;
+  all += require("./trade-strip").crossCss;
+
+  const defined = new Set(
+    [...all.matchAll(/^\s*(--[a-z0-9-]+)\s*:/gm)].map((m) => m[1]),
+  );
+  /* set inline via a style attribute or from JavaScript, never in a rule */
+  const inline = new Set([
+    "--d", "--i", "--v", "--sc", "--led-cols", "--noise", "--head", "--x-rgb",
+  ]);
+  const missing = [...new Set([...all.matchAll(/var\((--[a-z0-9-]+)/g)].map((m) => m[1]))]
+    .filter((u) => !defined.has(u) && !inline.has(u))
+    .sort();
+  assert.strictEqual(missing.length, 0, "undefined: " + missing.join(", "));
+});
 
 // ------------------------------------------------------------------- runner
 const failures = [];

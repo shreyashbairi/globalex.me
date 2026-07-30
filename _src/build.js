@@ -8,6 +8,7 @@ const { html, jsonScript, xml } = require("./esc");
 const S = require("./schema-org");
 const ogPlate = require("./og-plate");
 const consent = require("./consent");
+const { THEME } = require("./theme");
 
 /* Repo root, derived rather than hardcoded — LOGO_B64 below reads through it
    at module load, so a wrong value fails at require() time, not at write. */
@@ -50,7 +51,7 @@ const faviconPlate =
   "data:image/svg+xml," +
   encodeURIComponent(
     `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 70 70">` +
-      `<rect width="70" height="70" fill="#0F2A38"/>` +
+      `<rect width="70" height="70" fill="${THEME.pageBackground}"/>` +
       `<image xlink:href="data:image/webp;base64,${LOGO_B64}" x="2" y="7" width="66" height="56"/>` +
       `</svg>`,
   );
@@ -89,7 +90,7 @@ function render(p) {
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<meta name="theme-color" content="#0F2A38" />
+<meta name="theme-color" content="${THEME.pageBackground}" />
 <meta name="color-scheme" content="dark" />
 <title>${title}</title>
 <meta name="description" content="${desc}" />
@@ -235,7 +236,7 @@ function emitAdmin() {
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="robots" content="noindex, nofollow" />
-<meta name="theme-color" content="#0F2A38" />
+<meta name="theme-color" content="${THEME.pageBackground}" />
 <meta name="color-scheme" content="dark" />
 <title>Control — Globalex Trading FZCO</title>
 <link rel="icon" type="image/svg+xml" href="${faviconPlate}" />

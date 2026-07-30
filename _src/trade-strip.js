@@ -70,7 +70,7 @@ const crossCss = `
   background:var(--line)}
 .xs-c{display:grid;gap:.3rem;align-content:start;padding:1.05rem 1.15rem;
   background:rgba(var(--deep-rgb),.66);transition:background .35s var(--ease)}
-.xs-c:hover{background:rgba(53,214,245,.07)}
+.xs-c:hover{background:rgba(var(--cyan-rgb),.07)}
 .xs-c b{font-family:var(--f-disp);font-weight:700;font-size:1.03rem;
   font-variation-settings:'wdth' 106;color:var(--frost)}
 .xs-c small{color:var(--haze);font-size:.93rem}

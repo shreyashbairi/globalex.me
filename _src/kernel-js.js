@@ -1,5 +1,6 @@
 // Shared runtime — inlined into every page.
 const { searchIndex } = require('./catalogue');
+const theme = require('./theme');
 
 module.exports = `
 (function(){
@@ -10,7 +11,16 @@ module.exports = `
 var GLXSEARCH = ${JSON.stringify(searchIndex())};
 var RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
 var TOUCH = matchMedia('(hover: none)').matches || innerWidth < 901;
-var PAL = {cyan:'53,214,245', sand:'217,183,120'};
+/* Theme colours for canvas work. A 2D context takes a string, not a CSS
+   custom property, so anything drawn to a canvas reads them from here —
+   generated from _src/theme.js like everything else, so recolouring the site
+   recolours the ornaments and the globe too.
+
+   GLXC.<name> is the hex; GLXC.rgb.<name> is bare channels for building an
+   rgba() string with a computed alpha. */
+var GLXC = ${JSON.stringify(theme.jsPalette(), null, 0)};
+window.GLXC = GLXC;
+var PAL = GLXC.rgb;
 
 /* ---------- procedural film grain ---------- */
 (function(){
@@ -762,9 +772,9 @@ function ornamentField(cv, opt){
 
     // radial vignette mask keeps the pattern a whisper at the edges
     var g = x.createRadialGradient(w*0.5+px*.4, h*0.42+py*.4, 0, w*0.5, h*0.5, R*0.52);
-    g.addColorStop(0,'rgba(15,42,56,0)');
-    g.addColorStop(.55,'rgba(15,42,56,.5)');
-    g.addColorStop(1,'rgba(15,42,56,.97)');
+    g.addColorStop(0,'rgba(' + GLXC.rgb.pageBackground + ',0)');
+    g.addColorStop(.55,'rgba(' + GLXC.rgb.pageBackground + ',.5)');
+    g.addColorStop(1,'rgba(' + GLXC.rgb.pageBackground + ',.97)');
     x.fillStyle = g; x.fillRect(0,0,w,h);
 
     // live nodes — diamond markers with breathing halo

@@ -24,13 +24,13 @@ const AVATAR = (id) => {
   const rot = seed % 45;
   const d = (x, y, r) => `M${x} ${y - r} L${x + r} ${y} L${x} ${y + r} L${x - r} ${y} Z`;
   return `<svg viewBox="0 0 100 125" aria-hidden="true" focusable="false">
-<rect width="100" height="125" fill="#0F2A38"/>
-<g transform="rotate(${rot} 50 62)" fill="none" stroke="#35D6F5" stroke-width="1.2" opacity=".55">
+<rect width="100" height="125" fill="var(--void)"/>
+<g transform="rotate(${rot} 50 62)" fill="none" stroke="var(--cyan)" stroke-width="1.2" opacity=".55">
 <path d="${d(50, 62, 34)}"/><path d="${d(50, 62, 22)}"/><path d="${d(50, 62, 11)}"/>
 <path d="${d(50, 28, 10)}"/><path d="${d(50, 96, 10)}"/>
 <path d="${d(16, 62, 10)}"/><path d="${d(84, 62, 10)}"/>
 </g>
-<path d="${d(50, 62, 5)}" fill="#D9B778" opacity=".7"/>
+<path d="${d(50, 62, 5)}" fill="var(--sand)" opacity=".7"/>
 </svg>`;
 };
 
@@ -49,7 +49,7 @@ module.exports = {
   clip-path:polygon(0 0,calc(100% - 24px) 0,100% 24px,100% 100%,24px 100%,0 calc(100% - 24px))}
 .hq-vis canvas{position:absolute;inset:0;width:100%;height:100%}
 .hq-tag{position:absolute;left:0;right:0;bottom:0;z-index:2;padding:1.15rem 1.35rem;
-  background:linear-gradient(0deg,rgba(15,42,56,.94),transparent);
+  background:linear-gradient(0deg,rgba(var(--void-rgb),.94),transparent);
   font-family:var(--f-mono);font-size:.725rem;letter-spacing:.16em;text-transform:uppercase;
   color:var(--haze);display:grid;gap:.3rem}
 .hq-tag b{color:var(--cyan);font-weight:500}
@@ -60,8 +60,8 @@ module.exports = {
 .mv-c{position:relative;padding:clamp(1.9rem,3.6vw,3rem);border:1px solid var(--line);
   display:grid;gap:1.4rem;align-content:start;
   clip-path:polygon(0 0,calc(100% - 20px) 0,100% 20px,100% 100%,20px 100%,0 calc(100% - 20px))}
-.mv-c.a{background:linear-gradient(155deg,rgba(53,214,245,.09),rgba(20,53,68,.6))}
-.mv-c.b{background:linear-gradient(155deg,rgba(217,183,120,.08),rgba(20,53,68,.6))}
+.mv-c.a{background:linear-gradient(155deg,rgba(var(--cyan-rgb),.09),rgba(var(--deep-rgb),.6))}
+.mv-c.b{background:linear-gradient(155deg,rgba(var(--sand-rgb),.08),rgba(var(--deep-rgb),.6))}
 .mv-c q{quotes:none;font-family:var(--f-disp);font-weight:700;
   font-size:clamp(1.15rem,2.3vw,1.62rem);line-height:1.28;letter-spacing:-.018em;
   font-variation-settings:'wdth' 108;color:var(--frost);text-wrap:pretty}
@@ -72,7 +72,7 @@ module.exports = {
 .val{padding:clamp(1.5rem,2.6vw,2.1rem) clamp(1.1rem,1.9vw,1.5rem);border-right:1px solid var(--line);
   display:grid;gap:.7rem;align-content:start;position:relative;transition:background .45s var(--ease)}
 .val:last-child{border-right:0}
-.val:hover{background:rgba(53,214,245,.05)}
+.val:hover{background:rgba(var(--cyan-rgb),.05)}
 .val svg{width:26px;height:26px;color:var(--steel);transition:color .45s var(--ease),transform .7s var(--ease)}
 .val:hover svg{color:var(--cyan);transform:rotate(90deg)}
 .val h4{font-size:1.08rem}
@@ -135,7 +135,7 @@ module.exports = {
 .tm-p img,.tm-p svg{width:100%;height:100%;object-fit:cover;display:block}
 .tm-p img{filter:grayscale(1) contrast(1.12) brightness(.72)}
 .tm-p::after{content:'';position:absolute;inset:0;
-  background:linear-gradient(155deg,rgba(53,214,245,.34),rgba(15,42,56,.5) 55%,rgba(217,183,120,.2));
+  background:linear-gradient(155deg,rgba(var(--cyan-rgb),.34),rgba(var(--void-rgb),.5) 55%,rgba(var(--sand-rgb),.2));
   mix-blend-mode:color}
 .tm-b{padding:clamp(1.1rem,2.2vw,1.5rem);display:grid;gap:.3rem}
 .tm-b h3{font-size:1.14rem}
