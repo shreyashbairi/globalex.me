@@ -143,6 +143,22 @@ const PRESETS = {
        delete control in the dashboard. Deliberately outside the two accents so
        it cannot be mistaken for either. */
     accentAlert: "#F5748A",
+
+    /* SIGNAL. The system accent pushed to its loudest usable form, reserved for
+       motion: the leading edge of a sweep, a firing node, the head of a cargo
+       packet. It exists because an accent tuned to sit calmly behind body copy
+       is, by construction, too quiet to carry an animation. Never used for
+       type or for a static fill. */
+    accentSignal: "#7BF3FF",
+
+    /* ============ BUTTON FLIP ============
+       A filled button wipes to this on hover, with its label switching to
+       textOnFlip. It is deliberately NOT a text colour: the flip has to be the
+       page's opposite pole so the wipe reads at a glance, and borrowing a
+       heading colour for it lands the wipe on whatever near-black or near-white
+       the type happens to use. */
+    buttonFlip: "#F2FBFD",
+    textOnFlip: "#0F2A38",
     /* ============ HOME-PAGE GLOBE ============
        The WebGL corridor globe uses three colours that appear nowhere else. They
        are here so recolouring the site recolours the globe with it, rather than
@@ -155,8 +171,12 @@ const PRESETS = {
 
     /* The beaded latitude/longitude grid over the sphere. */
     globeGraticule: "#1B5468",
-    /* The 4,200-point landmass dot field, unlit. */
+    /* The landmass dot field, unlit. */
     globeSurface: "#2A6E85",
+    /* Coastlines and national borders drawn over the sphere. Reads one step
+       harder than the graticule: the grid is scaffolding, the coast is the
+       thing being looked at. */
+    globeBorder: "#3E93AE",
     /* The lit rim of the atmosphere, and a corridor node under the pointer. The
        brightest thing on the home page — keep it close to accentSystem or the
        globe stops reading as part of the site. */
@@ -209,19 +229,24 @@ const PRESETS = {
        core, the darkest corner of the share card. */
     surfaceDeepest: "#0F1C0E",
 
-    /* ============ TEXT ============ */
-
-    /* The storefront's foreground: a dark navy-green rather than pure black,
-       which is softer against an off-white ground. */
-    textHeading: "#1A1A2E",
-    textLead: "#2D3A2C",
-    textBody: "#3F4A3D",
-    textMuted: "#6B7669",
+    /* ============ TEXT ============
+       Ink, not tinted grey. An earlier pass ran a navy-green foreground down
+       the whole ramp, which on an off-white ground read as washed and slightly
+       blue. This is a light theme in its own right rather than a dark one
+       turned inside out, so the type is black and the ramp is built from
+       neutral near-blacks — the steps still separate a heading from a caption,
+       and none of them reads as grey. */
+    textHeading: "#000000",
+    textLead: "#141414",
+    textBody: "#1C1C1C",
+    /* Captions, mono eyebrows, metadata. The quietest text on the site and
+       still 10:1 — quiet here means smaller and wider-tracked, not paler. */
+    textMuted: "#3A3A3A",
 
     /* White on the green button. */
     textOnSystem: "#FFFFFF",
-    /* A dark earthy brown on the gold button — black would be harsh on gold. */
-    textOnMaterial: "#2D2308",
+    /* Near-black on the gold button. */
+    textOnMaterial: "#1A1508",
 
     /* ============ OVERLAYS ============ */
 
@@ -232,7 +257,7 @@ const PRESETS = {
     overlayPanel: "#FFFFFF",
     /* On a light page the scanline sheen and the pointer ring have to be dark
        to be visible at all. This is the token that inverts. */
-    highlight: "#1A1A2E",
+    highlight: "#111111",
 
     /* ============ ACCENTS ============ */
 
@@ -252,26 +277,43 @@ const PRESETS = {
     /* Material accent used as TEXT. The gold is kept for fills — buttons and
        chip backgrounds, as intended — but gold type on off-white is about
        2:1 and unreadable, so text takes this earthy brown instead: same
-       family, 6.1:1 on the page and 5.6:1 on the sage panels. */
-    accentMaterialText: "#7A5A16",
+       family, 7.4:1 on the page and 6.8:1 on the sage panels. */
+    accentMaterialText: "#6E4F0C",
 
     /* The storefront's terracotta. Outside both accents so an error cannot be
        mistaken for either. */
-    accentAlert: "#C44536",
+    accentAlert: "#C43A29",
+
+    /* SIGNAL. The loudest green the palette will go, for motion only. On a
+       light ground "loud" means saturated rather than bright — a pale green
+       moving over off-white is invisible, which is exactly how the first pass
+       of this theme lost every animation it inherited. */
+    accentSignal: "#0E8F35",
+
+    /* ============ BUTTON FLIP ============
+       Filled buttons wipe to black with white type. The wipe used to land on
+       textHeading, which on the dark theme was a near-white — correct there,
+       and on this palette it produced the dark-navy flip that read as a
+       different brand mid-hover. */
+    buttonFlip: "#0A0A0A",
+    textOnFlip: "#FFFFFF",
 
     /* ============ HOME-PAGE GLOBE ============
-       Inverted along with the page: a pale sage sphere with dark green
-       markings, so it reads as an airy wireframe rather than a black hole
-       punched in the layout. */
-    globeCore: "#EAF0E4",
-    globeGraticule: "#7E9A72",
-    globeSurface: "#3E7039",
-    globeGlow: "#2D5016",
+       Inverted along with the page, but not bleached: a pale sphere carrying
+       dark land. The ocean is the quiet surface, the continents are drawn in
+       the system green, and the coastlines are the hardest line on it — the
+       globe has to read as the earth first and as an ornament second. */
+    globeCore: "#E7EEE2",
+    globeGraticule: "#A9BF9E",
+    globeSurface: "#2F5B2A",
+    globeBorder: "#1F3D1B",
+    globeGlow: "#0E8F35",
 
     /* ============ LINES ============
-       Dark on a light page — a light hairline on off-white is invisible. This
-       is the other token that inverts. */
-    hairline: "#3F4A3D",
+       Dark on a light page — a light hairline on off-white is invisible.
+       Neutral rather than green: at 30% over off-white a tinted rule turns the
+       whole grid faintly olive. */
+    hairline: "#232323",
   },
 };
 
@@ -379,9 +421,12 @@ const polarVars = () => {
        Not a sepia/hue-rotate tint either — it washes the fine strokes out. A
        supplied dark-on-transparent logo would be better than any of these. */
     `  --logo-filter:${light ? "brightness(0)" : "none"};`,
-    /* The procedural ornament field was tuned against a dark ground. The same
-       alpha over off-white reads as loud wallpaper, so it is scaled down. */
-    `  --orn-scale:${light ? "0.42" : "1"};`,
+    /* The procedural ornament field was tuned against a dark ground, where it
+       glows; drawn normally over off-white the same alpha is heavier, so it is
+       scaled back. 0.42 took it past subtle to absent — the gül tessellation
+       is one of the few things carrying the region the company trades in, and
+       it was not worth having at all at that strength. */
+    `  --orn-scale:${light ? "0.78" : "1"};`,
     /* Port labels sit on the globe's surface, so they follow the sphere rather
        than the page: dark type on a pale sphere, light type on a dark one. */
     `  --glabel-hub:${light ? "var(--text-heading)" : "var(--text-heading)"};`,
@@ -426,12 +471,15 @@ const ALIAS = {
   "haze-d": "text-muted",
   cyan: "accent-system",
   "cyan-d": "accent-system-dark",
+  signal: "accent-signal",
   sand: "accent-material",
   "sand-d": "accent-material-dark",
   "sand-t": "accent-material-text",
   alert: "accent-alert",
   "on-cyan": "text-on-system",
   "on-sand": "text-on-material",
+  flip: "button-flip",
+  "on-flip": "text-on-flip",
   scrim: "overlay-scrim",
   "ov-panel": "overlay-panel",
 };
@@ -457,11 +505,13 @@ const jsPalette = () => {
   /* every colour under its own camelCase name */
   for (const [k, v] of Object.entries(THEME)) put(k, v);
   /* plus the short aliases, so page scripts read the names the CSS uses.
-     Hyphenated aliases are skipped: GLXC.ovPanel has to be dot-accessible. */
+     Hyphenated aliases are camelCased rather than skipped — GLXC.ovPanel has
+     to be dot-accessible, and dropping them left canvas code with no way to
+     name --haze-d or --sand-t at all. That gap is why several 2D contexts
+     were reaching for a var() a canvas cannot resolve. */
   for (const [alias, real] of Object.entries(ALIAS)) {
-    if (alias.includes("-")) continue;
     const key = Object.keys(THEME).find((k) => kebab(k) === real);
-    if (key) put(alias, THEME[key]);
+    if (key) put(alias.replace(/-([a-z])/g, (_, c) => c.toUpperCase()), THEME[key]);
   }
   return out;
 };

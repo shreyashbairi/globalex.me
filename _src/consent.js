@@ -181,11 +181,17 @@ const js = `
   }
   function close(){
     el.removeAttribute('data-open');
-    /* RM, because the global reduced-motion rule flattens the transition to
-       .001ms — waiting the full duration there leaves an invisible bar over
-       the content swallowing clicks. */
+    /* Reduced motion is checked here, because the global reduced-motion rule
+       flattens the transition to .001ms — waiting the full duration there
+       leaves an invisible bar over the content swallowing clicks.
+
+       Read from matchMedia rather than a bare RM: RM is a local of the
+       kernel-js IIFE and was never in scope in this script, so close() threw a
+       ReferenceError on every call and the bar could not be dismissed at all —
+       neither Accept nor Decline nor Escape would put it away. */
+    var reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
     clearTimeout(t);
-    t = setTimeout(function(){ el.hidden = true; }, RM ? 0 : ${MS});
+    t = setTimeout(function(){ el.hidden = true; }, reduced ? 0 : ${MS});
     if (lastFocus && lastFocus.focus) lastFocus.focus();
   }
 

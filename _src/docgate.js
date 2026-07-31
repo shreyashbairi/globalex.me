@@ -294,6 +294,7 @@ var GLXFAM = {
   if (!reg.length) return;
   var gate = document.getElementById('gate');
   var cur = 0, lastFocus = null;
+  var RGBA = window.glxRGBA;
 
   /* ---------- specimen plate ----------
      Draws the family this document belongs to and lights the member the
@@ -327,8 +328,8 @@ var GLXFAM = {
 
       // Axis caption carries the unit, so the tick row stays pure numbers —
       // a trailing unit down there collided with the last tick.
-      c.font = '500 11px IBM Plex Mono, monospace';
-      c.fillStyle = 'rgba(var(--haze-rgb),.95)';
+      c.font = '600 11px IBM Plex Mono, monospace';
+      c.fillStyle = RGBA('haze', .95);
       c.textAlign = 'left'; c.textBaseline = 'alphabetic';
       c.fillText(set.axis.toUpperCase() + '  \\u2014  ' + set.unit.toUpperCase(), padL, 18);
 
@@ -337,10 +338,10 @@ var GLXFAM = {
       c.textAlign = 'center';
       for (var v = 0; v <= set.max; v += step){
         var x = X(v);
-        c.strokeStyle = 'rgba(var(--hairline-rgb),.17)';
+        c.strokeStyle = RGBA('hairline', .22);
         c.lineWidth = 1;
         c.beginPath(); c.moveTo(x, padT - 6); c.lineTo(x, h - padB + 4); c.stroke();
-        c.fillStyle = 'rgba(var(--haze-d-rgb),.8)';
+        c.fillStyle = RGBA('hazeD', .85);
         c.fillText(String(v), x, h - padB + 18);
       }
 
@@ -353,38 +354,49 @@ var GLXFAM = {
 
         // grade label
         c.textAlign = 'right'; c.textBaseline = 'middle';
-        c.font = (lit > .5 ? '600 ' : '400 ') + '11.5px IBM Plex Mono, monospace';
-        c.fillStyle = 'rgba(' + (lit > .5 ? '53,214,245,' : '160,186,197,') + (0.6 + lit*0.4) + ')';
+        c.font = (lit > .5 ? '700 ' : '400 ') + '11.5px IBM Plex Mono, monospace';
+        c.fillStyle = RGBA(lit > .5 ? 'cyan' : 'hazeD', 0.6 + lit*0.4);
         c.fillText(r.g, padL - 12, cy);
 
         // full-width track, so the unlit grades still read as a family
-        c.strokeStyle = 'rgba(var(--hairline-rgb),.14)';
+        c.strokeStyle = RGBA('hairline', .18);
         c.beginPath(); c.moveTo(padL, cy); c.lineTo(w - padR, cy); c.stroke();
 
         var x0 = X(r.lo), x1 = X(r.hi), bw = Math.max(3, x1 - x0);
         c.save();
         if (lit > .02){
-          c.shadowColor = 'rgba(' + GLXC.rgb.cyan + ',' + (lit*0.55) + ')';
+          c.shadowColor = RGBA('cyan', lit*0.55);
           c.shadowBlur = 16 * lit;
         }
         // dim base + lit overlay, so the tween is a crossfade not a jump
-        c.fillStyle = 'rgba(var(--hairline-rgb),.2)';
+        c.fillStyle = RGBA('hairline', .22);
         c.fillRect(x0, cy - bh/2, bw, bh);
-        c.fillStyle = 'rgba(' + GLXC.rgb.cyan + ',' + (lit * 0.9) + ')';
+        c.fillStyle = RGBA('cyan', lit * 0.92);
         c.fillRect(x0, cy - bh/2, bw, bh);
+        /* A lit bar carries a travelling highlight along its own length, so
+           the selected grade is the one thing on the plate that is moving. */
+        if (lit > .25){
+          var hx = x0 + ((t * 0.42 + i * 0.17) % 1) * bw;
+          var hg = c.createLinearGradient(hx - bw*0.30, 0, hx + bw*0.30, 0);
+          hg.addColorStop(0, RGBA('signal', 0));
+          hg.addColorStop(.5, RGBA('signal', lit * 0.85));
+          hg.addColorStop(1, RGBA('signal', 0));
+          c.fillStyle = hg;
+          c.fillRect(x0, cy - bh/2, bw, bh);
+        }
         c.restore();
 
         // end caps mark the tolerance limits
         if (lit > .3){
-          c.fillStyle = 'rgba(' + GLXC.rgb.frost + ',' + lit + ')';
+          c.fillStyle = RGBA('frost', lit);
           [x0, x1].forEach(function(x){
             c.beginPath();
             c.moveTo(x, cy - bh/2 - 3); c.lineTo(x + 2.5, cy);
             c.lineTo(x, cy + bh/2 + 3); c.lineTo(x - 2.5, cy);
             c.closePath(); c.fill();
           });
-          c.font = '500 11px IBM Plex Mono, monospace';
-          c.fillStyle = 'rgba(' + GLXC.rgb.frost + ',' + (lit*0.95) + ')';
+          c.font = '600 11px IBM Plex Mono, monospace';
+          c.fillStyle = RGBA('frost', lit*0.95);
           // keep both ends at the same precision — "4.5-6" reads as sloppy
           var dp = (r.lo % 1 || r.hi % 1) ? 1 : 0;
           var txt = r.lo.toFixed(dp) + '\\u2013' + r.hi.toFixed(dp);
@@ -398,14 +410,19 @@ var GLXFAM = {
         }
       }
 
-      // slow sweep — the plate reads as live instrumentation
+      // Sweep — the plate reads as live instrumentation. A soft wash with a
+      // hard leading edge: the wash alone was tuned against a dark ground and
+      // over off-white it is below the threshold of being seen at all.
       var sx = padL + ((t * 0.16) % 1) * iw;
-      var g = c.createLinearGradient(sx - 24, 0, sx + 24, 0);
-      g.addColorStop(0,'rgba(var(--cyan-rgb),0)');
-      g.addColorStop(.5,'rgba(var(--cyan-rgb),.09)');
-      g.addColorStop(1,'rgba(var(--cyan-rgb),0)');
+      var g = c.createLinearGradient(sx - 46, 0, sx + 10, 0);
+      g.addColorStop(0, RGBA('cyan', 0));
+      g.addColorStop(.82, RGBA('cyan', .10));
+      g.addColorStop(1, RGBA('cyan', 0));
       c.fillStyle = g;
       c.fillRect(padL, padT - 8, iw, ih + 12);
+      c.strokeStyle = RGBA('signal', .5);
+      c.lineWidth = 1;
+      c.beginPath(); c.moveTo(sx, padT - 8); c.lineTo(sx, padT + ih + 4); c.stroke();
     });
   }
 
@@ -453,15 +470,19 @@ var GLXFAM = {
   });
   /* A #doc-<id> hash selects that row instead of the first. Resolved to one
      index and selected once — calling select twice would double-fire retarget()
-     and restart the plate animation. */
-  var want = 0;
+     and restart the plate animation.
+
+     Named startAt, not want: want is the plate's per-row lit-target array,
+     declared with var in this same function scope, and reusing the name here
+     overwrote it with a number on every load. It survived only because
+     select() reassigns it an array one line later. */
+  var startAt = 0;
   var m = /^#doc-(.+)$/.exec(location.hash || '');
   if (m){
-    var rows = [].slice.call(el.reg.querySelectorAll('.dr'));
-    for (var i = 0; i < rows.length; i++)
-      if (rows[i].getAttribute('data-doc') === m[1]) { want = i; break; }
+    for (var q = 0; q < reg.length; q++)
+      if (reg[q].getAttribute('data-doc') === m[1]) { startAt = q; break; }
   }
-  select(want);
+  select(startAt);
 
   /* ---------- the gate ---------- */
   if (!gate) return;

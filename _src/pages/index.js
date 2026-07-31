@@ -1,4 +1,5 @@
 const docgate = require("../docgate");
+const geo = require("../geo");
 
 module.exports = {
   page: "index",
@@ -15,8 +16,11 @@ module.exports = {
 /* scrim keeps the header legible where the globe rides beneath it */
 .hero::before{content:'';position:absolute;inset:0 0 auto;height:210px;z-index:1;pointer-events:none;
   background:linear-gradient(180deg,rgba(var(--void-rgb),.9),rgba(var(--void-rgb),0))}
-.hero-stage{position:absolute;top:50%;right:calc(var(--pad-x) * .1);
-  width:min(86vh,46vw,880px);aspect-ratio:1;transform:translateY(-50%);z-index:0;
+/* The globe is the page's one piece of spectacle and it was being drawn small
+   enough to read as a decorative bullet. It gets the right-hand half of the
+   viewport now; .hero-in caps itself at 48vw, so the two do not collide. */
+.hero-stage{position:absolute;top:50%;right:calc(var(--pad-x) * .3);
+  width:min(96vh,52vw,1010px);aspect-ratio:1;transform:translateY(-50%);z-index:0;
   transition:opacity .3s linear}
 .hero-stage canvas{width:100%;height:100%}
 /* 62ch, not 52ch, purely so the three hero actions hold one line — the copy
@@ -90,12 +94,55 @@ module.exports = {
 .strip a::after{content:'';position:absolute;left:0;bottom:0;width:100%;height:2px;
   background:var(--cyan);transform:scaleX(0);transform-origin:left;transition:transform .5s var(--ease)}
 .strip a:hover::after{transform:scaleX(1)}
+
+/* A checkpoint runs 01 to 10 on a loop — the sequence the copy is describing,
+   performed rather than listed. Ten staggered copies of one keyframe, offset
+   .44s apart, so the last cell fires 3.96s in; the cycle is 7s, which leaves
+   about a second of rest before it starts over. Longer than that and the
+   strip sits dead for most of the time anyone is looking at it. Hovering the
+   strip pauses it, because a cell lighting under the pointer competes with
+   the hover state the visitor just asked for. */
+.strip a::before{content:'';position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(180deg,rgba(var(--cyan-rgb),.2),rgba(var(--signal-rgb),.06));
+  opacity:0;animation:stripRun 7s linear infinite}
+.strip:hover a::before{animation-play-state:paused}
+.strip a>i,.strip a>span{position:relative}
+@keyframes stripRun{0%,14%{opacity:0}4%{opacity:1}}
+.strip a:nth-child(1)::before{animation-delay:0s}
+.strip a:nth-child(2)::before{animation-delay:.44s}
+.strip a:nth-child(3)::before{animation-delay:.88s}
+.strip a:nth-child(4)::before{animation-delay:1.32s}
+.strip a:nth-child(5)::before{animation-delay:1.76s}
+.strip a:nth-child(6)::before{animation-delay:2.2s}
+.strip a:nth-child(7)::before{animation-delay:2.64s}
+.strip a:nth-child(8)::before{animation-delay:3.08s}
+.strip a:nth-child(9)::before{animation-delay:3.52s}
+.strip a:nth-child(10)::before{animation-delay:3.96s}
 @media (max-width:1080px){.strip{grid-template-columns:repeat(5,1fr)}
   .strip a:nth-child(5){border-right:0}
   .strip a:nth-child(-n+5){border-bottom:1px solid var(--line)}}
 @media (max-width:620px){.strip{grid-template-columns:repeat(2,1fr)}
   .strip a{border-right:1px solid var(--line);border-bottom:1px solid var(--line);min-height:132px}
   .strip a:nth-child(2n){border-right:0}}
+
+/* ---------- CTA on the ink band ----------
+   No plate of its own: the section IS the plate, so the block only has to
+   place the lattice canvas and the standing figures beside the copy. */
+.cta-ink{position:relative;display:grid;grid-template-columns:1.35fr .65fr;
+  gap:clamp(2rem,5vw,4.5rem);align-items:center;padding-block:clamp(1rem,3vw,2.5rem)}
+.cta-ink canvas{position:absolute;inset:-2rem;width:calc(100% + 4rem);height:calc(100% + 4rem);
+  opacity:.55;z-index:0;pointer-events:none}
+.cta-ink .cta-in{position:relative;z-index:2;display:grid;gap:1.4rem;max-width:52ch}
+.cta-ink h2{max-width:22ch}
+.cta-fig{position:relative;z-index:2;display:grid;gap:0;
+  border-top:1px solid rgba(var(--void-rgb),.28)}
+.cta-fig>div{display:flex;justify-content:space-between;align-items:baseline;gap:1rem;
+  padding:.85rem .1rem;border-bottom:1px solid rgba(var(--void-rgb),.28)}
+.cta-fig dt{font-family:var(--f-mono);font-size:.69rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--steel)}
+.cta-fig dd{font-family:var(--f-disp);font-weight:700;font-size:.95rem;
+  font-variation-settings:'wdth' 108;color:var(--void)}
+@media (max-width:940px){.cta-ink{grid-template-columns:1fr}}
 
 /* ---------- sustainability split ---------- */
 .sus{position:relative;display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(2rem,5vw,4.5rem);
@@ -338,10 +385,10 @@ module.exports = {
 </section>
 
 <!-- ============ CTA ============ -->
-<section class="sec">
+<section class="sec sec-ink" data-sec="Contact">
   <div class="wrap">
-    <div class="cta rv">
-      <canvas data-lat="cyan" data-count="30" aria-hidden="true"></canvas>
+    <div class="cta-ink rv">
+      <canvas data-lat="signal" data-count="42" aria-hidden="true"></canvas>
       <div class="cta-in">
         <span class="eb">Open a lane</span>
         <h2>Tell us the tonnage, the port and the window.</h2>
@@ -351,6 +398,11 @@ module.exports = {
           <a href="mailto:info@globalex.me" class="btn btn-o" data-mag="6">info@globalex.me</a>
         </div>
       </div>
+      <dl class="cta-fig">
+        <div><dt>Response</dt><dd>2 business days</dd></div>
+        <div><dt>Desk</dt><dd>Dubai &middot; JLT</dd></div>
+        <div><dt>Incoterms</dt><dd>FOB &middot; CIF &middot; CFR</dd></div>
+      </dl>
     </div>
   </div>
 </section>
@@ -361,21 +413,37 @@ module.exports = {
     `
 /* ================= commodity class visuals ================= */
 function visCrystal(cv){
-  // urea: a white crystalline solid — grow a dendritic lattice
+  /* Fertilizers: a prilled urea bed. Prills fall, settle into a heap and the
+     heap grows a dendritic frost over it — the two things urea actually does.
+     Drawn in the material accent throughout, because this is cargo. */
   var seeds = [], N = 5;
   for (var i=0;i<N;i++) seeds.push({x:.2+Math.random()*.6, y:.2+Math.random()*.6, ph:Math.random()*6.3});
+  var prills = [];
+  for (var p=0;p<34;p++) prills.push({x:Math.random(), y:Math.random(),
+    sp:.055+Math.random()*.10, r:.9+Math.random()*1.7, ph:Math.random()*6.3});
   glxStage(cv, function(x,w,h,t){
     x.clearRect(0,0,w,h);
     var g = x.createLinearGradient(0,0,0,h);
-    g.addColorStop(0,'rgba('+GLXC.rgb.sand+',.07)'); g.addColorStop(1,'rgba('+GLXC.rgb.void+',0)');
+    g.addColorStop(0, RGBA('sand', .16));
+    g.addColorStop(1, RGBA('sandD', .04));
     x.fillStyle=g; x.fillRect(0,0,w,h);
+
+    // falling prills, wrapping at the foot of the frame
+    prills.forEach(function(pr){
+      pr.y += pr.sp * 0.016;
+      if (pr.y > 1.04) { pr.y = -0.04; pr.x = Math.random(); }
+      var px2 = (pr.x + Math.sin(t*.6 + pr.ph)*.012) * w, py = pr.y*h;
+      x.fillStyle = RGBA('sandD', .5);
+      x.beginPath(); x.arc(px2, py, pr.r, 0, 6.284); x.fill();
+    });
+
     seeds.forEach(function(s,si){
       var cx = s.x*w, cy = s.y*h;
       var grow = (Math.sin(t*.35 + s.ph)*.5+.5)*.65+.35;
       for (var a=0;a<6;a++){
         var ang = a*Math.PI/3 + t*.05 + si;
         var L = Math.min(w,h)*.42*grow;
-        x.strokeStyle='rgba(var(--sand-rgb),.42)'; x.lineWidth=1;
+        x.strokeStyle=RGBA('sandD', .55); x.lineWidth=1.2;
         x.beginPath(); x.moveTo(cx,cy);
         x.lineTo(cx+Math.cos(ang)*L, cy+Math.sin(ang)*L); x.stroke();
         for (var b=.28;b<1;b+=.24){
@@ -383,14 +451,20 @@ function visCrystal(cv){
           var bl = L*.22*(1-b);
           [-1,1].forEach(function(sd){
             var ba = ang + sd*Math.PI/3;
-            x.strokeStyle='rgba(var(--sand-rgb),.26)';
+            x.strokeStyle=RGBA('sandD', .34);
             x.beginPath(); x.moveTo(bx,by);
             x.lineTo(bx+Math.cos(ba)*bl, by+Math.sin(ba)*bl); x.stroke();
           });
         }
       }
+      // the nucleus flares as the lattice reaches full extension
+      var flare = Math.pow(grow, 3);
       x.save(); x.translate(cx,cy); x.rotate(Math.PI/4);
-      x.fillStyle='rgba(var(--sand-rgb),.9)'; x.fillRect(-2.5,-2.5,5,5); x.restore();
+      x.fillStyle=RGBA('sandD', .95); x.fillRect(-2.5,-2.5,5,5);
+      x.strokeStyle=RGBA('sand', flare*.9); x.lineWidth=1;
+      var rr = 4 + flare*7;
+      x.strokeRect(-rr,-rr,rr*2,rr*2);
+      x.restore();
     });
   });
 }
@@ -403,7 +477,7 @@ function visChain(cv){
   glxStage(cv, function(x,w,h,t){
     x.clearRect(0,0,w,h);
     chains.forEach(function(c,ci){
-      x.strokeStyle='rgba(var(--cyan-rgb),.3)'; x.lineWidth=1.1;
+      x.strokeStyle=RGBA('cyan', .42); x.lineWidth=1.3;
       x.beginPath();
       for (var px=0;px<=w;px+=4){
         var u = px/w;
@@ -411,14 +485,20 @@ function visChain(cv){
         px===0 ? x.moveTo(px,py) : x.lineTo(px,py);
       }
       x.stroke();
+      /* One monomer per chain is mid-reaction at any moment: the travelling
+         index carries the signal green and a halo, so the eye is given
+         something to follow rather than a uniformly shimmering field. */
+      var hot = Math.floor(((t*0.55 + ci*0.37) % 1) * 14);
       for (var k=0;k<=13;k++){
         var u2 = k/13;
         var mx = u2*w;
         var my = (c.y + Math.sin(u2*Math.PI*2*c.f + t*c.sp*2 + c.ph)*c.amp)*h;
         var pulse = Math.sin(t*1.4 - k*.4 + ci)*.5+.5;
+        var isHot = k === hot;
         x.save(); x.translate(mx,my); x.rotate(Math.PI/4);
-        var r = 1.9+pulse*1.5;
-        x.fillStyle='rgba('+GLXC.rgb.cyan+','+(.35+pulse*.5)+')';
+        var r = (isHot ? 3.4 : 1.9) + pulse*1.5;
+        if (isHot){ x.shadowColor = RGBA('signal', .9); x.shadowBlur = 12; }
+        x.fillStyle = isHot ? RGBA('signal', .95) : RGBA('cyan', .42+pulse*.5);
         x.fillRect(-r,-r,r*2,r*2); x.restore();
       }
     });
@@ -426,8 +506,11 @@ function visChain(cv){
 }
 
 function visReact(cv){
-  // industrials: reacting particle field with transient bonds
-  var P = [];
+  /* Industrials: a reacting particle field with transient bonds. Every bond
+     that forms fires once — a reaction is an event, and the previous version
+     drew only the standing lattice, which is the one state a reactor is never
+     actually in. */
+  var P = [], flash = [];
   for (var i=0;i<26;i++) P.push({x:Math.random(),y:Math.random(),
     vx:(Math.random()-.5)*.0013,vy:(Math.random()-.5)*.0013,r:1+Math.random()*1.8});
   glxStage(cv, function(x,w,h,t){
@@ -440,15 +523,27 @@ function visReact(cv){
       var ax=P[i].x*w,ay=P[i].y*h,bx=P[j].x*w,by=P[j].y*h;
       var d=Math.hypot(ax-bx,ay-by), lim=Math.min(w,h)*.30;
       if (d<lim){
-        x.strokeStyle='rgba('+GLXC.rgb.sand+','+(.30*(1-d/lim)).toFixed(3)+')';
+        var near = 1-d/lim;
+        x.strokeStyle=RGBA('sandD', (.42*near).toFixed(3));
         x.lineWidth=1; x.beginPath(); x.moveTo(ax,ay); x.lineTo(bx,by); x.stroke();
+        // a bond crossing the close threshold ignites at its midpoint
+        if (near > .93 && flash.length < 14 && Math.random() < .06)
+          flash.push({x:(ax+bx)/2, y:(ay+by)/2, t:0});
       }
+    }
+    for (var f=flash.length-1; f>=0; f--){
+      var fl = flash[f];
+      fl.t += .045;
+      if (fl.t >= 1){ flash.splice(f,1); continue; }
+      var k = 1-fl.t;
+      x.strokeStyle = RGBA('signal', k*.85); x.lineWidth = 1.4;
+      x.beginPath(); x.arc(fl.x, fl.y, 3 + fl.t*17, 0, 6.284); x.stroke();
     }
     P.forEach(function(p,i){
       var bx=p.x*w, by=p.y*h, pulse=Math.sin(t*.9+i)*.5+.5;
       x.save(); x.translate(bx,by); x.rotate(Math.PI/4);
       var r=p.r*(1+pulse*.5);
-      x.fillStyle='rgba('+GLXC.rgb.sand+','+(.4+pulse*.45)+')';
+      x.fillStyle=RGBA('sandD', .5+pulse*.45);
       x.fillRect(-r,-r,r*2,r*2); x.restore();
     });
   });
@@ -473,9 +568,53 @@ var NODES = [
 ];
 var HUB = NODES[6];
 
+/* ---- baked geography (see _src/geo.js for the encoding) ---- */
+var GEO = {Q:${geo.Q}, MW:${geo.MW}, MH:${geo.MH},
+  B:${JSON.stringify(geo.BORDERS)}, M:${JSON.stringify(geo.LANDMASK)}};
+
+/* Rings of [lon,lat], from delta-encoded zig-zag varints. */
+function geoRings(){
+  var A = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+-';
+  var IX = {}; for (var n=0;n<64;n++) IX[A.charAt(n)] = n;
+  return GEO.B.split('|').map(function(r){
+    var pts = [], px = 0, py = 0, i = 0;
+    function rd(){
+      var v = 0, sh = 1, c;
+      do { c = IX[r.charAt(i++)]; v += (c & 31) * sh; sh *= 32; } while (c & 32);
+      return (v & 1) ? -((v + 1) / 2) : v / 2;
+    }
+    while (i < r.length){ px += rd(); py += rd(); pts.push([px/GEO.Q, py/GEO.Q]); }
+    return pts;
+  });
+}
+
+/* One-degree land bitmask. Row 0 is the north pole, column 0 is 180W. */
+function landTest(){
+  var bin = atob(GEO.M), bytes = new Uint8Array(bin.length);
+  for (var i=0;i<bin.length;i++) bytes[i] = bin.charCodeAt(i);
+  return function(lat, lon){
+    var row = Math.floor((90 - lat) / 180 * GEO.MH);
+    if (row < 0 || row >= GEO.MH) return false;
+    var col = Math.floor((lon + 180) / 360 * GEO.MW);
+    col = ((col % GEO.MW) + GEO.MW) % GEO.MW;
+    var ix = row * GEO.MW + col;
+    return (bytes[ix >> 3] & (1 << (ix & 7))) !== 0;
+  };
+}
+
 function ll2v(lat, lon, r){
   var phi = (90-lat)*Math.PI/180, th = (lon+180)*Math.PI/180;
   return new THREE.Vector3(-r*Math.sin(phi)*Math.cos(th), r*Math.cos(phi), r*Math.sin(phi)*Math.sin(th));
+}
+/* Exact inverse of ll2v for a unit vector — the dot field is generated as
+   points on a sphere and has to ask the mask which of them are on land. If
+   these two ever disagree the continents rotate away from the corridors, so
+   they are written as a pair on purpose. */
+function v2ll(x, y, z){
+  var lat = 90 - Math.acos(Math.max(-1, Math.min(1, y))) * 180/Math.PI;
+  var lon = Math.atan2(z, -x) * 180/Math.PI - 180;
+  if (lon < -180) lon += 360;
+  return [lat, lon];
 }
 function haversine(a, b){
   var R=6371, p1=a.lat*Math.PI/180, p2=b.lat*Math.PI/180;
@@ -514,7 +653,12 @@ function buildGlobe(){
   var DPR = Math.min(devicePixelRatio||1, 2);
   renderer.setPixelRatio(DPR);
 
-  var FOV = 30, DIST = 5.4;
+  /* At FOV 30 the half-height of the view at distance d is d*tan(15deg), so
+     the unit sphere fills 1/(d*0.2679) of it: 5.4 put the globe at 69% of the
+     canvas and left a wide dead margin, which is most of why it read as having
+     shrunk. 4.55 takes it to about 82%, still clear of the projected labels,
+     which sit out at radius 1.15. */
+  var FOV = 30, DIST = 4.55;
   var scene = new THREE.Scene();
   var cam = new THREE.PerspectiveCamera(FOV, 1, .1, 100);
   cam.position.set(0,0,DIST);
@@ -537,12 +681,21 @@ function buildGlobe(){
   );
   inner.add(core);
 
-  /* --- fresnel atmosphere --- */
+  /* --- fresnel atmosphere ---
+     A wide soft halo is a dark-theme device: it works because it adds light to
+     a black field. Added to off-white it only bleaches the limb and costs the
+     sphere its silhouette. On a light palette the same shader is retuned into
+     a tight limb-darkening — higher exponent, tighter shell, drawn in the
+     border green — so the edge reads as the curve of a solid body. */
   var atmo = new THREE.Mesh(
-    new THREE.SphereGeometry(1.06, 64, 48),
+    new THREE.SphereGeometry(LIGHT ? 1.015 : 1.06, 64, 48),
     new THREE.ShaderMaterial({
       transparent:true, blending:BLEND, side:THREE.BackSide, depthWrite:false,
-      uniforms:{uC:{value:new THREE.Color(GLXC.int.cyan)}},
+      uniforms:{
+        uC:{value:new THREE.Color(LIGHT ? GLXC.int.globeBorder : GLXC.int.cyan)},
+        uPow:{value:LIGHT ? 6.0 : 3.4},
+        uAmt:{value:LIGHT ? 0.55 : 0.34}
+      },
       vertexShader:[
         'varying vec3 vN; varying vec3 vP;',
         'void main(){ vN = normalize(normalMatrix * normal);',
@@ -550,10 +703,11 @@ function buildGlobe(){
         ' gl_Position = projectionMatrix * mv; }'
       ].join('\\n'),
       fragmentShader:[
-        'uniform vec3 uC; varying vec3 vN; varying vec3 vP;',
+        'uniform vec3 uC; uniform float uPow; uniform float uAmt;',
+        'varying vec3 vN; varying vec3 vP;',
         'void main(){',
-        ' float f = pow(clamp(1.0 - abs(dot(normalize(vN), normalize(-vP))), 0.0, 1.0), 3.4);',
-        ' gl_FragColor = vec4(uC, f * 0.34);',
+        ' float f = pow(clamp(1.0 - abs(dot(normalize(vN), normalize(-vP))), 0.0, 1.0), uPow);',
+        ' gl_FragColor = vec4(uC, f * uAmt);',
         '}'
       ].join('\\n')
     })
@@ -578,7 +732,8 @@ function buildGlobe(){
     var g = new THREE.BufferGeometry();
     g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
     inner.add(new THREE.LineSegments(g, new THREE.LineBasicMaterial({
-      color:GLXC.int.globeGraticule, transparent:true, opacity:.34, depthWrite:false
+      color:GLXC.int.globeGraticule, transparent:true,
+      opacity:LIGHT?.62:.34, depthWrite:false
     })));
   })();
 
@@ -599,58 +754,106 @@ function buildGlobe(){
     });
   });
 
+  /* The corridors are the subject of the whole graphic, so on a light ground
+     they take the darker end of each accent: a mid cyan and a mid gold both
+     sit at roughly the same lightness as pale sage and vanish into it. The
+     idle and selected opacities are held here rather than in setHud so the
+     two states cannot drift apart. */
+  var ARC_DIM = LIGHT ? .5 : .26, ARC_LIT = LIGHT ? 1 : .95;
   arcs.forEach(function(ar){
     var pts = ar.curve.getPoints(72);
     var g = new THREE.BufferGeometry().setFromPoints(pts);
     ar.line = new THREE.Line(g, new THREE.LineBasicMaterial({
-      color: ar.kind === 'in' ? GLXC.int.cyan : GLXC.int.sand,
-      transparent:true, opacity:LIGHT?.8:.34, blending:BLEND, depthWrite:false
+      color: ar.kind === 'in'
+        ? (LIGHT ? GLXC.int.cyanD : GLXC.int.cyan)
+        : (LIGHT ? GLXC.int.sandD : GLXC.int.sand),
+      transparent:true, opacity:ARC_DIM, blending:BLEND, depthWrite:false
     }));
     inner.add(ar.line);
   });
 
-  /* --- dot sphere: brightness driven by proximity to corridors --- */
+  /* --- coastlines and national borders ---
+     The hardest line on the sphere. Segments are subdivided so a simplified
+     span does not chord through the globe, and any segment that wraps the
+     antimeridian is dropped rather than drawn straight across the Pacific. */
   (function(){
-    var N = 4200, pos = new Float32Array(N*3), glow = new Float32Array(N);
+    var pos = [];
+    geoRings().forEach(function(ring){
+      for (var i=0;i<ring.length-1;i++){
+        var a = ring[i], b = ring[i+1];
+        var dlon = b[0] - a[0];
+        if (Math.abs(dlon) > 180) continue;           // antimeridian wrap
+        var arcDeg = Math.max(Math.abs(dlon), Math.abs(b[1]-a[1]));
+        var steps = Math.max(1, Math.ceil(arcDeg / 3));
+        var prev = ll2v(a[1], a[0], 1.003);
+        for (var s=1;s<=steps;s++){
+          var f = s/steps;
+          var v = ll2v(a[1] + (b[1]-a[1])*f, a[0] + dlon*f, 1.003);
+          pos.push(prev.x, prev.y, prev.z, v.x, v.y, v.z);
+          prev = v;
+        }
+      }
+    });
+    var g = new THREE.BufferGeometry();
+    g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+    inner.add(new THREE.LineSegments(g, new THREE.LineBasicMaterial({
+      color:GLXC.int.globeBorder, transparent:true, opacity:LIGHT?.85:.55,
+      depthWrite:false
+    })));
+  })();
+
+  /* --- dot field over land, brightness driven by proximity to corridors ---
+     Candidates are a Fibonacci sphere; only those the land mask accepts are
+     kept, so the continents are drawn rather than implied. */
+  (function(){
+    var CAND = 17000, pos = [], glow = [];
+    var onLand = landTest();
     var samples = [];
     arcs.forEach(function(ar){
-      ar.curve.getPoints(48).forEach(function(p){ samples.push(p.clone().normalize()); });
+      ar.curve.getPoints(32).forEach(function(p){ samples.push(p.clone().normalize()); });
     });
     var gold = Math.PI * (3 - Math.sqrt(5));
-    for (var i=0;i<N;i++){
-      var y = 1 - (i/(N-1))*2, r = Math.sqrt(Math.max(0,1-y*y)), th = gold*i;
+    for (var i=0;i<CAND;i++){
+      var y = 1 - (i/(CAND-1))*2, r = Math.sqrt(Math.max(0,1-y*y)), th = gold*i;
       var vx = Math.cos(th)*r, vy = y, vz = Math.sin(th)*r;
-      pos[i*3] = vx; pos[i*3+1] = vy; pos[i*3+2] = vz;
+      var ll = v2ll(vx, vy, vz);
+      if (!onLand(ll[0], ll[1])) continue;
+      pos.push(vx, vy, vz);
       var best = 0;
       for (var s=0;s<samples.length;s++){
         var dt = vx*samples[s].x + vy*samples[s].y + vz*samples[s].z;
         if (dt > best) best = dt;
       }
       // best is cos(angular distance); shape it into a halo hugging the corridors
-      glow[i] = Math.pow(Math.max(0, (best - 0.9965) / 0.0035), 1.05);
+      glow.push(Math.pow(Math.max(0, (best - 0.9965) / 0.0035), 1.05));
     }
     var g = new THREE.BufferGeometry();
     g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
     g.setAttribute('aGlow', new THREE.Float32BufferAttribute(glow, 1));
     var m = new THREE.ShaderMaterial({
       transparent:true, depthWrite:false, blending:BLEND,
-      uniforms:{uPx:uPx, uDim:{value:new THREE.Color(GLXC.int.globeSurface)}, uHot:{value:new THREE.Color(GLXC.int.globeGlow)}},
+      uniforms:{uPx:uPx, uOp:{value:LIGHT?0.82:0.44},
+        uDim:{value:new THREE.Color(GLXC.int.globeSurface)},
+        uHot:{value:new THREE.Color(GLXC.int.globeGlow)}},
       vertexShader:[
         'attribute float aGlow; varying float vG; uniform float uPx;',
         'void main(){ vG = aGlow;',
         ' vec4 mv = modelViewMatrix * vec4(position,1.0);',
-        ' gl_PointSize = (0.0032 + aGlow * 0.0040) * uPx / -mv.z;',
+        ' gl_PointSize = (0.0040 + aGlow * 0.0042) * uPx / -mv.z;',
         ' gl_Position = projectionMatrix * mv; }'
       ].join('\\n'),
+      /* uOp lifts the whole field on a light palette. These points are drawn
+         normally there rather than additively, and a 0.44 alpha that read as a
+         glowing landmass against near-black is a grey smudge on pale sage. */
       fragmentShader:[
-        'varying float vG; uniform vec3 uDim; uniform vec3 uHot;',
+        'varying float vG; uniform vec3 uDim; uniform vec3 uHot; uniform float uOp;',
         'void main(){',
         ' vec2 p = gl_PointCoord - 0.5;',
         ' float d = abs(p.x) + abs(p.y);',
         ' if (d > 0.5) discard;',
         ' float e = smoothstep(0.5, 0.12, d);',
         ' vec3 c = mix(uDim, uHot, vG);',
-        ' gl_FragColor = vec4(c, e * (0.44 + vG * 0.56));',
+        ' gl_FragColor = vec4(c, e * (uOp + vG * (1.0 - uOp)));',
         '}'
       ].join('\\n')
     });
@@ -663,12 +866,18 @@ function buildGlobe(){
     var total = arcs.length * FLOW;
     flowPos = new Float32Array(total*3);
     var col = new Float32Array(total*3);
+    /* Packet colour comes from the palette rather than from two hand-tuned
+       float triples. Those were a pale cyan and a pale gold — chosen to glow
+       against a near-black sphere, and on a pale one they were two invisible
+       tints of off-white. */
+    var IN_C = new THREE.Color(LIGHT ? GLXC.int.globeGlow : GLXC.int.cyan);
+    var OUT_C = new THREE.Color(LIGHT ? GLXC.int.accentMaterialDark : GLXC.int.sand);
     for (var a=0;a<arcs.length;a++){
-      var c = arcs[a].kind === 'in' ? [0.42,0.90,1.0] : [1.0,0.78,0.42];
+      var c = arcs[a].kind === 'in' ? IN_C : OUT_C;
       for (var f=0;f<FLOW;f++){
         var i = a*FLOW+f;
         flowT.push({a:a, t:f/FLOW, sp:0.055 + (arcs[a].kind==='in'?0.02:0)});
-        col[i*3]=c[0]; col[i*3+1]=c[1]; col[i*3+2]=c[2];
+        col[i*3]=c.r; col[i*3+1]=c.g; col[i*3+2]=c.b;
       }
     }
     flowGeo = new THREE.BufferGeometry();
@@ -681,7 +890,7 @@ function buildGlobe(){
         'attribute vec3 aCol; varying vec3 vC; uniform float uPx;',
         'void main(){ vC = aCol;',
         ' vec4 mv = modelViewMatrix * vec4(position,1.0);',
-        ' gl_PointSize = 0.0105 * uPx / -mv.z;',
+        ' gl_PointSize = 0.0135 * uPx / -mv.z;',
         ' gl_Position = projectionMatrix * mv; }'
       ].join('\\n'),
       fragmentShader:[
@@ -690,7 +899,7 @@ function buildGlobe(){
         ' vec2 p = gl_PointCoord - 0.5;',
         ' float d = abs(p.x) + abs(p.y);',
         ' if (d > 0.5) discard;',
-        ' gl_FragColor = vec4(vC, smoothstep(0.5, 0.0, d) * 0.9);',
+        ' gl_FragColor = vec4(vC, smoothstep(0.5, 0.06, d));',
         '}'
       ].join('\\n')
     });
@@ -739,7 +948,7 @@ function buildGlobe(){
     hud.cargo.textContent = ar.node.g;
     hud.cargo.className = ar.kind === 'in' ? 'mat' : 'sys';
     hud.dist.textContent = fmt(ar.dist) + ' km';
-    arcs.forEach(function(a2, j){ a2.line.material.opacity = j === i ? .95 : .26; });
+    arcs.forEach(function(a2, j){ a2.line.material.opacity = j === i ? ARC_LIT : ARC_DIM; });
   }
   setHud(0);
 

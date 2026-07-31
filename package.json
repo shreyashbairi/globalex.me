@@ -7,6 +7,7 @@
     "build": "node _src/build.js",
     "test": "node _src/test.js",
     "og": "node _src/og-render.js",
+    "geo": "node --stack-size=8000 _src/geo-build.js",
     "dev": "wrangler pages dev . --port 8788",
     "db:local": "wrangler d1 execute globalex --local --file=./schema.sql",
     "db:remote": "wrangler d1 execute globalex --remote --file=./schema.sql",

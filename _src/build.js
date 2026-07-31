@@ -42,17 +42,44 @@ const FONTS =
 const THREE_CDN =
   "https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js";
 
-// The logo is white-on-transparent, so it also gets served on the brand plate
-// for light browser chrome — same file, unmodified, just composited.
+/* The tab icon.
+
+   The supplied logo is white artwork on transparency. Composited straight onto
+   the light page background — which is what this did — it is a white mark on a
+   near-white plate: an empty favicon at 16px, which is the only size that
+   matters. Elsewhere the site solves this with filter:brightness(0) from
+   --logo-filter, but a data: URI has no :root to inherit a custom property
+   from, so the plate carries its own equivalent as an SVG filter.
+
+   feColorMatrix, not feFlood/feComposite: it zeroes R, G and B while passing
+   alpha through untouched, which is exactly brightness(0) and keeps the mark's
+   fine strokes and its anti-aliased edge. Applied only on a light palette; on
+   a dark one the white artwork is already correct.
+
+   The raw assets/logo.webp is no longer offered as `rel="alternate icon"`.
+   That link existed for browsers without SVG-favicon support, but the file it
+   points at is the untreated white artwork — the exact thing this plate is
+   here to avoid — so the fallback rendered blank in precisely the light tab
+   strip it was meant to serve. apple-touch-icon still uses it: iOS flattens a
+   transparent icon onto black, where white artwork is right. */
 const LOGO_B64 = fs
   .readFileSync(path.join(OUT, "assets/logo.webp"))
   .toString("base64");
+const INK_MATRIX =
+  POLARITY === "light"
+    ? `<filter id="ink" color-interpolation-filters="sRGB">` +
+      `<feColorMatrix type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0"/>` +
+      `</filter>`
+    : "";
 const faviconPlate =
   "data:image/svg+xml," +
   encodeURIComponent(
     `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 70 70">` +
+      INK_MATRIX +
       `<rect width="70" height="70" fill="${THEME.pageBackground}"/>` +
-      `<image xlink:href="data:image/webp;base64,${LOGO_B64}" x="2" y="7" width="66" height="56"/>` +
+      `<image xlink:href="data:image/webp;base64,${LOGO_B64}" x="2" y="7" width="66" height="56"` +
+      (INK_MATRIX ? ` filter="url(#ink)"` : "") +
+      `/>` +
       `</svg>`,
   );
 
@@ -110,7 +137,6 @@ ${p.noindex ? `<meta name="robots" content="noindex, nofollow" />\n` : ""}<link 
 <meta name="twitter:description" content="${desc}" />
 <meta name="twitter:image" content="${ogImage}" />
 <link rel="icon" type="image/svg+xml" href="${faviconPlate}" />
-<link rel="alternate icon" type="image/webp" href="assets/logo.webp" />
 <link rel="apple-touch-icon" href="assets/logo.webp" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

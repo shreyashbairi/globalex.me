@@ -7,17 +7,22 @@
    ============================================================ */
 
 const { DOCS } = require('./docs');
+const theme = require('./theme');
 
 const FONTS =
   'https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Instrument+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap';
 
+/* The dashboard does not load kernel-css, so it has to emit the palette
+   itself. It previously declared --cyan:var(--cyan) and reached for
+   --hairline-rgb and --void, none of which were defined on this page: every
+   colour on the dashboard resolved to nothing. It renders in the site palette
+   again because the tokens are now actually here. */
 const css = `
 *,*::before,*::after{box-sizing:border-box}*{margin:0;padding:0}
 :root{
-  
-  --line:rgba(var(--hairline-rgb),.2);--line-2:rgba(var(--hairline-rgb),.36);
-  --cyan:var(--cyan);--cyan-d:var(--cyan-d);--sand:var(--sand);--rose:var(--alert);
-  --frost:var(--frost);--haze:var(--haze);--haze-d:var(--haze-d);
+${theme.cssVars()}
+${theme.cssAliases()}
+  --rose:var(--alert);
   --f-disp:'Archivo',system-ui,sans-serif;--f-body:'Instrument Sans',system-ui,sans-serif;
   --f-mono:'IBM Plex Mono',ui-monospace,Menlo,monospace;
   --ease:cubic-bezier(.16,1,.3,1);
@@ -37,7 +42,8 @@ button{cursor:pointer}
 .gatebox{width:min(100%,392px);border:1px solid var(--line-2);background:var(--deep);
   padding:2.1rem 1.9rem;
   clip-path:polygon(0 0,calc(100% - 17px) 0,100% 17px,100% 100%,17px 100%,0 calc(100% - 17px))}
-.gatebox img{margin:0 auto 1.4rem}
+.gatebox img{margin:0 auto 1.4rem;filter:var(--logo-filter)}
+.top .mark img{filter:var(--logo-filter)}
 .gatebox h1{font-family:var(--f-disp);font-variation-settings:'wdth' 114;font-weight:700;
   font-size:1.28rem;text-align:center}
 .gatebox p{color:var(--haze-d);font-size:.86rem;text-align:center;margin-top:.5rem}
@@ -51,7 +57,7 @@ select option{background:var(--deep)}
 .btn{padding:.78em 1.4em;background:var(--cyan);color:var(--void);font-weight:600;font-size:.88rem;
   text-align:center;transition:background .3s;
   clip-path:polygon(0 0,calc(100% - 9px) 0,100% 9px,100% 100%,9px 100%,0 calc(100% - 9px))}
-.btn:hover{background:var(--frost)}
+.btn:hover{background:var(--flip);color:var(--on-flip)}
 .btn-o{background:none;border:1px solid var(--line-2);color:var(--haze);clip-path:none;
   padding:.5em 1em;font-size:.79rem}
 .btn-o:hover{border-color:var(--cyan);color:var(--cyan);background:rgba(var(--cyan-rgb),.07)}
@@ -338,6 +344,15 @@ ${DOCS.map((d) => `              <option value="${d.id}">${d.kind} — ${d.title
 `;
 
 const js = `
+/* The chart is a 2D canvas, and a canvas takes a colour string — it cannot
+   resolve a custom property. This page does not load kernel-js, so it carries
+   its own copy of the palette and the same rgba() helper. */
+var GLXC = ${JSON.stringify(theme.jsPalette(), null, 0)};
+function RGBA(name, alpha){
+  var ch = GLXC.rgb[name];
+  if (!ch) throw new Error('RGBA: no theme colour named "' + name + '"');
+  return 'rgba(' + ch + ',' + alpha + ')';
+}
 (function(){
   var signin = document.getElementById('signin');
   var app = document.getElementById('app');
@@ -453,7 +468,7 @@ const js = `
 
     if (!series.length){
       ctx.font = '400 13px Instrument Sans, sans-serif';
-      ctx.fillStyle = 'rgba(var(--haze-d-rgb),.8)'; ctx.textAlign = 'center';
+      ctx.fillStyle = RGBA('hazeD', .8); ctx.textAlign = 'center';
       ctx.fillText('No traffic recorded yet.', w/2, h/2);
       return;
     }
@@ -471,9 +486,9 @@ const js = `
     ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
     for (var g=0; g<=4; g++){
       var v = max*g/4, y = Y(v);
-      ctx.strokeStyle = 'rgba(var(--hairline-rgb),.14)'; ctx.lineWidth = 1;
+      ctx.strokeStyle = RGBA('hairline', .18); ctx.lineWidth = 1;
       ctx.beginPath(); ctx.moveTo(padL, y); ctx.lineTo(w-padR, y); ctx.stroke();
-      ctx.fillStyle = 'rgba(var(--haze-d-rgb),.8)';
+      ctx.fillStyle = RGBA('hazeD', .85);
       ctx.fillText(String(Math.round(v)), padL-9, y);
     }
 
@@ -484,18 +499,18 @@ const js = `
         ctx.save();
         ctx.lineTo(X(series.length-1), padT+ih); ctx.lineTo(X(0), padT+ih); ctx.closePath();
         var grd = ctx.createLinearGradient(0,padT,0,padT+ih);
-        grd.addColorStop(0, fill); grd.addColorStop(1, 'rgba(var(--cyan-rgb),0)');
+        grd.addColorStop(0, fill); grd.addColorStop(1, RGBA('cyan', 0));
         ctx.fillStyle = grd; ctx.fill(); ctx.restore();
         ctx.beginPath();
         series.forEach(function(s,i){ i ? ctx.lineTo(X(i), Y(s[key])) : ctx.moveTo(X(i), Y(s[key])); });
       }
       ctx.strokeStyle = stroke; ctx.lineWidth = 2; ctx.lineJoin = 'round'; ctx.stroke();
     }
-    line('views', 'rgba(var(--hairline-rgb),.45)', null);
-    line('visitors', 'var(--cyan)', 'rgba(var(--cyan-rgb),.2)');
+    line('views', RGBA('hairline', .5), null);
+    line('visitors', GLXC.cyan, RGBA('cyan', .22));
 
     ctx.textAlign = 'center'; ctx.textBaseline = 'top';
-    ctx.fillStyle = 'rgba(var(--haze-d-rgb),.8)';
+    ctx.fillStyle = RGBA('hazeD', .85);
     var step = Math.max(1, Math.ceil(series.length/7));
     series.forEach(function(s,i){
       if (i % step && i !== series.length-1) return;

@@ -164,9 +164,12 @@ body::before{
 .load-in{display:grid;justify-items:center;gap:30px;width:min(88vw,340px)}
 /* concentric diamonds open around the logo, echoing the medallion's own rings */
 .load-mark{position:relative;display:grid;place-items:center;width:140px;height:140px}
-/* same white-on-transparent asset as the header mark */
+/* Same white-on-transparent asset as the header mark, and it needs the same
+   --logo-filter: on a light ground the raw file is white artwork on a white
+   curtain, which is a blank preloader. The header mark carried the filter and
+   this one did not. */
 .load-mark img{width:82px;height:70px;object-fit:contain;opacity:0;transform:scale(.84);
-  animation:logoIn .85s var(--ease) .12s forwards}
+  filter:var(--logo-filter);animation:logoIn .85s var(--ease) .12s forwards}
 .load-mark i{position:absolute;border:1px solid var(--cyan);opacity:0;
   animation:ringIn 1.1s var(--ease) forwards}
 .load-mark i:nth-child(1){inset:6px}
@@ -217,7 +220,36 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
 :target,section[id]{scroll-margin-top:clamp(74px,8.5vh,96px)}
 .sec.is-tight{padding-block:clamp(3rem,6vh,4.75rem)}
 .sec.is-flush{padding-block:0}
-.sec-panel{background:linear-gradient(180deg,rgba(var(--panel-rgb),.52),rgba(var(--void-rgb),0))}
+/* The alternating band. At .52 over off-white this was a two-percent shift and
+   the page ran as one flat value from header to footer; it now actually bands,
+   and closes on a rule so the section has an edge rather than a fade. */
+.sec-panel{background:linear-gradient(180deg,rgba(var(--panel-rgb),.95),rgba(var(--panel-rgb),.5));
+  border-block:1px solid var(--line)}
+
+/* ============ ink band ============
+   One deep section in a light page. A site that never leaves off-white reads
+   as unfinished rather than as airy, and this is the only place the palette's
+   full range gets used: near-black ground, page-white type, the system green
+   at full strength on top of it. Scoped hard, because everything inside is
+   inheriting inverted colours. */
+.sec-ink{position:relative;background:var(--flip);color:var(--void);isolation:isolate}
+.sec-ink h1,.sec-ink h2,.sec-ink h3,.sec-ink h4,.sec-ink .disp{color:var(--void)}
+.sec-ink .lead,.sec-ink p{color:var(--void)}
+.sec-ink .eb{color:var(--signal)}
+.sec-ink .mono,.sec-ink .dim{color:var(--steel)}
+/* On the ink ground the outline button borrows the ground's own type colour;
+   --line-2 is a dark hairline and disappears entirely here. */
+.sec-ink .btn-o{border-color:rgba(var(--void-rgb),.45);color:var(--void)}
+.sec-ink .btn-o:hover{border-color:var(--signal);color:var(--flip)}
+.sec-ink .btn-o::before{background:var(--signal)}
+.sec-ink .btn-p{background:var(--signal);color:var(--flip)}
+.sec-ink .btn-p::before{background:var(--void)}
+.sec-ink .btn-p:hover{color:var(--flip)}
+/* a hazard chevron along the top edge — the one place the site is allowed to
+   look like a loading dock */
+.sec-ink::before{content:'';position:absolute;inset:0 0 auto;height:6px;
+  background:repeating-linear-gradient(115deg,var(--signal) 0 16px,transparent 16px 32px);
+  opacity:.9}
 .hd{display:grid;gap:1.1rem;max-width:62ch;margin-bottom:clamp(2.6rem,5vw,4.25rem)}
 .hd .lead{margin-top:.35rem}
 
@@ -381,10 +413,21 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
   transition:transform .44s var(--ease)}
 .btn:hover::before{transform:translateY(0)}
 
+/* A filled button wipes to --flip and takes --on-flip with it.
+
+   These used to wipe to --frost, the heading colour. On the dark palette that
+   was a near-white, so a cyan button flipped to white and read as an invert.
+   Carried onto a light palette the same rule flipped green to the dark navy
+   the headings were set in, which looked like a third brand colour arriving
+   mid-hover. --flip is its own token for that reason: black here, near-white
+   on the dark preset, and the label colour moves with it so a gold button does
+   not keep its dark-brown type over a black fill. */
 .btn-p{background:var(--cyan);color:var(--on-cyan);font-weight:600}
-.btn-p::before{background:var(--frost)}
+.btn-p::before{background:var(--flip)}
+.btn-p:hover{color:var(--on-flip)}
 .btn-m{background:var(--sand);color:var(--on-sand);font-weight:600}
-.btn-m::before{background:var(--frost)}
+.btn-m::before{background:var(--flip)}
+.btn-m:hover{color:var(--on-flip)}
 .btn-o{border:1px solid var(--line-2);color:var(--frost)}
 .btn-o::before{background:var(--cyan)}
 .btn-o:hover{color:var(--on-cyan);border-color:var(--cyan)}
@@ -713,7 +756,7 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
    the same row per origin; --led-cols lets each caller set its own column
    template so the homepage renders byte-identically. */
 .led{display:grid;border-top:1px solid var(--line)}
-.led-r{display:grid;grid-template-columns:var(--led-cols,2.2rem 1.35fr .85fr 1.6fr auto);gap:clamp(.75rem,2vw,1.75rem);
+.led-r{position:relative;display:grid;grid-template-columns:var(--led-cols,2.2rem 1.35fr .85fr 1.6fr auto);gap:clamp(.75rem,2vw,1.75rem);
   align-items:center;padding:1.1rem .5rem;border-bottom:1px solid var(--line);
   font-family:var(--f-mono);font-size:.765rem;letter-spacing:.1em;text-transform:uppercase;
   color:var(--haze-d);transition:background .38s var(--ease),color .38s}
@@ -721,6 +764,28 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
 .led-r b{font-family:var(--f-disp);font-weight:700;font-size:1rem;letter-spacing:0;
   font-variation-settings:'wdth' 106;color:var(--frost);text-transform:none}
 .led-r .co{color:var(--cyan)}
+/* The ledger reads top to bottom as a manifest being checked off: a lit rule
+   runs down the origin column on a loop, one row after the next. Staggered by
+   nth-child rather than by a --n in the markup, so the product pages, which
+   render a different number of origins from one data source, get the effect
+   without either template having to know about it. */
+.led-r::before{content:'';position:absolute;left:0;top:-1px;bottom:-1px;width:2px;
+  background:var(--cyan);transform:scaleY(0);transform-origin:top;
+  animation:ledRun 8.5s var(--ease-io) infinite}
+.led-r:nth-child(1)::before{animation-delay:0s}
+.led-r:nth-child(2)::before{animation-delay:.34s}
+.led-r:nth-child(3)::before{animation-delay:.68s}
+.led-r:nth-child(4)::before{animation-delay:1.02s}
+.led-r:nth-child(5)::before{animation-delay:1.36s}
+.led-r:nth-child(6)::before{animation-delay:1.7s}
+.led-r:nth-child(7)::before{animation-delay:2.04s}
+.led-r:nth-child(n+8)::before{animation-delay:2.38s}
+@keyframes ledRun{
+  0%{transform:scaleY(0);transform-origin:top}
+  6%{transform:scaleY(1);transform-origin:top}
+  15%{transform:scaleY(1);transform-origin:bottom}
+  22%,100%{transform:scaleY(0);transform-origin:bottom}
+}
 .led-r .fl{justify-self:end;width:44px;height:1px;background:var(--line-2);position:relative}
 .led-r:hover .fl{background:var(--cyan)}
 .led-r .fl::after{content:'';position:absolute;right:0;top:-2.5px;width:6px;height:6px;
@@ -787,6 +852,17 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
   letter-spacing:-.03em;font-variation-settings:'wdth' 118;color:var(--frost);
   font-variant-numeric:tabular-nums}
 .stat b i{font-style:normal;color:var(--cyan);font-size:.67em;vertical-align:.04em;margin-left:.02em}
+/* Each tile fills from the left as it enters, one after the next, so the row
+   of figures arrives as a sequence rather than four numbers at once. The wash
+   sits behind the type; the content is lifted to z-index 1 over it. */
+.stat::after{content:'';position:absolute;inset:0;z-index:0;
+  background:linear-gradient(90deg,rgba(var(--cyan-rgb),.14),rgba(var(--cyan-rgb),0));
+  transform:scaleX(0);transform-origin:left;transition:transform 1.05s var(--ease)}
+.stat[data-in]::after{transform:scaleX(1)}
+.stat>*{position:relative;z-index:1}
+.stat:nth-child(2)::after,.stat:nth-child(2)::before{transition-delay:130ms}
+.stat:nth-child(3)::after,.stat:nth-child(3)::before{transition-delay:260ms}
+.stat:nth-child(4)::after,.stat:nth-child(4)::before{transition-delay:390ms}
 /* direct child only — the number lives in a nested span inside b */
 .stat>span{font-family:var(--f-mono);font-size:.715rem;letter-spacing:.16em;text-transform:uppercase;
   color:var(--haze-d)}
@@ -801,11 +877,11 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
 .mq-t.rev{animation-direction:reverse}
 .mq:hover .mq-t{animation-play-state:paused}
 .mq-i{display:flex;align-items:center;gap:clamp(2.5rem,6vw,5rem);font-family:var(--f-disp);
-  font-weight:700;font-size:clamp(1rem,2vw,1.4rem);font-variation-settings:'wdth' 108;
-  letter-spacing:.01em;color:var(--haze-d);white-space:nowrap;transition:color .4s}
-.mq-i::after{content:'';width:7px;height:7px;background:var(--cyan);opacity:.6;flex:none;
+  font-weight:700;font-size:clamp(1.05rem,2.1vw,1.5rem);font-variation-settings:'wdth' 108;
+  letter-spacing:.01em;color:var(--haze);white-space:nowrap;transition:color .4s}
+.mq-i::after{content:'';width:7px;height:7px;background:var(--cyan);opacity:.9;flex:none;
   clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%)}
-.mq-i:hover{color:var(--frost)}
+.mq-i:hover{color:var(--cyan)}
 @keyframes mqr{to{transform:translateX(-50%)}}
 
 /* CTA plate */

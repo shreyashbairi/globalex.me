@@ -21,6 +21,24 @@ var TOUCH = matchMedia('(hover: none)').matches || innerWidth < 901;
 var GLXC = ${JSON.stringify(theme.jsPalette(), null, 0)};
 window.GLXC = GLXC;
 var PAL = GLXC.rgb;
+
+/* rgba() for a 2D context, from a theme name.
+
+   A canvas takes a colour STRING. It does not resolve custom properties: a
+   fillStyle of 'rgba(var(--cyan-rgb),.3)' is silently ignored and the context
+   keeps whatever colour it had, and the same string handed to addColorStop
+   THROWS. That throw is not contained — glxStage runs the first frame
+   synchronously, so it escapes the draw callback and takes the rest of the
+   caller's setup with it. Every canvas colour goes through here now, and
+   an unknown name fails loudly at the first frame rather than painting
+   nothing for a year. */
+function RGBA(name, alpha){
+  var ch = PAL[name];
+  if (!ch) throw new Error('RGBA: no theme colour named "' + name + '"');
+  return 'rgba(' + ch + ',' + alpha + ')';
+}
+window.glxRGBA = RGBA;
+window.RGBA = RGBA;   // page scripts call it unqualified
 /* The ornament field was tuned against a dark ground; the same alpha over a
    light one reads as loud wallpaper. Scaled from the active preset. */
 var ORN_SCALE = parseFloat(getComputedStyle(document.documentElement)
