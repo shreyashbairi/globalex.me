@@ -6,3 +6,8 @@ node_modules/
 # Source PDFs live in R2, not in the repo. They are staged here for upload
 # and must never be part of a deploy — see DEPLOY.md.
 _docs/
+
+# Image masters: 144 MB of PNG that git cannot delta-compress, and every
+# derivative in assets/products is rebuilt from them by `npm run images`.
+# Back these up outside the repo — nothing here can regenerate them.
+_masters/

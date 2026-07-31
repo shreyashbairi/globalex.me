@@ -65,7 +65,15 @@ const css = `
   clip-path:polygon(0 0,calc(100% - 17px) 0,100% 17px,100% 100%,17px 100%,0 calc(100% - 17px))}
 @media (max-width:1000px){.dv-sp{position:static}}
 
-.dv-plate{position:relative;aspect-ratio:16/10;border-bottom:1px solid var(--line);
+/* The document's identity, and the one control that acts on it. */
+.dv-head{padding:clamp(1.1rem,2.4vw,1.5rem) clamp(1.2rem,2.6vw,1.85rem) clamp(.9rem,2vw,1.15rem)}
+.dv-head .dv-sub{margin-top:.55rem}
+
+/* 16/9 rather than 16/10, to pay for the header now sitting above it — the
+   panel is sticky, and a taller one is worse on a short viewport. The chart is
+   unaffected: five rows at this height still leave more vertical room per bar
+   than the bars use. */
+.dv-plate{position:relative;aspect-ratio:16/9;border-block:1px solid var(--line);
   background:rgba(var(--void-rgb),.55);overflow:hidden}
 .dv-plate canvas{width:100%;height:100%}
 /* Controlled-document seal. Centred on the corner diagonal at 45deg with the
@@ -78,9 +86,16 @@ const css = `
   box-shadow:0 3px 14px rgba(var(--void-rgb),.55)}
 
 .dv-body{padding:clamp(1.2rem,2.6vw,1.85rem)}
-.dv-code{display:flex;align-items:center;gap:.7rem;flex-wrap:wrap}
+/* Badge and title on the left, the action pushed to the right by margin-left
+   rather than by space-between: the badge and the title have to stay together
+   as one group, and space-between would spread all three evenly. */
+.dv-code{display:flex;align-items:center;gap:.7rem;flex-wrap:wrap;row-gap:.85rem}
 .dv-code b{font-family:var(--f-disp);font-variation-settings:'wdth' 118;font-weight:700;
   font-size:clamp(1.15rem,2.4vw,1.5rem);letter-spacing:.01em;line-height:1.15}
+.dv-code .btn{margin-left:auto;flex:none}
+/* Once the row wraps, the button is on its own line and margin-left:auto would
+   strand it against the right edge, away from everything it relates to. */
+@media (max-width:520px){.dv-code .btn{margin-left:0}}
 .dv-sub{font-family:var(--f-mono);font-size:.715rem;letter-spacing:.18em;text-transform:uppercase;
   color:var(--haze-d);margin-top:.5rem}
 .dv-sum{color:var(--haze);margin-top:1rem;font-size:.99rem;line-height:1.6}
@@ -92,8 +107,10 @@ const css = `
 .dv-tab dd{font-family:var(--f-mono);font-size:.79rem;color:var(--frost);
   text-align:right;white-space:nowrap;flex:none}
 
-.dv-foot{display:flex;flex-wrap:wrap;gap:1rem;align-items:center;justify-content:space-between;
-  margin-top:1.6rem}
+/* Only the file figures live here now that the action has moved up, so the
+   generous margin that separated a button from the table above it is gone —
+   this is a caption, and it should sit close to what it describes. */
+.dv-foot{display:flex;flex-wrap:wrap;gap:1rem;align-items:center;margin-top:1rem}
 .dv-fig{font-family:var(--f-mono);font-size:.69rem;letter-spacing:.14em;text-transform:uppercase;
   color:var(--haze-d)}
 .dv-fig b{color:var(--haze)}
@@ -183,21 +200,36 @@ function section(cls = 'sec sec-panel') {
       ${rows}
     </div>
 
+    <!-- Identity and action first, then the plate, then the detail.
+
+         #specifications is a hash target — the hero's "Download spec sheet"
+         goes straight to it — so the browser pins the section top to the top
+         of the viewport and everything here competes for one screen. With the
+         action at the foot of the panel it sat ~450px below the fold; moved
+         onto the title line but still under the plate it cleared a 857px
+         window by 21px and was cut off on any laptop shorter than that.
+
+         Above the plate it is roughly 390px from the section top, which is
+         inside the fold on any viewport worth designing for. It also reads
+         better: what the document is, and how to get it, before the chart
+         drawn from its contents. -->
     <div class="dv-sp rv" style="--d:120ms">
+      <div class="dv-head">
+        <div class="dv-code">
+          <span class="dr-k" data-kind="MSDS" data-sp-kind>MSDS</span>
+          <b data-sp-title>Base Oil SN-180</b>
+          <button class="btn btn-p btn-sm" type="button" data-gate-open data-mag="5">Request access <span class="ar">&rarr;</span></button>
+        </div>
+        <div class="dv-sub" data-sp-sub>Material Safety Data Sheet &middot; Turkmenistan</div>
+      </div>
       <div class="dv-plate">
         <canvas data-plate aria-hidden="true"></canvas>
         <span class="dv-seal">CONTROLLED</span>
       </div>
       <div class="dv-body">
-        <div class="dv-code">
-          <span class="dr-k" data-kind="MSDS" data-sp-kind>MSDS</span>
-          <b data-sp-title>Base Oil SN-180</b>
-        </div>
-        <div class="dv-sub" data-sp-sub>Material Safety Data Sheet &middot; Turkmenistan</div>
         <p class="dv-sum" data-sp-sum></p>
         <dl class="dv-tab" data-sp-tab></dl>
         <div class="dv-foot">
-          <button class="btn btn-p" type="button" data-gate-open data-mag="6">Request access <span class="ar">&rarr;</span></button>
           <span class="dv-fig"><b data-sp-pages>3</b> pp &middot; <b data-sp-size>4.7 MB</b> &middot; PDF</span>
         </div>
       </div>

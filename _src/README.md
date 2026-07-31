@@ -18,6 +18,13 @@ This folder only exists so shared chrome doesn't have to be edited eleven times.
                     home-page globe. Generated and committed, not built.
 - `geo-build.js`  — regenerates the above (`npm run geo`). Needs two source
                     files fetched by hand; see its header.
+- `images-build.js` — encodes the product photographs from `_masters/products`
+                    into `assets/products` (`npm run images`). Masters are
+                    gitignored and must be backed up separately.
+- `product-images.md`        — the imagery brief: what the photographs are,
+                    where they go, and what the stylesheet does to them.
+- `product-images-build.js`  — the 24 image-generation prompts
+                    (`npm run prompts`), expanded into `product-images-prompts.md`.
 
 Canvas colours never come from CSS. A 2D context and a three.js material take
 a string or an int, not a `var()`, so anything drawn to a canvas reads the

@@ -52,6 +52,28 @@ const plain = (s) =>
    every link derive the same value — a grade cannot end up with two URLs. */
 const purl = (cat, id) => `${cat}-${id}.html`;
 
+/* Per-grade specimen photograph, in the two sizes _src/images-build.js emits
+   from the masters. Same rule as purl for the same reason: the filename is
+   derived from the grade, so a rename moves the page and its picture
+   together instead of leaving a broken <img> nobody notices.
+
+   `img`   1600px wide, for the plate on the grade's own page
+   `imgSq` 512 square centre crop, for the circular thumbnail on the grid */
+const pimg = (cat, id) => `assets/products/${cat}-${id}.webp`;
+const pimgSq = (cat, id) => `assets/products/${cat}-${id}-sq.webp`;
+
+/* The encoder's output dimensions, declared here because the markup needs
+   width and height on every <img> to reserve space before the bytes arrive —
+   without them the hero reflows as each photograph lands.
+
+   These are not a guess about the files. `npm run images` asserts that every
+   file it writes matches these exactly and fails if one does not, so a master
+   re-delivered at a different aspect ratio is caught at encode time rather
+   than shipping as a page that jumps. */
+const IMG_W = 1600;
+const IMG_H = 894;
+const IMG_SQ = 512;
+
 // ------------------------------------------------------------------
 // Class 01 — Fertilizers
 // ------------------------------------------------------------------
@@ -110,7 +132,12 @@ const FERTILIZERS = [
   },
 ].map((p) => {
   const id = slug(p.name);
-  return { ...p, id, cat: "fertilizers", url: purl("fertilizers", id) };
+  return {
+    ...p, id, cat: "fertilizers",
+    url: purl("fertilizers", id),
+    img: pimg("fertilizers", id),
+    imgSq: pimgSq("fertilizers", id),
+  };
 });
 
 // ------------------------------------------------------------------
@@ -159,6 +186,8 @@ const POLYMERS = [
   ...p,
   id: slug(p.name),
   url: purl("polymers", slug(p.name)),
+  img: pimg("polymers", slug(p.name)),
+  imgSq: pimgSq("polymers", slug(p.name)),
   cat: "polymers",
   origins: POLYMER_ORIGINS,
   ix: `${String(i + 1).padStart(2, "0")} &mdash; ${p.name}`,
@@ -325,6 +354,8 @@ const CHEMICALS = [
   ...c,
   id: slug(c.name),
   url: purl("industrials", slug(c.name)),
+  img: pimg("industrials", slug(c.name)),
+  imgSq: pimgSq("industrials", slug(c.name)),
   cat: "industrials",
   /* A chemical's kind label is its sector tags, not an authored string. An
      unknown tag used to throw a bare TypeError at require() time with no
@@ -547,6 +578,11 @@ function searchIndex() {
 
 module.exports = {
   slug,
+  pimg,
+  pimgSq,
+  IMG_W,
+  IMG_H,
+  IMG_SQ,
   plain,
   purl,
   SECTORS,

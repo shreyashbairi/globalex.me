@@ -14,7 +14,7 @@
    ============================================================ */
 
 const { hero, cta } = require("./parts");
-const { CLASSES, plain } = require("./catalogue");
+const { CLASSES, plain, IMG_W, IMG_H } = require("./catalogue");
 const { SPECS, isDraft } = require("./specs");
 const { RELEASED: DOCS } = require("./docs");
 const S = require("./schema-org");
@@ -264,6 +264,20 @@ module.exports = function productPage(item, cls) {
           : [cls.title, "Class"],
       [spec.physical && spec.physical.form !== "[--]" ? spec.physical.form.split(" / ")[0] : "&mdash;", "Form"],
       [String(origins.length || "&mdash;"), origins.length === 1 ? "Origin" : "Origins"],
+    ],
+    /* The alt names the grade and says what kind of picture it is, and stops
+       there. It does not describe the material, because nothing in the
+       catalogue records what each grade looks like — the physical
+       descriptions live in the image prompts, as photography direction rather
+       than as prose about the product. Writing them out here would mean
+       inventing detail per grade and getting it wrong somewhere, on a page a
+       QA team reads. The lead paragraph beside the plate already carries the
+       substance. */
+    image: [
+      item.img,
+      `${plain(item.name)} — specimen photograph`,
+      IMG_W,
+      IMG_H,
     ],
   };
 

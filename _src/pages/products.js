@@ -36,17 +36,29 @@ const haystack = (p, cls) =>
     ].join(" "),
   ).toLowerCase();
 
+/* The specimen disc sits with the grade name rather than above the card,
+   so the pair reads as one entry — this is what the material is, this is
+   what it is called. alt="" is deliberate: the heading immediately beside it
+   already names the grade, so describing the photograph too would make a
+   screen reader announce the same product twice. */
 const card = (p, cls, i) => `<a class="pc" href="${p.url}"
  data-cat="${cls.key}"${attrs(p, cls)} data-h="${haystack(p, cls)}" data-cur="Open grade">
 <span class="pc-top">
   <span class="pc-ix">${String(i + 1).padStart(2, "0")}</span>
   <span class="pc-cls${cls.tone === "sand" ? " mat" : ""}">${cls.title}</span>
 </span>
-<span class="pc-h">
-  <b>${p.name}</b>
-  ${p.f ? `<i class="formula">${p.f}</i>` : ""}
+<span class="pc-hd">
+  <span class="pc-img">
+    <img src="${p.imgSq}" alt="" width="512" height="512" loading="lazy" decoding="async" />
+  </span>
+  <span class="pc-hd-t">
+    <span class="pc-h">
+      <b>${p.name}</b>
+      ${p.f ? `<i class="formula">${p.f}</i>` : ""}
+    </span>
+    <span class="pc-kind">${p.kind}</span>
+  </span>
 </span>
-<span class="pc-kind">${p.kind}</span>
 <span class="pc-p">${p.body}</span>
 <span class="chips">${(p.specs || []).map((s) => `<span class="chip spec">${s}</span>`).join("")}</span>
 ${
@@ -179,6 +191,27 @@ module.exports = {
 .pc-cls{font-family:var(--f-mono);font-size:.645rem;letter-spacing:.15em;text-transform:uppercase;
   padding:.3em .6em;color:var(--cyan);border:1px solid rgba(var(--cyan-rgb),.3);background:var(--cyan-g)}
 .pc-cls.mat{color:var(--sand-t);border-color:rgba(var(--sand-rgb),.34);background:var(--sand-g)}
+/* Specimen disc + name, as one unit. The circle is the only round thing on a
+   site built entirely from notched rectangles, which is exactly why it works
+   here: it reads as a lens onto the material rather than as another panel. */
+.pc-hd{display:flex;align-items:center;gap:.95rem}
+.pc-hd-t{display:grid;gap:.3rem;min-width:0}
+.pc-img{position:relative;flex:none;width:clamp(64px,17vw,76px);aspect-ratio:1;
+  border-radius:50%;overflow:hidden;background:var(--panel);
+  box-shadow:0 0 0 1px var(--line),0 3px 12px rgba(var(--scrim-rgb),.07);
+  transition:transform .5s var(--ease),box-shadow .45s var(--ease)}
+/* Ungraded, like .ph-img — the encoder already matched each frame's paper to
+   the page background, so the site-wide photo filter would only undo it. */
+.pc-img img{width:100%;height:100%;object-fit:cover}
+/* A hairline inside the circle, so the disc still has an edge where the
+   specimen's own off-white ground meets the card's. Without it the lighter
+   materials — urea, caustic soda, sodium sulphate — dissolve into the panel
+   and the circle disappears entirely. */
+.pc-img::after{content:'';position:absolute;inset:0;border-radius:50%;
+  box-shadow:inset 0 0 0 1px rgba(var(--hairline-rgb),.16);pointer-events:none}
+.pc:hover .pc-img{transform:scale(1.05);
+  box-shadow:0 0 0 1px var(--cyan),0 5px 18px rgba(var(--scrim-rgb),.12)}
+
 .pc-h{display:flex;align-items:baseline;gap:.7rem;flex-wrap:wrap}
 .pc-h b{font-family:var(--f-disp);font-variation-settings:'wdth' 108;font-weight:700;
   font-size:1.14rem;line-height:1.25}
