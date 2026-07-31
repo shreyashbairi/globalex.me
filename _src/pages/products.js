@@ -5,7 +5,7 @@
    which quietly told visitors that fertilizer was all we did. This page
    is the actual index: every grade in every class, filterable by class
    and searchable by name, formula, application or origin, with each
-   card deep-linking to its row on the class page.
+   card opening that grade's own page.
 
    Filtering is done in the browser against markup that is already in
    the HTML, so the grades are indexed by search engines and readable

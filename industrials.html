@@ -656,7 +656,7 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
 
 /* Anything an in-page anchor can land on has to clear the fixed header, or a
    deep link from search puts its target underneath the bar. */
-.row[id],.fam-c[id],.pc[id],section[id],[data-sec][id]{scroll-margin-top:clamp(6.5rem,13vh,9.5rem)}
+.row[id],.pc[id],section[id],[data-sec][id]{scroll-margin-top:clamp(6.5rem,13vh,9.5rem)}
 
 .hdr-r{display:flex;align-items:center;gap:clamp(.5rem,1.2vw,1rem)}
 .srch-t{display:flex;align-items:center;gap:.6rem;padding:.5rem .8rem;flex:none;
@@ -826,7 +826,8 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
   color:var(--haze-d)}
 .cls:hover .cls-f{color:var(--cyan)}
 
-/* spec row — the document/spec-sheet register */
+/* spec row — the document/spec-sheet register, and the grade listing on all
+   three class pages (see _src/product-row.js) */
 .rows{display:grid;border-top:1px solid var(--line)}
 .row{position:relative;display:grid;grid-template-columns:auto 1fr auto;gap:clamp(1rem,3vw,2.5rem);
   align-items:start;padding:clamp(1.4rem,2.6vw,2.1rem) clamp(.5rem,1.5vw,1.25rem);
@@ -837,12 +838,52 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
 .row:hover .row-ix{color:var(--cyan)}
 .row-b{display:grid;gap:.7rem;min-width:0}
 .row-b h3,.row-b h4{font-size:var(--t-h4)}
-.row-b p{color:var(--haze);max-width:76ch;font-size:1.03rem}
+.row-b p,.row-p{color:var(--haze);max-width:76ch;font-size:1.03rem}
 .row-side{display:grid;gap:.5rem;justify-items:end;text-align:right;font-family:var(--f-mono);
   font-size:.725rem;letter-spacing:.14em;text-transform:uppercase;color:var(--haze-d)}
 @media (max-width:760px){
   .row{grid-template-columns:auto 1fr;gap:1rem}
   .row-side{grid-column:1/-1;justify-items:start;text-align:left;margin-top:.4rem}
+}
+
+/* ---- grade listing: a row that is a whole link, with the specimen disc ----
+   The same circular treatment as the product cards on products.html, so a
+   grade looks like itself wherever it appears. Larger here because the row has
+   the width to give it. */
+.row.prod{grid-template-columns:auto auto minmax(0,1fr) auto;align-items:center;overflow:hidden}
+.row.prod .row-b{align-content:center}
+.row-img{position:relative;flex:none;width:clamp(76px,11vw,124px);aspect-ratio:1;
+  border-radius:50%;overflow:hidden;background:var(--panel);align-self:center;
+  box-shadow:0 0 0 1px var(--line),0 3px 12px rgba(var(--scrim-rgb),.07);
+  transition:transform .5s var(--ease),box-shadow .45s var(--ease)}
+.row-img img{width:100%;height:100%;object-fit:cover}
+/* Hairline inside the disc: the specimen's own off-white ground and the page's
+   are the same colour by design, so a pale material has no edge without it. */
+.row-img::after{content:'';position:absolute;inset:0;border-radius:50%;
+  box-shadow:inset 0 0 0 1px rgba(var(--hairline-rgb),.16);pointer-events:none}
+.row.prod:hover .row-img{transform:scale(1.05);
+  box-shadow:0 0 0 1px var(--cyan),0 5px 18px rgba(var(--scrim-rgb),.12)}
+/* left accent, matching the product cards and the document register */
+.row.prod::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--cyan);
+  transform:scaleY(0);transform-origin:bottom;transition:transform .5s var(--ease)}
+.row.prod:hover::before{transform:scaleY(1);transform-origin:top}
+.row.prod:focus-visible{outline:1px solid var(--cyan);outline-offset:-3px}
+.row-h{display:flex;align-items:baseline;gap:.9rem;flex-wrap:wrap;
+  transition:color .3s var(--ease)}
+.row.prod:hover .row-h{color:var(--cyan)}
+.row-h::after{content:'→';font-family:var(--f-mono);font-size:.62em;opacity:0;
+  transition:opacity .3s var(--ease),transform .3s var(--ease)}
+.row.prod:hover .row-h::after{opacity:1;transform:translateX(3px)}
+@media (max-width:760px){
+  /* The index is decorative and the disc is not, so the index yields the
+     column rather than squeezing the photograph on a phone. The disc also
+     stops being centred: the body block runs to five or six lines at this
+     width, and a vertically centred disc floats level with the middle of the
+     description instead of sitting beside the name it belongs to. */
+  .row.prod{grid-template-columns:auto minmax(0,1fr);gap:1rem;align-items:start}
+  .row.prod .row-ix{display:none}
+  .row-img{align-self:start;margin-top:.2rem}
+  .row.prod .row-b{align-content:start}
 }
 
 /* ============ shared primitives ============
@@ -985,11 +1026,6 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
 
 /* A grade heading on a class page links to that grade's own page. The row
    keeps its id, so inbound links to the old anchor still land here. */
-.row-lk{color:inherit;transition:color .3s var(--ease)}
-.row-lk:hover{color:var(--cyan)}
-.row-lk::after{content:' →';font-family:var(--f-mono);font-size:.62em;opacity:0;
-  transition:opacity .3s var(--ease),margin-left .3s var(--ease);margin-left:-.25em}
-.row-lk:hover::after{opacity:1;margin-left:.15em}
 
 /* Reopens the consent bar, so a decision can be withdrawn. A button rather
    than a link because it opens a dialog instead of navigating. */
@@ -1222,9 +1258,12 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
   border-left:0;border-right:0;border-bottom:0}}
 @media (prefers-reduced-motion:reduce){.glx-cc{transform:none}}
 
-.chem-h{display:flex;align-items:baseline;gap:.9rem;flex-wrap:wrap}
-.formula{font-family:var(--f-mono);font-size:.825rem;letter-spacing:.06em;color:var(--sand-t);
-  padding:.2em .55em;border:1px solid rgba(var(--sand-rgb),.3);background:var(--sand-g)}
+/* .formula is the molecular formula chip beside a grade name. It stays here
+   rather than moving into the kernel because this is the only page that shows
+   one: the shared row emits it only for grades that carry a formula. */
+.formula{font-family:var(--f-mono);font-size:.825rem;font-style:normal;letter-spacing:.06em;
+  color:var(--sand-t);padding:.2em .55em;border:1px solid rgba(var(--sand-rgb),.3);
+  background:var(--sand-g)}
 .chem[hidden]{display:none}
 
 /* sector filter */
@@ -1481,198 +1520,214 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
     </div>
 
     <div class="rows rvs" id="chems">
-<article class="row chem" id="sulphur" data-tags="mfg agri">
+<a class="row prod chem" href="industrials-sulphur.html" id="sulphur" data-cur="Open grade" data-tags="mfg agri">
 <span class="row-ix">01</span>
-<div class="row-b">
-  <div class="chem-h"><h3><a class="row-lk" href="industrials-sulphur.html">Sulphur</a></h3><span class="formula">S</span></div>
-  <div class="chips"><span class="chip spec">Granular</span><span class="chip spec">Lump</span></div>
-  <p>High-quality granular and lump sulphur &mdash; the upstream input for sulphuric acid, and from there for phosphate fertilizer and a long list of industrial processes.</p>
-  <div class="chips"><span class="chip org">Turkmenistan</span><span class="chip org">Uzbekistan</span><span class="chip org">Kazakhstan</span></div>
-</div>
-<div class="row-side">
-  <span>Manufacturing</span><span>Agriculture &amp; energy</span>
-</div>
-</article>
-<article class="row chem" id="urea-a-technical" data-tags="mfg">
+<span class="row-img">
+  <img src="assets/products/industrials-sulphur-sq.webp" alt="" width="512" height="512" loading="lazy" decoding="async" />
+</span>
+<span class="row-b">
+  <h3 class="row-h">Sulphur<i class="formula">S</i></h3>
+  <span class="chips"><span class="chip spec">Granular</span><span class="chip spec">Lump</span></span>
+  <span class="row-p">High-quality granular and lump sulphur &mdash; the upstream input for sulphuric acid, and from there for phosphate fertilizer and a long list of industrial processes.</span>
+  <span class="chips"><span class="chip org">Turkmenistan</span><span class="chip org">Uzbekistan</span><span class="chip org">Kazakhstan</span></span>
+</span>
+<span class="row-side"><span>Manufacturing</span><span>Agriculture &amp; energy</span></span>
+</a>
+<a class="row prod chem" href="industrials-urea-a-technical.html" id="urea-a-technical" data-cur="Open grade" data-tags="mfg">
 <span class="row-ix">02</span>
-<div class="row-b">
-  <div class="chem-h"><h3><a class="row-lk" href="industrials-urea-a-technical.html">Urea-A (technical)</a></h3><span class="formula">CH&#8324;N&#8322;O</span></div>
-  <div class="chips"><span class="chip spec">Technical Grade A</span></div>
-  <p>High-purity urea for industrial rather than agricultural use: resin and adhesive production, and as the reducing agent in selective catalytic reduction (SCR) systems on diesel exhaust.</p>
-  <div class="chips"><span class="chip org">Uzbekistan</span></div>
-</div>
-<div class="row-side">
-  <span>Manufacturing</span>
-</div>
-</article>
-<article class="row chem" id="caustic-soda" data-tags="mfg water">
+<span class="row-img">
+  <img src="assets/products/industrials-urea-a-technical-sq.webp" alt="" width="512" height="512" loading="lazy" decoding="async" />
+</span>
+<span class="row-b">
+  <h3 class="row-h">Urea-A (technical)<i class="formula">CH&#8324;N&#8322;O</i></h3>
+  <span class="chips"><span class="chip spec">Technical Grade A</span></span>
+  <span class="row-p">High-purity urea for industrial rather than agricultural use: resin and adhesive production, and as the reducing agent in selective catalytic reduction (SCR) systems on diesel exhaust.</span>
+  <span class="chips"><span class="chip org">Uzbekistan</span></span>
+</span>
+<span class="row-side"><span>Manufacturing</span></span>
+</a>
+<a class="row prod chem" href="industrials-caustic-soda.html" id="caustic-soda" data-cur="Open grade" data-tags="mfg water">
 <span class="row-ix">03</span>
-<div class="row-b">
-  <div class="chem-h"><h3><a class="row-lk" href="industrials-caustic-soda.html">Caustic Soda</a></h3><span class="formula">NaOH</span></div>
-  <div class="chips"><span class="chip spec">Solid</span><span class="chip spec">Liquid</span></div>
-  <p>Sodium hydroxide, the most broadly used industrial alkali &mdash; pulp and paper, textiles, alumina, soap, and pH correction in water treatment. Supplied solid and liquid.</p>
+<span class="row-img">
+  <img src="assets/products/industrials-caustic-soda-sq.webp" alt="" width="512" height="512" loading="lazy" decoding="async" />
+</span>
+<span class="row-b">
+  <h3 class="row-h">Caustic Soda<i class="formula">NaOH</i></h3>
+  <span class="chips"><span class="chip spec">Solid</span><span class="chip spec">Liquid</span></span>
+  <span class="row-p">Sodium hydroxide, the most broadly used industrial alkali &mdash; pulp and paper, textiles, alumina, soap, and pH correction in water treatment. Supplied solid and liquid.</span>
   
-</div>
-<div class="row-side">
-  <span>Manufacturing</span><span>Water treatment</span>
-</div>
-</article>
-<article class="row chem" id="sodium-hypochlorite" data-tags="water">
+</span>
+<span class="row-side"><span>Manufacturing</span><span>Water treatment</span></span>
+</a>
+<a class="row prod chem" href="industrials-sodium-hypochlorite.html" id="sodium-hypochlorite" data-cur="Open grade" data-tags="water">
 <span class="row-ix">04</span>
-<div class="row-b">
-  <div class="chem-h"><h3><a class="row-lk" href="industrials-sodium-hypochlorite.html">Sodium Hypochlorite</a></h3><span class="formula">NaOCl</span></div>
-  <div class="chips"><span class="chip spec">Disinfectant grade</span></div>
-  <p>The workhorse disinfectant and bleaching agent for municipal water purification and cleaning product manufacture.</p>
+<span class="row-img">
+  <img src="assets/products/industrials-sodium-hypochlorite-sq.webp" alt="" width="512" height="512" loading="lazy" decoding="async" />
+</span>
+<span class="row-b">
+  <h3 class="row-h">Sodium Hypochlorite<i class="formula">NaOCl</i></h3>
+  <span class="chips"><span class="chip spec">Disinfectant grade</span></span>
+  <span class="row-p">The workhorse disinfectant and bleaching agent for municipal water purification and cleaning product manufacture.</span>
   
-</div>
-<div class="row-side">
-  <span>Water treatment</span>
-</div>
-</article>
-<article class="row chem" id="hydrochloric-acid" data-tags="mfg water">
+</span>
+<span class="row-side"><span>Water treatment</span></span>
+</a>
+<a class="row prod chem" href="industrials-hydrochloric-acid.html" id="hydrochloric-acid" data-cur="Open grade" data-tags="mfg water">
 <span class="row-ix">05</span>
-<div class="row-b">
-  <div class="chem-h"><h3><a class="row-lk" href="industrials-hydrochloric-acid.html">Hydrochloric Acid</a></h3><span class="formula">HCl</span></div>
-  <div class="chips"><span class="chip spec">Industrial grade</span></div>
-  <p>Steel pickling, chemical synthesis and pH control. Supplied at industrial concentration with the handling documentation the grade requires.</p>
+<span class="row-img">
+  <img src="assets/products/industrials-hydrochloric-acid-sq.webp" alt="" width="512" height="512" loading="lazy" decoding="async" />
+</span>
+<span class="row-b">
+  <h3 class="row-h">Hydrochloric Acid<i class="formula">HCl</i></h3>
+  <span class="chips"><span class="chip spec">Industrial grade</span></span>
+  <span class="row-p">Steel pickling, chemical synthesis and pH control. Supplied at industrial concentration with the handling documentation the grade requires.</span>
   
-</div>
-<div class="row-side">
-  <span>Manufacturing</span><span>Water treatment</span>
-</div>
-</article>
-<article class="row chem" id="liquid-chlorine" data-tags="water">
+</span>
+<span class="row-side"><span>Manufacturing</span><span>Water treatment</span></span>
+</a>
+<a class="row prod chem" href="industrials-liquid-chlorine.html" id="liquid-chlorine" data-cur="Open grade" data-tags="water">
 <span class="row-ix">06</span>
-<div class="row-b">
-  <div class="chem-h"><h3><a class="row-lk" href="industrials-liquid-chlorine.html">Liquid Chlorine</a></h3><span class="formula">Cl&#8322;</span></div>
-  <div class="chips"><span class="chip spec">Bulk supply</span></div>
-  <p>Bulk chlorine for water treatment, disinfection and chemical manufacture, shipped under pressure to specification.</p>
+<span class="row-img">
+  <img src="assets/products/industrials-liquid-chlorine-sq.webp" alt="" width="512" height="512" loading="lazy" decoding="async" />
+</span>
+<span class="row-b">
+  <h3 class="row-h">Liquid Chlorine<i class="formula">Cl&#8322;</i></h3>
+  <span class="chips"><span class="chip spec">Bulk supply</span></span>
+  <span class="row-p">Bulk chlorine for water treatment, disinfection and chemical manufacture, shipped under pressure to specification.</span>
   
-</div>
-<div class="row-side">
-  <span>Water treatment</span>
-</div>
-</article>
-<article class="row chem" id="calcium-chloride" data-tags="mfg">
+</span>
+<span class="row-side"><span>Water treatment</span></span>
+</a>
+<a class="row prod chem" href="industrials-calcium-chloride.html" id="calcium-chloride" data-cur="Open grade" data-tags="mfg">
 <span class="row-ix">07</span>
-<div class="row-b">
-  <div class="chem-h"><h3><a class="row-lk" href="industrials-calcium-chloride.html">Calcium Chloride</a></h3><span class="formula">CaCl&#8322;</span></div>
-  <div class="chips"><span class="chip spec">Solid</span><span class="chip spec">Liquid</span></div>
-  <p>De-icing, dust suppression on unsealed roads, concrete acceleration and industrial drying. Hygroscopic enough to pull moisture out of almost anything.</p>
+<span class="row-img">
+  <img src="assets/products/industrials-calcium-chloride-sq.webp" alt="" width="512" height="512" loading="lazy" decoding="async" />
+</span>
+<span class="row-b">
+  <h3 class="row-h">Calcium Chloride<i class="formula">CaCl&#8322;</i></h3>
+  <span class="chips"><span class="chip spec">Solid</span><span class="chip spec">Liquid</span></span>
+  <span class="row-p">De-icing, dust suppression on unsealed roads, concrete acceleration and industrial drying. Hygroscopic enough to pull moisture out of almost anything.</span>
   
-</div>
-<div class="row-side">
-  <span>Manufacturing</span>
-</div>
-</article>
-<article class="row chem" id="sodium-sulphate" data-tags="care mfg">
+</span>
+<span class="row-side"><span>Manufacturing</span></span>
+</a>
+<a class="row prod chem" href="industrials-sodium-sulphate.html" id="sodium-sulphate" data-cur="Open grade" data-tags="care mfg">
 <span class="row-ix">08</span>
-<div class="row-b">
-  <div class="chem-h"><h3><a class="row-lk" href="industrials-sodium-sulphate.html">Sodium Sulphate</a></h3><span class="formula">Na&#8322;SO&#8324;</span></div>
-  <div class="chips"><span class="chip spec">Detergent grade</span></div>
-  <p>The bulk filler and processing aid in powder detergents, and a flux in glass manufacture and pulping.</p>
+<span class="row-img">
+  <img src="assets/products/industrials-sodium-sulphate-sq.webp" alt="" width="512" height="512" loading="lazy" decoding="async" />
+</span>
+<span class="row-b">
+  <h3 class="row-h">Sodium Sulphate<i class="formula">Na&#8322;SO&#8324;</i></h3>
+  <span class="chips"><span class="chip spec">Detergent grade</span></span>
+  <span class="row-p">The bulk filler and processing aid in powder detergents, and a flux in glass manufacture and pulping.</span>
   
-</div>
-<div class="row-side">
-  <span>Detergents &amp; care</span><span>Manufacturing</span>
-</div>
-</article>
-<article class="row chem" id="labsa" data-tags="care">
+</span>
+<span class="row-side"><span>Detergents &amp; care</span><span>Manufacturing</span></span>
+</a>
+<a class="row prod chem" href="industrials-labsa.html" id="labsa" data-cur="Open grade" data-tags="care">
 <span class="row-ix">09</span>
-<div class="row-b">
-  <div class="chem-h"><h3><a class="row-lk" href="industrials-labsa.html">LABSA</a></h3><span class="formula">C&#8321;&#8328;H&#8323;&#8320;O&#8323;S</span></div>
-  <div class="chips"><span class="chip spec">96% purity</span></div>
-  <p>Linear alkyl benzene sulphonic acid at 96% &mdash; the primary anionic surfactant behind most detergent and cleaning formulations sold in the region.</p>
+<span class="row-img">
+  <img src="assets/products/industrials-labsa-sq.webp" alt="" width="512" height="512" loading="lazy" decoding="async" />
+</span>
+<span class="row-b">
+  <h3 class="row-h">LABSA<i class="formula">C&#8321;&#8328;H&#8323;&#8320;O&#8323;S</i></h3>
+  <span class="chips"><span class="chip spec">96% purity</span></span>
+  <span class="row-p">Linear alkyl benzene sulphonic acid at 96% &mdash; the primary anionic surfactant behind most detergent and cleaning formulations sold in the region.</span>
   
-</div>
-<div class="row-side">
-  <span>Detergents &amp; care</span>
-</div>
-</article>
-<article class="row chem" id="sles" data-tags="care">
+</span>
+<span class="row-side"><span>Detergents &amp; care</span></span>
+</a>
+<a class="row prod chem" href="industrials-sles.html" id="sles" data-cur="Open grade" data-tags="care">
 <span class="row-ix">10</span>
-<div class="row-b">
-  <div class="chem-h"><h3><a class="row-lk" href="industrials-sles.html">SLES</a></h3><span class="formula">C&#8321;&#8322;H&#8322;&#8325;NaO&#8324;S</span></div>
-  <div class="chips"><span class="chip spec">70% concentration</span></div>
-  <p>Sodium lauryl ether sulphate at 70% &mdash; the foaming surfactant in shampoo, body wash and liquid detergent.</p>
+<span class="row-img">
+  <img src="assets/products/industrials-sles-sq.webp" alt="" width="512" height="512" loading="lazy" decoding="async" />
+</span>
+<span class="row-b">
+  <h3 class="row-h">SLES<i class="formula">C&#8321;&#8322;H&#8322;&#8325;NaO&#8324;S</i></h3>
+  <span class="chips"><span class="chip spec">70% concentration</span></span>
+  <span class="row-p">Sodium lauryl ether sulphate at 70% &mdash; the foaming surfactant in shampoo, body wash and liquid detergent.</span>
   
-</div>
-<div class="row-side">
-  <span>Detergents &amp; care</span>
-</div>
-</article>
-<article class="row chem" id="sulphuric-acid" data-tags="mfg agri">
+</span>
+<span class="row-side"><span>Detergents &amp; care</span></span>
+</a>
+<a class="row prod chem" href="industrials-sulphuric-acid.html" id="sulphuric-acid" data-cur="Open grade" data-tags="mfg agri">
 <span class="row-ix">11</span>
-<div class="row-b">
-  <div class="chem-h"><h3><a class="row-lk" href="industrials-sulphuric-acid.html">Sulphuric Acid</a></h3><span class="formula">H&#8322;SO&#8324;</span></div>
-  <div class="chips"><span class="chip spec">Industrial</span></div>
-  <p>The single most produced industrial chemical on earth. Phosphate fertilizer production, oil refining, metal processing and wastewater neutralisation.</p>
+<span class="row-img">
+  <img src="assets/products/industrials-sulphuric-acid-sq.webp" alt="" width="512" height="512" loading="lazy" decoding="async" />
+</span>
+<span class="row-b">
+  <h3 class="row-h">Sulphuric Acid<i class="formula">H&#8322;SO&#8324;</i></h3>
+  <span class="chips"><span class="chip spec">Industrial</span></span>
+  <span class="row-p">The single most produced industrial chemical on earth. Phosphate fertilizer production, oil refining, metal processing and wastewater neutralisation.</span>
   
-</div>
-<div class="row-side">
-  <span>Manufacturing</span><span>Agriculture &amp; energy</span>
-</div>
-</article>
-<article class="row chem" id="formic-acid" data-tags="agri mfg">
+</span>
+<span class="row-side"><span>Manufacturing</span><span>Agriculture &amp; energy</span></span>
+</a>
+<a class="row prod chem" href="industrials-formic-acid.html" id="formic-acid" data-cur="Open grade" data-tags="agri mfg">
 <span class="row-ix">12</span>
-<div class="row-b">
-  <div class="chem-h"><h3><a class="row-lk" href="industrials-formic-acid.html">Formic Acid</a></h3><span class="formula">CH&#8322;O&#8322;</span></div>
-  <div class="chips"><span class="chip spec">Preservative grade</span></div>
-  <p>Silage preservation in agriculture, plus leather tanning and textile dyeing where a strong, volatile acid is needed that leaves no residue.</p>
+<span class="row-img">
+  <img src="assets/products/industrials-formic-acid-sq.webp" alt="" width="512" height="512" loading="lazy" decoding="async" />
+</span>
+<span class="row-b">
+  <h3 class="row-h">Formic Acid<i class="formula">CH&#8322;O&#8322;</i></h3>
+  <span class="chips"><span class="chip spec">Preservative grade</span></span>
+  <span class="row-p">Silage preservation in agriculture, plus leather tanning and textile dyeing where a strong, volatile acid is needed that leaves no residue.</span>
   
-</div>
-<div class="row-side">
-  <span>Agriculture &amp; energy</span><span>Manufacturing</span>
-</div>
-</article>
-<article class="row chem" id="acetex-plus" data-tags="mfg">
+</span>
+<span class="row-side"><span>Agriculture &amp; energy</span><span>Manufacturing</span></span>
+</a>
+<a class="row prod chem" href="industrials-acetex-plus.html" id="acetex-plus" data-cur="Open grade" data-tags="mfg">
 <span class="row-ix">13</span>
-<div class="row-b">
-  <div class="chem-h"><h3><a class="row-lk" href="industrials-acetex-plus.html">Acetex Plus</a></h3><span class="formula">&mdash;</span></div>
-  <div class="chips"><span class="chip spec">Multi-purpose</span></div>
-  <p>A versatile process chemical for coatings, adhesives and general chemical manufacture.</p>
+<span class="row-img">
+  <img src="assets/products/industrials-acetex-plus-sq.webp" alt="" width="512" height="512" loading="lazy" decoding="async" />
+</span>
+<span class="row-b">
+  <h3 class="row-h">Acetex Plus</h3>
+  <span class="chips"><span class="chip spec">Multi-purpose</span></span>
+  <span class="row-p">A versatile process chemical for coatings, adhesives and general chemical manufacture.</span>
   
-</div>
-<div class="row-side">
-  <span>Manufacturing</span>
-</div>
-</article>
-<article class="row chem" id="aluminium-sulphate" data-tags="water mfg">
+</span>
+<span class="row-side"><span>Manufacturing</span></span>
+</a>
+<a class="row prod chem" href="industrials-aluminium-sulphate.html" id="aluminium-sulphate" data-cur="Open grade" data-tags="water mfg">
 <span class="row-ix">14</span>
-<div class="row-b">
-  <div class="chem-h"><h3><a class="row-lk" href="industrials-aluminium-sulphate.html">Aluminium Sulphate</a></h3><span class="formula">Al&#8322;(SO&#8324;)&#8323;</span></div>
-  <div class="chips"><span class="chip spec">Water treatment</span></div>
-  <p>The standard coagulant in drinking water and effluent treatment &mdash; it pulls suspended solids together so they settle. Also used in paper sizing and dyeing.</p>
+<span class="row-img">
+  <img src="assets/products/industrials-aluminium-sulphate-sq.webp" alt="" width="512" height="512" loading="lazy" decoding="async" />
+</span>
+<span class="row-b">
+  <h3 class="row-h">Aluminium Sulphate<i class="formula">Al&#8322;(SO&#8324;)&#8323;</i></h3>
+  <span class="chips"><span class="chip spec">Water treatment</span></span>
+  <span class="row-p">The standard coagulant in drinking water and effluent treatment &mdash; it pulls suspended solids together so they settle. Also used in paper sizing and dyeing.</span>
   
-</div>
-<div class="row-side">
-  <span>Water treatment</span><span>Manufacturing</span>
-</div>
-</article>
-<article class="row chem" id="iodine" data-tags="mfg">
+</span>
+<span class="row-side"><span>Water treatment</span><span>Manufacturing</span></span>
+</a>
+<a class="row prod chem" href="industrials-iodine.html" id="iodine" data-cur="Open grade" data-tags="mfg">
 <span class="row-ix">15</span>
-<div class="row-b">
-  <div class="chem-h"><h3><a class="row-lk" href="industrials-iodine.html">Iodine</a></h3><span class="formula">I&#8322;</span></div>
-  <div class="chips"><span class="chip spec">Pharma grade</span></div>
-  <p>Pharmaceutical synthesis, X-ray contrast media, disinfectants and LCD polarising film. A genuinely scarce element, and one of the few we source single-origin.</p>
-  <div class="chips"><span class="chip org">Turkmenistan</span></div>
-</div>
-<div class="row-side">
-  <span>Manufacturing</span>
-</div>
-</article>
-<article class="row chem" id="carbon-black" data-tags="mfg">
+<span class="row-img">
+  <img src="assets/products/industrials-iodine-sq.webp" alt="" width="512" height="512" loading="lazy" decoding="async" />
+</span>
+<span class="row-b">
+  <h3 class="row-h">Iodine<i class="formula">I&#8322;</i></h3>
+  <span class="chips"><span class="chip spec">Pharma grade</span></span>
+  <span class="row-p">Pharmaceutical synthesis, X-ray contrast media, disinfectants and LCD polarising film. A genuinely scarce element, and one of the few we source single-origin.</span>
+  <span class="chips"><span class="chip org">Turkmenistan</span></span>
+</span>
+<span class="row-side"><span>Manufacturing</span></span>
+</a>
+<a class="row prod chem" href="industrials-carbon-black.html" id="carbon-black" data-cur="Open grade" data-tags="mfg">
 <span class="row-ix">16</span>
-<div class="row-b">
-  <div class="chem-h"><h3><a class="row-lk" href="industrials-carbon-black.html">Carbon Black</a></h3><span class="formula">C</span></div>
-  <div class="chips"><span class="chip spec">Rubber grade</span></div>
-  <p>The reinforcing filler that makes a tyre last. Also pigment and UV protection in plastics, coatings and inks.</p>
-  <div class="chips"><span class="chip org">Turkmenistan</span></div>
-</div>
-<div class="row-side">
-  <span>Manufacturing</span>
-</div>
-</article>
+<span class="row-img">
+  <img src="assets/products/industrials-carbon-black-sq.webp" alt="" width="512" height="512" loading="lazy" decoding="async" />
+</span>
+<span class="row-b">
+  <h3 class="row-h">Carbon Black<i class="formula">C</i></h3>
+  <span class="chips"><span class="chip spec">Rubber grade</span></span>
+  <span class="row-p">The reinforcing filler that makes a tyre last. Also pigment and UV protection in plastics, coatings and inks.</span>
+  <span class="chips"><span class="chip org">Turkmenistan</span></span>
+</span>
+<span class="row-side"><span>Manufacturing</span></span>
+</a>
     </div>
   </div>
 </section>
@@ -2402,7 +2457,20 @@ var ORN_SCALE = parseFloat(getComputedStyle(document.documentElement)
       show(r.target);
       io.unobserve(r.target);
     });
-  }, {rootMargin:'0px 0px -12% 0px', threshold:.12});
+  /* threshold 0, not 0.12.
+
+     A ratio threshold is a trap for a tall element: it asks for a percentage
+     of the ELEMENT, which can exceed the viewport entirely. The industrials
+     grade list is a single .rvs container about 4,900px tall, so 0.12 meant
+     583px of it had to sit inside a root the bottom margin had already shrunk
+     to 792px — reachable on a desktop, never on a phone until the list had
+     been scrolled most of the way past. Sixteen grades stayed at opacity 0
+     while the visitor scrolled through the blank space where they were.
+
+     The bottom rootMargin is what actually stops a sliver at the very edge of
+     the screen from triggering a reveal, and it does that job for any height.
+     With it in place, threshold 0 is the correct pairing. */
+  }, {rootMargin:'0px 0px -12% 0px', threshold:0});
 
   /* The -12% bottom margin is right for scroll-triggered reveals, but it would
      strand anything already on screen at load (hero CTAs, for one). Reveal the

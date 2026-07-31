@@ -656,7 +656,7 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
 
 /* Anything an in-page anchor can land on has to clear the fixed header, or a
    deep link from search puts its target underneath the bar. */
-.row[id],.fam-c[id],.pc[id],section[id],[data-sec][id]{scroll-margin-top:clamp(6.5rem,13vh,9.5rem)}
+.row[id],.pc[id],section[id],[data-sec][id]{scroll-margin-top:clamp(6.5rem,13vh,9.5rem)}
 
 .hdr-r{display:flex;align-items:center;gap:clamp(.5rem,1.2vw,1rem)}
 .srch-t{display:flex;align-items:center;gap:.6rem;padding:.5rem .8rem;flex:none;
@@ -826,7 +826,8 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
   color:var(--haze-d)}
 .cls:hover .cls-f{color:var(--cyan)}
 
-/* spec row — the document/spec-sheet register */
+/* spec row — the document/spec-sheet register, and the grade listing on all
+   three class pages (see _src/product-row.js) */
 .rows{display:grid;border-top:1px solid var(--line)}
 .row{position:relative;display:grid;grid-template-columns:auto 1fr auto;gap:clamp(1rem,3vw,2.5rem);
   align-items:start;padding:clamp(1.4rem,2.6vw,2.1rem) clamp(.5rem,1.5vw,1.25rem);
@@ -837,12 +838,52 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
 .row:hover .row-ix{color:var(--cyan)}
 .row-b{display:grid;gap:.7rem;min-width:0}
 .row-b h3,.row-b h4{font-size:var(--t-h4)}
-.row-b p{color:var(--haze);max-width:76ch;font-size:1.03rem}
+.row-b p,.row-p{color:var(--haze);max-width:76ch;font-size:1.03rem}
 .row-side{display:grid;gap:.5rem;justify-items:end;text-align:right;font-family:var(--f-mono);
   font-size:.725rem;letter-spacing:.14em;text-transform:uppercase;color:var(--haze-d)}
 @media (max-width:760px){
   .row{grid-template-columns:auto 1fr;gap:1rem}
   .row-side{grid-column:1/-1;justify-items:start;text-align:left;margin-top:.4rem}
+}
+
+/* ---- grade listing: a row that is a whole link, with the specimen disc ----
+   The same circular treatment as the product cards on products.html, so a
+   grade looks like itself wherever it appears. Larger here because the row has
+   the width to give it. */
+.row.prod{grid-template-columns:auto auto minmax(0,1fr) auto;align-items:center;overflow:hidden}
+.row.prod .row-b{align-content:center}
+.row-img{position:relative;flex:none;width:clamp(76px,11vw,124px);aspect-ratio:1;
+  border-radius:50%;overflow:hidden;background:var(--panel);align-self:center;
+  box-shadow:0 0 0 1px var(--line),0 3px 12px rgba(var(--scrim-rgb),.07);
+  transition:transform .5s var(--ease),box-shadow .45s var(--ease)}
+.row-img img{width:100%;height:100%;object-fit:cover}
+/* Hairline inside the disc: the specimen's own off-white ground and the page's
+   are the same colour by design, so a pale material has no edge without it. */
+.row-img::after{content:'';position:absolute;inset:0;border-radius:50%;
+  box-shadow:inset 0 0 0 1px rgba(var(--hairline-rgb),.16);pointer-events:none}
+.row.prod:hover .row-img{transform:scale(1.05);
+  box-shadow:0 0 0 1px var(--cyan),0 5px 18px rgba(var(--scrim-rgb),.12)}
+/* left accent, matching the product cards and the document register */
+.row.prod::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--cyan);
+  transform:scaleY(0);transform-origin:bottom;transition:transform .5s var(--ease)}
+.row.prod:hover::before{transform:scaleY(1);transform-origin:top}
+.row.prod:focus-visible{outline:1px solid var(--cyan);outline-offset:-3px}
+.row-h{display:flex;align-items:baseline;gap:.9rem;flex-wrap:wrap;
+  transition:color .3s var(--ease)}
+.row.prod:hover .row-h{color:var(--cyan)}
+.row-h::after{content:'→';font-family:var(--f-mono);font-size:.62em;opacity:0;
+  transition:opacity .3s var(--ease),transform .3s var(--ease)}
+.row.prod:hover .row-h::after{opacity:1;transform:translateX(3px)}
+@media (max-width:760px){
+  /* The index is decorative and the disc is not, so the index yields the
+     column rather than squeezing the photograph on a phone. The disc also
+     stops being centred: the body block runs to five or six lines at this
+     width, and a vertically centred disc floats level with the middle of the
+     description instead of sitting beside the name it belongs to. */
+  .row.prod{grid-template-columns:auto minmax(0,1fr);gap:1rem;align-items:start}
+  .row.prod .row-ix{display:none}
+  .row-img{align-self:start;margin-top:.2rem}
+  .row.prod .row-b{align-content:start}
 }
 
 /* ============ shared primitives ============
@@ -985,11 +1026,6 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
 
 /* A grade heading on a class page links to that grade's own page. The row
    keeps its id, so inbound links to the old anchor still land here. */
-.row-lk{color:inherit;transition:color .3s var(--ease)}
-.row-lk:hover{color:var(--cyan)}
-.row-lk::after{content:' →';font-family:var(--f-mono);font-size:.62em;opacity:0;
-  transition:opacity .3s var(--ease),margin-left .3s var(--ease);margin-left:-.25em}
-.row-lk:hover::after{opacity:1;margin-left:.15em}
 
 /* Reopens the consent bar, so a decision can be withdrawn. A button rather
    than a link because it opens a dialog instead of navigating. */
@@ -1222,20 +1258,6 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
   border-left:0;border-right:0;border-bottom:0}}
 @media (prefers-reduced-motion:reduce){.glx-cc{transform:none}}
 
-/* resin family cards, each with its own chain visual */
-.fam{display:grid;gap:var(--gut)}
-.fam-c{display:grid;grid-template-columns:minmax(0,320px) 1fr;gap:0;border:1px solid var(--line);
-  overflow:hidden;transition:border-color .45s var(--ease)}
-.fam-c:hover{border-color:var(--line-2)}
-.fam-vis{position:relative;background:var(--deep);border-right:1px solid var(--line);min-height:230px}
-.fam-vis canvas{position:absolute;inset:0;width:100%;height:100%}
-.fam-vis .ix{position:absolute;top:14px;left:14px;z-index:2;font-family:var(--f-mono);font-size:.69rem;
-  letter-spacing:.2em;text-transform:uppercase;color:var(--cyan)}
-.fam-b{padding:clamp(1.6rem,3vw,2.4rem);display:grid;gap:1rem;align-content:center}
-.fam-b p{color:var(--haze);max-width:70ch}
-@media (max-width:860px){.fam-c{grid-template-columns:1fr}
-  .fam-vis{border-right:0;border-bottom:1px solid var(--line);min-height:170px}}
-
 /* application sectors */
 .app{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--line)}
 .app-c{padding:clamp(1.5rem,2.8vw,2.2rem);border-right:1px solid var(--line);display:grid;gap:.85rem;
@@ -1453,33 +1475,46 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
 
 <section class="sec is-tight" data-sec="Families">
   <div class="wrap">
-    <div class="fam rvs">
-
-<article class="fam-c" id="polyethylene">
-  <div class="fam-vis"><span class="ix">01 &mdash; Polyethylene</span><canvas data-poly="pe"></canvas></div>
-  <div class="fam-b">
-    <h3><a class="row-lk" href="polymers-polyethylene.html">Polyethylene</a></h3>
-    <div class="chips"><span class="chip spec">LDPE</span><span class="chip spec">HDPE</span><span class="chip spec">LLDPE</span><span class="chip spec">UHMWPE</span></div>
-    <p>One monomer, four very different materials &mdash; the difference is how tightly the chains pack. Low-density (LDPE) stays branched and flexible, which is why it becomes film and bags. High-density (HDPE) packs straight and stiff, so it becomes pipe, containers and automotive parts. Linear low-density (LLDPE) trades stiffness for puncture resistance in stretch film, and ultra-high molecular weight (UHMWPE) runs chains so long the material outwears steel in abrasion service.</p>
-  </div>
-</article>
-<article class="fam-c" id="polypropylene">
-  <div class="fam-vis"><span class="ix">02 &mdash; Polypropylene</span><canvas data-poly="pp"></canvas></div>
-  <div class="fam-b">
-    <h3><a class="row-lk" href="polymers-polypropylene.html">Polypropylene</a></h3>
-    <div class="chips"><span class="chip spec">Homopolymer</span><span class="chip spec">Copolymer</span><span class="chip spec">PPR</span><span class="chip spec">PPC</span></div>
-    <p>Lighter than polyethylene and considerably stiffer, with a higher melting point &mdash; which is what makes it the default for packaging that gets hot-filled, automotive interiors, textiles and rigid consumer goods. Homopolymer for stiffness and clarity; copolymer where impact strength at low temperature matters more.</p>
-  </div>
-</article>
-<article class="fam-c" id="performance-additives">
-  <div class="fam-vis"><span class="ix">03 &mdash; Performance additives</span><canvas data-poly="add"></canvas></div>
-  <div class="fam-b">
-    <h3><a class="row-lk" href="polymers-performance-additives.html">Performance additives</a></h3>
-    <div class="chips"><span class="chip spec">Plasticizers</span><span class="chip spec">UV stabilizers</span><span class="chip spec">Flame retardants</span><span class="chip spec">Antimicrobials</span></div>
-    <p>A resin only becomes a product once it is tuned. Plasticizers for flexibility, UV stabilizers so outdoor parts do not chalk and crack, flame retardants for building and electrical compliance, antimicrobials for medical and food contact. Specified by application, supplied to grade.</p>
-  </div>
-</article>
-
+    <div class="rows rvs">
+<a class="row prod" href="polymers-polyethylene.html" id="polyethylene" data-cur="Open grade">
+<span class="row-ix">01</span>
+<span class="row-img">
+  <img src="assets/products/polymers-polyethylene-sq.webp" alt="" width="512" height="512" loading="lazy" decoding="async" />
+</span>
+<span class="row-b">
+  <h3 class="row-h">Polyethylene</h3>
+  <span class="chips"><span class="chip spec">LDPE</span><span class="chip spec">HDPE</span><span class="chip spec">LLDPE</span><span class="chip spec">UHMWPE</span></span>
+  <span class="row-p">One monomer, four very different materials &mdash; the difference is how tightly the chains pack. Low-density (LDPE) stays branched and flexible, which is why it becomes film and bags. High-density (HDPE) packs straight and stiff, so it becomes pipe, containers and automotive parts. Linear low-density (LLDPE) trades stiffness for puncture resistance in stretch film, and ultra-high molecular weight (UHMWPE) runs chains so long the material outwears steel in abrasion service.</span>
+  <span class="chips"><span class="chip org">Turkmenistan</span><span class="chip org">Uzbekistan</span><span class="chip org">UAE</span><span class="chip org">Saudi Arabia</span><span class="chip org">China</span></span>
+</span>
+<span class="row-side"><span>Resin family</span></span>
+</a>
+<a class="row prod" href="polymers-polypropylene.html" id="polypropylene" data-cur="Open grade">
+<span class="row-ix">02</span>
+<span class="row-img">
+  <img src="assets/products/polymers-polypropylene-sq.webp" alt="" width="512" height="512" loading="lazy" decoding="async" />
+</span>
+<span class="row-b">
+  <h3 class="row-h">Polypropylene</h3>
+  <span class="chips"><span class="chip spec">Homopolymer</span><span class="chip spec">Copolymer</span><span class="chip spec">PPR</span><span class="chip spec">PPC</span></span>
+  <span class="row-p">Lighter than polyethylene and considerably stiffer, with a higher melting point &mdash; which is what makes it the default for packaging that gets hot-filled, automotive interiors, textiles and rigid consumer goods. Homopolymer for stiffness and clarity; copolymer where impact strength at low temperature matters more.</span>
+  <span class="chips"><span class="chip org">Turkmenistan</span><span class="chip org">Uzbekistan</span><span class="chip org">UAE</span><span class="chip org">Saudi Arabia</span><span class="chip org">China</span></span>
+</span>
+<span class="row-side"><span>Resin family</span></span>
+</a>
+<a class="row prod" href="polymers-performance-additives.html" id="performance-additives" data-cur="Open grade">
+<span class="row-ix">03</span>
+<span class="row-img">
+  <img src="assets/products/polymers-performance-additives-sq.webp" alt="" width="512" height="512" loading="lazy" decoding="async" />
+</span>
+<span class="row-b">
+  <h3 class="row-h">Performance additives</h3>
+  <span class="chips"><span class="chip spec">Plasticizers</span><span class="chip spec">UV stabilizers</span><span class="chip spec">Flame retardants</span><span class="chip spec">Antimicrobials</span></span>
+  <span class="row-p">A resin only becomes a product once it is tuned. Plasticizers for flexibility, UV stabilizers so outdoor parts do not chalk and crack, flame retardants for building and electrical compliance, antimicrobials for medical and food contact. Specified by application, supplied to grade.</span>
+  <span class="chips"><span class="chip org">Turkmenistan</span><span class="chip org">Uzbekistan</span><span class="chip org">UAE</span><span class="chip org">Saudi Arabia</span><span class="chip org">China</span></span>
+</span>
+<span class="row-side"><span>Resin modifiers</span></span>
+</a>
     </div>
   </div>
 </section>
@@ -2236,7 +2271,20 @@ var ORN_SCALE = parseFloat(getComputedStyle(document.documentElement)
       show(r.target);
       io.unobserve(r.target);
     });
-  }, {rootMargin:'0px 0px -12% 0px', threshold:.12});
+  /* threshold 0, not 0.12.
+
+     A ratio threshold is a trap for a tall element: it asks for a percentage
+     of the ELEMENT, which can exceed the viewport entirely. The industrials
+     grade list is a single .rvs container about 4,900px tall, so 0.12 meant
+     583px of it had to sit inside a root the bottom margin had already shrunk
+     to 792px — reachable on a desktop, never on a phone until the list had
+     been scrolled most of the way past. Sixteen grades stayed at opacity 0
+     while the visitor scrolled through the blank space where they were.
+
+     The bottom rootMargin is what actually stops a sliver at the very edge of
+     the screen from triggering a reveal, and it does that job for any height.
+     With it in place, threshold 0 is the correct pairing. */
+  }, {rootMargin:'0px 0px -12% 0px', threshold:0});
 
   /* The -12% bottom margin is right for scroll-triggered reveals, but it would
      strand anything already on screen at load (hero CTAs, for one). Reveal the
@@ -2626,92 +2674,7 @@ if (location.protocol.indexOf('http') === 0){
 }
 })();
 </script>
-<script>
-/* Polymer chain visuals: chain architecture is the actual difference between
-   these families, so each canvas draws its own topology. */
-function chains(cv, mode){
-  var rows = [], i;
-  var N = mode === 'add' ? 0 : (mode === 'pe' ? 5 : 4);
-  for (i=0;i<N;i++){
-    rows.push({y:(i+.85)/(N+.7), ph:Math.random()*6.3,
-      amp: mode === 'pe' ? .055 + Math.random()*.05 : .028,
-      f: mode === 'pe' ? 1.3 + Math.random()*1.4 : 2.6,
-      sp:.24 + Math.random()*.26,
-      branch: mode === 'pe' && i % 2 === 0});
-  }
-  var mol = [];
-  if (mode === 'add'){
-    for (i=0;i<22;i++) mol.push({x:Math.random(),y:Math.random(),
-      vx:(Math.random()-.5)*.0012, vy:(Math.random()-.5)*.0012, r:1+Math.random()*1.7,
-      sand: i % 3 === 0});
-  }
-  glxStage(cv, function(x,w,h,t){
-    x.clearRect(0,0,w,h);
 
-    if (mode === 'add'){
-      mol.forEach(function(p){
-        p.x+=p.vx; p.y+=p.vy;
-        if(p.x<.03||p.x>.97)p.vx*=-1; if(p.y<.03||p.y>.97)p.vy*=-1;
-      });
-      for (var a=0;a<mol.length;a++) for (var b=a+1;b<mol.length;b++){
-        var ax=mol[a].x*w, ay=mol[a].y*h, bx=mol[b].x*w, by=mol[b].y*h;
-        var d=Math.hypot(ax-bx,ay-by), lim=Math.min(w,h)*.34;
-        if (d<lim){
-          x.strokeStyle=RGBA('cyan',(.28*(1-d/lim)).toFixed(3));
-          x.lineWidth=1; x.beginPath(); x.moveTo(ax,ay); x.lineTo(bx,by); x.stroke();
-        }
-      }
-      mol.forEach(function(p,k){
-        var bx=p.x*w, by=p.y*h, pulse=Math.sin(t*.95+k)*.5+.5, r=p.r*(1+pulse*.55);
-        x.save(); x.translate(bx,by); x.rotate(Math.PI/4);
-        x.fillStyle = p.sand ? RGBA('sandD',.5+pulse*.42) : RGBA('cyan',.45+pulse*.45);
-        x.fillRect(-r,-r,r*2,r*2); x.restore();
-      });
-      return;
-    }
-
-    rows.forEach(function(c,ci){
-      var pts = [];
-      for (var px=0;px<=w;px+=4){
-        var u=px/w;
-        pts.push([px,(c.y + Math.sin(u*Math.PI*2*c.f + t*c.sp*2 + c.ph)*c.amp)*h]);
-      }
-      x.strokeStyle=RGBA('cyan',.42); x.lineWidth=1.4;
-      x.beginPath(); pts.forEach(function(p,k){ k?x.lineTo(p[0],p[1]):x.moveTo(p[0],p[1]); }); x.stroke();
-
-      // LDPE branches: the short side chains that stop the polymer packing tight
-      if (c.branch){
-        for (var s=0.12;s<1;s+=.19){
-          var k2 = Math.floor(s*(pts.length-1)), p0 = pts[k2];
-          var dir = (ci%4<2) ? -1 : 1;
-          x.strokeStyle=RGBA('cyan',.3);
-          x.beginPath(); x.moveTo(p0[0],p0[1]);
-          x.lineTo(p0[0]+9, p0[1]+dir*h*.075); x.stroke();
-          x.save(); x.translate(p0[0]+9, p0[1]+dir*h*.075); x.rotate(Math.PI/4);
-          x.fillStyle=RGBA('cyan',.6); x.fillRect(-1.5,-1.5,3,3); x.restore();
-        }
-      }
-
-      var beads = mode === 'pe' ? 12 : 16;
-      for (var k=0;k<=beads;k++){
-        var u2=k/beads, mx=u2*w;
-        var my=(c.y + Math.sin(u2*Math.PI*2*c.f + t*c.sp*2 + c.ph)*c.amp)*h;
-        var pulse=Math.sin(t*1.3 - k*.38 + ci)*.5+.5;
-        x.save(); x.translate(mx,my); x.rotate(Math.PI/4);
-        var r=1.9+pulse*1.4;
-        x.fillStyle=RGBA(pulse>.72?'signal':'cyan',.42+pulse*.5);
-        x.fillRect(-r,-r,r*2,r*2); x.restore();
-      }
-    });
-  });
-}
-
-window.glxPage = function(){
-  [].forEach.call(document.querySelectorAll('[data-poly]'), function(cv){
-    chains(cv, cv.getAttribute('data-poly'));
-  });
-};
-</script>
 <script>
 /* ---------- consent ----------
    The only code path to the network. kernel-js pushes onto window.glxQ and

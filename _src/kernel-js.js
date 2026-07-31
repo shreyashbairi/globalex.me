@@ -595,7 +595,20 @@ var ORN_SCALE = parseFloat(getComputedStyle(document.documentElement)
       show(r.target);
       io.unobserve(r.target);
     });
-  }, {rootMargin:'0px 0px -12% 0px', threshold:.12});
+  /* threshold 0, not 0.12.
+
+     A ratio threshold is a trap for a tall element: it asks for a percentage
+     of the ELEMENT, which can exceed the viewport entirely. The industrials
+     grade list is a single .rvs container about 4,900px tall, so 0.12 meant
+     583px of it had to sit inside a root the bottom margin had already shrunk
+     to 792px — reachable on a desktop, never on a phone until the list had
+     been scrolled most of the way past. Sixteen grades stayed at opacity 0
+     while the visitor scrolled through the blank space where they were.
+
+     The bottom rootMargin is what actually stops a sliver at the very edge of
+     the screen from triggering a reveal, and it does that job for any height.
+     With it in place, threshold 0 is the correct pairing. */
+  }, {rootMargin:'0px 0px -12% 0px', threshold:0});
 
   /* The -12% bottom margin is right for scroll-triggered reveals, but it would
      strand anything already on screen at load (hero CTAs, for one). Reveal the

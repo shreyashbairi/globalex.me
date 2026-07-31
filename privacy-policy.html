@@ -656,7 +656,7 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
 
 /* Anything an in-page anchor can land on has to clear the fixed header, or a
    deep link from search puts its target underneath the bar. */
-.row[id],.fam-c[id],.pc[id],section[id],[data-sec][id]{scroll-margin-top:clamp(6.5rem,13vh,9.5rem)}
+.row[id],.pc[id],section[id],[data-sec][id]{scroll-margin-top:clamp(6.5rem,13vh,9.5rem)}
 
 .hdr-r{display:flex;align-items:center;gap:clamp(.5rem,1.2vw,1rem)}
 .srch-t{display:flex;align-items:center;gap:.6rem;padding:.5rem .8rem;flex:none;
@@ -826,7 +826,8 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
   color:var(--haze-d)}
 .cls:hover .cls-f{color:var(--cyan)}
 
-/* spec row — the document/spec-sheet register */
+/* spec row — the document/spec-sheet register, and the grade listing on all
+   three class pages (see _src/product-row.js) */
 .rows{display:grid;border-top:1px solid var(--line)}
 .row{position:relative;display:grid;grid-template-columns:auto 1fr auto;gap:clamp(1rem,3vw,2.5rem);
   align-items:start;padding:clamp(1.4rem,2.6vw,2.1rem) clamp(.5rem,1.5vw,1.25rem);
@@ -837,12 +838,52 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
 .row:hover .row-ix{color:var(--cyan)}
 .row-b{display:grid;gap:.7rem;min-width:0}
 .row-b h3,.row-b h4{font-size:var(--t-h4)}
-.row-b p{color:var(--haze);max-width:76ch;font-size:1.03rem}
+.row-b p,.row-p{color:var(--haze);max-width:76ch;font-size:1.03rem}
 .row-side{display:grid;gap:.5rem;justify-items:end;text-align:right;font-family:var(--f-mono);
   font-size:.725rem;letter-spacing:.14em;text-transform:uppercase;color:var(--haze-d)}
 @media (max-width:760px){
   .row{grid-template-columns:auto 1fr;gap:1rem}
   .row-side{grid-column:1/-1;justify-items:start;text-align:left;margin-top:.4rem}
+}
+
+/* ---- grade listing: a row that is a whole link, with the specimen disc ----
+   The same circular treatment as the product cards on products.html, so a
+   grade looks like itself wherever it appears. Larger here because the row has
+   the width to give it. */
+.row.prod{grid-template-columns:auto auto minmax(0,1fr) auto;align-items:center;overflow:hidden}
+.row.prod .row-b{align-content:center}
+.row-img{position:relative;flex:none;width:clamp(76px,11vw,124px);aspect-ratio:1;
+  border-radius:50%;overflow:hidden;background:var(--panel);align-self:center;
+  box-shadow:0 0 0 1px var(--line),0 3px 12px rgba(var(--scrim-rgb),.07);
+  transition:transform .5s var(--ease),box-shadow .45s var(--ease)}
+.row-img img{width:100%;height:100%;object-fit:cover}
+/* Hairline inside the disc: the specimen's own off-white ground and the page's
+   are the same colour by design, so a pale material has no edge without it. */
+.row-img::after{content:'';position:absolute;inset:0;border-radius:50%;
+  box-shadow:inset 0 0 0 1px rgba(var(--hairline-rgb),.16);pointer-events:none}
+.row.prod:hover .row-img{transform:scale(1.05);
+  box-shadow:0 0 0 1px var(--cyan),0 5px 18px rgba(var(--scrim-rgb),.12)}
+/* left accent, matching the product cards and the document register */
+.row.prod::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--cyan);
+  transform:scaleY(0);transform-origin:bottom;transition:transform .5s var(--ease)}
+.row.prod:hover::before{transform:scaleY(1);transform-origin:top}
+.row.prod:focus-visible{outline:1px solid var(--cyan);outline-offset:-3px}
+.row-h{display:flex;align-items:baseline;gap:.9rem;flex-wrap:wrap;
+  transition:color .3s var(--ease)}
+.row.prod:hover .row-h{color:var(--cyan)}
+.row-h::after{content:'→';font-family:var(--f-mono);font-size:.62em;opacity:0;
+  transition:opacity .3s var(--ease),transform .3s var(--ease)}
+.row.prod:hover .row-h::after{opacity:1;transform:translateX(3px)}
+@media (max-width:760px){
+  /* The index is decorative and the disc is not, so the index yields the
+     column rather than squeezing the photograph on a phone. The disc also
+     stops being centred: the body block runs to five or six lines at this
+     width, and a vertically centred disc floats level with the middle of the
+     description instead of sitting beside the name it belongs to. */
+  .row.prod{grid-template-columns:auto minmax(0,1fr);gap:1rem;align-items:start}
+  .row.prod .row-ix{display:none}
+  .row-img{align-self:start;margin-top:.2rem}
+  .row.prod .row-b{align-content:start}
 }
 
 /* ============ shared primitives ============
@@ -985,11 +1026,6 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
 
 /* A grade heading on a class page links to that grade's own page. The row
    keeps its id, so inbound links to the old anchor still land here. */
-.row-lk{color:inherit;transition:color .3s var(--ease)}
-.row-lk:hover{color:var(--cyan)}
-.row-lk::after{content:' →';font-family:var(--f-mono);font-size:.62em;opacity:0;
-  transition:opacity .3s var(--ease),margin-left .3s var(--ease);margin-left:-.25em}
-.row-lk:hover::after{opacity:1;margin-left:.15em}
 
 /* Reopens the consent bar, so a decision can be withdrawn. A button rather
    than a link because it opens a dialog instead of navigating. */
@@ -2279,7 +2315,20 @@ var ORN_SCALE = parseFloat(getComputedStyle(document.documentElement)
       show(r.target);
       io.unobserve(r.target);
     });
-  }, {rootMargin:'0px 0px -12% 0px', threshold:.12});
+  /* threshold 0, not 0.12.
+
+     A ratio threshold is a trap for a tall element: it asks for a percentage
+     of the ELEMENT, which can exceed the viewport entirely. The industrials
+     grade list is a single .rvs container about 4,900px tall, so 0.12 meant
+     583px of it had to sit inside a root the bottom margin had already shrunk
+     to 792px — reachable on a desktop, never on a phone until the list had
+     been scrolled most of the way past. Sixteen grades stayed at opacity 0
+     while the visitor scrolled through the blank space where they were.
+
+     The bottom rootMargin is what actually stops a sliver at the very edge of
+     the screen from triggering a reveal, and it does that job for any height.
+     With it in place, threshold 0 is the correct pairing. */
+  }, {rootMargin:'0px 0px -12% 0px', threshold:0});
 
   /* The -12% bottom margin is right for scroll-triggered reveals, but it would
      strand anything already on screen at load (hero CTAs, for one). Reveal the

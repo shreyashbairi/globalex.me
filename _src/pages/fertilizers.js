@@ -1,24 +1,19 @@
 const { hero, cta } = require("../parts");
 // Nutrient split is what actually distinguishes these grades, so it becomes
-// the visual. The grades themselves live in the catalogue, which the products
-// page and site search read from the same object.
+// this page's contribution to the shared row. The grades themselves live in
+// the catalogue, which the products page and site search read from the same
+// object; the row itself lives in product-row.js, shared with the other two
+// class pages so the three cannot drift apart again.
 const { FERTILIZERS: PRODUCTS } = require("../catalogue");
+const { productRow } = require("../product-row");
 
-const row = (p, i) => `<article class="row prod" id="${p.id}">
-<span class="row-ix">${String(i + 1).padStart(2, "0")}</span>
-<div class="row-b">
-  <h3><a class="row-lk" href="${p.url}">${p.name}</a></h3>
-  <div class="chips">${p.specs.map((s) => `<span class="chip spec">${s}</span>`).join("")}</div>
-  <p>${p.body}</p>
-  <div class="chips">${p.origins.map((o) => `<span class="chip org">${o}</span>`).join("")}</div>
-</div>
-<div class="row-side">
-  <span>${p.kind}</span>
-  <div class="npk" role="img" aria-label="Nutrient split: ${p.npk[0]} nitrogen, ${p.npk[1]} phosphorus, ${p.npk[2]} potassium">
+const row = (p, i) =>
+  productRow(p, i, {
+    side: `<span>${p.kind}</span>
+  <span class="npk" role="img" aria-label="Nutrient split: ${p.npk[0]} nitrogen, ${p.npk[1]} phosphorus, ${p.npk[2]} potassium">
     ${["N", "P", "K"].map((L, k) => `<span class="npk-b"><i style="--v:${p.npk[k]}%"></i><b>${L}</b><em>${p.npk[k]}</em></span>`).join("")}
-  </div>
-</div>
-</article>`;
+  </span>`,
+  });
 
 const CRUMB = [["Products", "products.html"], "Fertilizers"];
 

@@ -1,23 +1,18 @@
 const { hero, cta } = require("../parts");
 // Grades live in the catalogue so this page, products.html and site search
-// cannot drift apart.
+// cannot drift apart. The row markup lives in product-row.js, shared with the
+// fertilizers and polymers pages for the same reason.
 const { CHEMICALS: CHEMS, SECTORS } = require("../catalogue");
+const { productRow } = require("../product-row");
 
-const chem = (
-  c,
-  i,
-) => `<article class="row chem" id="${c.id}" data-tags="${c.t.join(" ")}">
-<span class="row-ix">${String(i + 1).padStart(2, "0")}</span>
-<div class="row-b">
-  <div class="chem-h"><h3><a class="row-lk" href="${c.url}">${c.name}</a></h3><span class="formula">${c.f}</span></div>
-  <div class="chips">${c.specs.map((s) => `<span class="chip spec">${s}</span>`).join("")}</div>
-  <p>${c.body}</p>
-  ${c.origins.length ? `<div class="chips">${c.origins.map((o) => `<span class="chip org">${o}</span>`).join("")}</div>` : ""}
-</div>
-<div class="row-side">
-  ${c.t.map((t) => `<span>${SECTORS.find((s) => s[0] === t)[1]}</span>`).join("")}
-</div>
-</article>`;
+const chem = (c, i) =>
+  productRow(c, i, {
+    cls: "chem",
+    attrs: ` data-tags="${c.t.join(" ")}"`,
+    side: c.t
+      .map((t) => `<span>${SECTORS.find((s) => s[0] === t)[1]}</span>`)
+      .join(""),
+  });
 
 const CRUMB = [["Products", "products.html"], "Industrial Chemicals"];
 
@@ -30,9 +25,12 @@ module.exports = {
   desc: "Sixteen specialty chemicals — sulphur, caustic soda, sulphuric and hydrochloric acid, LABSA 96%, SLES 70%, carbon black, iodine and more — for water treatment, manufacturing, personal care, agriculture and energy.",
 
   css: `
-.chem-h{display:flex;align-items:baseline;gap:.9rem;flex-wrap:wrap}
-.formula{font-family:var(--f-mono);font-size:.825rem;letter-spacing:.06em;color:var(--sand-t);
-  padding:.2em .55em;border:1px solid rgba(var(--sand-rgb),.3);background:var(--sand-g)}
+/* .formula is the molecular formula chip beside a grade name. It stays here
+   rather than moving into the kernel because this is the only page that shows
+   one: the shared row emits it only for grades that carry a formula. */
+.formula{font-family:var(--f-mono);font-size:.825rem;font-style:normal;letter-spacing:.06em;
+  color:var(--sand-t);padding:.2em .55em;border:1px solid rgba(var(--sand-rgb),.3);
+  background:var(--sand-g)}
 .chem[hidden]{display:none}
 
 /* sector filter */
