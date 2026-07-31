@@ -640,6 +640,82 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
 .ph-meta b{display:block;color:var(--frost);font-weight:500;font-size:1rem;letter-spacing:.04em;
   margin-bottom:2px}
 
+/* ---- hero with a WebGL stage ----
+   The homepage hands its globe the right-hand half of the viewport, and it
+   needed that: the same scene drawn small enough to sit behind a paragraph
+   reads as a decorative bullet rather than as the subject. So an interior
+   hero that carries a scene grows to a real height and splits — copy left,
+   stage right. Under 1080 the two stack and the stage becomes a plate above
+   the copy, which is the arrangement the homepage falls back to as well.
+
+   Pointer events are the fiddly part. The canvas sits behind the copy, and
+   .wrap is a full-width box whether or not there is text under the pointer,
+   so it would swallow every drag before the scene saw it. The wrap is made
+   transparent to the pointer and the copy block takes it back: text stays
+   selectable, links stay clickable, and the empty space around them orbits
+   the scene. */
+.ph.has-3d{display:flex;align-items:center;min-height:clamp(30rem,76svh,48rem);
+  padding-top:clamp(8.5rem,17vh,12.5rem);padding-bottom:clamp(3.5rem,8vh,6rem)}
+.ph.has-3d>.wrap{pointer-events:none}
+.ph.has-3d .ph-in{pointer-events:auto;max-width:min(56ch,50%)}
+.ph-3d{position:absolute;top:50%;right:calc(var(--pad-x) * .25);
+  width:min(88vh,54vw,900px);aspect-ratio:1;transform:translateY(-50%);z-index:0;
+  transition:opacity .3s linear}
+/* opacity 1, deliberately, against the .ph canvas rule above: a WebGL scene
+   builds its own recession out of per-material alpha, and dimming the whole
+   surface a second time only flattens the near geometry into the far. */
+.ph-3d canvas{position:absolute;inset:0;display:block;width:100%;height:100%;opacity:1}
+/* A stage that fell back to the 2D gül field is a background again rather
+   than a subject, so it goes full-bleed — otherwise the hero ends up with a
+   small square of pattern hanging beside the copy. */
+.ph-3d[data-flat]{position:absolute;inset:0;width:auto;aspect-ratio:auto;transform:none}
+.ph-3d[data-flat] canvas{opacity:.85}
+/* keeps the copy legible where the scene rides under it */
+.ph.has-3d::after{content:'';position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:linear-gradient(90deg,rgba(var(--void-rgb),.93),rgba(var(--void-rgb),.52) 30%,
+    rgba(var(--void-rgb),0) 58%)}
+
+/* the stage readout — what the scene is currently showing */
+.ph-3d-hud{position:absolute;right:var(--pad-x);bottom:clamp(1.4rem,3.5vh,2.4rem);z-index:2;
+  display:grid;gap:.32rem;justify-items:end;text-align:right;pointer-events:none;
+  font-family:var(--f-mono);font-size:.66rem;letter-spacing:.19em;text-transform:uppercase}
+/* display:grid above beats the UA rule for [hidden], and the script hides the
+   readout when the scene could not start */
+.ph-3d-hud[hidden]{display:none}
+.ph-3d-k{color:var(--cyan)}
+.ph-3d-hud.mat .ph-3d-k{color:var(--sand-t)}
+.ph-3d-v{display:flex;align-items:center;gap:.5em;color:var(--frost);font-size:.78rem;
+  letter-spacing:.13em}
+.ph-3d-v::before{content:'';width:6px;height:6px;flex:none;background:var(--cyan);
+  clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%)}
+.ph-3d-hud.mat .ph-3d-v::before{background:var(--sand)}
+@keyframes ph3dTick{from{opacity:.2}to{opacity:1}}
+.ph-3d-v[data-tick]{animation:ph3dTick .55s var(--ease)}
+.ph-3d-hint{color:var(--haze-d);font-size:.61rem;letter-spacing:.21em;
+  transition:opacity .6s var(--ease)}
+.ph-3d-hint[data-off]{opacity:0}
+@media (hover:none){.ph-3d-hint{display:none}}
+
+@media (max-width:1080px){
+  .ph.has-3d{min-height:auto;flex-direction:column;align-items:stretch;
+    padding-top:clamp(7rem,15vh,9.5rem)}
+  .ph.has-3d .ph-in{max-width:74ch}
+  .ph.has-3d::after{display:none}
+  /* Wider than tall once it is a plate above the copy rather than a panel
+     beside it. Every scene is composed around a horizontal subject — a
+     skyline, a corridor, a quay — so 5:4 loses nothing and gives back about
+     a fifth of the screen the headline needs. */
+  .ph-3d{position:relative;top:auto;right:auto;transform:none;aspect-ratio:5/4;
+    width:min(100%,540px);margin:0 auto clamp(.6rem,2.5vw,1.2rem)}
+  /* The readout belongs under the thing it is reading out. In source order it
+     follows the copy, because on desktop it is positioned and order is
+     irrelevant; here the two are flex items and it has to be pulled back up. */
+  .ph-3d{order:1}
+  .ph-3d-hud{order:2;position:static;justify-items:start;text-align:left;width:100%;
+    max-width:var(--wrap);margin:0 auto clamp(1.6rem,5vw,2.4rem);padding-inline:var(--pad-x)}
+  .ph.has-3d>.wrap{order:3}
+}
+
 /* ============ surfaces / cards ============ */
 .card{position:relative;padding:clamp(1.5rem,2.6vw,2.2rem);background:linear-gradient(160deg,
   rgba(var(--steel-rgb),.44),rgba(var(--deep-rgb),.72));border:1px solid var(--line);

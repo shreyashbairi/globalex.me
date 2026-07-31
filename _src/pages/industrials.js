@@ -4,6 +4,13 @@ const { hero, cta } = require("../parts");
 // fertilizers and polymers pages for the same reason.
 const { CHEMICALS: CHEMS, SECTORS } = require("../catalogue");
 const { productRow } = require("../product-row");
+const { decode } = require("../esc");
+const scene3d = require("../scene3d");
+
+/* Sixteen grades, sixteen nodes on the near face of the hero's crystal cell.
+   The formula is the kicker because it is what distinguishes one white
+   powder from another, and it is what the rows below lead with too. */
+const STAGE = CHEMS.map((c) => [decode(c.name), decode(c.f || c.kind)]);
 
 const chem = (c, i) =>
   productRow(c, i, {
@@ -23,6 +30,7 @@ module.exports = {
   crumb: CRUMB,
   title: "Industrial Chemicals — Globalex Trading FZCO",
   desc: "Sixteen specialty chemicals — sulphur, caustic soda, sulphuric and hydrochloric acid, LABSA 96%, SLES 70%, carbon black, iodine and more — for water treatment, manufacturing, personal care, agriculture and energy.",
+  three: true,
 
   css: `
 /* .formula is the molecular formula chip beside a grade name. It stays here
@@ -74,6 +82,7 @@ ${hero({
     ["MSDS", "Supplied with every lot"],
   ],
   sec: "Industrials",
+  stage: { name: "lattice", kicker: "Grade" },
 })}
 
 <section class="sec is-tight" data-sec="Sectors">
@@ -149,5 +158,5 @@ window.glxPage = function(){
     });
   });
 };
-`,
+` + scene3d.bundle("lattice", STAGE),
 };

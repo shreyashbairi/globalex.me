@@ -17,8 +17,19 @@ const { CLASSES, plain } = require("../catalogue");
 const { RELEASED: DOCS } = require("../docs");
 const { groups, attrs } = require("../facets");
 const { on } = require("../flags");
+const { decode } = require("../esc");
+const scene3d = require("../scene3d");
 
 const TOTAL = CLASSES.reduce((n, c) => n + c.items.length, 0);
+
+/* The hero scene is the index in orbit: one ring per class, one marker per
+   grade, read straight off the catalogue. It cannot list a grade the page
+   below does not show, or miss one it does. */
+const STAGE = CLASSES.map((c) => ({
+  title: decode(c.title),
+  tone: c.tone,
+  items: c.items.map((p) => decode(p.name)),
+}));
 
 /* Everything the matcher scans, baked into the element. One attribute read
    beats rebuilding a string per keystroke per card. */
@@ -106,6 +117,7 @@ module.exports = {
   crumb: CRUMB,
   title: "Products — Globalex Trading FZCO",
   desc: `Search all ${TOTAL} grades Globalex Trading FZCO supplies across fertilizers, polymers and industrial chemicals — by name, formula, application or origin.`,
+  three: true,
 
   css: `
 /* ---------- search console ---------- */
@@ -262,6 +274,7 @@ ${hero({
   h1: "Products",
   lead: "Fertilizers, polymers and industrial chemicals &mdash; the whole book in one place. Search by grade name, chemical formula, application or origin, or browse the classes below.",
   sec: "Products",
+  stage: { name: "book", kicker: "The book" },
 })}
 
 <section class="sec psec" data-sec="Search">
@@ -498,5 +511,5 @@ window.glxPage = function(){
   apply();
   if (new URLSearchParams(location.search).get('q')) box.focus();
 };
-`,
+` + scene3d.bundle("book", STAGE),
 };

@@ -1,4 +1,6 @@
 const { hero, cta } = require("../parts");
+const { decode } = require("../esc");
+const scene3d = require("../scene3d");
 
 const STEPS = [
   {
@@ -73,6 +75,17 @@ const panel = (s, i) => `<article class="step" data-i="${i}">
 
 const CRUMB = ["Procedures"];
 
+/* The hero corridor is built from the same ten steps the scroller below is,
+   so a checkpoint cannot be renamed in one and not the other. Entities are
+   resolved because the readout is written with textContent, which would
+   otherwise print "&middot;" as eight characters. The party code drives the
+   gate colour and matches the legend printed under the scroller. */
+const STAGE = STEPS.map((s) => [
+  decode(s.tag),
+  s.party === "Buyer" ? "b" : s.party === "Seller" ? "s" : "a",
+  decode(s.h),
+]);
+
 module.exports = {
   page: "procedures",
   tier: "company",
@@ -80,6 +93,7 @@ module.exports = {
   crumb: CRUMB,
   title: "Trade Procedures — Globalex Trading FZCO",
   desc: "The ten contractual checkpoints between handshake and hull: NCND, IMFPA, LOI, FCO, letter of credit, proof of product, performance bond and shipment.",
+  three: true,
 
   css: `
 /* ---------- scroll-driven corridor ---------- */
@@ -195,6 +209,7 @@ ${hero({
     ["48h", "Typical response"],
   ],
   sec: "Procedure",
+  stage: { name: "corridor", kicker: "Checkpoint" },
 })}
 
 <section class="corr" id="corr" data-sec="Checkpoints">
@@ -321,5 +336,5 @@ window.glxPage = function(){
   // fonts settling changes panel widths, so re-measure once they land
   if (document.fonts) document.fonts.ready.then(layout);
 };
-`,
+` + scene3d.bundle("corridor", STAGE),
 };

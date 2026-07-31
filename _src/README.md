@@ -13,6 +13,10 @@ This folder only exists so shared chrome doesn't have to be edited eleven times.
 - `kernel-js.js`  — shared runtime (preloader, cursor, rails, reveals, canvas engine)
 - `shell.js`      — header, footer, gül mark, instrument frame, preloader markup
 - `parts.js`      — reusable page hero and CTA
+- `scene3d.js`    — the interior pages' WebGL hero stages, one scene per page.
+                    A page opts in with `three: true`, a `stage:` on its hero
+                    and `js: scene3d.bundle(name, data)`. Only the scene that
+                    page asked for is inlined, never all eight.
 - `pages/*.js`    — one file per page: metadata, body, page-specific CSS/JS
 - `geo.js`        — baked Natural Earth 110m coastlines and land mask, for the
                     home-page globe. Generated and committed, not built.
@@ -32,5 +36,7 @@ palette from `GLXC` and builds colours with `RGBA(name, alpha)`, both published
 by `kernel-js.js`. A `var(--x)` in a `fillStyle` is silently ignored; the same
 string in `addColorStop` throws and takes the rest of the caller with it.
 
-Third-party code is CDN-only and loaded at runtime: Three.js r128 (index globe)
-and Google Fonts. No build tooling, no package.json, no API keys.
+Third-party code is CDN-only and loaded at runtime: Three.js r128 (the home
+page globe and the eight interior stages) and Google Fonts. No build tooling,
+no package.json, no API keys. Every scene falls back to the 2D gül ornament if
+three.js or WebGL is unavailable, so no page depends on the CDN answering.

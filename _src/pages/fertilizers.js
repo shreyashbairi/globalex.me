@@ -6,6 +6,13 @@ const { hero, cta } = require("../parts");
 // class pages so the three cannot drift apart again.
 const { FERTILIZERS: PRODUCTS } = require("../catalogue");
 const { productRow } = require("../product-row");
+const { decode } = require("../esc");
+const scene3d = require("../scene3d");
+
+/* The hero is a prilling tower, which is how the flagship grade on this page
+   is physically made. The readout walks the five grades, taken from the same
+   catalogue the rows below are built from. */
+const STAGE = PRODUCTS.map((p) => [decode(p.kind), decode(p.name)]);
 
 const row = (p, i) =>
   productRow(p, i, {
@@ -24,6 +31,7 @@ module.exports = {
   crumb: CRUMB,
   title: "Fertilizers — Globalex Trading FZCO",
   desc: "Urea B (N46), Potash, Ammonia, Ammonium Nitrate and NPK compound fertilizers sourced from Turkmenistan, Uzbekistan, Kazakhstan and Azerbaijan.",
+  three: true,
 
   css: `
 .prod .row-side{min-width:170px}
@@ -59,6 +67,7 @@ ${hero({
     ["Bulk", "Vessel &amp; bagged"],
   ],
   sec: "Fertilizers",
+  stage: { name: "prill", kicker: "Grade" },
 })}
 
 <section class="sec is-tight" data-sec="Grades">
@@ -115,4 +124,6 @@ ${cta({
   tone: "sand",
 })}
 `,
+
+  js: scene3d.bundle("prill", STAGE),
 };

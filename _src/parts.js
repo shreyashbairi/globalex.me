@@ -31,6 +31,27 @@ const heroImage = ([src, alt, w, h]) => `<figure class="ph-img rv" style="--d:24
 <img src="${src}" alt="${alt}" width="${w}" height="${h}" decoding="async" fetchpriority="high" />
 </figure>`;
 
+/* Optional WebGL stage beside the hero copy.
+
+   `stage` is {name, kicker}: the name selects a scene from _src/scene3d.js and
+   the kicker labels the readout under it. The scene itself is one canvas —
+   everything else here is the instrument frame around it, which has to exist
+   in the markup rather than be created by the script so that a browser with
+   WebGL switched off still gets a laid-out hero rather than a reflow.
+
+   The canvas replaces the gül ornament this hero would otherwise carry. If the
+   scene cannot start, the script puts that ornament back on the same canvas —
+   so the fallback is the previous design, not an empty box. */
+const stage3d = (s, tone) => `<div class="ph-3d" data-3d="${s.name}" data-tone="${tone}" aria-hidden="true">
+<canvas></canvas>
+</div>`;
+
+const stageHud = (s, tone) => `<div class="ph-3d-hud${tone === 'sand' ? ' mat' : ''}" aria-hidden="true">
+<span class="ph-3d-k" data-3d-k>${s.kicker}</span>
+<span class="ph-3d-v" data-3d-v>&mdash;</span>
+<span class="ph-3d-hint" data-3d-hint>Drag to orbit</span>
+</div>`;
+
 function hero({
   crumb = [],
   eyebrow,
@@ -42,6 +63,7 @@ function hero({
   sec = 'Overview',
   video = null,
   image = null,
+  stage = null,
 }) {
   const trail = crumb.map((c) =>
     typeof c === 'string'
@@ -63,8 +85,18 @@ ${sub ? `<dd class="ph-det-s">${sub}</dd>` : ''}
 </div>`)
         .join('')}</dl>`
     : '';
-  return `<section class="ph${video ? ' has-vid' : ''}${image ? ' has-img' : ''}" data-sec="${sec}">
-${video ? heroVideo() : `<canvas data-orn="${tone}" data-tile="146" data-nodes="5" data-alpha="0.26" aria-hidden="true"></canvas>`}
+  /* Footage wins over a scene. Both are the hero's background and only one of
+     them can be it — a page that switches its video on should get the video,
+     not a scene drawn behind it and a layout sized for neither. */
+  const scene = video ? null : stage;
+  const bg = video
+    ? heroVideo()
+    : scene
+      ? stage3d(scene, tone)
+      : `<canvas data-orn="${tone}" data-tile="146" data-nodes="5" data-alpha="0.26" aria-hidden="true"></canvas>`;
+
+  return `<section class="ph${video ? ' has-vid' : ''}${image ? ' has-img' : ''}${scene ? ' has-3d' : ''}" data-sec="${sec}">
+${bg}
 <div class="wrap">
 <div class="ph-in">
 <nav class="crumb rv" aria-label="Breadcrumb"><a href="index.html">Home</a><i>/</i>${trail}</nav>
@@ -75,7 +107,7 @@ ${metaHtml}
 ${detailHtml}
 </div>
 ${image ? heroImage(image) : ''}
-</div>
+</div>${scene ? '\n' + stageHud(scene, tone) : ''}
 </section>`;
 }
 

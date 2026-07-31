@@ -149,6 +149,42 @@ t("no backtick inside the kernel template literals", () => {
   }
 });
 
+/* scene3d.js carries the same hazard in a harder-to-spot form: it is not one
+   literal but nine — the shared core and one per scene — so the anchoring
+   trick above does not apply. Compiling what it emits is a stronger check
+   anyway, and it catches every other syntax slip in the client code as well.
+   The three page modules that already own a glxPage rely on that code
+   parsing; a broken bundle would take their filter bars down with it. */
+t("scene3d: every emitted bundle is syntactically valid JavaScript", () => {
+  const scene3d = require("./scene3d");
+  const names = Object.keys(scene3d.SCENES);
+  assert.ok(names.length >= 8, `only ${names.length} scene(s) registered`);
+  for (const n of names) {
+    /* new Function compiles without running: a syntax error throws here, and
+       nothing touches the DOM or three.js, neither of which exists in node. */
+    assert.doesNotThrow(() => new Function(scene3d.bundle(n, [])), `scene "${n}"`);
+  }
+});
+
+/* Every scene the pages ask for has to exist. bundle() throws on an unknown
+   name, so this is really a check that the eight heroes and the eight scenes
+   have not drifted apart under a rename. */
+t("scene3d: every stage a page declares resolves to a scene", () => {
+  const fsx = require("fs");
+  const px = require("path");
+  const scene3d = require("./scene3d");
+  const dir = px.join(__dirname, "pages");
+  let found = 0;
+  for (const f of fsx.readdirSync(dir).filter((x) => x.endsWith(".js"))) {
+    const src = fsx.readFileSync(px.join(dir, f), "utf8");
+    for (const m of src.matchAll(/stage:\s*\{\s*name:\s*"([a-z]+)"/g)) {
+      assert.ok(scene3d.SCENES[m[1]], `pages/${f} asks for missing scene "${m[1]}"`);
+      found++;
+    }
+  }
+  assert.strictEqual(found, 8, `expected 8 staged heroes, found ${found}`);
+});
+
 // ------------------------------------------------------------- generated SEO
 /* These read the built output, so they only mean something after a build.
    Skipped rather than failed when it has not run, so `npm test` is useful on

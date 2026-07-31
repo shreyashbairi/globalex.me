@@ -786,6 +786,82 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
 .ph-meta b{display:block;color:var(--frost);font-weight:500;font-size:1rem;letter-spacing:.04em;
   margin-bottom:2px}
 
+/* ---- hero with a WebGL stage ----
+   The homepage hands its globe the right-hand half of the viewport, and it
+   needed that: the same scene drawn small enough to sit behind a paragraph
+   reads as a decorative bullet rather than as the subject. So an interior
+   hero that carries a scene grows to a real height and splits — copy left,
+   stage right. Under 1080 the two stack and the stage becomes a plate above
+   the copy, which is the arrangement the homepage falls back to as well.
+
+   Pointer events are the fiddly part. The canvas sits behind the copy, and
+   .wrap is a full-width box whether or not there is text under the pointer,
+   so it would swallow every drag before the scene saw it. The wrap is made
+   transparent to the pointer and the copy block takes it back: text stays
+   selectable, links stay clickable, and the empty space around them orbits
+   the scene. */
+.ph.has-3d{display:flex;align-items:center;min-height:clamp(30rem,76svh,48rem);
+  padding-top:clamp(8.5rem,17vh,12.5rem);padding-bottom:clamp(3.5rem,8vh,6rem)}
+.ph.has-3d>.wrap{pointer-events:none}
+.ph.has-3d .ph-in{pointer-events:auto;max-width:min(56ch,50%)}
+.ph-3d{position:absolute;top:50%;right:calc(var(--pad-x) * .25);
+  width:min(88vh,54vw,900px);aspect-ratio:1;transform:translateY(-50%);z-index:0;
+  transition:opacity .3s linear}
+/* opacity 1, deliberately, against the .ph canvas rule above: a WebGL scene
+   builds its own recession out of per-material alpha, and dimming the whole
+   surface a second time only flattens the near geometry into the far. */
+.ph-3d canvas{position:absolute;inset:0;display:block;width:100%;height:100%;opacity:1}
+/* A stage that fell back to the 2D gül field is a background again rather
+   than a subject, so it goes full-bleed — otherwise the hero ends up with a
+   small square of pattern hanging beside the copy. */
+.ph-3d[data-flat]{position:absolute;inset:0;width:auto;aspect-ratio:auto;transform:none}
+.ph-3d[data-flat] canvas{opacity:.85}
+/* keeps the copy legible where the scene rides under it */
+.ph.has-3d::after{content:'';position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:linear-gradient(90deg,rgba(var(--void-rgb),.93),rgba(var(--void-rgb),.52) 30%,
+    rgba(var(--void-rgb),0) 58%)}
+
+/* the stage readout — what the scene is currently showing */
+.ph-3d-hud{position:absolute;right:var(--pad-x);bottom:clamp(1.4rem,3.5vh,2.4rem);z-index:2;
+  display:grid;gap:.32rem;justify-items:end;text-align:right;pointer-events:none;
+  font-family:var(--f-mono);font-size:.66rem;letter-spacing:.19em;text-transform:uppercase}
+/* display:grid above beats the UA rule for [hidden], and the script hides the
+   readout when the scene could not start */
+.ph-3d-hud[hidden]{display:none}
+.ph-3d-k{color:var(--cyan)}
+.ph-3d-hud.mat .ph-3d-k{color:var(--sand-t)}
+.ph-3d-v{display:flex;align-items:center;gap:.5em;color:var(--frost);font-size:.78rem;
+  letter-spacing:.13em}
+.ph-3d-v::before{content:'';width:6px;height:6px;flex:none;background:var(--cyan);
+  clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%)}
+.ph-3d-hud.mat .ph-3d-v::before{background:var(--sand)}
+@keyframes ph3dTick{from{opacity:.2}to{opacity:1}}
+.ph-3d-v[data-tick]{animation:ph3dTick .55s var(--ease)}
+.ph-3d-hint{color:var(--haze-d);font-size:.61rem;letter-spacing:.21em;
+  transition:opacity .6s var(--ease)}
+.ph-3d-hint[data-off]{opacity:0}
+@media (hover:none){.ph-3d-hint{display:none}}
+
+@media (max-width:1080px){
+  .ph.has-3d{min-height:auto;flex-direction:column;align-items:stretch;
+    padding-top:clamp(7rem,15vh,9.5rem)}
+  .ph.has-3d .ph-in{max-width:74ch}
+  .ph.has-3d::after{display:none}
+  /* Wider than tall once it is a plate above the copy rather than a panel
+     beside it. Every scene is composed around a horizontal subject — a
+     skyline, a corridor, a quay — so 5:4 loses nothing and gives back about
+     a fifth of the screen the headline needs. */
+  .ph-3d{position:relative;top:auto;right:auto;transform:none;aspect-ratio:5/4;
+    width:min(100%,540px);margin:0 auto clamp(.6rem,2.5vw,1.2rem)}
+  /* The readout belongs under the thing it is reading out. In source order it
+     follows the copy, because on desktop it is positioned and order is
+     irrelevant; here the two are flex items and it has to be pulled back up. */
+  .ph-3d{order:1}
+  .ph-3d-hud{order:2;position:static;justify-items:start;text-align:left;width:100%;
+    max-width:var(--wrap);margin:0 auto clamp(1.6rem,5vw,2.4rem);padding-inline:var(--pad-x)}
+  .ph.has-3d>.wrap{order:3}
+}
+
 /* ============ surfaces / cards ============ */
 .card{position:relative;padding:clamp(1.5rem,2.6vw,2.2rem);background:linear-gradient(160deg,
   rgba(var(--steel-rgb),.44),rgba(var(--deep-rgb),.72));border:1px solid var(--line);
@@ -1587,8 +1663,10 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
 
 <main id="main">
 
-<section class="ph" data-sec="Products">
-<canvas data-orn="cyan" data-tile="146" data-nodes="5" data-alpha="0.26" aria-hidden="true"></canvas>
+<section class="ph has-3d" data-sec="Products">
+<div class="ph-3d" data-3d="book" data-tone="cyan" aria-hidden="true">
+<canvas></canvas>
+</div>
 <div class="wrap">
 <div class="ph-in">
 <nav class="crumb rv" aria-label="Breadcrumb"><a href="index.html">Home</a><i>/</i><b>Products</b></nav>
@@ -1599,6 +1677,11 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
 
 </div>
 
+</div>
+<div class="ph-3d-hud" aria-hidden="true">
+<span class="ph-3d-k" data-3d-k>The book</span>
+<span class="ph-3d-v" data-3d-v>&mdash;</span>
+<span class="ph-3d-hint" data-3d-hint>Drag to orbit</span>
 </div>
 </section>
 
@@ -2416,6 +2499,7 @@ or joined across days.</small></label>
 </div>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
 (function(){
 'use strict';
@@ -3574,6 +3658,496 @@ window.glxPage = function(){
   apply();
   if (new URLSearchParams(location.search).get('q')) box.focus();
 };
+
+/* ---------- book stage — see _src/scene3d.js ---------- */
+var GLX3D_DATA = [{"title":"Fertilizers","tone":"sand","items":["Urea B (N46)","Potash","Ammonia","Ammonium Nitrate","NPK Compound"]},{"title":"Polymers","tone":"cyan","items":["Polyethylene","Polypropylene","Performance additives"]},{"title":"Industrial Chemicals","tone":"cyan","items":["Sulphur","Urea-A (technical)","Caustic Soda","Sodium Hypochlorite","Hydrochloric Acid","Liquid Chlorine","Calcium Chloride","Sodium Sulphate","LABSA","SLES","Sulphuric Acid","Formic Acid","Acetex Plus","Aluminium Sulphate","Iodine","Carbon Black"]}];
+
+/* Shared bootstrap: renderer, orbit, readout, frame loop. Each scene is a
+   function that receives this and returns a config plus a frame callback. */
+function glx3d(build){
+  var host = document.querySelector('[data-3d]');
+  if (!host) return;
+  var cv = host.querySelector('canvas');
+  if (!cv) return;
+
+  var T = window.THREE;
+  var RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var LIGHT = GLXC.polarity === 'light';
+  var TONE = host.getAttribute('data-tone') || 'cyan';
+
+  /* The hero carried a gül field before it carried a scene, so that is what a
+     machine without WebGL gets back — on the same canvas, full-bleed, which
+     is the design this replaced rather than a hole where it used to be. */
+  function flat(){
+    host.setAttribute('data-flat','');
+    /* The readout names what the scene is showing and invites a drag. With no
+       scene there is nothing to name and nothing to drag, so it goes with the
+       scene rather than sitting there describing an absence. */
+    var hud = document.querySelector('.ph-3d-hud');
+    if (hud) hud.hidden = true;
+    if (!window.glxOrnament) return;
+    var s = parseFloat(getComputedStyle(document.documentElement)
+      .getPropertyValue('--orn-scale')) || 1;
+    glxOrnament(cv, {tone:TONE, tile:146, nodes:5, alpha:0.3 * s});
+  }
+  if (!T){ flat(); return; }
+  var renderer;
+  try {
+    renderer = new T.WebGLRenderer({canvas:cv, antialias:true, alpha:true,
+      powerPreference:'high-performance'});
+  } catch(e){ flat(); return; }
+  if (!renderer.getContext()){ flat(); return; }
+
+  var DPR = Math.min(devicePixelRatio || 1, 2);
+  renderer.setPixelRatio(DPR);
+  var BLEND = LIGHT ? T.NormalBlending : T.AdditiveBlending;
+
+  var FOV = 30;
+  var scene = new T.Scene();
+  var cam = new T.PerspectiveCamera(FOV, 1, 0.1, 200);
+  var uPx = {value: 900};
+
+  var world = new T.Group();   // pitch, from the drag
+  var root  = new T.Group();   // yaw, from the drag and the idle spin
+  world.add(root); scene.add(world);
+
+  /* ---- colour ----
+     ink() is rule 2 of the file header in one line: on a light palette an
+     accent takes the darker end of its ramp.
+
+     It applies to sprites as well as to lines, which is not where this
+     started. The globe gets away with mid-tone markers because it draws them
+     onto a sphere; these scenes draw onto the page itself, and a six-pixel
+     mid-gold dot on off-white is not a dot, it is nothing. Every colour a
+     scene asks for goes through here. */
+  var INK = LIGHT ? {cyan:'cyanD', sand:'sandD', frost:'textLead'} : {};
+  function ink(n){ return INK[n] || n; }
+  function col(n){ return new T.Color(GLXC.int[ink(n)]); }
+  var BG = new T.Color(GLXC.int.pageBackground);
+
+  function lineMat(n, o){
+    return new T.LineBasicMaterial({color:GLXC.int[ink(n)], transparent:true,
+      opacity:o, blending:BLEND, depthWrite:false});
+  }
+  function geo(a){
+    var g = new T.BufferGeometry();
+    g.setAttribute('position', new T.Float32BufferAttribute(a, 3));
+    return g;
+  }
+  function segs(a, n, o){ return new T.LineSegments(geo(a), lineMat(n, o)); }
+  function poly(a, n, o){ return new T.Line(geo(a), lineMat(n, o)); }
+  function ring(a, n, o){ return new T.LineLoop(geo(a), lineMat(n, o)); }
+
+  /* Vertex-coloured segments, for anything that fades over its own length —
+     a ground grid dying into the distance, a bond lighting as a wave crosses
+     it. Fading is done by lerping toward the PAGE colour rather than toward
+     black: on a dark palette those are the same thing, on a light one they
+     are opposites and the grid would have got harder at the horizon. */
+  function vsegs(n, count, o){
+    var g = new T.BufferGeometry();
+    var p = new Float32Array(count*3), c = new Float32Array(count*3);
+    g.setAttribute('position', new T.BufferAttribute(p, 3));
+    g.setAttribute('color', new T.BufferAttribute(c, 3));
+    var obj = new T.LineSegments(g, new T.LineBasicMaterial({vertexColors:true,
+      transparent:true, opacity:o, blending:BLEND, depthWrite:false}));
+    /* Every buffer here is rewritten per frame, and three.js computes a
+       bounding sphere once — from whatever was in the buffer the first time
+       it was asked, which is all zeroes. Culling against that sphere is a
+       coin flip, so it is switched off rather than kept correct. */
+    obj.frustumCulled = false;
+    return {obj:obj, geo:g, pos:p, col:c, base:col(n),
+      put:function(i, ax, ay, az, bx, by, bz){
+        var k = i*6; p[k]=ax; p[k+1]=ay; p[k+2]=az; p[k+3]=bx; p[k+4]=by; p[k+5]=bz;
+      },
+      /* f = 0 full strength, 1 gone */
+      fade:function(i, f, c2){
+        var s = (c2 || this.base).clone().lerp(BG, Math.max(0, Math.min(1, f)));
+        var k = i*6;
+        c[k]=s.r; c[k+1]=s.g; c[k+2]=s.b; c[k+3]=s.r; c[k+4]=s.g; c[k+5]=s.b;
+      },
+      flush:function(){ g.attributes.position.needsUpdate = true;
+        g.attributes.color.needsUpdate = true; }};
+  }
+
+  /* ---- point sprites ----
+     One shader, three shapes. The diamond is the site's marker everywhere
+     else, so it is the default; round is for anything physically granular;
+     the annulus is a shockwave. Size is held in world units and divided by
+     depth, so a sprite keeps a constant SCREEN size however far back it is —
+     the same trick the globe's dot field uses. */
+  var SPRITE_V = [
+    'attribute vec3 aCol; attribute float aS; attribute float aA;',
+    'varying vec3 vC; varying float vA;',
+    'uniform float uPx; uniform float uSize;',
+    'void main(){ vC = aCol; vA = aA;',
+    ' vec4 mv = modelViewMatrix * vec4(position,1.0);',
+    ' gl_PointSize = uSize * max(aS,0.0) * uPx / max(0.001, -mv.z);',
+    ' gl_Position = projectionMatrix * mv; }'
+  ].join('\n');
+
+  function spriteF(shape){
+    var d = shape === 'round' || shape === 'ring'
+      ? ' float d = length(p);'
+      : ' float d = abs(p.x) + abs(p.y);';
+    var a = shape === 'ring'
+      ? ' float e = smoothstep(0.50, 0.40, d) * smoothstep(0.26, 0.36, d);'
+      : ' float e = smoothstep(0.50, 0.10, d);';
+    return ['varying vec3 vC; varying float vA; uniform float uOp;',
+      'void main(){', ' vec2 p = gl_PointCoord - 0.5;', d,
+      ' if (d > 0.5) discard;', a,
+      ' gl_FragColor = vec4(vC, e * uOp * clamp(vA, 0.0, 1.0));',
+      '}'].join('\n');
+  }
+
+  function cloud(n, size, op, shape){
+    var g = new T.BufferGeometry();
+    var p = new Float32Array(n*3), c = new Float32Array(n*3);
+    var s = new Float32Array(n), a = new Float32Array(n);
+    g.setAttribute('position', new T.BufferAttribute(p, 3));
+    g.setAttribute('aCol', new T.BufferAttribute(c, 3));
+    g.setAttribute('aS', new T.BufferAttribute(s, 1));
+    g.setAttribute('aA', new T.BufferAttribute(a, 1));
+    var m = new T.ShaderMaterial({transparent:true, depthWrite:false, blending:BLEND,
+      uniforms:{uPx:uPx, uSize:{value:size}, uOp:{value:op}},
+      vertexShader:SPRITE_V, fragmentShader:spriteF(shape)});
+    var pts = new T.Points(g, m);
+    pts.frustumCulled = false;
+    return {obj:pts, geo:g, mat:m, pos:p, size:s, alpha:a, n:n,
+      at:function(i, x, y, z){ p[i*3]=x; p[i*3+1]=y; p[i*3+2]=z; },
+      tint:function(i, cc){ c[i*3]=cc.r; c[i*3+1]=cc.g; c[i*3+2]=cc.b; },
+      flush:function(){
+        g.attributes.position.needsUpdate = true; g.attributes.aCol.needsUpdate = true;
+        g.attributes.aS.needsUpdate = true; g.attributes.aA.needsUpdate = true; }};
+  }
+
+  /* ---- misc ----
+     Seeded, so the city a visitor saw on Friday is the city they see on
+     Monday. Math.random reshuffles the layout on every reload, which reads as
+     a rendering bug rather than as variety. */
+  var seed = 20190411;
+  function rnd(){ seed = (seed * 1664525 + 1013904223) % 4294967296; return seed / 4294967296; }
+  function rng(a, b){ return a + rnd() * (b - a); }
+  function clamp(v, a, b){ return v < a ? a : v > b ? b : v; }
+  function V(x, y, z){ return new T.Vector3(x, y, z); }
+  function circle(r, n, y, ax){
+    var a = [];
+    for (var i=0;i<n;i++){
+      var th = i/n * Math.PI * 2;
+      if (ax === 'y') a.push(Math.cos(th)*r, y, Math.sin(th)*r);
+      else a.push(Math.cos(th)*r, Math.sin(th)*r, y);
+    }
+    return a;
+  }
+  function boxEdges(out, cx, cy, cz, hx, hy, hz){
+    var v = [[-1,-1,-1],[1,-1,-1],[1,-1,1],[-1,-1,1],
+             [-1,1,-1],[1,1,-1],[1,1,1],[-1,1,1]];
+    var e = [0,1,1,2,2,3,3,0, 4,5,5,6,6,7,7,4, 0,4,1,5,2,6,3,7];
+    for (var i=0;i<e.length;i++){
+      var p = v[e[i]];
+      out.push(cx + p[0]*hx, cy + p[1]*hy, cz + p[2]*hz);
+    }
+  }
+
+  /* ---- readout ---- */
+  var kEl = document.querySelector('[data-3d-k]');
+  var vEl = document.querySelector('[data-3d-v]');
+  function say(v, k){
+    if (kEl && k) kEl.textContent = k;
+    if (!vEl || vEl.textContent === v) return;
+    vEl.textContent = v;
+    vEl.removeAttribute('data-tick');
+    void vEl.offsetWidth;          // restart the animation rather than skip it
+    vEl.setAttribute('data-tick','');
+  }
+
+  var P = {x:0, y:0, over:false};
+  var A = {T:T, scene:scene, root:root, world:world, cam:cam, uPx:uPx,
+    LIGHT:LIGHT, RM:RM, BLEND:BLEND, p:P,
+    ink:ink, col:col, lineMat:lineMat, geo:geo, segs:segs, poly:poly, ring:ring,
+    vsegs:vsegs, cloud:cloud, rnd:rnd, rng:rng, clamp:clamp, V:V,
+    circle:circle, boxEdges:boxEdges, say:say,
+    data: (typeof GLX3D_DATA === 'undefined' ? null : GLX3D_DATA)};
+
+  var S = build(A) || {};
+
+  /* Camera distance is declared as S.fit — the radius of the sphere the
+     scene wants inside the frame — rather than as a distance, because a
+     distance is a number nobody can check. A sphere of radius R subtends the
+     full field of view at R/sin(FOV/2), so that is the distance; 1/sin(15deg)
+     is 3.864. Ground-plane scenes set S.dist directly instead: half their
+     extent is depth, perspective already shortens it, and fitting them as a
+     sphere puts the camera in the next postcode. */
+  var DIST = S.fit ? S.fit / Math.sin(FOV * Math.PI / 360) : (S.dist || 4.8);
+  var LIM = S.limit == null ? 0.85 : S.limit;
+  var SPIN = S.spin == null ? 0.13 : S.spin;
+
+  /* Yaw is kept as a base plus an offset rather than accumulated straight
+     onto the object, because two things drive it and one of them has to be
+     able to return.
+
+     A scene that is roughly as wide as it is deep can turn all the way round
+     and stay in frame. A corridor cannot: seen end-on it is a metre across
+     and seen side-on it is seven, so a scene that spins freely spends half
+     its life hanging off the edge of the stage. Those scenes declare S.sway
+     instead — the idle motion becomes a slow oscillation about the framing
+     they were composed for, and a drag still moves them anywhere the visitor
+     wants, because the drag offset is added on top rather than replacing it. */
+  var YAW0 = S.yaw || 0, yawOff = 0;
+  var SWAY = S.sway || null;
+  root.rotation.y = YAW0;
+  world.rotation.x = S.tilt || 0;
+
+  var LOOK = V(0, S.look || 0, 0);
+  var OFF = V(0, S.lift || 0, DIST).sub(LOOK);
+  function place(k){
+    cam.position.copy(LOOK).addScaledVector(OFF, 1 + k * 0.5);
+    cam.lookAt(LOOK);
+    cam.rotation.z += k * 0.12;    // a slight roll as the hero leaves
+  }
+
+  /* ---- orbit with inertia ---- */
+  var drag = false, lx = 0, ly = 0, vY = 0, vX = 0, idle = 0;
+  var hint = document.querySelector('[data-3d-hint]');
+  cv.style.touchAction = 'pan-y';
+  /* Not cursor:grab. The site hides the native pointer on desktop and draws
+     its own, so a CSS cursor here would put a second one on screen over the
+     one interactive surface on the page. data-cur is the existing hook: the
+     custom cursor opens and takes this as its label. */
+  cv.setAttribute('data-cur', 'Drag to orbit');
+  cv.addEventListener('pointerdown', function(e){
+    drag = true; lx = e.clientX; ly = e.clientY; idle = 0;
+    if (cv.setPointerCapture) cv.setPointerCapture(e.pointerId);
+    if (hint) hint.setAttribute('data-off','');
+  });
+  cv.addEventListener('pointermove', function(e){
+    var r = cv.getBoundingClientRect();
+    if (r.width && r.height){
+      P.tx = ((e.clientX - r.left) / r.width) * 2 - 1;
+      P.ty = -(((e.clientY - r.top) / r.height) * 2 - 1);
+      P.over = true;
+    }
+    if (!drag) return;
+    vY = (e.clientX - lx) * 0.0055;
+    vX = (e.clientY - ly) * 0.0035;
+    lx = e.clientX; ly = e.clientY;
+    yawOff += vY;
+    world.rotation.x = clamp(world.rotation.x + vX, -LIM, LIM);
+    idle = 0;
+  });
+  ['pointerup','pointercancel','pointerleave'].forEach(function(ev){
+    cv.addEventListener(ev, function(){
+      drag = false;
+      if (ev === 'pointerleave') P.over = false;
+    });
+  });
+
+  /* ---- resize ----
+     A ResizeObserver rather than a window listener alone: the stage is sized
+     from the hero rather than from the viewport, and it can arrive at zero —
+     the preloader locks the body while this runs — in which case there is no
+     resize event to wait for and a one-shot measurement would leave the
+     renderer at its 300x150 default forever. */
+  var sized = false;
+  function resize(){
+    var r = cv.getBoundingClientRect();
+    if (!r.width || !r.height) return;
+    sized = true;
+    renderer.setSize(r.width, r.height, false);
+    cam.aspect = r.width / Math.max(1, r.height);
+    cam.updateProjectionMatrix();
+    // px per world unit at unit depth: (drawingBufferHeight/2) / tan(fov/2)
+    uPx.value = (r.height * DPR * 0.5) / Math.tan(FOV * Math.PI / 360);
+  }
+  addEventListener('resize', resize, {passive:true});
+  if ('ResizeObserver' in window) new ResizeObserver(resize).observe(cv);
+  resize();
+
+  /* ---- scroll: the stage recedes as the hero leaves ---- */
+  var sk = 0;
+  function onScroll(){
+    var r = host.getBoundingClientRect();
+    sk = clamp(-r.top / Math.max(1, r.height), 0, 1);
+    host.style.opacity = String(1 - sk * 0.82);
+  }
+  addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+
+  /* ---- frame ---- */
+  var visible = true;
+  if ('IntersectionObserver' in window)
+    new IntersectionObserver(function(r){ visible = r[0].isIntersecting; }).observe(cv);
+
+  var t0 = performance.now(), last = t0;
+  function frame(now){
+    requestAnimationFrame(frame);
+    var dt = Math.min(0.05, (now - last) / 1000); last = now;
+    if (!visible) return;
+    if (!sized){ resize(); if (!sized) return; }
+    var t = (now - t0) / 1000;
+
+    if (P.tx != null){ P.x += (P.tx - P.x) * 0.06; P.y += (P.ty - P.y) * 0.06; }
+
+    if (!drag){
+      vY *= 0.94; vX *= 0.90;
+      yawOff += vY;
+      world.rotation.x = clamp(world.rotation.x + vX, -LIM, LIM);
+      idle += dt;
+      var wake = Math.min(1, (idle - 1.4) / 1.6);
+      if (idle > 1.4 && !RM && !SWAY) yawOff += SPIN * dt * wake;
+      /* A swaying scene walks its drag offset back to zero once the visitor
+         lets go, so it always returns to the framing it was composed for. */
+      if (SWAY && idle > 1.4) yawOff *= 1 - 0.6 * dt * wake;
+    }
+    root.rotation.y = YAW0 + yawOff
+      + (SWAY && !RM ? Math.sin(t * SWAY.rate) * SWAY.amp : 0);
+
+    place(sk);
+    if (S.frame) S.frame(t, dt);
+    renderer.render(scene, cam);
+  }
+  requestAnimationFrame(frame);
+  world.updateMatrixWorld(true);
+}
+
+
+function sceneBook(A){
+  var T = A.T, root = A.root;
+  var CLS = A.data || [];
+
+  /* the gül core: two counter-turning octahedra and a bright centre */
+  function octa(r){
+    var v = [[r,0,0],[-r,0,0],[0,r,0],[0,-r,0],[0,0,r],[0,0,-r]];
+    var e = [0,2,2,1,1,3,3,0, 0,4,4,1,1,5,5,0, 2,4,4,3,3,5,5,2];
+    var a = [];
+    for (var i=0;i<e.length;i++) a.push(v[e[i]][0], v[e[i]][1], v[e[i]][2]);
+    return a;
+  }
+  var coreA = A.segs(octa(0.26), 'frost', A.LIGHT ? 0.7 : 0.46);
+  var coreB = A.segs(octa(0.16), 'cyan', A.LIGHT ? 0.95 : 0.75);
+  root.add(coreA); root.add(coreB);
+  var centre = A.cloud(1, 0.055, 1, 'diamond');
+  centre.tint(0, A.col('signal')); centre.at(0,0,0,0);
+  root.add(centre.obj);
+
+  /* one orbit per class. Radius, tilt and marker size separate them as much
+     as colour does — on the light palette two of the three classes share an
+     accent, and a ring that is only distinguishable by hue would collapse. */
+  var ORB = [{r:0.80, rx:0.36, rz:0.18, s:1.5}, {r:1.14, rx:-0.44, rz:-0.3, s:1.35},
+             {r:1.48, rx:0.14, rz:0.52, s:1.05}];
+  var ITEMS = [], rings = [];
+  CLS.forEach(function(cl, ci){
+    var o = ORB[ci] || ORB[2];
+    var grp = new T.Group();
+    grp.rotation.x = o.rx; grp.rotation.z = o.rz;
+    var path = A.ring(A.circle(o.r, 160, 0, 'y'), cl.tone, A.LIGHT ? 0.68 : 0.34);
+    grp.add(path);
+    rings.push({grp:grp, path:path, o:o, tone:cl.tone});
+    root.add(grp);
+    cl.items.forEach(function(nm, i){
+      ITEMS.push({grp:grp, o:o, th:i / cl.items.length * Math.PI*2,
+        name:nm, cls:cl.title, tone:cl.tone, ci:ci});
+    });
+  });
+
+  /* markers live in one cloud so the whole book is one draw call, and the
+     raycaster can still name an individual grade by index */
+  var dots = A.cloud(ITEMS.length, 0.027, 1, 'diamond');
+  var lit = A.col('signal');
+  ITEMS.forEach(function(it, i){
+    it.c = A.col(it.tone);    // hoisted: this is read every frame
+    dots.tint(i, it.c);
+  });
+  root.add(dots.obj);
+  var beads = A.cloud(rings.length, 0.018, 1, 'round');
+  rings.forEach(function(r, i){ beads.tint(i, lit); });
+  root.add(beads.obj);
+
+  /* the spoke to whatever is selected — the only line that moves */
+  var spokeGeo = A.geo([0,0,0, 0,0,0]);
+  var spoke = new T.Line(spokeGeo, A.lineMat('signal', 0.6));
+  spoke.frustumCulled = false;
+  root.add(spoke);
+  var halo = A.cloud(1, 0.07, 1, 'ring');
+  halo.tint(0, A.col('signal'));
+  root.add(halo.obj);
+
+  var sel = 0, tick = 0, spin = [], at3 = new T.Vector3();
+  ITEMS.forEach(function(){ spin.push(0); });
+  A.say(ITEMS.length ? ITEMS[0].name : '', ITEMS.length ? ITEMS[0].cls : '');
+
+  var ray = new T.Raycaster(), ptr = new T.Vector2();
+  ray.params.Points = {threshold: 0.07};
+
+  return {fit:1.66, lift:0.5, look:0, tilt:0.18, spin:0.12, limit:0.8,
+  frame:function(t, dt){
+    var w = A.RM ? 0 : t;
+    rings.forEach(function(r, i){
+      r.grp.rotation.y = w * (0.11 - i*0.028) + i*0.7;
+      /* The bead rides its own ring's group, but the cloud holding all three
+         beads lives on the root — so the group's rotation is applied here by
+         hand rather than by the scene graph. */
+      var u = ((w * 0.09 + i*0.33) % 1) * Math.PI*2;
+      at3.set(Math.cos(u)*r.o.r, 0, Math.sin(u)*r.o.r).applyEuler(r.grp.rotation);
+      beads.at(i, at3.x, at3.y, at3.z);
+      beads.size[i] = 1; beads.alpha[i] = 0.85;
+    });
+    beads.flush();
+
+    coreA.rotation.y = w*0.24; coreA.rotation.x = w*0.16;
+    coreB.rotation.y = -w*0.36; coreB.rotation.z = w*0.2;
+    var cp = A.RM ? 0.7 : Math.sin(t*1.7)*0.5+0.5;
+    centre.size[0] = 0.8 + cp*0.7; centre.alpha[0] = 0.6 + cp*0.4;
+    centre.flush();
+
+    for (var i=0;i<ITEMS.length;i++){
+      var it = ITEMS[i];
+      at3.set(Math.cos(it.th)*it.o.r, 0, Math.sin(it.th)*it.o.r);
+      at3.applyEuler(it.grp.rotation);
+      dots.at(i, at3.x, at3.y, at3.z);
+      var on = i === sel;
+      spin[i] += ((on ? 1 : 0) - spin[i]) * 0.14;
+      var b = A.RM ? 0.5 : (Math.sin(t*1.3 + i)*0.5+0.5);
+      dots.size[i] = it.o.s * (0.7 + b*0.3 + spin[i]*1.5);
+      dots.alpha[i] = 0.6 + b*0.24 + spin[i]*0.16;
+      dots.tint(i, on ? lit : it.c);
+      if (on){
+        spokeGeo.attributes.position.setXYZ(1, at3.x, at3.y, at3.z);
+        spokeGeo.attributes.position.needsUpdate = true;
+        halo.at(0, at3.x, at3.y, at3.z);
+        halo.size[0] = 2.1 + b*0.5; halo.alpha[0] = 0.55 + b*0.3;
+        halo.flush();
+      }
+    }
+    dots.flush();
+
+    /* Pointer picks; otherwise the read head walks the book on its own. */
+    var picked = -1;
+    if (A.p.over && A.p.tx != null){
+      ptr.set(A.p.tx, A.p.ty);
+      ray.setFromCamera(ptr, A.cam);
+      var hit = ray.intersectObject(dots.obj, false);
+      if (hit.length) picked = hit[0].index;
+    }
+    if (picked >= 0 && picked !== sel){
+      sel = picked; tick = 0;
+      A.say(ITEMS[sel].name, ITEMS[sel].cls);
+    } else if (picked < 0 && ITEMS.length){
+      tick += dt;
+      if (tick > 2.5){
+        tick = 0; sel = (sel+1) % ITEMS.length;
+        A.say(ITEMS[sel].name, ITEMS[sel].cls);
+      }
+    }
+  }};
+}
+
+(function(){
+  var prev = window.glxPage;
+  window.glxPage = function(){
+    if (prev) try { prev(); } catch(e){ console.warn('page init', e); }
+    glx3d(sceneBook);
+  };
+})();
 </script>
 <script>
 /* ---------- consent ----------

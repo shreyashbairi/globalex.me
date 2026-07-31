@@ -4,6 +4,21 @@ const { hero, cta } = require("../parts");
 // fertilizers and industrials pages.
 const { POLYMERS } = require("../catalogue");
 const { productRow } = require("../product-row");
+const scene3d = require("../scene3d");
+
+/* Seven chains in the hero, one lit at a time. The list is the resin book as
+   a converter names it — the four polyethylenes, the two polypropylenes and
+   the additive package — rather than the three catalogue families, because a
+   chain per family would have put LDPE and UHMWPE on the same strand. */
+const STAGE = [
+  ["Polyethylene", "LDPE · film grade"],
+  ["Polyethylene", "HDPE · blow moulding"],
+  ["Polyethylene", "LLDPE · stretch film"],
+  ["Polyethylene", "UHMWPE · wear parts"],
+  ["Polypropylene", "Homopolymer"],
+  ["Polypropylene", "Impact copolymer"],
+  ["Additives", "Performance package"],
+];
 
 /* This page used to render its own card, .fam-c, with a procedural canvas
    drawing each family's chain architecture in a 320px column. The animation
@@ -21,6 +36,7 @@ module.exports = {
   crumb: CRUMB,
   title: "Polymers — Globalex Trading FZCO",
   desc: "Polyethylene (LDPE, HDPE, LLDPE, UHMWPE), polypropylene homopolymer and copolymer, and performance additives — sourced from Turkmenistan, Uzbekistan, UAE, Saudi Arabia and China.",
+  three: true,
 
   css: `
 /* application sectors */
@@ -54,6 +70,7 @@ ${hero({
     ["MFI", "Spec matched"],
   ],
   sec: "Polymers",
+  stage: { name: "chain", kicker: "Resin" },
 })}
 
 <section class="sec is-tight" data-sec="Families">
@@ -115,4 +132,5 @@ ${cta({
 })}
 `,
 
+  js: scene3d.bundle("chain", STAGE),
 };

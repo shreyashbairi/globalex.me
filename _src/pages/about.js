@@ -1,8 +1,20 @@
 const { hero, cta } = require("../parts");
 const { publishable, HEADCOUNT } = require("../team");
 const { on } = require("../flags");
+const scene3d = require("../scene3d");
 
 const CRUMB = ["About"];
+
+/* What the hero's readout says while the survey plane climbs the cluster.
+   Every line is a fact stated somewhere else on the page — the scene is a
+   second way of reading the same address, not a place for new claims. */
+const STAGE = [
+  ["Dubai HQ", "2605 X3 Tower · Cluster X"],
+  ["Coordinates", "25.0693°N / 55.1413°E"],
+  ["District", "Jumeirah Lakes Towers"],
+  ["Licence", "FZCO freezone · United Arab Emirates"],
+  ["Established", "2019 · Dubai, UAE"],
+];
 
 /* Timeline. 2019 and today's figures are known; the three between them need
    verifiable years, which is what SECTIONS.timeline is waiting on. The years
@@ -41,6 +53,7 @@ module.exports = {
   crumb: CRUMB,
   title: "About — Globalex Trading FZCO",
   desc: "Established in 2019 on honesty, integrity and trust. A FZCO freezone trading house in Jumeirah Lakes Towers, Dubai, sourcing across the Caspian and Central Asia.",
+  three: true,
 
   css: `
 /* HQ plate */
@@ -169,6 +182,7 @@ ${hero({
     ["7", "Origin markets"],
   ],
   sec: "About",
+  stage: { name: "skyline", kicker: "Dubai HQ" },
 })}
 
 <section class="sec">
@@ -372,4 +386,6 @@ ${cta({
   secondary: ["Careers at Globalex", "careers.html"],
 })}
 `,
+
+  js: scene3d.bundle("skyline", STAGE),
 };

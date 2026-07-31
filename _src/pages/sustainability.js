@@ -1,5 +1,6 @@
 const { hero, cta } = require("../parts");
 const { on } = require("../flags");
+const scene3d = require("../scene3d");
 
 const COMMITS = [
   [
@@ -36,6 +37,10 @@ const COMMITS = [
 
 const CRUMB = ["Sustainability"];
 
+/* Six lit tips on the hero's growth, one per commitment, named from the same
+   array the cards below are built from. */
+const STAGE = COMMITS.map(([h, tag]) => [tag, h]);
+
 /* KPI band. Each metric is [label, value, unit, note]. A value of null means
    "not tracked yet" and renders as an em dash with a mono caption rather than a
    round invention — the checklist is explicit that this reads better, and it is
@@ -67,6 +72,7 @@ module.exports = {
   crumb: CRUMB,
   title: "Sustainability — Globalex Trading FZCO",
   desc: "Six commitments — environmental stewardship, ethical sourcing, product quality, transparency, social impact and continuous improvement — applied to product, partner and process decisions.",
+  three: true,
 
   css: `
 .cmt{display:grid;grid-template-columns:repeat(2,1fr);gap:var(--gut)}
@@ -130,6 +136,7 @@ ${hero({
   lead: "",
   tone: "sand",
   sec: "Sustainability",
+  stage: { name: "growth", kicker: "Commitment" },
 })}
 
 ${
@@ -229,4 +236,6 @@ ${cta({
   tone: "sand",
 })}
 `,
+
+  js: scene3d.bundle("growth", STAGE),
 };

@@ -20,6 +20,7 @@ const { hero, cta } = require("../parts");
 const { PACKAGING, INCOTERMS } = require("../specs");
 const { on } = require("../flags");
 const { crossStrip, crossCss } = require("../trade-strip");
+const scene3d = require("../scene3d");
 
 /* Incoterms 2020. Who bears what, and where risk passes. These are the
    published rules, not our terms — which is exactly why this table can ship
@@ -118,6 +119,19 @@ const PORTS = [
 
 const CRUMB = ["Logistics &amp; Shipping"];
 
+/* The gantry in the hero completes one lift per mode and names it. The prose
+   in MODES is a paragraph, which is far too long for a readout, so each mode
+   carries a short form here — keyed off the mode name so renaming one drops
+   its caption rather than mislabelling the next one along. */
+const MODE_SHORT = {
+  "Break bulk": "Bagged, loaded piece by piece",
+  Containerised: "20 ft and 40 ft boxes",
+  "ISO tank": "Liquid, 20 ft tank container",
+  "Big bag": "One-tonne four-loop FIBC",
+  "Bulk vessel": "Handysize and supramax",
+};
+const STAGE = MODES.map(([name]) => [MODE_SHORT[name] || "Carriage", name]);
+
 module.exports = {
   page: "logistics",
   gate: "logistics",
@@ -126,6 +140,7 @@ module.exports = {
   crumb: CRUMB,
   title: "Logistics & Shipping — Globalex Trading FZCO",
   desc: "Incoterms 2020 allocation, load ports on the Caspian and Arabian Gulf, shipping modes from break bulk to ISO tank, packaging options and the documentation set behind every shipment.",
+  three: true,
 
   css: `
 ${crossCss}
@@ -174,6 +189,7 @@ ${hero({
   ],
   sec: "Logistics",
   video: on("heroVideo") ? "freight" : null,
+  stage: { name: "yard", kicker: "Carriage" },
 })}
 
 <section class="sec" data-sec="Incoterms">
@@ -333,4 +349,6 @@ ${cta({
   lead: "Origin, grade, tonnage and discharge port is enough for the desk to come back with terms.",
   primary: ["Contact the desk", "contact.html"],
 })}`,
+
+  js: scene3d.bundle("yard", STAGE),
 };
