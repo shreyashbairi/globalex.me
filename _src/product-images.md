@@ -1,6 +1,14 @@
 # Product imagery — generation brief
 
-> **The 24 expanded, ready-to-paste prompts are in
+> **Status.** The 24 grades in classes 01–03 are shot and encoded. The 8
+> petroleum grades in class 04 are specified below and in the prompts file but
+> have **not** been shot: each carries `photo:false` in `catalogue.js` and is
+> served a generated stand-in plate by `npm run placeholders`. Every "24" in
+> the rest of this file describes the delivered set, not the catalogue. Shoot
+> the remaining 8 against the same master prompt, drop the masters in
+> `_masters/products`, clear the flag and run `npm run images`.
+
+> **The expanded, ready-to-paste prompts are in
 > [`product-images-prompts.md`](./product-images-prompts.md).** This file is
 > the reasoning behind them. Neither is written by hand — both the master
 > prompt and the per-grade material descriptions live in

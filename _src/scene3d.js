@@ -3,7 +3,7 @@
 
    The home page has one piece of spectacle, the corridor globe. Everywhere
    else the hero carried a flat gül ornament, which is fine as wallpaper and
-   says nothing about the page it sits on. This file gives eight pages a scene
+   says nothing about the page it sits on. This file gives nine pages a scene
    of their own: a thing that is actually about the page, drawn in three
    dimensions, that a visitor can take hold of and turn.
 
@@ -21,8 +21,8 @@
        body: hero({ ..., stage: {name:'skyline', kicker:'Dubai HQ'} }),
        js:   scene3d.bundle('skyline'),
 
-   bundle() emits the shared bootstrap plus ONE scene, not all eight, so a
-   page carries about 11 KB rather than 60.
+   bundle() emits the shared bootstrap plus ONE scene, not all nine, so a
+   page carries about 11 KB rather than 70.
 
    ------------------------------------------------------------
    THE RULES EVERY SCENE FOLLOWS
@@ -766,13 +766,16 @@ function sceneBook(A){
   root.add(centre.obj);
 
   /* one orbit per class. Radius, tilt and marker size separate them as much
-     as colour does — on the light palette two of the three classes share an
-     accent, and a ring that is only distinguishable by hue would collapse. */
-  var ORB = [{r:0.80, rx:0.36, rz:0.18, s:1.5}, {r:1.14, rx:-0.44, rz:-0.3, s:1.35},
-             {r:1.48, rx:0.14, rz:0.52, s:1.05}];
+     as colour does — on the light palette the classes share two accents
+     between four of them, and a ring that is only distinguishable by hue would
+     collapse. A fifth class would fall back onto the outermost orbit and draw
+     on top of the fourth, so give it its own row here rather than trusting the
+     fallback to look deliberate. */
+  var ORB = [{r:0.74, rx:0.36, rz:0.18, s:1.5}, {r:1.04, rx:-0.44, rz:-0.3, s:1.35},
+             {r:1.34, rx:0.14, rz:0.52, s:1.05}, {r:1.64, rx:-0.2, rz:-0.14, s:1.2}];
   var ITEMS = [], rings = [];
   CLS.forEach(function(cl, ci){
-    var o = ORB[ci] || ORB[2];
+    var o = ORB[ci] || ORB[ORB.length-1];
     var grp = new T.Group();
     grp.rotation.x = o.rx; grp.rotation.z = o.rz;
     var path = A.ring(A.circle(o.r, 160, 0, 'y'), cl.tone, A.LIGHT ? 0.68 : 0.34);
@@ -814,7 +817,7 @@ function sceneBook(A){
   var ray = new T.Raycaster(), ptr = new T.Vector2();
   ray.params.Points = {threshold: 0.07};
 
-  return {fit:1.66, lift:0.5, look:0, tilt:0.18, spin:0.12, limit:0.8,
+  return {fit:1.80, lift:0.5, look:0, tilt:0.18, spin:0.12, limit:0.8,
   frame:function(t, dt){
     var w = A.RM ? 0 : t;
     rings.forEach(function(r, i){
@@ -1707,9 +1710,267 @@ function scenePrill(A){
 `,
 };
 
+/* ---------------------------------------------------------------- petroleum
+   A fractionating column. Crude leaves the furnace and flashes into the tower;
+   vapour climbs; every cut drops out at the tray its boiling range puts it on
+   and runs off down its own draw-off to a collector. Eight trays, eight
+   grades, in the order the barrel actually gives them up — gasoline overhead,
+   bitumen in the boot — so the readout walking down the tower is the same walk
+   as the rows below it on the page.
+
+   The pointer is the furnace. Pushing it up drives the flash harder and the
+   vapour reaches further before it condenses, which is the one control a
+   refiner really has over where the cuts land. */
+SCENES.column = {
+  fn: 'sceneColumn',
+  src: `
+function sceneColumn(A){
+  var T = A.T, root = A.root, rng = A.rng, rnd = A.rnd;
+  var CUTS = A.data || [];
+  var N = Math.max(1, CUTS.length);
+
+  var R = 0.30, TOP = 1.16, BOT = -0.80, FLASH = -0.60;
+  var TRAY0 = 1.00, TRAYN = -0.44, OUT = 0.62, DROP = 0.14;
+  var FX = -1.00, FY = BOT + 0.04;          // the furnace, off the tower's foot
+
+  /* A polyline a particle can be walked along by one parameter. Segment
+     lengths are measured once here rather than per particle per frame: there
+     are two hundred and forty of them and nine paths. */
+  function path(pts){
+    var seg = [], total = 0;
+    for (var i=0;i<pts.length-1;i++){
+      var dx = pts[i+1][0]-pts[i][0], dy = pts[i+1][1]-pts[i][1], dz = pts[i+1][2]-pts[i][2];
+      var L = Math.sqrt(dx*dx + dy*dy + dz*dz);
+      seg.push(L); total += L;
+    }
+    return {
+      at:function(u, o){
+        var d = A.clamp(u, 0, 1) * total, i = 0;
+        while (i < seg.length-1 && d > seg[i]){ d -= seg[i]; i++; }
+        var k = seg[i] > 0 ? d / seg[i] : 0, a = pts[i], b = pts[i+1];
+        o[0] = a[0] + (b[0]-a[0])*k;
+        o[1] = a[1] + (b[1]-a[1])*k;
+        o[2] = a[2] + (b[2]-a[2])*k;
+        return o;
+      },
+      pairs:function(){
+        var f = [];
+        for (var i=0;i<pts.length-1;i++)
+          f.push(pts[i][0], pts[i][1], pts[i][2], pts[i+1][0], pts[i+1][1], pts[i+1][2]);
+        return f;
+      }};
+  }
+
+  function ringAt(cx, cy, cz, r, n){
+    var a = [];
+    for (var i=0;i<n;i++){
+      var th = i/n * 6.28318;
+      a.push(cx + Math.cos(th)*r, cy, cz + Math.sin(th)*r);
+    }
+    return a;
+  }
+
+  /* --- the shell, the dome and the boot ---
+     Stiffening rings are sparse and faint on purpose. At the pitch the trays
+     sit on they doubled the number of horizontal ellipses in the tower, and
+     the two readings the scene actually needs — which ring is a tray, and
+     what is moving between them — were lost inside a barrel of hoops. */
+  (function(){
+    var f = [];
+    for (var i=0;i<20;i++){
+      var th = i/20 * 6.28318, x = Math.cos(th)*R, z = Math.sin(th)*R;
+      f.push(x, BOT, z, x, TOP, z);
+    }
+    root.add(A.segs(f, 'globeBorder', A.LIGHT ? 0.4 : 0.17));
+    for (var y=BOT; y<=TOP+0.001; y+=0.3)
+      root.add(A.ring(A.circle(R, 44, y, 'y'), 'globeBorder', A.LIGHT ? 0.42 : 0.18));
+
+    /* A vessel has heads, not lids. Two flat rings hovering over the shell
+       read as debris when the stage is tilted almost edge-on to them; a
+       tapered course of staves reads as a dome from any angle. */
+    function head(y, dy, rr){
+      var h = [];
+      for (var i=0;i<16;i++){
+        var th = i/16 * 6.28318;
+        h.push(Math.cos(th)*R, y, Math.sin(th)*R,
+               Math.cos(th)*R*rr, y+dy, Math.sin(th)*R*rr);
+      }
+      root.add(A.segs(h, 'globeBorder', A.LIGHT ? 0.55 : 0.26));
+      root.add(A.ring(A.circle(R*rr, 30, y+dy, 'y'), 'globeBorder', A.LIGHT ? 0.8 : 0.42));
+    }
+    head(TOP, 0.14, 0.42);
+    head(BOT, -0.13, 0.46);
+
+    for (var g=0.95; g<1.62; g+=0.22)
+      root.add(A.ring(A.circle(g, 76, BOT-0.32, 'y'), 'globeGraticule', A.LIGHT ? 0.42 : 0.18));
+  })();
+
+  /* --- the furnace --- */
+  (function(){
+    var b = [];
+    A.boxEdges(b, FX, FY, 0, 0.22, 0.17, 0.17);
+    root.add(A.segs(b, 'globeBorder', A.LIGHT ? 0.8 : 0.45));
+    /* the coil bank, five passes at alternating depths rather than five
+       diagonals across the box — a fired heater, not a crate with an X in it */
+    var c = [];
+    for (var k=-2;k<=2;k++)
+      c.push(FX-0.18, FY + k*0.062, (k % 2 ? -0.09 : 0.09),
+             FX+0.18, FY + k*0.062, (k % 2 ? -0.09 : 0.09));
+    root.add(A.segs(c, 'sand', A.LIGHT ? 0.6 : 0.3));
+  })();
+
+  var FEED = path([[FX, FY+0.17, 0], [FX, FLASH, 0], [-R, FLASH, 0]]);
+  root.add(A.segs(FEED.pairs(), 'globeBorder', A.LIGHT ? 0.9 : 0.55));
+
+  /* --- the trays ---
+     Draw-offs step round the tower by the golden angle rather than by a whole
+     fraction of a turn: eight evenly spaced pipes collapse into four pairs
+     seen edge-on, and the tower loses half its draws twice per revolution. */
+  var TR = [], decks = [];
+  for (var i=0;i<N;i++){
+    var u = N === 1 ? 0 : i/(N-1);
+    var th = i * 2.39996, cx = Math.cos(th), cz = Math.sin(th);
+    var y = TRAY0 + (TRAYN - TRAY0) * u;
+    var t = {y:y, cx:cx, cz:cz,
+      name: CUTS[i] ? CUTS[i][0] : '', kick: CUTS[i] ? CUTS[i][1] : ''};
+    t.path = path([[cx*R, y, cz*R], [cx*OUT, y, cz*OUT], [cx*OUT, y-DROP, cz*OUT]]);
+    t.tray = A.ring(A.circle(R*0.9, 40, y, 'y'), 'cyan', A.LIGHT ? 0.6 : 0.3);
+    t.pipe = A.segs(t.path.pairs(), 'cyan', A.LIGHT ? 0.45 : 0.22);
+    t.pot  = A.ring(ringAt(cx*OUT, y-DROP, cz*OUT, 0.075, 26), 'sand', A.LIGHT ? 0.7 : 0.4);
+    root.add(t.tray); root.add(t.pipe); root.add(t.pot);
+    for (var q=0;q<6;q++){
+      var a2 = q/6 * 3.14159, dx = Math.cos(a2)*R*0.9, dz = Math.sin(a2)*R*0.9;
+      decks.push(dx, y, dz, -dx, y, -dz);
+    }
+    TR.push(t);
+  }
+  root.add(A.segs(decks, 'globeGraticule', A.LIGHT ? 0.4 : 0.16));
+
+  /* --- what is actually moving ---
+     Vapour is the system accent and product is the material accent, so a
+     particle changing colour on the way up IS the phase change: the tower's
+     whole job in one property. */
+  var gasC = A.col('cyan'), oilC = A.col('sand'), hotC = A.col('signal');
+  var mix = A.col('sand');                   // scratch, rewritten per particle
+  var tmp3 = [0, 0, 0];
+
+  function spawn(k, delay){
+    var th = rng(0, 6.28318), r = Math.sqrt(rnd()) * R * 0.76;
+    return {k:k, st:0, wait:delay, u:0,
+      x:Math.cos(th)*r, z:Math.sin(th)*r, y:FLASH - rng(0, 0.14),
+      sp:rng(0.36, 0.66), ph:rng(0, 6.28318)};
+  }
+
+  var NV = 240;
+  var vap = A.cloud(NV, 0.0155, 1, 'round');
+  var VP = [];
+  for (var v=0; v<NV; v++){ VP.push(spawn(v % N, rng(0, 3.4))); vap.tint(v, gasC); }
+  root.add(vap.obj);
+
+  var feed = A.cloud(30, 0.013, 1, 'round');
+  var FE = [];
+  for (var f=0; f<feed.n; f++){ FE.push(f/feed.n); feed.tint(f, oilC); }
+  root.add(feed.obj);
+
+  var burn = A.cloud(1, 0.08, 1, 'ring');
+  burn.tint(0, hotC); burn.at(0, FX, FY, 0);
+  root.add(burn.obj);
+
+  var halo = A.cloud(1, 0.07, 1, 'ring');
+  halo.tint(0, hotC);
+  root.add(halo.obj);
+
+  var sel = 0, tick = 0;
+  if (CUTS.length) A.say(TR[0].name, TR[0].kick);
+
+  /* The stage is a square that the hero section is not tall enough to show all
+     of — it overflows top and bottom by roughly an eighth each — so a scene
+     that fits the canvas on paper still loses its extremities on the page.
+     This tower is a fifth taller than the prilling tower on the fertilizers
+     page and is framed from correspondingly further back: at 5.9 the dome was
+     cut off exactly at the section edge. */
+  return {dist:7.6, lift:0.62, look:0.1, tilt:0.07, yaw:0.6, spin:0.11, limit:0.7,
+  frame:function(t, dt){
+    /* the pointer works the furnace */
+    var heat = A.RM ? 1 : 1 + A.p.y * 0.4;
+
+    for (var v=0; v<NV; v++){
+      var P = VP[v], TT = TR[P.k], on = P.k === sel;
+      if (A.RM){
+        /* Motion off: every cut sits in its own collector, so the tower still
+           says which grade comes off where rather than standing empty. */
+        TT.path.at(1, tmp3);
+        vap.at(v, tmp3[0] + (P.x)*0.16, tmp3[1] + (P.z)*0.16, tmp3[2] + (P.x)*0.1);
+        vap.tint(v, on ? hotC : oilC);
+        vap.size[v] = 0.9; vap.alpha[v] = 0.75;
+        continue;
+      }
+      if (P.wait > 0){ P.wait -= dt; vap.alpha[v] = 0; vap.size[v] = 0; continue; }
+      if (P.st === 0){
+        P.y += P.sp * heat * dt;
+        var sway = Math.sin(t*1.3 + P.ph) * 0.018;
+        vap.at(v, P.x + sway, P.y, P.z + sway*0.7);
+        var climb = A.clamp((P.y - FLASH) / Math.max(0.001, TT.y - FLASH), 0, 1);
+        mix.copy(gasC).lerp(on ? hotC : oilC, climb*climb);
+        vap.tint(v, mix);
+        vap.size[v] = 0.55 + climb*0.5;
+        vap.alpha[v] = 0.28 + climb*0.55;
+        if (P.y >= TT.y){ P.st = 1; P.u = 0; }
+      } else {
+        P.u += dt * 0.8;
+        TT.path.at(P.u, tmp3);
+        vap.at(v, tmp3[0], tmp3[1], tmp3[2]);
+        vap.tint(v, on ? hotC : oilC);
+        vap.size[v] = 1.05;
+        vap.alpha[v] = 0.9 - Math.max(0, P.u - 0.86) * 6;
+        if (P.u >= 1) VP[v] = spawn(P.k, rng(0, 0.6));
+      }
+    }
+    vap.flush();
+
+    for (var f=0; f<FE.length; f++){
+      if (!A.RM) FE[f] = (FE[f] + dt * 0.19 * heat) % 1;
+      FEED.at(FE[f], tmp3);
+      feed.at(f, tmp3[0], tmp3[1], tmp3[2]);
+      feed.size[f] = 1;
+      feed.alpha[f] = 0.32 + Math.sin(FE[f] * 3.14159) * 0.5;
+    }
+    feed.flush();
+
+    var b = A.RM ? 0.6 : (Math.sin(t*2.6)*0.5 + 0.5) * heat;
+    burn.size[0] = 1.5 + b*0.9; burn.alpha[0] = 0.45 + b*0.4;
+    burn.flush();
+
+    for (var i=0;i<N;i++){
+      var S2 = TR[i], lit = i === sel;
+      S2.tray.material.opacity = lit ? (A.LIGHT ? 1 : 0.9) : (A.LIGHT ? 0.55 : 0.26);
+      S2.tray.material.color.set(GLXC.int[lit ? 'signal' : A.ink('cyan')]);
+      S2.pipe.material.opacity = lit ? (A.LIGHT ? 0.95 : 0.75) : (A.LIGHT ? 0.38 : 0.18);
+      S2.pipe.material.color.set(GLXC.int[lit ? 'signal' : A.ink('cyan')]);
+      S2.pot.material.opacity = lit ? (A.LIGHT ? 1 : 0.9) : (A.LIGHT ? 0.6 : 0.32);
+      S2.pot.material.color.set(GLXC.int[lit ? 'signal' : A.ink('sand')]);
+    }
+    var H = TR[sel];
+    halo.at(0, H.cx*OUT, H.y-DROP, H.cz*OUT);
+    halo.size[0] = 2.3 + (A.RM ? 0 : Math.sin(t*2.2)*0.4);
+    halo.alpha[0] = 0.6;
+    halo.flush();
+
+    if (CUTS.length){
+      tick += dt;
+      if (tick > 2.6){
+        tick = 0; sel = (sel+1) % N;
+        A.say(TR[sel].name, TR[sel].kick);
+      }
+    }
+  }};
+}
+`,
+};
+
 /* ------------------------------------------------------------------ emit */
 
-/* One page gets ONE scene. Emitting all eight everywhere would put 60 KB of
+/* One page gets ONE scene. Emitting all nine everywhere would put 70 KB of
    dead code on every hero for the sake of a shared file. */
 function bundle(name, data) {
   const scene = SCENES[name];

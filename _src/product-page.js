@@ -89,6 +89,46 @@ const USES = {
     ["Plastics and coatings", "Pigment and UV protection."],
     ["Cables", "Conductive and semi-conductive compounds."],
   ],
+  gasoline: [
+    ["Road transport", "Spark-ignition engines, to an octane grade."],
+    ["Small engines", "Generators, pumps and agricultural equipment."],
+    ["Blending", "Component supply into a finished motor grade."],
+  ],
+  "jet-fuel": [
+    ["Commercial aviation", "Turbine fuel on a segregated supply chain."],
+    ["Ground handling", "Airport hydrant and bowser supply."],
+    ["Turbine testing", "Engine test cells and overhaul facilities."],
+  ],
+  "lighting-kerosene": [
+    ["Household lighting", "Wick and mantle lamps where grid supply is thin."],
+    ["Cooking", "Pressure and wick stoves."],
+    ["Solvent use", "Cleaning and thinning where a low-odour cut is wanted."],
+  ],
+  "heating-kerosene": [
+    ["Domestic heating", "Vaporising and pressure-jet burners."],
+    ["Commercial boilers", "Where a clean-burning distillate beats gasoil."],
+    ["Process heat", "Kilns, dryers and direct-fired plant."],
+  ],
+  diesel: [
+    ["Road and rail", "Compression-ignition engines at every scale."],
+    ["Marine and standby", "Auxiliaries, harbour craft and generator sets."],
+    ["Agriculture and mining", "Off-road plant and irrigation pumping."],
+  ],
+  "base-oil": [
+    ["Lubricant blending", "The bulk of any finished engine or gear oil."],
+    ["Greases", "Base fluid in the soap-thickened grades."],
+    ["Process oils", "Rubber, textile and metalworking formulations."],
+  ],
+  "fuel-oil": [
+    ["Marine bunkers", "Residual fuel for main engines and boilers."],
+    ["Power generation", "Utility and captive plant firing heavy fuel."],
+    ["Industrial furnaces", "Cement, ceramics and steel reheat."],
+  ],
+  bitumen: [
+    ["Road construction", "Binder in hot-mix asphalt and surface dressing."],
+    ["Waterproofing", "Roofing felt, membrane and damp-proof course."],
+    ["Industrial coating", "Pipeline wrap and protective coatings."],
+  ],
 };
 
 const CSS = `
@@ -245,6 +285,10 @@ module.exports = function productPage(item, cls) {
 
   const related = cls.items.filter((p) => p.id !== item.id).slice(0, 3);
 
+  /* "Other grades in x", not "Other x grades" — the second reads as "Other
+     petroleum products grades" for a class whose title is already plural. */
+  const relatedHeading = `Other grades in ${cls.title.toLowerCase()}`;
+
   const H = {
     crumb: [
       ["Products", "products.html"],
@@ -272,10 +316,17 @@ module.exports = function productPage(item, cls) {
        than as prose about the product. Writing them out here would mean
        inventing detail per grade and getting it wrong somewhere, on a page a
        QA team reads. The lead paragraph beside the plate already carries the
-       substance. */
+       substance.
+
+       A grade whose photography has not been shot gets a generated frame
+       instead (see catalogue.js#pimg), and the alt says so. Calling a
+       placeholder a specimen photograph would be a small lie told to exactly
+       the people who cannot see the difference. */
     image: [
       item.img,
-      `${plain(item.name)} — specimen photograph`,
+      item.photo === false
+        ? `${plain(item.name)} — placeholder plate, specimen photograph pending`
+        : `${plain(item.name)} — specimen photograph`,
       IMG_W,
       IMG_H,
     ],
@@ -367,7 +418,7 @@ ${
     ? `<section class="sec" data-sec="Related">
 <div class="wrap">
 <div class="hd"><span class="eb${cls.tone === "sand" ? " mat" : ""}">Same class</span>
-<h2>Other ${cls.title.toLowerCase()} grades</h2></div>
+<h2>${relatedHeading}</h2></div>
 <div class="pp-rel rvs">
 ${related
   .map(

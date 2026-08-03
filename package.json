@@ -14,7 +14,8 @@
     "db:remote": "wrangler d1 execute globalex --remote --file=./schema.sql",
     "docs:upload": "node _src/upload-docs.js",
     "seed:demo": "node _src/seed-demo.js",
-    "images": "node _src/images-build.js"
+    "images": "node _src/images-build.js",
+    "placeholders": "node _src/placeholder-images.js"
   },
   "devDependencies": {
     "wrangler": "^4.0.0"

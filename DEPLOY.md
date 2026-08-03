@@ -1,6 +1,6 @@
 # globalex.me — deployment
 
-The site is eleven static HTML files plus a small backend. Everything runs on
+The site is a set of static HTML files plus a small backend. Everything runs on
 Cloudflare: Pages serves the HTML, Pages Functions run the API, D1 stores the
 data, R2 stores the PDFs. One deploy, one domain, no servers to patch.
 
@@ -419,7 +419,7 @@ actually un-publishes it rather than leaving the last build's file in place.
 - **The forms degrade.** If the API is unreachable — including when a page is
   opened straight off disk — the contact, careers and document forms fall back
   to the visitor's mail client rather than failing silently. The site still
-  works as eleven standalone files.
+  works as standalone files.
 - **Rate limit.** Six document requests per hour per IP.
 - **Link lifetime.** 30 days, then the link 410s. Change `GRANT_TTL` in
   `functions/api/request.js`.

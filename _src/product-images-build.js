@@ -20,7 +20,7 @@
 
 const fs = require("fs");
 const path = require("path");
-const { FERTILIZERS, POLYMERS, CHEMICALS } = require("./catalogue");
+const { CLASSES } = require("./catalogue");
 const theme = require("./theme");
 
 /* The ground is the site's own page background, read from the theme rather
@@ -343,16 +343,101 @@ const MATERIAL = {
       "softened by an extremely fine black dust halo on the surrounding " +
       "ground.",
   },
+
+  // ---- Petroleum products ----
+  /* Seven of the eight are transparent liquids that differ from each other
+     only in tint and viscosity, which is the hardest set on this whole page
+     to keep distinguishable. So each one names its colour against the one
+     above it and states how it moves: a thin water-white cut and a heavy
+     amber one have to look like different products at thumbnail size, and
+     tint alone will not carry that once the frame is cropped to a 76px
+     circle. Bitumen is the exception and is shot as a solid. */
+  Gasoline: {
+    form: "liquid",
+    material:
+      "A wide, shallow clear-glass dish holding a thin layer of very pale " +
+      "straw-yellow liquid, thin and mobile, the paper ground reading " +
+      "clearly through it, with a bright crisp meniscus at the rim and a " +
+      "faint iridescent sheen where the surface catches the light.",
+  },
+  "Jet Fuel": {
+    form: "liquid",
+    material:
+      "A wide, shallow clear-glass dish holding a thin layer of water-white " +
+      "to faintly straw liquid, the palest of the fuel cuts, almost " +
+      "colourless and very clean, the ground reading through it almost " +
+      "unchanged, with a clean bright meniscus and a perfectly still, " +
+      "unbroken surface.",
+    extra:
+      "TONE — This cut is nearly colourless, so the dish itself has to do " +
+      "the work: hold the glass rim, the meniscus and the shallow shadow the " +
+      "dish casts on the paper crisply, so the frame still reads as a " +
+      "liquid specimen and not as an empty dish.",
+  },
+  "Lighting Kerosene": {
+    form: "liquid",
+    material:
+      "A wide, shallow clear-glass dish holding a thin layer of clear pale " +
+      "straw liquid, a shade deeper and slightly more viscous than jet fuel, " +
+      "the ground reading through it with a warm cast, a soft even sheen " +
+      "across the still surface.",
+  },
+  "Heating Kerosene": {
+    form: "liquid",
+    material:
+      "A wide, shallow clear-glass dish holding a thin layer of clear light " +
+      "amber liquid, a step warmer and deeper than the lighting grade, the " +
+      "ground still visible through it, with a soft even sheen and a clean " +
+      "meniscus at the rim.",
+  },
+  Diesel: {
+    form: "liquid",
+    material:
+      "A wide, shallow clear-glass dish holding a thin layer of clear amber " +
+      "liquid with a faint green cast at the meniscus, noticeably more " +
+      "viscous than the kerosene cuts so the surface settles slowly, the " +
+      "ground reading through it warmly.",
+  },
+  "Base Oil": {
+    form: "liquid",
+    material:
+      "A wide, shallow clear-glass dish holding a thin layer of clear golden " +
+      "amber oil, visibly thick and slow-moving, its surface glossy and " +
+      "smooth with a deep even sheen, the meniscus climbing the rim higher " +
+      "than the fuel cuts do.",
+  },
+  "Fuel Oil": {
+    form: "liquid",
+    material:
+      "A wide, shallow clear-glass dish holding a thin layer of opaque " +
+      "brown-black heavy oil, thick and tarry, the ground not visible " +
+      "through it at all, its surface dull and slightly uneven with a slow " +
+      "sluggish edge where it meets the rim.",
+    extra:
+      "TONE — Hold detail in the black: the surface needs a visible sheen " +
+      "and a readable edge against the paper rather than collapsing into a " +
+      "flat silhouette.",
+  },
+  Bitumen: {
+    form: "solid",
+    material:
+      "A single fractured lump of solid black bitumen about 80 mm across, " +
+      "centred, with a glossy conchoidal fracture face catching the light " +
+      "and duller matte faces around it, plus two or three small chips that " +
+      "have broken clear of it on the ground.",
+    extra:
+      "TONE — Push the separation between material and ground harder than " +
+      "usual, and keep the fracture face bright enough to read as glass-like " +
+      "rather than as an unlit black shape.",
+  },
 };
 
 /* ------------------------------------------------------------------
    Reconcile against the catalogue in both directions.
    ------------------------------------------------------------------ */
-const GROUPS = [
-  ["Fertilizers", FERTILIZERS],
-  ["Polymers", POLYMERS],
-  ["Industrial chemicals", CHEMICALS],
-];
+/* Read from CLASSES, so a new commodity class arrives here as a new section of
+   the brief rather than needing this list edited to notice it. */
+const GROUPS = CLASSES.map((c) => [c.title, c.items]);
 const products = GROUPS.flatMap(([g, arr]) => arr.map((p) => ({ ...p, group: g })));
 
 {

@@ -255,6 +255,12 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
 
 .g2{display:grid;gap:var(--gut);grid-template-columns:repeat(2,1fr)}
 .g3{display:grid;gap:var(--gut);grid-template-columns:repeat(3,1fr)}
+/* The commodity-class grid on the home page, which is as wide as CLASSES is
+   long. It breaks to two columns early: four cards of this height side by side
+   stop being readable well before .g3 does. */
+.g4{display:grid;gap:var(--gut);grid-template-columns:repeat(4,1fr)}
+@media (max-width:1180px){.g4{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:700px){.g4{grid-template-columns:1fr}}
 .split{display:grid;gap:clamp(2rem,5vw,4.5rem);grid-template-columns:1fr 1fr;align-items:start}
 .split.is-1-2{grid-template-columns:.85fr 1.15fr}
 @media (max-width:940px){.g3,.g2,.split,.split.is-1-2{grid-template-columns:1fr}}
@@ -358,8 +364,15 @@ h4{font-size:var(--t-h4);letter-spacing:-.012em;font-variation-settings:'wdth' 1
 .menu.mm{position:fixed;left:var(--frame);right:var(--frame);width:auto;
   top:calc(var(--frame) + 68px);padding:clamp(1.2rem,2vw,1.9rem);
   clip-path:polygon(0 0,calc(100% - 20px) 0,100% 20px,100% 100%,20px 100%,0 calc(100% - 20px))}
-.mm-grid{display:grid;grid-template-columns:repeat(3,1fr) 1.15fr;gap:clamp(1rem,2vw,2.2rem)}
-@media (max-width:1240px){.mm-grid{grid-template-columns:repeat(2,1fr)}}
+/* One column per commodity class, plus the featured column. The class count is
+   set inline by shell.js from CLASSES rather than typed here: a fourth class
+   was added to the catalogue once already, and a hardcoded 3 would have
+   silently wrapped its column onto a second row under the other three.
+   minmax(0,1fr) rather than 1fr so a long grade name cannot push a column
+   wider than its share and shunt the rest off the panel. */
+.mm-grid{display:grid;grid-template-columns:repeat(var(--mm-cols,3),minmax(0,1fr)) 1.15fr;
+  gap:clamp(1rem,2vw,2.2rem)}
+@media (max-width:1240px){.mm-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .mm-col{min-width:0}
 .mm-h{display:grid;grid-template-columns:auto 1fr;gap:0 .6rem;padding:0 0 .7rem;
   border-bottom:1px solid var(--line);border-left:0}

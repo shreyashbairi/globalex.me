@@ -531,12 +531,195 @@ const SPECS = {
     },
     storage: "[Handling and storage note]",
   },
+
+  /* ---------------- Petroleum products ----------------
+     Same rule as everything above: `form` is real, because it is a physical
+     fact about the cut and the catalogue already publishes it as a chip. Every
+     figure is blank. A fuel is bought on its assay — sulphur, cetane, flash,
+     pour, viscosity — and a plausible-looking placeholder against any of those
+     is a number a buyer's inspector will hold us to at the jetty.
+
+     `granulometry` is meaningless for a liquid and stays blank rather than
+     being renamed: the panel's four rows are shared by all four classes, and
+     an em dash is the honest value for a field that does not apply. */
+  gasoline: {
+    DRAFT: true,
+    analysis: [
+      // [parameter, typical, min, max, unit, method] — octane (RON/MON),
+      // density, RVP, sulphur, benzene, distillation, oxidation stability
+    ],
+    physical: {
+      form: "Liquid / Bulk",
+      colour: "[--]",
+      bulkDensity: "[--] kg/m&#179;",
+      granulometry: "&mdash;",
+    },
+    packaging: [],
+    trade: {
+      hsCode: "[HS code]",
+      loadPorts: [],
+      incoterms: [],
+      minLot: "[--] MT",
+    },
+    storage: "[Handling and storage note]",
+  },
+  "jet-fuel": {
+    DRAFT: true,
+    analysis: [
+      // freeze point, flash point, density, sulphur, smoke point,
+      // thermal stability (JFTOT), conductivity, existent gum
+    ],
+    physical: {
+      form: "Liquid / Bulk",
+      colour: "[--]",
+      bulkDensity: "[--] kg/m&#179;",
+      granulometry: "&mdash;",
+    },
+    packaging: [],
+    trade: {
+      hsCode: "[HS code]",
+      loadPorts: [],
+      incoterms: [],
+      minLot: "[--] MT",
+    },
+    storage: "[Handling and storage note]",
+  },
+  "lighting-kerosene": {
+    DRAFT: true,
+    analysis: [
+      // smoke point, char value, flash point, sulphur, distillation, colour
+    ],
+    physical: {
+      form: "Liquid / Bulk",
+      colour: "[--]",
+      bulkDensity: "[--] kg/m&#179;",
+      granulometry: "&mdash;",
+    },
+    packaging: [],
+    trade: {
+      hsCode: "[HS code]",
+      loadPorts: [],
+      incoterms: [],
+      minLot: "[--] MT",
+    },
+    storage: "[Handling and storage note]",
+  },
+  "heating-kerosene": {
+    DRAFT: true,
+    analysis: [
+      // flash point, viscosity, sulphur, distillation, cold filter plugging
+    ],
+    physical: {
+      form: "Liquid / Bulk",
+      colour: "[--]",
+      bulkDensity: "[--] kg/m&#179;",
+      granulometry: "&mdash;",
+    },
+    packaging: [],
+    trade: {
+      hsCode: "[HS code]",
+      loadPorts: [],
+      incoterms: [],
+      minLot: "[--] MT",
+    },
+    storage: "[Handling and storage note]",
+  },
+  diesel: {
+    DRAFT: true,
+    analysis: [
+      // cetane number/index, sulphur, density, viscosity, flash point,
+      // cold filter plugging point, pour point, water and sediment
+    ],
+    physical: {
+      form: "Liquid / Bulk",
+      colour: "[--]",
+      bulkDensity: "[--] kg/m&#179;",
+      granulometry: "&mdash;",
+    },
+    packaging: [],
+    trade: {
+      hsCode: "[HS code]",
+      loadPorts: [],
+      incoterms: [],
+      minLot: "[--] MT",
+    },
+    storage: "[Handling and storage note]",
+  },
+  "base-oil": {
+    /* The one grade in this class with published figures already on the site:
+       the register carries an MSDS for SN-180, SN-350 and SN-600 and a TDS for
+       the full SN-80 to SN-1200 range, and docgate.js plots them. Those are
+       per-document sheets rather than a per-grade assay, so this table stays
+       draft — but it is the first one that can be filled from a source we
+       already hold rather than from a supplier we have to ask. */
+    DRAFT: true,
+    analysis: [
+      // kinematic viscosity @ 40/100 C, viscosity index, flash point,
+      // pour point, density, sulphur, colour (ASTM), ash — see docs.js
+    ],
+    physical: {
+      form: "Liquid / Bulk",
+      colour: "[--]",
+      bulkDensity: "[--] kg/m&#179;",
+      granulometry: "&mdash;",
+    },
+    packaging: [],
+    trade: {
+      hsCode: "[HS code]",
+      loadPorts: [],
+      incoterms: [],
+      minLot: "[--] MT",
+    },
+    storage: "[Handling and storage note]",
+  },
+  "fuel-oil": {
+    DRAFT: true,
+    analysis: [
+      // kinematic viscosity @ 50 C, density, sulphur, flash point,
+      // pour point, water, ash, sediment, vanadium
+    ],
+    physical: {
+      form: "Liquid / Bulk",
+      colour: "[--]",
+      bulkDensity: "[--] kg/m&#179;",
+      granulometry: "&mdash;",
+    },
+    packaging: [],
+    trade: {
+      hsCode: "[HS code]",
+      loadPorts: [],
+      incoterms: [],
+      minLot: "[--] MT",
+    },
+    storage: "[Handling and storage note]",
+  },
+  bitumen: {
+    DRAFT: true,
+    analysis: [
+      // penetration @ 25 C, softening point, ductility, flash point,
+      // solubility, loss on heating, retained penetration
+    ],
+    physical: {
+      form: "Semi-solid / Bulk hot / Drum",
+      colour: "[--]",
+      bulkDensity: "[--] kg/m&#179;",
+      granulometry: "&mdash;",
+    },
+    packaging: [],
+    trade: {
+      hsCode: "[HS code]",
+      loadPorts: [],
+      incoterms: [],
+      minLot: "[--] MT",
+    },
+    storage: "[Handling and storage note]",
+  },
 };
 
 /* True when a grade still carries placeholder figures. The product page uses
    this to decide between rendering the tables and rendering the "request the
    specification" panel, so a grade whose real data lands is publishable on
-   its own without waiting for the other twenty-three. */
+   its own without waiting for the rest of the book. */
 const isDraft = (id) => !SPECS[id] || SPECS[id].DRAFT === true;
 
 module.exports = { SPECS, PACKAGING, INCOTERMS, isDraft };

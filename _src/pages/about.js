@@ -1,9 +1,14 @@
 const { hero, cta } = require("../parts");
 const { publishable, HEADCOUNT } = require("../team");
 const { on } = require("../flags");
+const { CLASSES } = require("../catalogue");
 const scene3d = require("../scene3d");
 
 const CRUMB = ["About"];
+
+/* The book's size, read from the catalogue rather than typed. It appears twice
+   on this page and it had already gone stale here once. */
+const TOTAL = CLASSES.reduce((n, c) => n + c.items.length, 0);
 
 /* What the hero's readout says while the survey plane climbs the cluster.
    Every line is a fact stated somewhere else on the page — the scene is a
@@ -24,7 +29,8 @@ const TIMELINE_ENTRIES = [
   ["[----]", "First Caspian corridor cargo", "[Which grade, which origin, which destination.]"],
   ["[----]", "Polymer book opened", "[Polyethylene and polypropylene added alongside the fertilizer book.]"],
   ["[----]", "Industrial chemicals to sixteen grades", "[The specialty book reaches its current breadth.]"],
-  ["Today", "24 grades, 7 origin markets", "Fertilizers, polymers and industrial chemicals sourced across Turkmenistan, Uzbekistan, Kazakhstan, Azerbaijan, the UAE, Saudi Arabia and China."],
+  ["[----]", "Petroleum products book opened", "[Refined and residual cuts added alongside the chemical book.]"],
+  ["Today", `${TOTAL} grades, 7 origin markets`, "Fertilizers, polymers, industrial chemicals and petroleum products sourced across Turkmenistan, Uzbekistan, Kazakhstan, Azerbaijan, the UAE, Saudi Arabia and China."],
 ];
 
 const TEAM_LIVE = publishable();
@@ -178,7 +184,7 @@ ${hero({
   meta: [
     ["2019", "Founded"],
     ["FZCO", "Freezone licence"],
-    ["24+", "Grades traded"],
+    [`${TOTAL}+`, "Grades traded"],
     ["7", "Origin markets"],
   ],
   sec: "About",

@@ -3,7 +3,7 @@
    site sells, plus the pages and documents around it.
 
    Three consumers read this file and must never disagree:
-     • the three class pages, which render their own slice of it
+     • the four class pages, which render their own slice of it
      • products.html, which renders all of it behind one search box
      • the header search overlay, which searches a flattened index
 
@@ -58,7 +58,15 @@ const purl = (cat, id) => `${cat}-${id}.html`;
    together instead of leaving a broken <img> nobody notices.
 
    `img`   1600px wide, for the plate on the grade's own page
-   `imgSq` 512 square centre crop, for the circular thumbnail on the grid */
+   `imgSq` 512 square centre crop, for the circular thumbnail on the grid
+
+   A grade carrying `photo:false` has no specimen photograph yet. The two
+   filenames are identical either way — the placeholder is written to the same
+   paths by `npm run placeholders`, so the day the real master lands the only
+   change is dropping it in _masters and re-running `npm run images`. The flag
+   exists so the gap is *stated* rather than implied: the alt text on the
+   grade's own page says the plate is a placeholder instead of calling it a
+   specimen photograph, and images-build.js knows not to demand a master. */
 const pimg = (cat, id) => `assets/products/${cat}-${id}.webp`;
 const pimgSq = (cat, id) => `assets/products/${cat}-${id}-sq.webp`;
 
@@ -373,6 +381,127 @@ const CHEMICALS = [
 }));
 
 // ------------------------------------------------------------------
+// Class 04 — Petroleum products
+// ------------------------------------------------------------------
+
+/* Ordered by where the cut comes off the barrel — lightest overhead first,
+   vacuum residue last — rather than alphabetically or by volume. That order is
+   the one real structure this class has: it is why gasoline and bitumen are in
+   the same book at all, it is the order the rows read in, and it is the order
+   the hero's fractionating column lights them in. `band` names the four groups
+   that order falls into, and the row ladder draws it.
+
+   `photo:false` on every grade: the specimen photography for this class has
+   not been shot, so each plate is a generated placeholder. See pimg() above. */
+const PETROLEUM = [
+  {
+    name: "Gasoline",
+    kind: "Motor spirit",
+    band: "light",
+    specs: ["Unleaded", "Motor spirit"],
+    origins: [],
+    body: "The lightest fuel cut off the tower, and the one whose price everyone knows. Blended from straight-run naphtha, reformate and cracked components to hit an octane target, then finished for volatility &mdash; a summer grade and a winter grade are different products wearing the same name.",
+    alias: "petrol mogas motor spirit unleaded octane naphtha reformate",
+  },
+  {
+    name: "Jet Fuel",
+    kind: "Aviation fuel",
+    band: "middle",
+    specs: ["Aviation turbine", "Jet A-1"],
+    origins: [],
+    body: "A narrow kerosene cut held to the tightest specification of anything on this page. Freeze point, thermal stability and cleanliness are what the specification is really about: fuel that behaves at altitude and leaves nothing behind in a turbine. Handled on a dedicated, segregated chain from refinery to wing.",
+    alias: "jet a-1 avtur aviation turbine kerosene jp-8 atf",
+  },
+  {
+    name: "Lighting Kerosene",
+    kind: "Illuminating kerosene",
+    band: "middle",
+    specs: ["Illuminating grade"],
+    origins: [],
+    body: "Kerosene refined and treated for burning in a wick or mantle rather than in an engine. Low smoke point and low sulphur are what matter, because the flame is in the room: this is still household lighting and cooking fuel across South Asia and East Africa.",
+    alias: "illuminating paraffin lamp oil ksk smoke point wick",
+  },
+  {
+    name: "Heating Kerosene",
+    kind: "Heating fuel",
+    band: "middle",
+    specs: ["Burning grade"],
+    origins: [],
+    body: "The same distillation range as the lighting grade, specified for vaporising and pressure-jet burners instead of a wick &mdash; domestic and commercial heating, and process heat where a clean-burning distillate is wanted over gasoil.",
+    alias: "burning oil heating paraffin 28 second boiler fuel",
+  },
+  {
+    name: "Diesel",
+    kind: "Automotive gasoil",
+    band: "middle",
+    specs: ["Automotive gasoil", "Marine gasoil"],
+    origins: [],
+    body: "The workhorse middle distillate: road haulage, rail, agriculture, marine auxiliaries and standby generation. Cetane governs how it ignites, cold-flow properties govern where it can be used in winter, and sulphur governs which markets will accept it at all.",
+    alias: "gasoil ago ulsd automotive gas oil cetane mgo dero",
+  },
+  {
+    name: "Base Oil",
+    kind: "Lubricant base stock",
+    band: "heavy",
+    specs: ["Solvent neutral", "SN-80 &ndash; SN-1200"],
+    origins: ["Turkmenistan"],
+    body: "Not a finished lubricant but the stock that becomes one &mdash; roughly nine parts of every engine oil in the world. The solvent-neutral cuts are graded by viscosity at 100&nbsp;&deg;C, from the thin SN-80 to the heavy SN-1200, and blenders choose across the range rather than buying a single grade.",
+    alias: "sn-80 sn-150 sn-180 sn-350 sn-500 sn-600 sn-1200 solvent neutral group i lube stock lubricant viscosity index",
+  },
+  {
+    name: "Fuel Oil",
+    kind: "Residual fuel",
+    band: "residue",
+    specs: ["Residual", "Bunker grade"],
+    origins: [],
+    body: "What is left after the distillates have been taken off, cut back to a viscosity a burner or a marine engine can handle. Power generation, industrial boilers, cement and shipping &mdash; the grades that move the largest tonnage and are specified by viscosity and sulphur rather than by name.",
+    alias: "hfo ifo bunker residual mazut m100 marine fuel 180 cst 380 cst",
+  },
+  {
+    name: "Bitumen",
+    kind: "Road binder",
+    band: "residue",
+    specs: ["Penetration grade", "Viscosity grade"],
+    origins: [],
+    body: "The bottom of the barrel, and the reason the barrel is worth refining to the last cut: the binder that holds an asphalt pavement together, plus roofing felt, waterproofing membrane and pipe coating. Classified by penetration or by viscosity depending on the market, and shipped hot, in drums or in bulk.",
+    alias: "asphalt penetration grade 60/70 80/100 vg-30 road binder waterproofing paving",
+  },
+].map((p, i) => {
+  const id = slug(p.name);
+  return {
+    ...p, id, cat: "petroleum",
+    photo: false,
+    url: purl("petroleum", id),
+    img: pimg("petroleum", id),
+    imgSq: pimgSq("petroleum", id),
+    ix: `${String(i + 1).padStart(2, "0")} &mdash; ${p.name}`,
+  };
+});
+
+/* The four distillate bands, in tower order, with their counts derived. The
+   class page draws the ladder from this and nowhere else, so a grade whose
+   band changes moves on the ladder without anything being retyped. */
+const PETROLEUM_BANDS = [
+  ["light", "Light distillate"],
+  ["middle", "Middle distillate"],
+  ["heavy", "Heavy &middot; lube"],
+  ["residue", "Residue"],
+].map(([k, label], i) => ({
+  k,
+  label,
+  i,
+  count: PETROLEUM.filter((p) => p.band === k).length,
+}));
+
+/* A band tag that matches no row would draw an empty rung on the ladder and a
+   silently mis-placed grade. Named at require() time instead. */
+for (const p of PETROLEUM)
+  if (!PETROLEUM_BANDS.some((b) => b.k === p.band))
+    throw new Error(
+      `catalogue: "${p.name}" has band "${p.band}", which is not in PETROLEUM_BANDS`,
+    );
+
+// ------------------------------------------------------------------
 // Classes, pages, documents
 // ------------------------------------------------------------------
 
@@ -410,6 +539,17 @@ const CLASSES = [
     blurb:
       "Sulphur, caustic soda, sulphuric and hydrochloric acid, LABSA 96%, SLES 70%, carbon black, iodine and more.",
   },
+  {
+    key: "petroleum",
+    no: "04",
+    title: "Petroleum Products",
+    href: "petroleum.html",
+    tone: "sand",
+    items: PETROLEUM,
+    count: `${PETROLEUM.length} grades`,
+    blurb:
+      "Gasoline, jet fuel, lighting and heating kerosene, diesel, base oil, fuel oil and bitumen &mdash; the whole cut range off one barrel.",
+  },
 ];
 
 /* Everything on the site that is worth landing on from a search box.
@@ -419,13 +559,13 @@ const PAGES = [
   [
     "index.html",
     "Home",
-    "Caspian and Central Asian commodity trading out of Dubai, across fertilizers, polymers and industrial chemicals.",
+    "Caspian and Central Asian commodity trading out of Dubai, across fertilizers, polymers, industrial chemicals and petroleum products.",
     "globalex trading FZCO home landing",
   ],
   [
     "products.html",
     "Products",
-    "Every grade we trade, searchable in one place across all three commodity classes.",
+    `Every grade we trade, searchable in one place across all ${CLASSES.length} commodity classes.`,
     "catalogue catalog grades search all products",
   ],
   [
@@ -589,6 +729,8 @@ module.exports = {
   FERTILIZERS,
   POLYMERS,
   CHEMICALS,
+  PETROLEUM,
+  PETROLEUM_BANDS,
   POLYMER_ORIGINS,
   CLASSES,
   PAGES,

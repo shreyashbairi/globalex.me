@@ -116,7 +116,7 @@ module.exports = {
   nav: "products",
   crumb: CRUMB,
   title: "Products — Globalex Trading FZCO",
-  desc: `Search all ${TOTAL} grades Globalex Trading FZCO supplies across fertilizers, polymers and industrial chemicals — by name, formula, application or origin.`,
+  desc: `Search all ${TOTAL} grades Globalex Trading FZCO supplies across fertilizers, polymers, industrial chemicals and petroleum products — by name, formula, application or origin.`,
   three: true,
 
   css: `
@@ -270,9 +270,9 @@ module.exports = {
   body: `
 ${hero({
   crumb: CRUMB,
-  eyebrow: `Three classes &middot; ${TOTAL} grades &middot; Caspian, Gulf &amp; East Asia`,
+  eyebrow: `${CLASSES.length} classes &middot; ${TOTAL} grades &middot; Caspian, Gulf &amp; East Asia`,
   h1: "Products",
-  lead: "Fertilizers, polymers and industrial chemicals &mdash; the whole book in one place. Search by grade name, chemical formula, application or origin, or browse the classes below.",
+  lead: "Fertilizers, polymers, industrial chemicals and petroleum products &mdash; the whole book in one place. Search by grade name, chemical formula, application or origin, or browse the classes below.",
   sec: "Products",
   stage: { name: "book", kicker: "The book" },
 })}
@@ -318,7 +318,7 @@ ${CLASSES.map(classSection).join("\n")}
 <section class="sec sec-panel pcls" data-cat="documents" id="documents" data-sec="Documents">
   <div class="wrap">
     <div class="pcls-h rv">
-      <span class="pcls-no">04</span>
+      <span class="pcls-no">${String(CLASSES.length + 1).padStart(2, "0")}</span>
       <div>
         <h2>Specifications &amp; documents</h2>
         <p class="lead">Safety, technical and origin sheets for the grades above. Tell us where to send it and a secure link arrives in your inbox.</p>

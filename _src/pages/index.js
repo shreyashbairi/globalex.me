@@ -1,11 +1,52 @@
 const docgate = require("../docgate");
 const geo = require("../geo");
+const { CLASSES } = require("../catalogue");
+
+const TOTAL = CLASSES.reduce((n, c) => n + c.items.length, 0);
+
+/* Spelled out because the heading is prose, not a readout. Only ever asked for
+   the number of commodity classes, so the list stops where it stops. */
+const WORDS = ["No", "One", "Two", "Three", "Four", "Five", "Six", "Seven"];
+
+/* The two things the class card needs that the catalogue does not carry: the
+   canvas visual that runs behind it, and three chips a visitor will recognise
+   at a glance. Everything else on the card — number, title, blurb, count,
+   href — is read from CLASSES, so adding a class to the catalogue puts a card
+   here and cannot leave a stale count behind it.
+
+   A class with no entry here still renders; it gets the gül ornament the rest
+   of the site falls back to, and no chips. */
+const CARD = {
+  fertilizers: { vis: "crystal", chips: ["N46", "Prilled", "Granular"] },
+  polymers: { vis: "chain", chips: ["HDPE", "LLDPE", "PP copo"] },
+  industrials: { vis: "react", chips: ["LABSA 96%", "SLES 70%", "Granular S"] },
+  petroleum: { vis: "distil", chips: ["Jet A-1", "Gasoil", "Pen grade"] },
+};
+
+const classCard = (c) => {
+  const x = CARD[c.key] || {};
+  return `      <a href="${c.href}" class="cls" data-cur="${c.count}">
+        <div class="cls-vis">${
+          x.vis
+            ? `<canvas data-vis="${x.vis}"></canvas>`
+            : `<canvas data-orn="${c.tone}" data-tile="120" data-nodes="5" data-alpha="0.3"></canvas>`
+        }<span class="tag">Class ${c.no} &middot; ${c.title}</span></div>
+        <div class="cls-b">
+          <h3>${c.title}</h3>
+          <p>${c.blurb}</p>
+          <div class="chips">
+${(x.chips || []).map((s) => `            <span class="chip spec">${s}</span>`).join("\n")}
+          </div>
+        </div>
+        <div class="cls-f"><span>${c.count}</span><span>Open class &rarr;</span></div>
+      </a>`;
+};
 
 module.exports = {
   page: "index",
   tier: "home",
   title: "Globalex Trading FZCO — The Caspian corridor, operated from Dubai",
-  desc: "Dubai FZCO freezone commodity trading house. Urea, sulphur, fertilizers, polymers and 16 industrial chemicals sourced across Turkmenistan, Uzbekistan, Kazakhstan and Azerbaijan, delivered worldwide.",
+  desc: "Dubai FZCO freezone commodity trading house. Urea, sulphur, fertilizers, polymers, industrial chemicals and refined petroleum products sourced across Turkmenistan, Uzbekistan, Kazakhstan and Azerbaijan, delivered worldwide.",
   three: true,
 
   css:
@@ -197,7 +238,7 @@ module.exports = {
 <section class="sec is-tight">
   <div class="wrap">
     <div class="stats rv">
-      <div class="stat" data-stat><b><span data-to="24" data-dur="1500">0</span><i>+</i></b><span>Commodities traded</span></div>
+      <div class="stat" data-stat><b><span data-to="${TOTAL}" data-dur="1500">0</span><i>+</i></b><span>Commodities traded</span></div>
       <div class="stat" data-stat><b><span data-to="7" data-dur="1200">0</span></b><span>Origin markets</span></div>
       <div class="stat" data-stat><b><span data-to="10" data-dur="1200" data-pad="1">00</span></b><span>Contract checkpoints</span></div>
       <div class="stat" data-stat><b><span data-to="2019" data-dur="1800">0</span></b><span>Trading since</span></div>
@@ -240,46 +281,12 @@ module.exports = {
   <div class="wrap">
     <div class="hd rv">
       <span class="eb mat">Commodity classes</span>
-      <h2>Three classes. Twenty-four grades. One accountable counterparty.</h2>
-      <p class="lead">From nitrogen that drives global yields to the surfactants behind every detergent line &mdash; traded with disciplined sourcing and documentation that closes.</p>
+      <h2>${WORDS[CLASSES.length] || CLASSES.length} classes. ${TOTAL} grades. One accountable counterparty.</h2>
+      <p class="lead">From nitrogen that drives global yields to the surfactants behind every detergent line and the cuts that come off a barrel of crude &mdash; traded with disciplined sourcing and documentation that closes.</p>
     </div>
 
-    <div class="g3 rvs">
-      <a href="fertilizers.html" class="cls" data-cur="5 grades">
-        <div class="cls-vis"><canvas data-vis="crystal"></canvas><span class="tag">Class 01 &middot; Fertilizers</span></div>
-        <div class="cls-b">
-          <h3>Fertilizers</h3>
-          <p>Urea B (N46), potash, ammonia, ammonium nitrate and NPK &mdash; the nitrogen and compound grades that set yield.</p>
-          <div class="chips">
-            <span class="chip spec">N46</span><span class="chip spec">Prilled</span><span class="chip spec">Granular</span>
-          </div>
-        </div>
-        <div class="cls-f"><span>5 grades</span><span>Open class &rarr;</span></div>
-      </a>
-
-      <a href="polymers.html" class="cls" data-cur="3 families">
-        <div class="cls-vis"><canvas data-vis="chain"></canvas><span class="tag">Class 02 &middot; Polymers</span></div>
-        <div class="cls-b">
-          <h3>Polymers</h3>
-          <p>Polyethylene across LDPE, HDPE, LLDPE and UHMWPE, polypropylene homo- and copolymer, plus performance additives.</p>
-          <div class="chips">
-            <span class="chip spec">HDPE</span><span class="chip spec">LLDPE</span><span class="chip spec">PP copo</span>
-          </div>
-        </div>
-        <div class="cls-f"><span>3 families</span><span>Open class &rarr;</span></div>
-      </a>
-
-      <a href="industrials.html" class="cls" data-cur="16 grades">
-        <div class="cls-vis"><canvas data-vis="react"></canvas><span class="tag">Class 03 &middot; Industrials</span></div>
-        <div class="cls-b">
-          <h3>Industrial chemicals</h3>
-          <p>Sulphur, caustic soda, sulphuric and hydrochloric acid, LABSA 96%, SLES 70%, carbon black, iodine and more.</p>
-          <div class="chips">
-            <span class="chip spec">LABSA 96%</span><span class="chip spec">SLES 70%</span><span class="chip spec">Granular S</span>
-          </div>
-        </div>
-        <div class="cls-f"><span>16 grades</span><span>Open class &rarr;</span></div>
-      </a>
+    <div class="g4 rvs">
+${CLASSES.map(classCard).join("\n\n")}
     </div>
   </div>
 </section>
@@ -545,6 +552,58 @@ function visReact(cv){
       var r=p.r*(1+pulse*.5);
       x.fillStyle=RGBA('sandD', .5+pulse*.45);
       x.fillRect(-r,-r,r*2,r*2); x.restore();
+    });
+  });
+}
+
+function visDistil(cv){
+  /* Petroleum: the fractionating column, flattened onto the card. Vapour
+     leaves the flash zone and each particle drops out at its own tray, turning
+     from the system accent to the material accent as it condenses — the same
+     event the hero's WebGL tower draws, at a twentieth of the geometry. */
+  var TRAYS = 8, V = [];
+  for (var i=0;i<72;i++) V.push({k:i % TRAYS, y:Math.random(),
+    sp:.16+Math.random()*.22, x:.18+Math.random()*.64, ph:Math.random()*6.3});
+  glxStage(cv, function(x,w,h,t){
+    x.clearRect(0,0,w,h);
+    var g = x.createLinearGradient(0,h,0,0);
+    g.addColorStop(0, RGBA('sandD', .13));
+    g.addColorStop(1, RGBA('cyan', .06));
+    x.fillStyle=g; x.fillRect(0,0,w,h);
+
+    var cw = w*.28, cx0 = w*.5 - cw/2, top = h*.10, bot = h*.90;
+    var lit = Math.floor(t*.55) % TRAYS;
+
+    x.strokeStyle = RGBA('sandD', .5); x.lineWidth = 1.2;
+    x.strokeRect(cx0, top, cw, bot-top);
+
+    // one tray per cut, each with its own draw-off to a collector
+    for (var i=0;i<TRAYS;i++){
+      var ty = top + (i+.5)/TRAYS * (bot-top), on = i === lit;
+      x.strokeStyle = on ? RGBA('signal', .95) : RGBA('sandD', .3);
+      x.lineWidth = on ? 1.7 : 1;
+      x.beginPath(); x.moveTo(cx0+2, ty); x.lineTo(cx0+cw-2, ty); x.stroke();
+      var side = i % 2 ? -1 : 1;
+      var ex = side > 0 ? cx0+cw : cx0, tx = ex + side*w*.15;
+      x.strokeStyle = on ? RGBA('signal', .8) : RGBA('sandD', .17);
+      x.lineWidth = 1;
+      x.beginPath(); x.moveTo(ex, ty); x.lineTo(tx, ty); x.lineTo(tx, ty + h*.055); x.stroke();
+      if (on){
+        x.save(); x.translate(tx, ty + h*.055); x.rotate(Math.PI/4);
+        x.fillStyle = RGBA('signal', .95); x.fillRect(-2.6,-2.6,5.2,5.2); x.restore();
+      }
+    }
+
+    V.forEach(function(p){
+      var goal = 1 - (p.k + .5)/TRAYS;         // 0 at the flash zone, 1 at the dome
+      p.y += p.sp * .006;
+      if (p.y >= goal){ p.y = 0; p.x = .18+Math.random()*.64; }
+      var k = goal > 0 ? Math.min(1, p.y/goal) : 1;
+      var px = cx0 + p.x*cw + Math.sin(t*1.2 + p.ph)*cw*.06;
+      var py = bot - p.y*(bot-top);
+      x.fillStyle = p.k === lit ? RGBA('signal', .45+k*.5)
+        : k > .78 ? RGBA('sandD', .3+k*.5) : RGBA('cyan', .22+k*.4);
+      x.beginPath(); x.arc(px, py, 1+k*1.5, 0, 6.284); x.fill();
     });
   });
 }
@@ -1103,7 +1162,7 @@ function buildGlobe(){
 }
 
 window.glxPage = function(){
-  var vis = {crystal:visCrystal, chain:visChain, react:visReact};
+  var vis = {crystal:visCrystal, chain:visChain, react:visReact, distil:visDistil};
   [].forEach.call(document.querySelectorAll('[data-vis]'), function(cv){
     var f = vis[cv.getAttribute('data-vis')];
     if (f) f(cv);

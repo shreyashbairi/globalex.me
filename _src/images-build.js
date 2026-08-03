@@ -35,9 +35,7 @@
 const fs = require("fs");
 const path = require("path");
 const { execFileSync } = require("child_process");
-const {
-  FERTILIZERS, POLYMERS, CHEMICALS, IMG_W, IMG_H, IMG_SQ,
-} = require("./catalogue");
+const { CLASSES, IMG_W, IMG_H, IMG_SQ } = require("./catalogue");
 const theme = require("./theme");
 
 const ROOT = path.resolve(__dirname, "..");
@@ -155,7 +153,17 @@ function dimensions(file) {
   throw new Error(`images-build: ${path.basename(file)} is neither PNG nor WebP`);
 }
 
-const products = [...FERTILIZERS, ...POLYMERS, ...CHEMICALS];
+/* Read from CLASSES rather than from three named arrays, so a new commodity
+   class is encoded by this script the day it is added instead of the day
+   someone remembers to name it here.
+
+   A grade carrying `photo:false` has no master and is not meant to: its two
+   files are drawn by `npm run placeholders`. Demanding a master for it would
+   make this script fail for the whole book because one class has not been
+   photographed yet. Clearing the flag is what hands it back to this script. */
+const products = CLASSES.flatMap((c) => c.items);
+const awaiting = products.filter((p) => p.photo === false);
+const shoot = products.filter((p) => p.photo !== false);
 const kb = (f) => Math.round(fs.statSync(f).size / 1024);
 
 if (!fs.existsSync(SRC))
@@ -167,7 +175,7 @@ fs.mkdirSync(OUT, { recursive: true });
 
 /* Reconcile before encoding anything, so a missing master is one clear error
    at the start rather than twenty-three successes and a gap. */
-const missing = products
+const missing = shoot
   .map((p) => p.url.replace(/\.html$/, ".webp"))
   .filter((f) => !fs.existsSync(path.join(SRC, f)));
 if (missing.length)
@@ -176,11 +184,18 @@ if (missing.length)
       `${missing.join(", ")}. Expected in ${path.relative(ROOT, SRC)}/.`,
   );
 
+if (awaiting.length)
+  console.log(
+    `  ${awaiting.length} grade(s) carry photo:false and are skipped — ` +
+      `${awaiting.map((p) => p.id).join(", ")}.\n` +
+      `  Their plates come from \`npm run placeholders\`.\n`,
+  );
+
 let totalIn = 0,
   totalWide = 0,
   totalSq = 0;
 
-for (const p of products) {
+for (const p of shoot) {
   const base = p.url.replace(/\.html$/, "");
   const src = path.join(SRC, `${base}.webp`);
   const wide = path.join(OUT, `${base}.webp`);
@@ -216,7 +231,7 @@ for (const p of products) {
       `images-build: ${base}.webp encoded to ${gotW.w}x${gotW.h}, but ` +
         `catalogue.js declares IMG_W/IMG_H as ${IMG_W}x${IMG_H}. The master ` +
         `is a different aspect ratio from the rest — re-crop it, or update ` +
-        `those constants for all 24.`,
+        `those constants for the whole set.`,
     );
   if (gotS.w !== IMG_SQ || gotS.h !== IMG_SQ)
     throw new Error(
@@ -237,11 +252,11 @@ for (const p of products) {
 
 const mb = (n) => (n / 1048576).toFixed(1);
 console.log(
-  `\n${products.length} grade(s): ${mb(totalIn)} MB of masters -> ` +
+  `\n${shoot.length} grade(s): ${mb(totalIn)} MB of masters -> ` +
     `${mb(totalWide)} MB wide + ${mb(totalSq)} MB square, ` +
     `${Math.round((1 - (totalWide + totalSq) / totalIn) * 100)}% smaller.`,
 );
 console.log(
   `The products grid loads only the square set: ${Math.round(totalSq / 1024)} KB ` +
-    `for all ${products.length}.`,
+    `for all ${shoot.length}.`,
 );

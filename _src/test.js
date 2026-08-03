@@ -167,8 +167,8 @@ t("scene3d: every emitted bundle is syntactically valid JavaScript", () => {
 });
 
 /* Every scene the pages ask for has to exist. bundle() throws on an unknown
-   name, so this is really a check that the eight heroes and the eight scenes
-   have not drifted apart under a rename. */
+   name, so this is really a check that the staged heroes and the scenes have
+   not drifted apart under a rename. */
 t("scene3d: every stage a page declares resolves to a scene", () => {
   const fsx = require("fs");
   const px = require("path");
@@ -182,7 +182,33 @@ t("scene3d: every stage a page declares resolves to a scene", () => {
       found++;
     }
   }
-  assert.strictEqual(found, 8, `expected 8 staged heroes, found ${found}`);
+  /* One staged hero per class page, plus the five non-class pages that carry a
+     scene: about, procedures, products, sustainability, logistics. Asserted as
+     a number rather than as "at least one", so a hero that silently loses its
+     stage in an edit fails here. */
+  const staged = CLASSES.length + 5;
+  assert.strictEqual(found, staged, `expected ${staged} staged heroes, found ${found}`);
+});
+
+/* Every product image the catalogue points at has to be on disk, whether it is
+   a delivered photograph or a generated placeholder. A missing file is a
+   broken <img> on the busiest page on the site, and neither image script runs
+   as part of `npm run build` — so nothing else would catch it. */
+t("catalogue: every grade's plate and thumbnail exist in assets/products", () => {
+  const fsx = require("fs");
+  const px = require("path");
+  const root = px.resolve(__dirname, "..");
+  const gone = [];
+  for (const cls of CLASSES)
+    for (const item of cls.items)
+      for (const f of [item.img, item.imgSq])
+        if (!fsx.existsSync(px.join(root, f))) gone.push(f);
+  assert.strictEqual(
+    gone.length,
+    0,
+    `missing ${gone.length} image(s): ${gone.slice(0, 6).join(", ")} — run ` +
+      `\`npm run images\`, or \`npm run placeholders\` for grades with photo:false`,
+  );
 });
 
 // ------------------------------------------------------------- generated SEO
@@ -414,7 +440,8 @@ t("theme: every custom property used in CSS is defined", () => {
   );
   /* set inline via a style attribute or from JavaScript, never in a rule */
   const inline = new Set([
-    "--d", "--i", "--v", "--sc", "--led-cols", "--noise", "--head", "--x-rgb",
+    "--d", "--i", "--v", "--sc", "--led-cols", "--mm-cols", "--noise", "--head",
+    "--x-rgb",
   ]);
   const missing = [...new Set([...all.matchAll(/var\((--[a-z0-9-]+)/g)].map((m) => m[1]))]
     .filter((u) => !defined.has(u) && !inline.has(u))

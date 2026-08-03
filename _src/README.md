@@ -1,12 +1,13 @@
 # Page generator (optional)
 
-The eleven `.html` files at the repo root are **fully self-contained** — every
-line of CSS and JS is inlined, and they open straight from disk. Nothing here is
-needed to run or deploy the site.
+The `.html` files at the repo root are **fully self-contained** — every line of
+CSS and JS is inlined, and they open straight from disk. Nothing here is needed
+to run or deploy the site.
 
-This folder only exists so shared chrome doesn't have to be edited eleven times.
+This folder only exists so shared chrome doesn't have to be edited once per
+page.
 
-    node _src/build.js      # rewrites all 11 .html files at the repo root
+    node _src/build.js      # rewrites every .html file at the repo root
 
 - `theme.js`      — every colour on the site; edit here, nowhere else
 - `kernel-css.js` — the whole design system (tokens, chrome, components)
@@ -16,7 +17,7 @@ This folder only exists so shared chrome doesn't have to be edited eleven times.
 - `scene3d.js`    — the interior pages' WebGL hero stages, one scene per page.
                     A page opts in with `three: true`, a `stage:` on its hero
                     and `js: scene3d.bundle(name, data)`. Only the scene that
-                    page asked for is inlined, never all eight.
+                    page asked for is inlined, never all nine.
 - `pages/*.js`    — one file per page: metadata, body, page-specific CSS/JS
 - `geo.js`        — baked Natural Earth 110m coastlines and land mask, for the
                     home-page globe. Generated and committed, not built.
@@ -24,10 +25,15 @@ This folder only exists so shared chrome doesn't have to be edited eleven times.
                     files fetched by hand; see its header.
 - `images-build.js` — encodes the product photographs from `_masters/products`
                     into `assets/products` (`npm run images`). Masters are
-                    gitignored and must be backed up separately.
+                    gitignored and must be backed up separately. Grades marked
+                    `photo:false` in the catalogue are skipped — they have no
+                    master yet.
+- `placeholder-images.js` — draws the stand-in plate for exactly those grades
+                    (`npm run placeholders`), at the same two paths, so no
+                    page has to know whether a grade has been photographed.
 - `product-images.md`        — the imagery brief: what the photographs are,
                     where they go, and what the stylesheet does to them.
-- `product-images-build.js`  — the 24 image-generation prompts
+- `product-images-build.js`  — one image-generation prompt per grade
                     (`npm run prompts`), expanded into `product-images-prompts.md`.
 
 Canvas colours never come from CSS. A 2D context and a three.js material take

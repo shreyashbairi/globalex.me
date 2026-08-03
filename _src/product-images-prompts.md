@@ -3,7 +3,7 @@
 
 # Product image prompts — ready to paste
 
-All 24 grades in `catalogue.js`, one block each. The camera, ground, light,
+All 32 grades in `catalogue.js`, one block each. The camera, ground, light,
 composition, colour and mood paragraphs are byte-identical across every
 block — that is what makes them a set. Only the opening sentence and the
 exclusion tail change.
@@ -15,7 +15,7 @@ you can delete the EXCLUDE line from the block.
 
 Reasoning, output specs and the post-processing the stylesheet applies to
 these: `product-images.md`. Read its section 6 before running them —
-generate Urea B (N46) first, lock the seed, then run the other 23 against
+generate Urea B (N46) first, lock the seed, then run the other 31 against
 it. Consistency across the set is the whole point, and it is invisible until
 they are seen together.
 
@@ -49,8 +49,16 @@ they are seen together.
 | 22 | Aluminium Sulphate | solid | `assets/products/industrials-aluminium-sulphate.webp` |
 | 23 | Iodine | solid | `assets/products/industrials-iodine.webp` |
 | 24 | Carbon Black | solid | `assets/products/industrials-carbon-black.webp` |
+| 25 | Gasoline | liquid | `assets/products/petroleum-gasoline.webp` |
+| 26 | Jet Fuel | liquid | `assets/products/petroleum-jet-fuel.webp` |
+| 27 | Lighting Kerosene | liquid | `assets/products/petroleum-lighting-kerosene.webp` |
+| 28 | Heating Kerosene | liquid | `assets/products/petroleum-heating-kerosene.webp` |
+| 29 | Diesel | liquid | `assets/products/petroleum-diesel.webp` |
+| 30 | Base Oil | liquid | `assets/products/petroleum-base-oil.webp` |
+| 31 | Fuel Oil | liquid | `assets/products/petroleum-fuel-oil.webp` |
+| 32 | Bitumen | solid | `assets/products/petroleum-bitumen.webp` |
 
-15 solid, 7 liquid, 2 sealed.
+16 solid, 14 liquid, 2 sealed.
 
 ---
 
@@ -59,7 +67,7 @@ they are seen together.
 Only for tools with a separate negative field. The EXCLUDE line already
 inside each block says the same thing in prose.
 
-For the 15 solid frames:
+For the 16 solid frames:
 
 ```
 packaging, sacks, bags, drums, labels, text, lettering, watermarks, logos,
@@ -72,7 +80,7 @@ orange grade, HDR, oversaturated, glossy reflective floor, mirror reflection,
 panels, borders, frames
 ```
 
-For the 7 liquid and 2 sealed frames, drop `beakers, flasks, test tubes,
+For the 14 liquid and 2 sealed frames, drop `beakers, flasks, test tubes,
 graduated cylinders` from that list. Those frames need their vessel — a
 shallow dish or a sealed glass ampoule — and a negative that broad will
 suppress it. For the sealed frames add `valve, handwheel, pressure gauge,
@@ -486,7 +494,7 @@ no oversaturation, no 3D render or illustration.
 Aspect ratio 16:10, 2048 x 1280.
 ```
 
-## Industrial chemicals
+## Industrial Chemicals
 
 ### 09 · Sulphur
 
@@ -1254,6 +1262,420 @@ material.
 
 MOOD — Quiet, factual, expensive. A specimen recorded for a technical
 document, not an advertisement.
+
+EXCLUDE — No packaging, sacks, bags, drums, labels, text, lettering, logos
+or branding. No hands, people, gloves, scoops or tools. No beakers, flasks,
+test tubes or laboratory glassware. No wooden, slate, marble or fabric
+surface. No dark or gradient background, no vignette, no lens flare, no HDR,
+no oversaturation, no 3D render or illustration.
+
+Aspect ratio 16:10, 2048 x 1280.
+```
+
+## Petroleum Products
+
+### 25 · Gasoline
+
+Save as `assets/products/petroleum-gasoline.webp`
+
+```
+Editorial macro specimen photograph of Gasoline, a bulk-traded industrial
+commodity. A wide, shallow clear-glass dish holding a thin layer of very
+pale straw-yellow liquid, thin and mobile, the paper ground reading clearly
+through it, with a bright crisp meniscus at the rim and a faint iridescent
+sheen where the surface catches the light.
+
+CAMERA — Shot from directly overhead, true flat lay, subject centred.
+Medium-format digital, 100mm macro, f/8. The material is sharp front to back
+with only a slight softness at the extreme edge of frame.
+
+GROUND — A single seamless sheet of off-white paper, colour exactly #FAFAF7:
+a very light neutral off-white carrying only the faintest warmth. Not cream,
+not beige, not tan, not ivory, not grey, and not pure white. It must read as
+the same sheet of paper in every frame of this series. Filling the frame
+edge to edge, very slight paper tooth visible. No table edge, no horizon, no
+second surface, no backdrop seam.
+
+LIGHT — One large soft north-facing window from the upper left. A single
+gentle diffuse shadow falls to the lower right, short and soft-edged. No
+hard specular hotspots, no rim light, no second source, no visible
+reflector.
+
+COMPOSITION — The material occupies the central 55% of the frame. Generous
+empty ground on all four sides; nothing crosses the outer 15% of the frame.
+Nothing else in shot.
+
+COLOUR — Restrained and near-neutral. The ground stays warm off-white and
+slightly desaturated. The only saturated colour anywhere in the frame is the
+material's own; it is not boosted. Fine natural film grain. Flat, even
+exposure holding detail in both the ground and the darkest part of the
+material.
+
+MOOD — Quiet, factual, expensive. A specimen recorded for a technical
+document, not an advertisement.
+
+EXCLUDE — No packaging, bottles, drums, labels, text, lettering, logos or
+branding. No hands, people, gloves, pipettes or tools. No beakers, flasks,
+test tubes or graduated cylinders — the shallow dish described above is the
+only vessel in frame. No wooden, slate, marble or fabric surface. No dark or
+gradient background, no vignette, no lens flare, no HDR, no oversaturation,
+no 3D render or illustration.
+
+Aspect ratio 16:10, 2048 x 1280.
+```
+
+### 26 · Jet Fuel
+
+Save as `assets/products/petroleum-jet-fuel.webp`
+
+```
+Editorial macro specimen photograph of Jet Fuel, a bulk-traded industrial
+commodity. A wide, shallow clear-glass dish holding a thin layer of
+water-white to faintly straw liquid, the palest of the fuel cuts, almost
+colourless and very clean, the ground reading through it almost unchanged,
+with a clean bright meniscus and a perfectly still, unbroken surface.
+
+CAMERA — Shot from directly overhead, true flat lay, subject centred.
+Medium-format digital, 100mm macro, f/8. The material is sharp front to back
+with only a slight softness at the extreme edge of frame.
+
+GROUND — A single seamless sheet of off-white paper, colour exactly #FAFAF7:
+a very light neutral off-white carrying only the faintest warmth. Not cream,
+not beige, not tan, not ivory, not grey, and not pure white. It must read as
+the same sheet of paper in every frame of this series. Filling the frame
+edge to edge, very slight paper tooth visible. No table edge, no horizon, no
+second surface, no backdrop seam.
+
+LIGHT — One large soft north-facing window from the upper left. A single
+gentle diffuse shadow falls to the lower right, short and soft-edged. No
+hard specular hotspots, no rim light, no second source, no visible
+reflector.
+
+COMPOSITION — The material occupies the central 55% of the frame. Generous
+empty ground on all four sides; nothing crosses the outer 15% of the frame.
+Nothing else in shot.
+
+COLOUR — Restrained and near-neutral. The ground stays warm off-white and
+slightly desaturated. The only saturated colour anywhere in the frame is the
+material's own; it is not boosted. Fine natural film grain. Flat, even
+exposure holding detail in both the ground and the darkest part of the
+material.
+
+MOOD — Quiet, factual, expensive. A specimen recorded for a technical
+document, not an advertisement.
+
+TONE — This cut is nearly colourless, so the dish itself has to do the work:
+hold the glass rim, the meniscus and the shallow shadow the dish casts on
+the paper crisply, so the frame still reads as a liquid specimen and not as
+an empty dish.
+
+EXCLUDE — No packaging, bottles, drums, labels, text, lettering, logos or
+branding. No hands, people, gloves, pipettes or tools. No beakers, flasks,
+test tubes or graduated cylinders — the shallow dish described above is the
+only vessel in frame. No wooden, slate, marble or fabric surface. No dark or
+gradient background, no vignette, no lens flare, no HDR, no oversaturation,
+no 3D render or illustration.
+
+Aspect ratio 16:10, 2048 x 1280.
+```
+
+### 27 · Lighting Kerosene
+
+Save as `assets/products/petroleum-lighting-kerosene.webp`
+
+```
+Editorial macro specimen photograph of Lighting Kerosene, a bulk-traded
+industrial commodity. A wide, shallow clear-glass dish holding a thin layer
+of clear pale straw liquid, a shade deeper and slightly more viscous than
+jet fuel, the ground reading through it with a warm cast, a soft even sheen
+across the still surface.
+
+CAMERA — Shot from directly overhead, true flat lay, subject centred.
+Medium-format digital, 100mm macro, f/8. The material is sharp front to back
+with only a slight softness at the extreme edge of frame.
+
+GROUND — A single seamless sheet of off-white paper, colour exactly #FAFAF7:
+a very light neutral off-white carrying only the faintest warmth. Not cream,
+not beige, not tan, not ivory, not grey, and not pure white. It must read as
+the same sheet of paper in every frame of this series. Filling the frame
+edge to edge, very slight paper tooth visible. No table edge, no horizon, no
+second surface, no backdrop seam.
+
+LIGHT — One large soft north-facing window from the upper left. A single
+gentle diffuse shadow falls to the lower right, short and soft-edged. No
+hard specular hotspots, no rim light, no second source, no visible
+reflector.
+
+COMPOSITION — The material occupies the central 55% of the frame. Generous
+empty ground on all four sides; nothing crosses the outer 15% of the frame.
+Nothing else in shot.
+
+COLOUR — Restrained and near-neutral. The ground stays warm off-white and
+slightly desaturated. The only saturated colour anywhere in the frame is the
+material's own; it is not boosted. Fine natural film grain. Flat, even
+exposure holding detail in both the ground and the darkest part of the
+material.
+
+MOOD — Quiet, factual, expensive. A specimen recorded for a technical
+document, not an advertisement.
+
+EXCLUDE — No packaging, bottles, drums, labels, text, lettering, logos or
+branding. No hands, people, gloves, pipettes or tools. No beakers, flasks,
+test tubes or graduated cylinders — the shallow dish described above is the
+only vessel in frame. No wooden, slate, marble or fabric surface. No dark or
+gradient background, no vignette, no lens flare, no HDR, no oversaturation,
+no 3D render or illustration.
+
+Aspect ratio 16:10, 2048 x 1280.
+```
+
+### 28 · Heating Kerosene
+
+Save as `assets/products/petroleum-heating-kerosene.webp`
+
+```
+Editorial macro specimen photograph of Heating Kerosene, a bulk-traded
+industrial commodity. A wide, shallow clear-glass dish holding a thin layer
+of clear light amber liquid, a step warmer and deeper than the lighting
+grade, the ground still visible through it, with a soft even sheen and a
+clean meniscus at the rim.
+
+CAMERA — Shot from directly overhead, true flat lay, subject centred.
+Medium-format digital, 100mm macro, f/8. The material is sharp front to back
+with only a slight softness at the extreme edge of frame.
+
+GROUND — A single seamless sheet of off-white paper, colour exactly #FAFAF7:
+a very light neutral off-white carrying only the faintest warmth. Not cream,
+not beige, not tan, not ivory, not grey, and not pure white. It must read as
+the same sheet of paper in every frame of this series. Filling the frame
+edge to edge, very slight paper tooth visible. No table edge, no horizon, no
+second surface, no backdrop seam.
+
+LIGHT — One large soft north-facing window from the upper left. A single
+gentle diffuse shadow falls to the lower right, short and soft-edged. No
+hard specular hotspots, no rim light, no second source, no visible
+reflector.
+
+COMPOSITION — The material occupies the central 55% of the frame. Generous
+empty ground on all four sides; nothing crosses the outer 15% of the frame.
+Nothing else in shot.
+
+COLOUR — Restrained and near-neutral. The ground stays warm off-white and
+slightly desaturated. The only saturated colour anywhere in the frame is the
+material's own; it is not boosted. Fine natural film grain. Flat, even
+exposure holding detail in both the ground and the darkest part of the
+material.
+
+MOOD — Quiet, factual, expensive. A specimen recorded for a technical
+document, not an advertisement.
+
+EXCLUDE — No packaging, bottles, drums, labels, text, lettering, logos or
+branding. No hands, people, gloves, pipettes or tools. No beakers, flasks,
+test tubes or graduated cylinders — the shallow dish described above is the
+only vessel in frame. No wooden, slate, marble or fabric surface. No dark or
+gradient background, no vignette, no lens flare, no HDR, no oversaturation,
+no 3D render or illustration.
+
+Aspect ratio 16:10, 2048 x 1280.
+```
+
+### 29 · Diesel
+
+Save as `assets/products/petroleum-diesel.webp`
+
+```
+Editorial macro specimen photograph of Diesel, a bulk-traded industrial
+commodity. A wide, shallow clear-glass dish holding a thin layer of clear
+amber liquid with a faint green cast at the meniscus, noticeably more
+viscous than the kerosene cuts so the surface settles slowly, the ground
+reading through it warmly.
+
+CAMERA — Shot from directly overhead, true flat lay, subject centred.
+Medium-format digital, 100mm macro, f/8. The material is sharp front to back
+with only a slight softness at the extreme edge of frame.
+
+GROUND — A single seamless sheet of off-white paper, colour exactly #FAFAF7:
+a very light neutral off-white carrying only the faintest warmth. Not cream,
+not beige, not tan, not ivory, not grey, and not pure white. It must read as
+the same sheet of paper in every frame of this series. Filling the frame
+edge to edge, very slight paper tooth visible. No table edge, no horizon, no
+second surface, no backdrop seam.
+
+LIGHT — One large soft north-facing window from the upper left. A single
+gentle diffuse shadow falls to the lower right, short and soft-edged. No
+hard specular hotspots, no rim light, no second source, no visible
+reflector.
+
+COMPOSITION — The material occupies the central 55% of the frame. Generous
+empty ground on all four sides; nothing crosses the outer 15% of the frame.
+Nothing else in shot.
+
+COLOUR — Restrained and near-neutral. The ground stays warm off-white and
+slightly desaturated. The only saturated colour anywhere in the frame is the
+material's own; it is not boosted. Fine natural film grain. Flat, even
+exposure holding detail in both the ground and the darkest part of the
+material.
+
+MOOD — Quiet, factual, expensive. A specimen recorded for a technical
+document, not an advertisement.
+
+EXCLUDE — No packaging, bottles, drums, labels, text, lettering, logos or
+branding. No hands, people, gloves, pipettes or tools. No beakers, flasks,
+test tubes or graduated cylinders — the shallow dish described above is the
+only vessel in frame. No wooden, slate, marble or fabric surface. No dark or
+gradient background, no vignette, no lens flare, no HDR, no oversaturation,
+no 3D render or illustration.
+
+Aspect ratio 16:10, 2048 x 1280.
+```
+
+### 30 · Base Oil
+
+Save as `assets/products/petroleum-base-oil.webp`
+
+```
+Editorial macro specimen photograph of Base Oil, a bulk-traded industrial
+commodity. A wide, shallow clear-glass dish holding a thin layer of clear
+golden amber oil, visibly thick and slow-moving, its surface glossy and
+smooth with a deep even sheen, the meniscus climbing the rim higher than the
+fuel cuts do.
+
+CAMERA — Shot from directly overhead, true flat lay, subject centred.
+Medium-format digital, 100mm macro, f/8. The material is sharp front to back
+with only a slight softness at the extreme edge of frame.
+
+GROUND — A single seamless sheet of off-white paper, colour exactly #FAFAF7:
+a very light neutral off-white carrying only the faintest warmth. Not cream,
+not beige, not tan, not ivory, not grey, and not pure white. It must read as
+the same sheet of paper in every frame of this series. Filling the frame
+edge to edge, very slight paper tooth visible. No table edge, no horizon, no
+second surface, no backdrop seam.
+
+LIGHT — One large soft north-facing window from the upper left. A single
+gentle diffuse shadow falls to the lower right, short and soft-edged. No
+hard specular hotspots, no rim light, no second source, no visible
+reflector.
+
+COMPOSITION — The material occupies the central 55% of the frame. Generous
+empty ground on all four sides; nothing crosses the outer 15% of the frame.
+Nothing else in shot.
+
+COLOUR — Restrained and near-neutral. The ground stays warm off-white and
+slightly desaturated. The only saturated colour anywhere in the frame is the
+material's own; it is not boosted. Fine natural film grain. Flat, even
+exposure holding detail in both the ground and the darkest part of the
+material.
+
+MOOD — Quiet, factual, expensive. A specimen recorded for a technical
+document, not an advertisement.
+
+EXCLUDE — No packaging, bottles, drums, labels, text, lettering, logos or
+branding. No hands, people, gloves, pipettes or tools. No beakers, flasks,
+test tubes or graduated cylinders — the shallow dish described above is the
+only vessel in frame. No wooden, slate, marble or fabric surface. No dark or
+gradient background, no vignette, no lens flare, no HDR, no oversaturation,
+no 3D render or illustration.
+
+Aspect ratio 16:10, 2048 x 1280.
+```
+
+### 31 · Fuel Oil
+
+Save as `assets/products/petroleum-fuel-oil.webp`
+
+```
+Editorial macro specimen photograph of Fuel Oil, a bulk-traded industrial
+commodity. A wide, shallow clear-glass dish holding a thin layer of opaque
+brown-black heavy oil, thick and tarry, the ground not visible through it at
+all, its surface dull and slightly uneven with a slow sluggish edge where it
+meets the rim.
+
+CAMERA — Shot from directly overhead, true flat lay, subject centred.
+Medium-format digital, 100mm macro, f/8. The material is sharp front to back
+with only a slight softness at the extreme edge of frame.
+
+GROUND — A single seamless sheet of off-white paper, colour exactly #FAFAF7:
+a very light neutral off-white carrying only the faintest warmth. Not cream,
+not beige, not tan, not ivory, not grey, and not pure white. It must read as
+the same sheet of paper in every frame of this series. Filling the frame
+edge to edge, very slight paper tooth visible. No table edge, no horizon, no
+second surface, no backdrop seam.
+
+LIGHT — One large soft north-facing window from the upper left. A single
+gentle diffuse shadow falls to the lower right, short and soft-edged. No
+hard specular hotspots, no rim light, no second source, no visible
+reflector.
+
+COMPOSITION — The material occupies the central 55% of the frame. Generous
+empty ground on all four sides; nothing crosses the outer 15% of the frame.
+Nothing else in shot.
+
+COLOUR — Restrained and near-neutral. The ground stays warm off-white and
+slightly desaturated. The only saturated colour anywhere in the frame is the
+material's own; it is not boosted. Fine natural film grain. Flat, even
+exposure holding detail in both the ground and the darkest part of the
+material.
+
+MOOD — Quiet, factual, expensive. A specimen recorded for a technical
+document, not an advertisement.
+
+TONE — Hold detail in the black: the surface needs a visible sheen and a
+readable edge against the paper rather than collapsing into a flat
+silhouette.
+
+EXCLUDE — No packaging, bottles, drums, labels, text, lettering, logos or
+branding. No hands, people, gloves, pipettes or tools. No beakers, flasks,
+test tubes or graduated cylinders — the shallow dish described above is the
+only vessel in frame. No wooden, slate, marble or fabric surface. No dark or
+gradient background, no vignette, no lens flare, no HDR, no oversaturation,
+no 3D render or illustration.
+
+Aspect ratio 16:10, 2048 x 1280.
+```
+
+### 32 · Bitumen
+
+Save as `assets/products/petroleum-bitumen.webp`
+
+```
+Editorial macro specimen photograph of Bitumen, a bulk-traded industrial
+commodity. A single fractured lump of solid black bitumen about 80 mm
+across, centred, with a glossy conchoidal fracture face catching the light
+and duller matte faces around it, plus two or three small chips that have
+broken clear of it on the ground.
+
+CAMERA — Shot from directly overhead, true flat lay, subject centred.
+Medium-format digital, 100mm macro, f/8. The material is sharp front to back
+with only a slight softness at the extreme edge of frame.
+
+GROUND — A single seamless sheet of off-white paper, colour exactly #FAFAF7:
+a very light neutral off-white carrying only the faintest warmth. Not cream,
+not beige, not tan, not ivory, not grey, and not pure white. It must read as
+the same sheet of paper in every frame of this series. Filling the frame
+edge to edge, very slight paper tooth visible. No table edge, no horizon, no
+second surface, no backdrop seam.
+
+LIGHT — One large soft north-facing window from the upper left. A single
+gentle diffuse shadow falls to the lower right, short and soft-edged. No
+hard specular hotspots, no rim light, no second source, no visible
+reflector.
+
+COMPOSITION — The material occupies the central 55% of the frame. Generous
+empty ground on all four sides; nothing crosses the outer 15% of the frame.
+Nothing else in shot.
+
+COLOUR — Restrained and near-neutral. The ground stays warm off-white and
+slightly desaturated. The only saturated colour anywhere in the frame is the
+material's own; it is not boosted. Fine natural film grain. Flat, even
+exposure holding detail in both the ground and the darkest part of the
+material.
+
+MOOD — Quiet, factual, expensive. A specimen recorded for a technical
+document, not an advertisement.
+
+TONE — Push the separation between material and ground harder than usual,
+and keep the fracture face bright enough to read as glass-like rather than
+as an unlit black shape.
 
 EXCLUDE — No packaging, sacks, bags, drums, labels, text, lettering, logos
 or branding. No hands, people, gloves, scoops or tools. No beakers, flasks,

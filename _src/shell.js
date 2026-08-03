@@ -84,7 +84,7 @@ function header(page, navOwner) {
     const panelId = `mm-${n.id}`;
     const mega = n.kind === "mega";
     const body = mega
-      ? `<div class="mm-grid">
+      ? `<div class="mm-grid" style="--mm-cols:${CLASSES.length}">
 ${CLASSES.map(productColumn).join("\n")}
 ${featuredColumn()}
 </div>`
