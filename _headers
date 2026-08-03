@@ -7,10 +7,20 @@
 # _headers itself is safe: it does not affect whether the middleware runs.
 
 /assets/*
-  # Content-addressed by hand rather than by hash: these filenames change when
-  # the asset changes, so a long immutable cache is correct. The two hero MP4s
-  # are 8.5 MB and 3.3 MB, and re-fetching them per visit is the single largest
-  # avoidable cost on the site.
+  # A year, and immutable — which means a browser will not revalidate this even
+  # on a manual reload. That is only safe if the URL changes whenever the bytes
+  # do, and it must be ENFORCED rather than assumed. It was assumed once: eight
+  # product plates shipped as placeholders and were later overwritten in place
+  # by the real photographs, and the placeholders stayed live at the edge and
+  # in browsers with a one-year lifetime.
+  #
+  # Product image URLs now carry a hash of their own bytes, stamped into the
+  # markup by _src/asset-stamp.js, so overwriting a file changes its URL.
+  # Anything else under /assets/ is still addressed by hand: rename it when you
+  # change it, or it will not be picked up.
+  #
+  # Worth the care — the two hero MP4s are 8.5 MB and 3.3 MB, and re-fetching
+  # them per visit is the single largest avoidable cost on the site.
   Cache-Control: public, max-age=31536000, immutable
 
 /sitemap.xml

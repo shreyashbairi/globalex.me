@@ -17,6 +17,7 @@ const { hero, cta } = require("./parts");
 const { CLASSES, plain, IMG_W, IMG_H } = require("./catalogue");
 const { SPECS, isDraft } = require("./specs");
 const { RELEASED: DOCS } = require("./docs");
+const { stamp } = require("./asset-stamp");
 const S = require("./schema-org");
 const { on } = require("./flags");
 
@@ -323,7 +324,7 @@ module.exports = function productPage(item, cls) {
        placeholder a specimen photograph would be a small lie told to exactly
        the people who cannot see the difference. */
     image: [
-      item.img,
+      stamp(item.img),
       item.photo === false
         ? `${plain(item.name)} — placeholder plate, specimen photograph pending`
         : `${plain(item.name)} — specimen photograph`,

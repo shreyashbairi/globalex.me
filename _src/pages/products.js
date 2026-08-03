@@ -16,6 +16,7 @@ const { hero, cta } = require("../parts");
 const { CLASSES, plain } = require("../catalogue");
 const { RELEASED: DOCS } = require("../docs");
 const { groups, attrs } = require("../facets");
+const { stamp } = require("../asset-stamp");
 const { on } = require("../flags");
 const { decode } = require("../esc");
 const scene3d = require("../scene3d");
@@ -60,7 +61,7 @@ const card = (p, cls, i) => `<a class="pc" href="${p.url}"
 </span>
 <span class="pc-hd">
   <span class="pc-img">
-    <img src="${p.imgSq}" alt="" width="512" height="512" loading="lazy" decoding="async" />
+    <img src="${stamp(p.imgSq)}" alt="" width="512" height="512" loading="lazy" decoding="async" />
   </span>
   <span class="pc-hd-t">
     <span class="pc-h">

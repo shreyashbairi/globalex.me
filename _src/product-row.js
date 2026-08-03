@@ -20,6 +20,8 @@
    of what reads as clickable.
    ============================================================ */
 
+const { stamp } = require("./asset-stamp");
+
 const chips = (list, kind) =>
   list && list.length
     ? `<span class="chips">${list.map((s) => `<span class="chip ${kind}">${s}</span>`).join("")}</span>`
@@ -32,7 +34,7 @@ function productRow(p, i, { side = "", cls = "", attrs = "" } = {}) {
   return `<a class="row prod${cls ? " " + cls : ""}" href="${p.url}" id="${p.id}" data-cur="Open grade"${attrs}>
 <span class="row-ix">${String(i + 1).padStart(2, "0")}</span>
 <span class="row-img">
-  <img src="${p.imgSq}" alt="" width="512" height="512" loading="lazy" decoding="async" />
+  <img src="${stamp(p.imgSq)}" alt="" width="512" height="512" loading="lazy" decoding="async" />
 </span>
 <span class="row-b">
   <h3 class="row-h">${p.name}${p.f && p.f !== "&mdash;" ? `<i class="formula">${p.f}</i>` : ""}</h3>
