@@ -391,8 +391,10 @@ const CHEMICALS = [
    the hero's fractionating column lights them in. `band` names the four groups
    that order falls into, and the row ladder draws it.
 
-   `photo:false` on every grade: the specimen photography for this class has
-   not been shot, so each plate is a generated placeholder. See pimg() above. */
+   These eight carried `photo:false` while their specimen photography was
+   outstanding and were served a generated plate. The masters have since been
+   delivered, so the flag is gone and they are encoded by `npm run images` like
+   every other grade. */
 const PETROLEUM = [
   {
     name: "Gasoline",
@@ -470,7 +472,6 @@ const PETROLEUM = [
   const id = slug(p.name);
   return {
     ...p, id, cat: "petroleum",
-    photo: false,
     url: purl("petroleum", id),
     img: pimg("petroleum", id),
     imgSq: pimgSq("petroleum", id),

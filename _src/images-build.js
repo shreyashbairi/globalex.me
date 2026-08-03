@@ -6,10 +6,13 @@
    NOT part of `npm run build`. Run it when a master changes.
 
    WHY THIS EXISTS
-   The twenty-four delivered frames arrived at 2752x1536 and about 6 MB each
-   — 144 MB in total, and PNG data carrying a .webp extension, so the bytes
-   and the Content-Type disagreed. products.html renders all twenty-four on
-   one page. Shipped as delivered that is a 144 MB page.
+   The frames arrive at about 6 MB each — 192 MB across the set — as PNG data
+   carrying a .webp extension, so the bytes and the Content-Type disagree.
+   products.html renders every grade on one page. Shipped as delivered that is
+   a 192 MB page.
+
+   They also do not all arrive at one size: classes 01-03 came at 2752x1536
+   and the petroleum set at 2528x1696. See the aspect fit in the loop below.
 
    Each master produces two derivatives, because the two placements want
    genuinely different files rather than one file used badly:
@@ -207,7 +210,41 @@ for (const p of shoot) {
   const tmp = path.join(OUT, `.${base}.norm.png`);
   const was = normalise(src, tmp, w, h);
 
-  cwebp(["-resize", String(WIDE_PX), "0", "-q", String(WIDE_Q), "-m", "6", tmp, "-o", wide]);
+  /* Fit the frame to the declared output ratio.
+
+     The first delivery was 2752x1536 throughout, which a plain width resize
+     lands on 1600x894 by itself. The petroleum set arrived at 2528x1696 — a
+     different ratio entirely — and the same resize would put it at 1600x1073:
+     eight product pages reflowing as each photograph landed, and eight plates
+     a different shape from the other twenty-four.
+
+     So a master that will not resize onto IMG_W x IMG_H is centre-cropped to
+     that ratio first. Cropping is safe for exactly the reason the square crop
+     is: every prompt pins the subject to the middle 55% of the frame.
+
+     Conditional rather than unconditional, and that is deliberate. Cropping
+     every master to the exact ratio would take three pixels off the width of
+     the twenty-four frames that are already correct, re-encoding all of them
+     to no visible end. A master within a pixel or two of the target is left
+     alone. */
+  const fit = Math.round((h * WIDE_PX) / w);
+  if (Math.abs(fit - IMG_H) <= 2) {
+    cwebp(["-resize", String(WIDE_PX), "0", "-q", String(WIDE_Q), "-m", "6", tmp, "-o", wide]);
+  } else {
+    let cw = w,
+      ch = Math.round((w * IMG_H) / IMG_W);
+    if (ch > h) { ch = h; cw = Math.round((h * IMG_W) / IMG_H); }
+    cwebp([
+      "-crop", String(Math.round((w - cw) / 2)), String(Math.round((h - ch) / 2)),
+      String(cw), String(ch),
+      "-resize", String(WIDE_PX), String(IMG_H),
+      "-q", String(WIDE_Q), "-m", "6", tmp, "-o", wide,
+    ]);
+    console.log(
+      `  ${base.padEnd(34)} master is ${w}x${h}, cropped to ${cw}x${ch} for the ` +
+        `${IMG_W}x${IMG_H} plate`,
+    );
+  }
 
   /* Centre square. Landscape masters crop horizontally, portrait ones
      vertically; the short edge always sets the square. */

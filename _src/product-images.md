@@ -1,12 +1,15 @@
 # Product imagery — generation brief
 
-> **Status.** The 24 grades in classes 01–03 are shot and encoded. The 8
-> petroleum grades in class 04 are specified below and in the prompts file but
-> have **not** been shot: each carries `photo:false` in `catalogue.js` and is
-> served a generated stand-in plate by `npm run placeholders`. Every "24" in
-> the rest of this file describes the delivered set, not the catalogue. Shoot
-> the remaining 8 against the same master prompt, drop the masters in
-> `_masters/products`, clear the flag and run `npm run images`.
+> **Status.** All 32 grades are shot and encoded. They arrived in two
+> deliveries — classes 01–03 at 2752x1536, class 04 (petroleum) at 2528x1696 —
+> so `images-build.js` centre-crops any master that will not resize onto
+> 1600x894 before encoding it. Every "24" in the rest of this file describes
+> the first delivery; the system it specifies is unchanged.
+>
+> A grade added to the catalogue before its photography exists can carry
+> `photo:false` and be served a generated stand-in plate by
+> `npm run placeholders`, at the same two paths. Clear the flag and run
+> `npm run images` when the master lands.
 
 > **The expanded, ready-to-paste prompts are in
 > [`product-images-prompts.md`](./product-images-prompts.md).** This file is
