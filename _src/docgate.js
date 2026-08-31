@@ -12,7 +12,7 @@
    single-recipient token and emails a link to the tracked viewer.
    ============================================================ */
 
-const { RELEASED: DOCS, BASE_OIL_FAMILY, PP_FAMILY } = require('./docs');
+const { RELEASED: DOCS, BASE_OIL_FAMILY, PP_FAMILY } = require("./docs");
 
 const css = `
 /* ---------- register + specimen ---------- */
@@ -170,19 +170,27 @@ const css = `
 // markup
 // --------------------------------------------------------------
 
-const bytes = (n) => (n >= 1048576 ? `${(n / 1048576).toFixed(1)} MB` : `${Math.round(n / 1024)} KB`);
+const bytes = (n) =>
+  n >= 1048576
+    ? `${(n / 1048576).toFixed(1)} MB`
+    : `${Math.round(n / 1024)} KB`;
 
 /* `cls` lets the caller control the section background, so the register can
    be dropped anywhere in the page without breaking the panel/plain
    alternation that gives the scroll its rhythm. */
-function section(cls = 'sec sec-panel') {
-  const rows = DOCS.map((d, i) => `<button class="dr" type="button" role="tab" data-doc="${d.id}" id="doc-${d.id}"
- aria-selected="${i === 0 ? 'true' : 'false'}"${i === 0 ? ' data-on' : ''}>
-<span class="dr-ix">${String(i + 1).padStart(2, '0')}</span>
+function section(cls = "sec sec-panel") {
+  const rows = DOCS.map(
+    (
+      d,
+      i,
+    ) => `<button class="dr" type="button" role="tab" data-doc="${d.id}" id="doc-${d.id}"
+ aria-selected="${i === 0 ? "true" : "false"}"${i === 0 ? " data-on" : ""}>
+<span class="dr-ix">${String(i + 1).padStart(2, "0")}</span>
 <span class="dr-k" data-kind="${d.kind}">${d.kind}</span>
 <span class="dr-t"><b>${d.title}</b><small>${d.sub} &middot; ${d.origin}</small></span>
 <span class="dr-lock" aria-hidden="true"><i></i><b></b></span>
-</button>`).join('\n');
+</button>`,
+  ).join("\n");
 
   return `<section class="${cls}" id="specifications" data-sec="Documents">
 <div class="wrap">
@@ -290,7 +298,7 @@ const modal = `<div class="gate" id="gate" role="dialog" aria-modal="true" aria-
     <p data-g-err>Something broke on our side.</p>
     <div class="btns" style="justify-content:center;margin-top:.9rem">
       <button class="btn btn-o" type="button" data-gate-retry data-mag="5">Try again</button>
-      <a class="btn btn-o" href="mailto:info@globalex.me?subject=Document%20request" data-mag="5">Email the desk</a>
+      <a class="btn btn-o" href="mailto:contact@globalex.me?subject=Document%20request" data-mag="5">Email the desk</a>
     </div>
   </div>
 </div>
@@ -303,11 +311,22 @@ const modal = `<div class="gate" id="gate" role="dialog" aria-modal="true" aria-
 // --------------------------------------------------------------
 
 const js = `
-var GLXDOCS = ${JSON.stringify(DOCS.map((d) => ({
-    id: d.id, kind: d.kind, code: d.code, title: d.title, sub: d.sub,
-    pages: d.pages, size: bytes(d.bytes), origin: d.origin,
-    plot: d.plot, hi: d.highlight, specs: d.specs, summary: d.summary,
-  })))};
+var GLXDOCS = ${JSON.stringify(
+  DOCS.map((d) => ({
+    id: d.id,
+    kind: d.kind,
+    code: d.code,
+    title: d.title,
+    sub: d.sub,
+    pages: d.pages,
+    size: bytes(d.bytes),
+    origin: d.origin,
+    plot: d.plot,
+    hi: d.highlight,
+    specs: d.specs,
+    summary: d.summary,
+  })),
+)};
 var GLXFAM = {
   viscosity: {
     axis: 'Kinematic viscosity @ 100 \\u00B0C',
@@ -611,7 +630,7 @@ var GLXFAM = {
       if (err instanceof TypeError){
         var body = 'Please send me: ' + d.title + ' (' + d.sub + ')\\n\\n'
           + 'Name: ' + payload.name + '\\nCompany: ' + payload.company + '\\nEmail: ' + email;
-        location.href = 'mailto:info@globalex.me?subject='
+        location.href = 'mailto:contact@globalex.me?subject='
           + encodeURIComponent('Document request \\u2014 ' + d.title)
           + '&body=' + encodeURIComponent(body);
         gate.querySelector('[data-g-sent]').textContent = email;

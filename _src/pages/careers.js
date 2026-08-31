@@ -135,14 +135,14 @@ ${hero({
       <div class="rv">
         <span class="eb">Work for us</span>
         <h2 style="margin-top:.9rem">Think you are a good fit?</h2>
-        <p class="lead" style="margin-top:1.3rem">Fill in the form and we will reply with next steps. Applications are reviewed weekly. Send your CV to <a href="mailto:info@globalex.me" style="color:var(--cyan)">info@globalex.me</a> and we will match it to your application.</p>
+        <p class="lead" style="margin-top:1.3rem">Fill in the form and we will reply with next steps. Applications are reviewed weekly. Send your CV to <a href="mailto:contact@globalex.me" style="color:var(--cyan)">contact@globalex.me</a> and we will match it to your application.</p>
         <div style="margin-top:2rem;display:grid;gap:.75rem">
-          <span class="mono">Applications &mdash; <a href="mailto:info@globalex.me" style="color:var(--cyan)">info@globalex.me</a></span>
+          <span class="mono">Applications &mdash; <a href="mailto:contact@globalex.me" style="color:var(--cyan)">contact@globalex.me</a></span>
           <span class="mono">Office &mdash; Cluster X, Jumeirah Lakes Towers, Dubai</span>
         </div>
       </div>
 
-      <form class="form rv" style="--d:120ms" data-form="careers" data-mailto="info@globalex.me" data-subject="Career application — Globalex Trading FZCO">
+      <form class="form rv" style="--d:120ms" data-form="careers" data-mailto="contact@globalex.me" data-subject="Career application — Globalex Trading FZCO">
         <div class="hp" aria-hidden="true"><label for="cw">Website</label><input id="cw" name="website" type="text" tabindex="-1" autocomplete="off" /></div>
         <div class="f-row">
           <div class="fld"><label for="fn">Name</label><input id="fn" name="fn" type="text" autocomplete="given-name" required /></div>
@@ -168,7 +168,7 @@ ${hero({
           <button type="submit" class="btn btn-p" data-mag="5">Send application <span class="ar">&rarr;</span></button>
         </div>
         <span class="sent" data-sent aria-live="polite"></span>
-        <span class="f-note">Sends to our team. Email your CV to info@globalex.me and we will match it to this application.</span>
+        <span class="f-note">Sends to our team. Email your CV to contact@globalex.me and we will match it to this application.</span>
       </form>
     </div>
   </div>

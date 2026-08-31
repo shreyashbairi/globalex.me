@@ -20,9 +20,8 @@ const { decode } = require("./esc");
 
 const LEGAL_NAME = "Globalex Trading FZCO";
 const PHONE = "+971 4 566 7713";
-const EMAIL = "info@globalex.me";
-const LINKEDIN =
-  "https://www.linkedin.com/company/globalex-trading-FZCO-uae/";
+const EMAIL = "contact@globalex.me";
+const LINKEDIN = "https://www.linkedin.com/company/globalex-trading-FZCO-uae/";
 
 /* Deliberately incomplete. "337622" appears in the footer address, but
    whether it is a PO Box or a postal code is unconfirmed, and the two are

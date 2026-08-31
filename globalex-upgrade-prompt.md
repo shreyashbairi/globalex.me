@@ -166,7 +166,7 @@ Escape all interpolated values — `title` and `desc` currently go in raw and a 
 
 Emit a `<script type="application/ld+json">` block per page:
 
-- **Every page** — `Organization`: legal name `Globalex Trading FZCO`, url, logo, `foundingDate: "2019"`, `PostalAddress` (2605 X3 Tower, Cluster X, Jumeirah Lakes Towers, 337622 Dubai, AE), `ContactPoint` (`+971 4 566 7713`, `info@globalex.me`, `contactType: "sales"`, `availableLanguage: ["en"]`), `sameAs` → the LinkedIn URL already in the footer.
+- **Every page** — `Organization`: legal name `Globalex Trading FZCO`, url, logo, `foundingDate: "2019"`, `PostalAddress` (2605 X3 Tower, Cluster X, Jumeirah Lakes Towers, 337622 Dubai, AE), `ContactPoint` (`+971 4 566 7713`, `contact@globalex.me`, `contactType: "sales"`, `availableLanguage: ["en"]`), `sameAs` → the LinkedIn URL already in the footer.
 - **Every page except home** — `BreadcrumbList` built from the same `crumb` array `parts.js#hero()` already receives. Refactor `hero()` to return both the markup and the crumb data so the two cannot drift.
 - **Per-product pages (Phase 3)** — `Product` with `name`, `description`, `category`, `sku` (the slug), `brand`, and `additionalProperty` entries for each spec row.
 - **News posts (Phase 4)** — `NewsArticle` with `headline`, `datePublished`, `dateModified`, `author`, `publisher`.

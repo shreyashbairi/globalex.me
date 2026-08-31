@@ -65,7 +65,7 @@ const SECTIONS = [
   [
     "contact",
     "Contact",
-    '<p>For questions about these Terms, contact us at <a href="mailto:info@globalex.me">info@globalex.me</a> or <a href="tel:+97145667713">+971 4 566 7713</a>.</p>',
+    '<p>For questions about these Terms, contact us at <a href="mailto:contact@globalex.me">contact@globalex.me</a> or <a href="tel:+97145667713">+971 4 566 7713</a>.</p>',
   ],
 ];
 

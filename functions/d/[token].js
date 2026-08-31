@@ -23,7 +23,7 @@ export async function onRequestGet(ctx) {
     return page(
       gone(
         "This link cannot be checked right now.",
-        "Storage is offline. Try again shortly, or write to info@globalex.me.",
+        "Storage is offline. Try again shortly, or write to contact@globalex.me.",
       ),
       503,
     );
@@ -45,7 +45,7 @@ export async function onRequestGet(ctx) {
     return page(
       gone(
         "This link has been withdrawn.",
-        "Contact info@globalex.me if you still need the document.",
+        "Contact contact@globalex.me if you still need the document.",
       ),
       410,
     );
@@ -56,7 +56,7 @@ export async function onRequestGet(ctx) {
     return page(
       gone(
         "This link has expired.",
-        "Request the document again at globalex.me and a fresh link will arrive, or write to info@globalex.me.",
+        "Request the document again at globalex.me and a fresh link will arrive, or write to contact@globalex.me.",
       ),
       410,
     );
@@ -67,7 +67,7 @@ export async function onRequestGet(ctx) {
     return page(
       gone(
         "That document is no longer published.",
-        "Write to info@globalex.me and we will send the current revision.",
+        "Write to contact@globalex.me and we will send the current revision.",
       ),
       404,
     );
@@ -210,7 +210,7 @@ function viewer(doc, token, grant) {
 
 <footer class="foot">
   <span>&copy; <span data-yr>2026</span> Globalex Trading FZCO</span>
-  <span>Questions? <a href="mailto:info@globalex.me">info@globalex.me</a></span>
+  <span>Questions? <a href="mailto:contact@globalex.me">contact@globalex.me</a></span>
 </footer>
 
 <script src="${PDFJS}/pdf.min.js"></script>

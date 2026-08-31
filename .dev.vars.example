@@ -3,4 +3,4 @@ RESEND_API_KEY=re_put_a_real_key_here_for_local_mail
 ADMIN_PASSWORD=localdev
 ADMIN_SECRET=local-dev-secret-not-for-production-0123456789
 ANALYTICS_SALT=local-dev-salt-0123456789
-DESK_EMAIL=info@globalex.me
+DESK_EMAIL=contact@globalex.me

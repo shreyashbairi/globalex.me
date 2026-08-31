@@ -68,8 +68,8 @@ ${hero({
     ],
     [
       "Email us",
-      "info@globalex.me",
-      "mailto:info@globalex.me",
+      "contact@globalex.me",
+      "mailto:contact@globalex.me",
       "General enquiries &amp; quote requests",
     ],
     [
@@ -91,7 +91,7 @@ ${hero({
         <h2 style="margin-top:.9rem">Tell us about your enquiry.</h2>
         <p class="lead" style="margin-top:1.3rem">Share what you are looking for &mdash; grade, origin, volume, destination port and delivery window &mdash; and the desk comes back with pricing and procedure.</p>
 
-        <form class="form" style="margin-top:2.2rem" data-form="contact" data-mailto="info@globalex.me" data-subject="Website enquiry — Globalex Trading FZCO">
+        <form class="form" style="margin-top:2.2rem" data-form="contact" data-mailto="contact@globalex.me" data-subject="Website enquiry — Globalex Trading FZCO">
           <div class="hp" aria-hidden="true"><label for="cw">Website</label><input id="cw" name="website" type="text" tabindex="-1" autocomplete="off" /></div>
           <div class="f-row">
             <div class="fld"><label for="cn">Your name</label><input id="cn" name="cn" type="text" autocomplete="name" required /></div>

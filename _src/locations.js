@@ -33,9 +33,10 @@ const LOCATIONS = [
     city: "Dubai",
     country: "United Arab Emirates",
     kind: "HQ",
-    address: "2605 X3 Tower, Cluster X, Jumeirah Lakes Towers, 337622 Dubai, UAE",
+    address:
+      "2605 X3 Tower, Cluster X, Jumeirah Lakes Towers, 337622 Dubai, UAE",
     phone: "+971 4 566 7713",
-    email: "info@globalex.me",
+    email: "contact@globalex.me",
     coords: [25.0693, 55.1413],
     note: "Trading, documentation and treasury. Every contract is written here and every cargo clears in our own name under the freezone licence.",
     REAL: true,

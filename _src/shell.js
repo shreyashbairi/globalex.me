@@ -1,12 +1,7 @@
 // Shared chrome: mark, header, search, mobile nav, footer, frame, loader.
 // The IA itself lives in _src/nav.js — this file only renders it.
 const { CLASSES } = require("./catalogue");
-const {
-  NAV_LIVE,
-  ownerOf,
-  footerColumns,
-  MENU_GRADE_CAP,
-} = require("./nav");
+const { NAV_LIVE, ownerOf, footerColumns, MENU_GRADE_CAP } = require("./nav");
 
 /* The company mark — the supplied logo file, used as-is.
    Native raster is 70x60, so every placement is a whole-ratio scale of that. */
@@ -154,7 +149,7 @@ ${magnifier}
 ${mobile}
 <a class="mnav-lk" href="contact.html"><i>&rarr;</i>Contact</a>
 <div class="mnav-f">
-<span>info@globalex.me</span>
+<span>contact@globalex.me</span>
 <span>+971 4 566 7713</span>
 <span>Cluster X, JLT — Dubai, UAE</span>
 </div>
@@ -220,7 +215,7 @@ ${c.links.map((l) => `<li><a href="${l.href}">${l.label}</a></li>`).join("\n")}
 <div class="ftr-col">
 <h6>Dubai Desk</h6>
 <span class="ftr-line hi"><a href="tel:+97145667713">+971 4 566 7713</a></span>
-<span class="ftr-line"><a href="mailto:info@globalex.me">info@globalex.me</a></span>
+<span class="ftr-line"><a href="mailto:contact@globalex.me">contact@globalex.me</a></span>
 <span class="ftr-line">2605 X3 Tower, Cluster X,<br />Jumeirah Lakes Towers,<br />337622 Dubai, UAE</span>
 <span class="ftr-line mono" style="margin-top:.4rem">25.0693&deg;N / 55.1413&deg;E</span>
 </div>

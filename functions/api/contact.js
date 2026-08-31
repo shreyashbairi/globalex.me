@@ -6,10 +6,10 @@
    buyer's message because a third party had a bad afternoon is not
    acceptable. */
 
-import { send, formAlert, formReceipt } from '../_lib/mail.js';
-import { json, bad, geo, clean, isEmail, now } from '../_lib/util.js';
+import { send, formAlert, formReceipt } from "../_lib/mail.js";
+import { json, bad, geo, clean, isEmail, now } from "../_lib/util.js";
 
-const KINDS = new Set(['contact', 'careers']);
+const KINDS = new Set(["contact", "careers"]);
 
 export async function onRequestPost(ctx) {
   const { request, env } = ctx;
@@ -18,47 +18,56 @@ export async function onRequestPost(ctx) {
   try {
     body = await request.json();
   } catch {
-    return bad('Malformed request.');
+    return bad("Malformed request.");
   }
 
-  const kind = KINDS.has(body.kind) ? body.kind : 'contact';
+  const kind = KINDS.has(body.kind) ? body.kind : "contact";
   const fields = Array.isArray(body.fields) ? body.fields.slice(0, 20) : [];
-  if (!fields.length) return bad('Nothing to send.');
+  if (!fields.length) return bad("Nothing to send.");
 
   const pairs = fields
     .map(([k, v]) => [clean(k, 80), clean(v, 4000)])
     .filter(([k, v]) => k && v);
-  if (!pairs.length) return bad('Please fill in the form before sending.');
+  if (!pairs.length) return bad("Please fill in the form before sending.");
 
   /* Honeypot: a hidden field no human fills in. Bots do. Accept and drop,
      so the bot sees success and does not retry. */
   if (clean(body.website, 100)) return json({ ok: true });
 
-  const find = (re) => (pairs.find(([k]) => re.test(k)) || [])[1] || '';
+  const find = (re) => (pairs.find(([k]) => re.test(k)) || [])[1] || "";
   const email = find(/e-?mail/i).toLowerCase();
   const name = find(/name|surname/i);
   const phone = find(/phone|tel/i);
   const company = find(/company|organisation|organization/i);
   const message = find(/message|note|why|volume|detail/i);
 
-  if (email && !isEmail(email)) return bad('That email address does not look right.');
+  if (email && !isEmail(email))
+    return bad("That email address does not look right.");
 
   const g = geo(request);
-  const place = [g.city, g.region, g.country].filter(Boolean).join(', ');
-  const desk = env.DESK_EMAIL || 'info@globalex.me';
+  const place = [g.city, g.region, g.country].filter(Boolean).join(", ");
+  const desk = env.DESK_EMAIL || "contact@globalex.me";
 
   if (env.DB) {
     try {
-      await env.DB
-        .prepare(
-          `INSERT INTO messages (kind,name,email,phone,company,subject,body,ts,ip,country,city,ua,page)
-           VALUES (?1,?2,?3,?4,?5,?6,?7,?8,?9,?10,?11,?12,?13)`
-        )
+      await env.DB.prepare(
+        `INSERT INTO messages (kind,name,email,phone,company,subject,body,ts,ip,country,city,ua,page)
+           VALUES (?1,?2,?3,?4,?5,?6,?7,?8,?9,?10,?11,?12,?13)`,
+      )
         .bind(
-          kind, name, email, phone, company,
-          kind === 'careers' ? 'Career application' : 'Website enquiry',
-          pairs.map(([k, v]) => `${k}: ${v}`).join('\n'),
-          now(), g.ip, g.country, g.city, g.ua, clean(body.page, 200)
+          kind,
+          name,
+          email,
+          phone,
+          company,
+          kind === "careers" ? "Career application" : "Website enquiry",
+          pairs.map(([k, v]) => `${k}: ${v}`).join("\n"),
+          now(),
+          g.ip,
+          g.country,
+          g.city,
+          g.ua,
+          clean(body.page, 200),
         )
         .run();
     } catch {
@@ -77,10 +86,10 @@ export async function onRequestPost(ctx) {
     });
   } catch (err) {
     /* 424 rather than 502 — see the note in api/request.js. */
-    console.error('mail send failed:', err.message);
+    console.error("mail send failed:", err.message);
     return bad(
-      'We could not send that just now. Please email info@globalex.me directly and we will pick it up.',
-      424
+      "We could not send that just now. Please email contact@globalex.me directly and we will pick it up.",
+      424,
     );
   }
 
@@ -90,11 +99,17 @@ export async function onRequestPost(ctx) {
       (async () => {
         try {
           const r = formReceipt({ kind });
-          await send(env, { to: email, subject: r.subject, html: r.html, text: r.text, replyTo: desk });
+          await send(env, {
+            to: email,
+            subject: r.subject,
+            html: r.html,
+            text: r.text,
+            replyTo: desk,
+          });
         } catch {
           /* Best effort. */
         }
-      })()
+      })(),
     );
   }
 

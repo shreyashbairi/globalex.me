@@ -11,12 +11,20 @@
    the same button. The only difference is `page`, which records that the
    desk created it rather than a visitor. */
 
-import { requireAdmin } from '../../_lib/auth.js';
-import { DOC_BY_ID } from '../../_lib/docs.js';
-import { send, documentEmail } from '../../_lib/mail.js';
-import { json, bad, mintToken, isEmail, clean, now, DAY } from '../../_lib/util.js';
+import { requireAdmin } from "../../_lib/auth.js";
+import { DOC_BY_ID } from "../../_lib/docs.js";
+import { send, documentEmail } from "../../_lib/mail.js";
+import {
+  json,
+  bad,
+  mintToken,
+  isEmail,
+  clean,
+  now,
+  DAY,
+} from "../../_lib/util.js";
 
-export const SHARE_PAGE = 'admin-share';
+export const SHARE_PAGE = "admin-share";
 
 /* Bounded so a typo cannot mint a link that outlives anyone's memory of
    sending it. 3650 days is "effectively permanent" and still auditable. */
@@ -28,26 +36,31 @@ export const onRequestPost = requireAdmin(async ({ request, env }) => {
   try {
     body = await request.json();
   } catch {
-    return bad('Malformed request.');
+    return bad("Malformed request.");
   }
 
   const db = env.DB;
-  if (!db) return bad('Storage is not configured.', 503);
+  if (!db) return bad("Storage is not configured.", 503);
 
   const doc = DOC_BY_ID[body.doc];
-  if (!doc) return bad('Pick a document to share.');
+  if (!doc) return bad("Pick a document to share.");
 
   /* The recipient address is optional — the operator may just want a link to
      paste into a chat. When it is given it must be real, because it is what
      the viewer stamps on the document and what the desk follows up. */
   const email = clean(body.email, 254).toLowerCase();
-  if (email && !isEmail(email)) return bad('That email address does not look right.');
+  if (email && !isEmail(email))
+    return bad("That email address does not look right.");
 
   const wantsMail = !!body.send;
-  if (wantsMail && !email) return bad('Add a recipient address, or turn off "email the link".');
+  if (wantsMail && !email)
+    return bad('Add a recipient address, or turn off "email the link".');
 
   const label = clean(body.label, 160);
-  const days = Math.min(MAX_DAYS, Math.max(MIN_DAYS, Math.round(+body.days || 30)));
+  const days = Math.min(
+    MAX_DAYS,
+    Math.max(MIN_DAYS, Math.round(+body.days || 30)),
+  );
 
   const ts = now();
   const leadId = crypto.randomUUID();
@@ -59,13 +72,13 @@ export const onRequestPost = requireAdmin(async ({ request, env }) => {
       db
         .prepare(
           `INSERT INTO leads (id,email,name,company,doc_id,created_at,ip,country,city,region,ua,referer,page)
-           VALUES (?1,?2,?3,?4,?5,?6,'','','','','','',?7)`
+           VALUES (?1,?2,?3,?4,?5,?6,'','','','','','',?7)`,
         )
-        .bind(leadId, email, '', label, doc.id, ts, SHARE_PAGE),
+        .bind(leadId, email, "", label, doc.id, ts, SHARE_PAGE),
       db
         .prepare(
           `INSERT INTO grants (token,lead_id,doc_id,email,created_at,expires_at)
-           VALUES (?1,?2,?3,?4,?5,?6)`
+           VALUES (?1,?2,?3,?4,?5,?6)`,
         )
         .bind(token, leadId, doc.id, email, ts, expiresAt),
     ]);
@@ -83,13 +96,13 @@ export const onRequestPost = requireAdmin(async ({ request, env }) => {
   let mailError = null;
   if (wantsMail) {
     try {
-      const mail = documentEmail({ doc, link, name: '', days, shared: true });
+      const mail = documentEmail({ doc, link, name: "", days, shared: true });
       await send(env, {
         to: email,
         subject: mail.subject,
         html: mail.html,
         text: mail.text,
-        replyTo: env.DESK_EMAIL || 'info@globalex.me',
+        replyTo: env.DESK_EMAIL || "contact@globalex.me",
       });
       mailed = true;
     } catch (err) {

@@ -19,7 +19,7 @@ bucket_name = "globalex-docs"
 
 [vars]
 # Non-secret configuration. Override per-environment in the dashboard.
-DESK_EMAIL = "info@globalex.me"
+DESK_EMAIL = "contact@globalex.me"
 MAIL_FROM = "Globalex Documents <documents@globalex.me>"
 
 # Secrets to set with `npx wrangler pages secret put <NAME>`:

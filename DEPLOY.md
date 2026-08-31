@@ -222,7 +222,7 @@ visitor clicks a document
 POST /api/request ──► leads row + grants row (32-byte random token)
         │
         ├─► email to the visitor with https://globalex.me/d/<token>
-        └─► notification to info@globalex.me
+        └─► notification to contact@globalex.me
                 │
                 ▼
 GET /d/<token> ──► verify grant, log an "open" with IP + city + country,
@@ -347,11 +347,11 @@ site and the backend cannot disagree about what exists.
 all before it, which meant the 8.5 MB and 3.3 MB hero MP4s were re-fetched on
 whatever Cloudflare's default happened to be.
 
-| Path | Policy | Why |
-|---|---|---|
-| `/assets/*` | `max-age=31536000, immutable` | Filenames change when the asset changes, so a year is safe. This is what stops the hero video being re-downloaded. |
-| `/sitemap.xml`, `/robots.txt` | `max-age=3600` | Regenerated every build; an hour is short enough. |
-| everything else (HTML) | Pages default | `no-store`-ish via `must-revalidate`; the pages are cheap and must not go stale after a deploy. |
+| Path                          | Policy                        | Why                                                                                                                |
+| ----------------------------- | ----------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| `/assets/*`                   | `max-age=31536000, immutable` | Filenames change when the asset changes, so a year is safe. This is what stops the hero video being re-downloaded. |
+| `/sitemap.xml`, `/robots.txt` | `max-age=3600`                | Regenerated every build; an hour is short enough.                                                                  |
+| everything else (HTML)        | Pages default                 | `no-store`-ish via `must-revalidate`; the pages are cheap and must not go stale after a deploy.                    |
 
 **If you change a file under `assets/` without renaming it, the year-long cache
 will serve the old one.** Rename it, or purge the cache from the dashboard.
@@ -360,7 +360,7 @@ will serve the old one.** Rename it, or purge the cache from the dashboard.
 Functions and it would silently break this site's security model:
 `functions/_middleware.js` returns 404 for `.dev.vars`, `_src/`, `functions/`,
 `.md`, `.sql`, `.toml` and every `.pdf` outside `/f/`, and that protection
-exists *only because the middleware runs on every request*. Adding
+exists _only because the middleware runs on every request_. Adding
 `_routes.json` would re-expose `.dev.vars`, which is the bug commit `2751044`
 fixed. `_headers` does not have this problem.
 

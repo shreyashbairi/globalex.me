@@ -1,6 +1,6 @@
 // Shared runtime — inlined into every page.
-const { searchIndex } = require('./catalogue');
-const theme = require('./theme');
+const { searchIndex } = require("./catalogue");
+const theme = require("./theme");
 
 module.exports = `
 (function(){
@@ -908,7 +908,7 @@ if (document.readyState === 'loading') addEventListener('DOMContentLoaded', boot
 /* ---------- forms ----------
    Post to the API when there is one. Opened straight off disk, or with the
    backend down, fall back to the visitor's mail client rather than
-   swallowing the message — either way it reaches info@globalex.me. */
+   swallowing the message — either way it reaches contact@globalex.me. */
 [].forEach.call(document.querySelectorAll('form[data-mailto]'), function(f){
   var btn = f.querySelector('button[type=submit]');
   var note = f.querySelector('[data-sent]');

@@ -67,7 +67,7 @@ const SECTIONS = [
 <p>When you request a safety data sheet, technical data sheet or specification from this website, we record the email address you give us, any name and company you supply, which document you asked for, and the date and time of the request. We use that to send you the document and to follow up on your enquiry.</p>
 <p>The link we email opens the document in our own viewer rather than sending you a file attachment. <strong>We record each time that link is opened</strong> &mdash; the date and time, the IP address it was opened from, the approximate city and country that address resolves to, and which pages of the document were viewed and for how long. We also record it if you download the original PDF.</p>
 <p>We do this so our commercial team knows whether the material we sent was useful and whether to follow up. We do not sell this information, and we do not share it outside Globalex Trading FZCO except as described under &ldquo;Disclosure of information&rdquo; below.</p>
-<p>The link is intended for the person who requested it. Links expire 30 days after they are issued, and we can revoke one at any time. If you would prefer we did not track your use of a document, write to <a href="mailto:info@globalex.me">info@globalex.me</a> and we will send the file as a plain attachment instead.</p>`,
+<p>The link is intended for the person who requested it. Links expire 30 days after they are issued, and we can revoke one at any time. If you would prefer we did not track your use of a document, write to <a href="mailto:contact@globalex.me">contact@globalex.me</a> and we will send the file as a plain attachment instead.</p>`,
   ],
   [
     "analytics",
@@ -128,7 +128,7 @@ const SECTIONS = [
     "contact",
     "Contact us",
     `
-<p>Questions or concerns about this policy or our privacy practices? Contact us at <a href="mailto:info@globalex.me">info@globalex.me</a> or <a href="tel:+97145667713">+971 4 566 7713</a>.</p>
+<p>Questions or concerns about this policy or our privacy practices? Contact us at <a href="mailto:contact@globalex.me">contact@globalex.me</a> or <a href="tel:+97145667713">+971 4 566 7713</a>.</p>
 <p>By using our services you acknowledge that you have read and understood this Privacy Policy, and consent to the collection, use, disclosure and storage of your personal information as described here.</p>`,
   ],
   [
@@ -206,7 +206,7 @@ corrected, ask for it to be deleted, or object to how it is used.</p>
 <p><strong>[Data-protection contact to be confirmed.]</strong> Requests should
 go to a named route rather than the general enquiry inbox, and that address is
 being set up. Until it is, write to
-<a href="mailto:info@globalex.me">info@globalex.me</a> marking the message for
+<a href="mailto:contact@globalex.me">contact@globalex.me</a> marking the message for
 the attention of the data-protection contact, and it will be routed.</p>
 <p>We respond to a request within the period the applicable law requires. If we
 cannot act on a request we will explain why.</p>

@@ -402,7 +402,7 @@ ${CLASSES.map(classCard).join("\n\n")}
         <p class="lead">Share volume, destination and target delivery window &mdash; the Dubai desk returns pricing and procedure within two business days.</p>
         <div class="btns">
           <a href="contact.html" class="btn btn-p" data-mag="6">Start a conversation <span class="ar">&rarr;</span></a>
-          <a href="mailto:info@globalex.me" class="btn btn-o" data-mag="6">info@globalex.me</a>
+          <a href="mailto:contact@globalex.me" class="btn btn-o" data-mag="6">contact@globalex.me</a>
         </div>
       </div>
       <dl class="cta-fig">
