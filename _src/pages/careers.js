@@ -8,7 +8,7 @@ module.exports = {
   nav: "company",
   crumb: CRUMB,
   title: "Careers — Globalex Trading FZCO",
-  desc: "Open roles at Globalex Trading FZCO in Dubai: Digital Marketing Manager (Shopify and D2C growth) and Chemical Engineer. Apply with your CV.",
+  desc: "Open roles at Globalex Trading FZCO in Dubai: Digital Marketing Manager (Shopify and D2C growth) and Agronomy Specialist / Agricultural Engineer (fertilizer solutions). Apply with your CV.",
 
   css: `
 .role{position:relative;padding:clamp(1.7rem,3vw,2.5rem);border:1px solid var(--line);
@@ -106,19 +106,21 @@ ${hero({
       <article class="role">
         <div class="role-h">
           <div>
-            <h3>Chemical Engineer</h3>
+            <h3>Agronomy Specialist &mdash; Agricultural Engineer, fertilizer solutions</h3>
             <div class="role-m">
               <span>Dubai, UAE</span><span>On-site</span><span>Full-time</span>
             </div>
           </div>
           <span class="chip hot">Hiring now</span>
         </div>
-        <p>A technical seat inside a commercial team. You will support trading operations across fertilizers and polymers &mdash; providing technical expertise, analysing product quality, and handling the client questions that need an engineer rather than a salesperson to answer.</p>
+        <p>A technical seat inside a commercial team, built around plant nutrition. You will advise farms, greenhouses and distributors on fertilizer selection and crop nutrition programmes, work beside the sales desk on consultations and proposals, and answer the questions that need an agronomist rather than a salesperson. This is not a farm management role &mdash; it sits behind product application, technical advisory and business development across our agricultural inputs.</p>
         <ul>
-          <li>Grade and specification analysis across nitrogen fertilizers and polyolefins</li>
-          <li>Quality review of certificates of analysis before and after shipment</li>
-          <li>Technical support to clients on application fit and handling</li>
-          <li>Chemical engineering degree; trading or petrochemical exposure welcome</li>
+          <li>Crop nutrition programmes: product selection, dosage and application schedules</li>
+          <li>Technical proposals and agronomic plans built on crop requirements and soil conditions</li>
+          <li>Client presentations and consultations run jointly with the commercial team</li>
+          <li>Field feedback on product performance, and a working read on market and agronomy trends</li>
+          <li>Degree in agricultural engineering, agronomy or soil science, with 2+ years in fertilizers or crop nutrition</li>
+          <li>Command of NPK and micronutrient principles; B2B or UAE market exposure welcome, Russian a plus</li>
         </ul>
         <div class="btns">
           <a href="#apply" class="btn btn-o btn-sm" data-mag="5">Apply for this role <span class="ar">&rarr;</span></a>
@@ -156,7 +158,7 @@ ${hero({
           <label for="rl">Applying for</label>
           <select id="rl" name="rl">
             <option>Digital Marketing Manager</option>
-            <option>Chemical Engineer</option>
+            <option>Agronomy Specialist / Agricultural Engineer</option>
             <option>General application</option>
           </select>
         </div>
