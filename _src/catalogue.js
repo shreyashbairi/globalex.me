@@ -590,8 +590,8 @@ const PAGES = [
   [
     "careers.html",
     "Careers",
-    "Open roles in Dubai, and how to apply.",
-    "jobs vacancies hiring apply cv digital marketing manager agronomy specialist agricultural engineer agronomist fertilizer crop nutrition",
+    "Reviewing applications — new roles in Dubai opening soon.",
+    "jobs vacancies hiring apply cv register interest recruitment",
   ],
   [
     "contact.html",

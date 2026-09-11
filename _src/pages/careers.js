@@ -8,7 +8,7 @@ module.exports = {
   nav: "company",
   crumb: CRUMB,
   title: "Careers — Globalex Trading FZCO",
-  desc: "Open roles at Globalex Trading FZCO in Dubai: Digital Marketing Manager (Shopify and D2C growth) and Agronomy Specialist / Agricultural Engineer (fertilizer solutions). Apply with your CV.",
+  desc: "Careers at Globalex Trading FZCO in Dubai. We are reviewing applications and will open new roles soon — register your interest with your CV.",
 
   css: `
 .role{position:relative;padding:clamp(1.7rem,3vw,2.5rem);border:1px solid var(--line);
@@ -24,10 +24,6 @@ module.exports = {
 .role-m span::before{content:'';width:5px;height:5px;background:var(--cyan);opacity:.6;flex:none;
   clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%)}
 .role p{color:var(--haze);max-width:78ch}
-.role ul{display:grid;gap:.5rem}
-.role li{display:flex;gap:.7rem;align-items:baseline;color:var(--haze);font-size:1rem}
-.role li::before{content:'';width:5px;height:5px;margin-top:.5em;flex:none;background:var(--sand);
-  clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%)}
 
 /* culture split */
 .cul{display:grid;grid-template-columns:1fr 1fr;gap:clamp(2rem,5vw,4.5rem);align-items:center}
@@ -45,13 +41,13 @@ module.exports = {
   body: `
 ${hero({
   crumb: CRUMB,
-  eyebrow: "Open roles &middot; Dubai, UAE",
+  eyebrow: "Careers &middot; Dubai, UAE",
   h1: "Global trade. Real ownership. Full exposure.",
-  lead: "Two roles open in Dubai, and a standing interest in professionals who share our standards. We are a trading house where every person touches deals, owns relationships and sees the whole picture &mdash; from sourcing decision to bill of lading.",
+  lead: "We are currently reviewing applications and will open new roles soon. We keep a standing interest in professionals who share our standards &mdash; a trading house where every person touches deals, owns relationships and sees the whole picture, from sourcing decision to bill of lading.",
   meta: [
-    ["2", "Open roles"],
+    ["Paused", "Reviewing applications"],
     ["Dubai", "On-site / hybrid"],
-    ["Weekly", "Application review"],
+    ["Soon", "New roles"],
   ],
   sec: "Careers",
 })}
@@ -72,62 +68,29 @@ ${hero({
   </div>
 </section>
 
-<section class="sec" data-sec="Open roles">
+<section class="sec" data-sec="Openings">
   <div class="wrap">
     <div class="hd rv">
       <span class="eb">Current openings</span>
-      <h2>Two open roles. Both in Dubai.</h2>
+      <h2>No open roles right now. New ones soon.</h2>
     </div>
 
-    <div class="rvs" style="display:grid;gap:var(--gut)">
-
-      <article class="role">
-        <div class="role-h">
-          <div>
-            <h3>Digital Marketing Manager &mdash; Shopify &amp; D2C growth</h3>
-            <div class="role-m">
-              <span>Dubai, UAE</span><span>On-site / hybrid</span><span>Full-time</span>
-            </div>
+    <article class="role rv">
+      <div class="role-h">
+        <div>
+          <h3>We are reviewing applications</h3>
+          <div class="role-m">
+            <span>Recruitment paused</span><span>Dubai, UAE</span>
           </div>
-          <span class="chip hot">Hiring now</span>
         </div>
-        <p>We are looking for a data-driven marketer to own the growth of our Shopify store. You will architect the D2C strategy: driving qualified traffic, lifting conversion rates and building brand loyalty outside third-party marketplaces. This is a build-from-the-ground-up role, not a maintain-what-exists role.</p>
-        <ul>
-          <li>Expert-level Shopify &mdash; theme, apps, checkout, merchandising</li>
-          <li>Paid media across Google and Meta, owned end to end from budget to ROAS</li>
-          <li>E-commerce SEO: technical, content and category architecture</li>
-          <li>Comfortable being the person accountable for the number</li>
-        </ul>
-        <div class="btns">
-          <a href="#apply" class="btn btn-o btn-sm" data-mag="5">Apply for this role <span class="ar">&rarr;</span></a>
-        </div>
-      </article>
-
-      <article class="role">
-        <div class="role-h">
-          <div>
-            <h3>Agronomy Specialist &mdash; Agricultural Engineer, fertilizer solutions</h3>
-            <div class="role-m">
-              <span>Dubai, UAE</span><span>On-site</span><span>Full-time</span>
-            </div>
-          </div>
-          <span class="chip hot">Hiring now</span>
-        </div>
-        <p>A technical seat inside a commercial team, built around plant nutrition. You will advise farms, greenhouses and distributors on fertilizer selection and crop nutrition programmes, work beside the sales desk on consultations and proposals, and answer the questions that need an agronomist rather than a salesperson. This is not a farm management role &mdash; it sits behind product application, technical advisory and business development across our agricultural inputs.</p>
-        <ul>
-          <li>Crop nutrition programmes: product selection, dosage and application schedules</li>
-          <li>Technical proposals and agronomic plans built on crop requirements and soil conditions</li>
-          <li>Client presentations and consultations run jointly with the commercial team</li>
-          <li>Field feedback on product performance, and a working read on market and agronomy trends</li>
-          <li>Degree in agricultural engineering, agronomy or soil science, with 2+ years in fertilizers or crop nutrition</li>
-          <li>Command of NPK and micronutrient principles; B2B or UAE market exposure welcome, Russian a plus</li>
-        </ul>
-        <div class="btns">
-          <a href="#apply" class="btn btn-o btn-sm" data-mag="5">Apply for this role <span class="ar">&rarr;</span></a>
-        </div>
-      </article>
-
-    </div>
+        <span class="chip org">Opening soon</span>
+      </div>
+      <p>Thank you to everyone who applied for our recent openings. Recruitment is paused while we review every application we received, and we will be in touch with shortlisted candidates directly.</p>
+      <p>We expect to open new roles soon. If you would like to be considered when we do, send us your CV below &mdash; we keep every application on file and reach out when a fitting role opens.</p>
+      <div class="btns">
+        <a href="#apply" class="btn btn-o btn-sm" data-mag="5">Register your interest <span class="ar">&rarr;</span></a>
+      </div>
+    </article>
   </div>
 </section>
 
@@ -136,8 +99,8 @@ ${hero({
     <div class="apply">
       <div class="rv">
         <span class="eb">Work for us</span>
-        <h2 style="margin-top:.9rem">Think you are a good fit?</h2>
-        <p class="lead" style="margin-top:1.3rem">Fill in the form and we will reply with next steps. Applications are reviewed weekly. Send your CV to <a href="mailto:contact@globalex.me" style="color:var(--cyan)">contact@globalex.me</a> and we will match it to your application.</p>
+        <h2 style="margin-top:.9rem">Be first in line for the next role.</h2>
+        <p class="lead" style="margin-top:1.3rem">Fill in the form and we will keep your details on file for upcoming openings. Send your CV to <a href="mailto:contact@globalex.me" style="color:var(--cyan)">contact@globalex.me</a> and we will match it to your submission.</p>
         <div style="margin-top:2rem;display:grid;gap:.75rem">
           <span class="mono">Applications &mdash; <a href="mailto:contact@globalex.me" style="color:var(--cyan)">contact@globalex.me</a></span>
           <span class="mono">Office &mdash; Cluster X, Jumeirah Lakes Towers, Dubai</span>
@@ -155,19 +118,11 @@ ${hero({
           <div class="fld"><label for="em">Email</label><input id="em" name="em" type="email" autocomplete="email" required /></div>
         </div>
         <div class="fld">
-          <label for="rl">Applying for</label>
-          <select id="rl" name="rl">
-            <option>Digital Marketing Manager</option>
-            <option>Agronomy Specialist / Agricultural Engineer</option>
-            <option>General application</option>
-          </select>
-        </div>
-        <div class="fld">
           <label for="nt">Why you would fit</label>
-          <textarea id="nt" name="nt" placeholder="A short note — what you have run, and what you want to run next."></textarea>
+          <textarea id="nt" name="nt" placeholder="A short note — your background, and the kind of role you want next."></textarea>
         </div>
         <div class="btns">
-          <button type="submit" class="btn btn-p" data-mag="5">Send application <span class="ar">&rarr;</span></button>
+          <button type="submit" class="btn btn-p" data-mag="5">Register interest <span class="ar">&rarr;</span></button>
         </div>
         <span class="sent" data-sent aria-live="polite"></span>
         <span class="f-note">Sends to our team. Email your CV to contact@globalex.me and we will match it to this application.</span>
